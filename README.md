@@ -12,7 +12,7 @@
 - Fuzzy searching
 - Delayed loading (load data of deep level options only when needed)
 - Rich options & highly customizable
-- Supports a wide range of browsers (see below)
+- Supports a wide range of browsers (see [below](#browser-compatibility))
 
 ### Installation
 
