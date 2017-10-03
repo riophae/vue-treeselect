@@ -1,0 +1,72 @@
++section('Getting Started')
+
+section
+  +subsection('Installation')
+
+  :markdown-it
+    **Install vue-treeselect using npm:**
+
+    ```shell
+    $ npm install --save @riophae/vue-treeselect
+    ```
+
+    **Or via yarn:**
+
+    ```shell
+    $ yarn add @riophae/vue-treeselect
+    ```
+
+    **Or via CDN:**
+
+    ```html
+    <script src="https://unpkg.com/@riophae/vue-treeselect@^0.1.0"></script>
+    <link rel="stylesheet" href="https://unpkg.com/@riophae/vue-treeselect@^0.1.0/dist/vue-treeselect.min.css">
+    ```
+
+    The library will be exposed as `window.VueTreeselect.Treeselect`. Note that, Vue should be included before vue-treeselect.
+
+section
+  +subsection('Basic Usage')
+
+  :markdown-it
+    ```html
+    <!-- Vue component -->
+    <template>
+      <treeselect
+        v-model="value"
+        :multiple="true"
+        :options="source"
+        />
+    </template>
+
+    <script>
+      import Treeselect from '@riophae/vue-treeselect'
+
+      export default {
+        components: { Treeselect },
+        data: {
+          value: null,
+          source: [
+            {
+              id: 'node-1',
+              label: 'Node 1',
+              children: [
+                {
+                  id: 'node-1-a',
+                  label: 'Node 1-A',
+                },
+                ...
+              ],
+            },
+            {
+              id: 'node-2',
+              label: 'Node 2',
+            },
+            ...
+          ],
+        },
+      }
+    </script>
+
+    <style src="@riophae/vue-treeselect/dist/vue-treeselect.min.css"></style>
+    ```

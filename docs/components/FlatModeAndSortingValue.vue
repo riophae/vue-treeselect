@@ -1,0 +1,33 @@
+<template>
+  <div>
+    <treeselect
+      :multiple="true"
+      :options="options"
+      :flat="true"
+      :sort-value-by="sortValueBy"
+      :default-expand-level="1"
+      placeholder="Try selecting some options."
+      v-model="value"
+    />
+    <p><strong>Sort value by:</strong></p>
+    <p>
+      <label><input type="radio" value="ORDER_SELECTED" v-model="sortValueBy"><code>"ORDER_SELECTED"</code> - Order selected (default)</label><br>
+      <label><input type="radio" value="LEVEL" v-model="sortValueBy"><code>"LEVEL"</code> - Level of option: C > BB > AAA</label><br>
+      <label><input type="radio" value="INDEX" v-model="sortValueBy"><code>"INDEX"</code> - Index of option: AAA > BB > C</label>
+    </p>
+  </div>
+</template>
+
+<script>
+  import { generateOptions } from './utils'
+
+  export default {
+    data() {
+      return {
+        value: null,
+        options: generateOptions(3),
+        sortValueBy: 'ORDER_SELECTED',
+      }
+    },
+  }
+</script>

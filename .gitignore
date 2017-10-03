@@ -1,0 +1,13 @@
+.DS_Store
+
+*debug.log*
+*error.log*
+
+node_modules/
+yarn.lock
+
+dist/
+gh-pages
+
+test/unit/coverage
+test/e2e/reports

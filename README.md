@@ -1,0 +1,124 @@
+# vue-treeselect
+[![Build Status](https://travis-ci.org/riophae/vue-treeselect.svg?branch=master)](https://travis-ci.org/riophae/vue-treeselect) ![Gzip Size](https://badge-size.herokuapp.com/riophae/vue-treeselect/master/dist/component-playground.min.js?compression=gzip) [![npm](https://img.shields.io/npm/v/@riophae/vue-treeselect.svg)](https://www.npmjs.com/package/@riophae/vue-treeselect)
+
+> A multi-select component with nested options for Vue.js
+
+![Vue-Treeselect Screenshot](https://raw.githubusercontent.com/riophae/vue-treeselect/master/screenshot.png)
+
+### Features
+
+- Single select
+- Multiple select
+- Fuzzy searching
+- Delayed loading (load data of deep level options only when needed)
+- Rich options & highly customizable
+- Supports a wide range of browsers (see below)
+
+### Installation
+
+**Install vue-treeselect using npm:**
+
+```shell
+$ npm install --save @riophae/vue-treeselect
+```
+
+**Or via yarn:**
+
+```shell
+$ yarn add @riophae/vue-treeselect
+```
+
+**Or via CDN:**
+
+```html
+<script src="https://unpkg.com/@riophae/vue-treeselect@^0.1.0"></script>
+<link rel="stylesheet" href="https://unpkg.com/@riophae/vue-treeselect@^0.1.0/dist/vue-treeselect.min.css">
+```
+
+The library will be exposed as `window.VueTreeselect.Treeselect`. Note that, Vue should be included before vue-treeselect.
+
+### Basic Usage
+
+```html
+<!-- Vue component -->
+<template>
+  <treeselect
+    v-model="value"
+    :multiple="true"
+    :options="source"
+    />
+</template>
+
+<script>
+  import Treeselect from '@riophae/vue-treeselect'
+
+  export default {
+    components: { Treeselect },
+    data: {
+      value: null,
+      source: [
+        {
+          id: 'node-1',
+          label: 'Node 1',
+          children: [
+            {
+              id: 'node-1-a',
+              label: 'Node 1-A',
+            },
+            ...
+          ],
+        },
+        {
+          id: 'node-2',
+          label: 'Node 2',
+        },
+        ...
+      ],
+    },
+  }
+</script>
+
+<style src="@riophae/vue-treeselect/dist/vue-treeselect.min.css"></style>
+```
+
+### Documentation & Examples
+
+[Visit the website](https://riophae.github.io/vue-treeselect)
+
+Note: please use a desktop browser since the website hasn't been optimized for mobile devices.
+
+### Browser Compatibility
+
+- Chrome
+- Edge
+- Firefox
+- IE9+
+- Safari
+
+It should function well on IE9, but the style can be slightly broken due to the lack of support of some relatively newer CSS features, such as `transition` and `animation`. Nevertheless it should look 90% same as on modern browsers.
+
+In addition, this component lib is designed to be used primarily on desktop browsers. Although it should work on mobile browsers as well, the user experience won't be ideal.
+
+### Contributing
+
+1. Fork & clone the repo
+2. Install dependencies by `npm install`
+3. Check out a new branch
+4. `npm run dev` & hack
+5. Make sure `npm test` passes
+6. Push your changes & create a pull request
+
+### Credits
+
+This package is inspired by [vue-multiselect](https://github.com/monterail/vue-multiselect), [react-select](https://github.com/JedWatson/react-select) and [Ant Design](https://github.com/ant-design/ant-design/). Special thanks go to their respective authors!
+
+Some icons used in this project:
+
+  - "anchor" icon made by [Smashicons](https://www.flaticon.com/authors/smashicons) is licensed under [CC 3.0 BY](https://creativecommons.org/licenses/by/3.0/)
+  - "spinner" icon from [SpinKit](https://github.com/tobiasahlin/SpinKit) is licensed under the [MIT License](https://github.com/tobiasahlin/SpinKit/blob/master/LICENSE)
+
+### License
+
+Copyright (c) 2017 [Riophae Lee](https://github.com/riophae).
+
+Released under the [MIT License](https://github.com/riophae/vue-treeselect/blob/master/LICENSE.md).

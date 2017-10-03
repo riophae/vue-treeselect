@@ -1,0 +1,52 @@
+- function kebabCase(path) {
+-   return path
+-     .replace(/ & /g, ' And ')
+-     .replace(/[A-Z]+/, x => x[0] + x.slice(1).toLowerCase())
+-     .replace(/^[A-Z]/, x => x.toLowerCase())
+-     .replace(/[A-Z ]/g, x => '-' + x.toLowerCase())
+-     .replace(/[^A-Za-z]/g, '-')
+-     .replace(/(^-+|-+$)/g, '')
+-     .replace(/-{2,}/g, '-')
+- }
+- function startCase(name) {
+-   return name.replace(/\s/g, '')
+- }
+- const toc = []
+
+mixin section(name)
+  - toc.push({ name, subs: [] })
+  h1(id=kebabCase(name))
+    =name
+    a.anchor(href='#' + kebabCase(name)) #
+
+mixin subsection(name)
+  - toc[toc.length - 1].subs.push(name)
+  h2(id=kebabCase(name) data-section)
+    =name
+    a.anchor(href='#' + kebabCase(name)) #
+
+mixin guide(name)
+  section
+    +subsection(name)
+    block
+
+mixin demo(name)
+  demo
+    #{kebabCase(name)}(slot="demo")
+    template(slot="html")
+      code(v-pre)=require('!!raw-loader!vue-loader/lib/selector?type=template!./components/' + name + '.vue').replace(/^\n*/, '')
+    template(slot="javascript")
+      code(v-pre)=require('!!raw-loader!vue-loader/lib/selector?type=script!./components/' + name + '.vue').replace(/^[\/\n]*/m, '')
+
+mixin renderToc()
+  - const tocSwapBuffer = pug_html
+  - pug_html = ''
+  for section in toc
+    section.sidebar-nav-section
+      h4.sidebar-nav-section-title=section.name
+      ul.sidebar-nav-list
+        for sub in section.subs
+          - const customClass = "{ current: currentPosition === '" + kebabCase(sub) + "' }"
+          li.sidebar-nav-list-item(:class=customClass)
+            a(href='#' + kebabCase(sub))=sub
+  - pug_html = tocSwapBuffer.replace('%%_TOC_%%', pug_html)

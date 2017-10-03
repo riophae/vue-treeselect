@@ -1,0 +1,68 @@
++section('Guides')
+
++guide('Basic Features')
+  :markdown-it
+    This example demonstrates the most commonly-used features of vue-treeselect. Try the fuzzy-searching functionality by typing a few letters.
+  +demo('BasicFeatures')
+  :markdown-it
+    The first thing you need to learn is how to define options. There are two types of options: **(a) folder options** that are foldable & may have children options, and **(b) normal options** that aren't & don't. Here, I'd like to borrow the basic concepts from Computer Science and call the former as **branch nodes** and the latter as **leaf nodes**. These two kinds of nodes together compose the tree.
+
+    Defining leaf nodes is quite simple:
+
+    ```js
+    {
+      id: '<id>', // used to identify the option within the tree so it's value must be unique across all options
+      label: '<label>', // used to display the option
+    }
+    ```
+
+    Defining branch nodes only needs an extra `children` property:
+
+    ```js
+    {
+      id: '<id>',
+      label: '<label>',
+      children: [
+        {
+          id: '<child id>',
+          label: '<child label>',
+        },
+        ...
+      ],
+    }
+    ```
+
+    Then you can pass an array of these nodes as the `options` prop.
+  p.tip
+    :markdown-it(inline)
+      Note that, because a complex state tree needs to be maintained internally, vue-treeselect will copy `options` and will not react to the changes of the original array. In other words, directly modify `options` **will not** work as expected. If children options needs to be dynamically loaded, see [below](#delayed-loading).
+
++guide('More Features')
+  :markdown-it
+    This demonstrates more features.
+  +demo('MoreFeatures')
+
++guide('Delayed Loading')
+  :markdown-it
+    If you have a large number of deeply nested options, you might want to load options only of the most top levels on initial load and load the rest only when needed. You can achieve that by following these steps:
+      1. Declare an *unloaded* branch node by setting `children: null` or `isBranch: true`
+      2. Provide a `loadChildrenOptions` prop
+      3. Whenever an unloaded branch node gets expanded, the `loadChildrenOptions` function will be called within which the job requesting data from remote server could be performed
+  +demo('DelayedLoading')
+
++guide('Flat Mode & Sorting Value')
+  :markdown-it
+    In all previous examples, we used the default non-flat mode of vue-treeselect, which means:
+
+      1. Whenever a branch node gets checked, all its children will be checked too
+      2. Whenever a branch node has all children checked, the branch node itself will be checked too
+
+    Sometimes we don't need that mechanism, and want branch nodes and leaf nodes don't affect each other. In this case, flat mode should be used, as demonstrated in the following.
+
+    If you want to control the order in which selected options to be displayed, use the `sortValueBy` prop.
+  +demo('FlatModeAndSortingValue')
+
++guide('Disabling Branch Nodes')
+  :markdown-it
+    Set `disableBranchNodes` to `true` to prevent branch nodes from being selected. You may also want to show a count next to the label of each branch node by setting `showCount` to `true`.
+  +demo('DisablingBranchNodes')
