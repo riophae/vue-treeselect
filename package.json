@@ -10,6 +10,7 @@
   "homepage": "https://riophae.github.io/vue-treeselect/",
   "main": "dist/vue-treeselect.min.js",
   "unpkg": "dist/vue-treeselect.min.js",
+  "css": "dist/vue-treeselect.min.css",
   "jsnext:main": "dist/vue-treeselect.min.js",
   "files": [
     "src",
