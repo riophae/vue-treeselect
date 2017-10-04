@@ -76,7 +76,7 @@ describe('Basic', () => {
         isLoaded: jasmine.any(Boolean),
         isPending: jasmine.any(Boolean),
         hasMatchedChild: jasmine.any(Boolean),
-        expandOnSearch: jasmine.any(Boolean),
+        expandsOnSearch: jasmine.any(Boolean),
         parentNode: jasmine.any(Object),
         ancestors: jasmine.any(Array),
         index: jasmine.any(Array),

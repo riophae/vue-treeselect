@@ -724,7 +724,7 @@ export default {
         // reset state
         this.traverseAllNodes(node => {
           if (node.isBranch) {
-            node.expandOnSearch = false
+            node.expandsOnSearch = false
             node.hasMatchedChild = false
             this.searchingCount[node.id] = {
               [ALL_CHILDREN]: 0,
@@ -750,10 +750,10 @@ export default {
           }
 
           if (
-            (isMatched || (node.isBranch && node.expandOnSearch)) &&
+            (isMatched || (node.isBranch && node.expandsOnSearch)) &&
             node.parentNode !== NO_PARENT_NODE
           ) {
-            node.parentNode.expandOnSearch = true
+            node.parentNode.expandsOnSearch = true
             node.parentNode.hasMatchedChild = true
           }
         })
@@ -782,7 +782,7 @@ export default {
       )
 
       if (this.searching) {
-        node.expandOnSearch = !node.expandOnSearch
+        node.expandsOnSearch = !node.expandsOnSearch
       } else {
         node.isExpanded = !node.isExpanded
       }
@@ -893,7 +893,7 @@ export default {
           normalized.isPending = false
           normalized.isExpanded = level < this.defaultExpandLevel
           normalized.hasMatchedChild = false
-          normalized.expandOnSearch = false
+          normalized.expandsOnSearch = false
           normalized.error = ''
           normalized.count = {
             [ALL_CHILDREN]: 0,
