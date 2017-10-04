@@ -41,7 +41,11 @@ const webpackConfig = merge(base, {
     new ExtractTextPlugin({
       filename: 'vue-treeselect.min.css',
     }),
-    new OptimizeCSSPlugin(),
+    new OptimizeCSSPlugin({
+      cssProcessorOptions: {
+        reduceIdents: false,
+      },
+    }),
   ],
 })
 
