@@ -13,7 +13,6 @@
   "jsnext:main": "dist/vue-treeselect.min.js",
   "files": [
     "src",
-    "lib",
     "dist"
   ],
   "repository": {
@@ -22,9 +21,7 @@
   },
   "scripts": {
     "dev": "node build/dev-server.js",
-    "bundle:dist": "rimraf dist && webpack --config build/webpack.bundle.conf.js",
-    "bundle:lib": "babel src --out-dir lib",
-    "bundle": "node build/bundle.js && npm run bundle:lib",
+    "bundle": "node build/bundle.js",
     "docs": "rimraf gh-pages && mkdir gh-pages && node build/build.js",
     "unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --watch",
     "gh-pages": "gh-pages -d gh-pages",
