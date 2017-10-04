@@ -3,6 +3,7 @@
 # Check https://circleci.com/docs/2.0/language-javascript/ for more details
 #
 version: 2
+
 jobs:
   build:
     docker:
@@ -37,3 +38,7 @@ jobs:
       - run: yarn test
 
       - run: ./node_modules/.bin/codecov
+
+branches:
+  ignore:
+    - gh-pages
