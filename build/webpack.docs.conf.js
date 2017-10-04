@@ -54,9 +54,10 @@ const webpackConfig = merge(baseWebpackConfig, {
       template: 'docs/index.pug',
       inject: true,
       minify: {
-        removeComments: true,
-        collapseWhitespace: true,
-        removeAttributeQuotes: true,
+        caseSensitive: true,
+        removeComments: false,
+        collapseWhitespace: false,
+        removeAttributeQuotes: false,
         // more options:
         // https://github.com/kangax/html-minifier#options-quick-reference
       },
