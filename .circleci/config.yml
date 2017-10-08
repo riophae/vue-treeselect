@@ -39,6 +39,6 @@ jobs:
 
       - run: ./node_modules/.bin/codecov
 
-branches:
-  ignore:
-    - gh-pages
+    branches:
+      ignore:
+        - gh-pages

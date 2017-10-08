@@ -84,12 +84,13 @@ const webpackConfig = merge(baseWebpackConfig, {
       name: 'manifest',
       chunks: [ 'vendor' ],
     }),
-    new CopyWebpackPlugin([
-      {
-        from: path.join(__dirname, '../static'),
-        to: path.join(__dirname, '../gh-pages/static'),
-      },
-    ]),
+    new CopyWebpackPlugin([ {
+      from: path.join(__dirname, '../static'),
+      to: path.join(__dirname, '../gh-pages/static'),
+    }, {
+      from: path.join(__dirname, '../.circleci'),
+      to: path.join(__dirname, '../gh-pages/.circleci'),
+    } ]),
   ],
 })
 
