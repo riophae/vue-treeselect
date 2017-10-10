@@ -46,7 +46,8 @@ function limitTextDefault(count) {
 }
 
 function loadChildrenErrorTextDefault(error) {
-  return `Failed to load children options: ${error.message || String(error)}.`
+  const reason = error.message || /* istanbul ignore next */ String(error)
+  return `Failed to load children options: ${reason}.`
 }
 
 export default {
@@ -534,8 +535,6 @@ export default {
 
     isOpen(newValue) {
       this.toggleTouchOutsideEvent(newValue)
-      const handler = newValue ? this.onOpen : this.onClose
-      handler && handler()
       // reset search query after dropdown closes
       if (!newValue) this.searchQuery = ''
     },
@@ -948,10 +947,6 @@ export default {
           node.error = ''
           this.buildNodeCheckedStateMap()
         }
-      }
-
-      if (node.isPending) {
-        return
       }
 
       node.isPending = true

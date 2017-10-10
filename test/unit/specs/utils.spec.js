@@ -1,6 +1,68 @@
 import * as utils from '../../../src/utils'
 
 describe('Utils', () => {
+  describe('warning', () => {
+    const { warning } = utils
+    const WARNING_MSG = '$MESSAGE$'
+
+    beforeEach(() => {
+      spyOn(console, 'error')
+    })
+
+    it('when true', () => {
+      warning(() => true, () => WARNING_MSG)
+      expect(console.error).not.toHaveBeenCalled()
+    })
+
+    it('when false', () => {
+      warning(() => false, () => WARNING_MSG)
+      expect(console.error).toHaveBeenCalledWith('[Vue-Treeselect Warning]', WARNING_MSG)
+    })
+  })
+
+  it('unreachable', () => {
+    const { unreachable } = utils
+    spyOn(console, 'error')
+    unreachable()
+    expect(console.error).toHaveBeenCalledWith('[Vue-Treeselect Error] You should not reach here.')
+  })
+
+  describe('onlyOnLeftClick', () => {
+    const { onlyOnLeftClick } = utils
+    let spy
+
+    beforeEach(() => {
+      spy = jasmine.createSpy('onmousedown')
+    })
+
+    it('should invoke the function when left button has been clicked', () => {
+      const eventObj = {
+        type: 'mousedown',
+        button: 0,
+      }
+      onlyOnLeftClick(spy)(eventObj)
+      expect(spy).toHaveBeenCalledWith(eventObj)
+    })
+
+    it('should not invoke the function if wrong event type', () => {
+      const eventObj = {
+        type: 'mouseup',
+        button: 0,
+      }
+      onlyOnLeftClick(spy)(eventObj)
+      expect(spy).not.toHaveBeenCalled()
+    })
+
+    it('should not invoke the function if clicked with buttons other than left button', () => {
+      const eventObj = {
+        type: 'mousedown',
+        button: 1,
+      }
+      onlyOnLeftClick(spy)(eventObj)
+      expect(spy).not.toHaveBeenCalled()
+    })
+  })
+
   it('hasOwn', () => {
     const { hasOwn } = utils
     const objectWithoutPrototypes = Object.create(null)
@@ -13,24 +75,59 @@ describe('Utils', () => {
     expect(hasOwn(normalObject, 'key')).toBe(true)
   })
 
-  it('deepExtend', () => {
+  describe('deepExtend', () => {
     const { deepExtend } = utils
-    expect(deepExtend({}, undefined)).toEqual({})
-    expect(deepExtend({}, null)).toEqual({})
-    expect(deepExtend({ b: 2 }, { a: 1, c: 3 })).toEqual({ a: 1, b: 2, c: 3 })
-    // expect(deepExtend({}, [])).toEqual({})
+
+    it('should deep extend the target object', () => {
+      expect(deepExtend({ b: 2 }, { a: 1, c: 3 })).toEqual({ a: 1, b: 2, c: 3 })
+    })
+
+    it('should work with undefined/null', () => {
+      expect(deepExtend({}, undefined)).toEqual({})
+      expect(deepExtend({}, null)).toEqual({})
+    })
+
+    it('should throw an error if source is not a plain object', () => {
+      spyOn(console, 'error')
+      deepExtend({}, [])
+      expect(console.error).toHaveBeenCalledWith('[Vue-Treeselect Error] You should not reach here.')
+    })
   })
 
-  it('last', () => {
+  describe('last', () => {
     const { last } = utils
-    expect(last([])).toBe(undefined)
-    expect(last([ 1 ])).toBe(1)
-    expect(last([ 1, 2, 3 ])).toBe(3)
+
+    it('returns undefined if array is empty', () => {
+      expect(last([])).toBe(undefined)
+    })
+
+    it('returns last element of array', () => {
+      expect(last([ 1 ])).toBe(1)
+      expect(last([ 1, 2, 3 ])).toBe(3)
+    })
+
+    it('throws an error if non-array argument passed', () => {
+      spyOn(console, 'error')
+      last({})
+      expect(console.error).toHaveBeenCalledWith('[Vue-Treeselect Warning]', 'unexpected type')
+    })
   })
 
-  it('findIndex', () => {
+  describe('findIndex', () => {
     const { findIndex } = utils
-    expect(findIndex([ 1, 2, 3 ], n => n % 2 === 0)).toBe(1)
+
+    it('should return the index of element in the array', () => {
+      expect(findIndex([ 1, 2, 3 ], n => n % 2 === 0)).toBe(1)
+      expect(findIndex([ 1 ], n => n < 0)).toBe(-1)
+    })
+
+    it('should be able to polyfill', () => {
+      const origin = Array.prototype.findIndex
+      Array.prototype.findIndex = null // eslint-disable-line no-extend-native
+      expect(findIndex([ 1, 2, 3 ], n => n % 2 === 0)).toBe(1)
+      expect(findIndex([ 1 ], n => n < 0)).toBe(-1)
+      Array.prototype.findIndex = origin // eslint-disable-line no-extend-native
+    })
   })
 
   it('removeFromArray', () => {

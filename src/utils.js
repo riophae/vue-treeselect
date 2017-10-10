@@ -1,5 +1,5 @@
 export const warning = process.env.NODE_ENV === 'production'
-  ? noop
+  ? /* istanbul ignore next */ noop
   : function warning(checker, complainer) {
     if (!checker()) {
       const message = [ '[Vue-Treeselect Warning]' ].concat(complainer())
@@ -11,7 +11,7 @@ export const warning = process.env.NODE_ENV === 'production'
   }
 
 export const unreachable = process.env.NODE_ENV === 'production'
-  ? noop
+  ? /* istanbul ignore next */ noop
   : function unreachable() {
     // eslint-disable-next-line no-console
     console.error('[Vue-Treeselect Error] You should not reach here.')
@@ -27,7 +27,9 @@ export function onlyOnLeftClick(mouseDownHandler) {
   }
 }
 
-export function noop() { /* empty */ }
+export function noop() {
+  /* istanbul ignore next */
+}
 
 function isPlainObject(value) {
   if (value == null || typeof value !== 'object') return false
@@ -70,16 +72,18 @@ export function last(arr) {
   return arr[arr.length - 1]
 }
 
-export function findIndex(arr, predicate, ctx) {
-  if (typeof Array.prototype.findIndex === 'function') {
-    return arr.findIndex(predicate, ctx)
-  }
-
+export function findIndexFallback(arr, predicate, ctx) {
   for (let i = 0, len = arr.length; i < len; i++) {
     if (predicate.call(ctx, arr[i], i, arr)) return i
   }
 
   return -1
+}
+
+export function findIndex(arr, predicate, ctx) {
+  return typeof Array.prototype.findIndex === 'function'
+    ? arr.findIndex(predicate, ctx)
+    : findIndexFallback(arr, predicate, ctx)
 }
 
 export function removeFromArray(arr, elem) {

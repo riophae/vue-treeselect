@@ -27,15 +27,11 @@
 
     methods: {
       focus() {
-        if (this.$refs.input) {
-          this.$refs.input.focus()
-        }
+        this.$refs.input.focus()
       },
 
       blur() {
-        if (this.$refs.input) {
-          this.$refs.input.blur()
-        }
+        this.$refs.input.blur()
       },
 
       onFocus() {
@@ -165,7 +161,9 @@
       updateInputWidth() {
         this.inputWidth = Math.max(
           MIN_INPUT_WIDTH,
-          this.$refs.sizer ? this.$refs.sizer.scrollWidth + 5 : 0,
+          this.$refs.sizer
+            ? this.$refs.sizer.scrollWidth + 5
+            : /* istanbul ignore next */ 0,
         )
       },
     },

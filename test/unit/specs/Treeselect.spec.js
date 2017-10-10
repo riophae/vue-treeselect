@@ -351,7 +351,6 @@ describe('Basic', () => {
 
     // TODO: 应该把这段代码移动到别的位置？比如专门做参数验证的地方
     it('should warn about the absent of `loadChildrenOptions` prop when unloaded branch node detected', () => {
-      const originalConsoleError = console.error
       spyOn(console, 'error')
 
       mount(Treeselect, {
@@ -364,8 +363,10 @@ describe('Basic', () => {
         },
       })
 
-      expect(console.error).toHaveBeenCalled()
-      console.error = originalConsoleError
+      expect(console.error).toHaveBeenCalledWith(
+        '[Vue-Treeselect Warning]',
+        'Unloaded branch node detected. `loadChildrenOptions` prop is required to load its children.',
+      )
     })
   })
 
@@ -455,6 +456,54 @@ describe('Basic', () => {
     vm.select(aa)
     expect(vm.internalValue).toEqual([ 'aa' ])
   })
+
+  it('should rebuild state after swithching from single to multiple', () => {
+    const wrapper = mount(Treeselect, {
+      propsData: {
+        options: [ {
+          id: 'a',
+          label: 'a',
+          children: [ {
+            id: 'aa',
+            label: 'aa',
+          } ],
+        } ],
+        multiple: false,
+        value: [ 'a' ],
+      },
+    })
+
+    expect(wrapper.data().nodeCheckedStateMap).toBeEmptyObject()
+    wrapper.setProps({ multiple: true })
+    expect(wrapper.data().nodeCheckedStateMap).toBeNonEmptyObject()
+  })
+
+  it('should rebuild state after value changed externally when multiple=true', () => {
+    const wrapper = mount(Treeselect, {
+      propsData: {
+        options: [ {
+          id: 'a',
+          label: 'a',
+          children: [ {
+            id: 'aa',
+            label: 'aa',
+          } ],
+        } ],
+        multiple: true,
+        value: [],
+      },
+    })
+
+    expect(wrapper.data().nodeCheckedStateMap).toEqual({
+      a: 0,
+      aa: 0,
+    })
+    wrapper.setProps({ value: [ 'a' ] })
+    expect(wrapper.data().nodeCheckedStateMap).toEqual({
+      a: 2,
+      aa: 2,
+    })
+  })
 })
 
 describe('SearchInput', () => {
@@ -466,6 +515,23 @@ describe('SearchInput', () => {
     })
     const input = wrapper.find('.vue-treeselect__input')[0]
     expect(input.element.getAttribute('autocomplete')).toBe('off')
+  })
+
+  it('focusInput & blurInput', () => {
+    const wrapper = mount(Treeselect, {
+      attachToDocument: true,
+      propsData: {
+        options: [],
+        disabled: false,
+        searchable: true,
+        autofocus: false,
+      },
+    })
+
+    wrapper.vm.focusInput()
+    expect(wrapper.data().isFocused).toBe(true)
+    wrapper.vm.blurInput()
+    expect(wrapper.data().isFocused).toBe(false)
   })
 })
 
