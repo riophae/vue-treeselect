@@ -2,8 +2,8 @@ const webpackConfig = require('../../build/webpack.test.conf')
 
 module.exports = config => {
   config.set({
-    browsers: [ 'PhantomJS', 'ChromeHeadless' ],
-    frameworks: [ 'jasmine', 'jasmine-matchers', 'phantomjs-shim' ],
+    browsers: [ 'ChromeHeadless' ],
+    frameworks: [ 'jasmine', 'jasmine-matchers' ],
     reporters: [ 'spec', 'coverage' ],
     files: [ './index.js' ],
     preprocessors: {
