@@ -8,7 +8,6 @@ module.exports = config => {
     files: [ './index.js' ],
     preprocessors: {
       './index.js': [ 'webpack', 'sourcemap' ],
-      '../../src/**/*.js': [ 'coverage' ],
     },
     webpack: webpackConfig,
     webpackMiddleware: {
