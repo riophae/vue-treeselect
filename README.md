@@ -11,6 +11,7 @@
 - Multiple select
 - Fuzzy searching
 - Delayed loading (load data of deep level options only when needed)
+- Keyboard support
 - Rich options & highly customizable
 - Supports a wide range of browsers (see [below](#browser-compatibility))
 
