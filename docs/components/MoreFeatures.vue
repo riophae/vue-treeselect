@@ -5,6 +5,8 @@
       :clearable="clearable"
       :searchable="searchable"
       :disabled="disabled"
+      :clear-on-select="clearOnSelect"
+      :close-on-select="closeOnSelect"
       :options="options"
       :limit="3"
       :max-height="200"
@@ -16,6 +18,10 @@
       <label><input type="checkbox" v-model="clearable">Clearable</label>
       <label><input type="checkbox" v-model="searchable">Searchable</label>
       <label><input type="checkbox" v-model="disabled">Disabled</label>
+    </p>
+    <p>
+      <label><input type="checkbox" v-model="clearOnSelect">Clear on select</label>
+      <label><input type="checkbox" v-model="closeOnSelect">Close on select</label>
     </p>
   </div>
 </template>
@@ -29,6 +35,8 @@
       clearable: true,
       searchable: true,
       disabled: false,
+      clearOnSelect: true,
+      closeOnSelect: false,
       value: [ 'a' ],
       options: generateOptions(2),
     }),
