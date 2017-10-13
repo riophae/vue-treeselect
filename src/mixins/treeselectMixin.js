@@ -971,7 +971,7 @@ export default {
       }
 
       const toggleFlag = this.multiple && !this.flat
-        ? this.nodeCheckedStateMap[node.id] !== CHECKED
+        ? this.nodeCheckedStateMap[node.id] === UNCHECKED
         : !this.isSelected(node)
 
       if (toggleFlag) {
