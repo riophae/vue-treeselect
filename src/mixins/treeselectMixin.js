@@ -66,6 +66,15 @@ export default {
     },
 
     /**
+     * Whether backspace removes an item if there is no text input
+     * @type {boolean}
+     */
+    backspaceRemoves: {
+      type: Boolean,
+      default: true,
+    },
+
+    /**
      * Show branch nodes before leaf nodes?
      * @default false
      * @type {boolean}
@@ -1054,6 +1063,7 @@ export default {
     },
 
     maybeRemoveLastValue() {
+      /* istanbul ignore next */
       if (!this.hasValue) return
       const lastValue = last(this.internalValue)
       const lastSelectedNode = this.getNode(lastValue)

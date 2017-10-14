@@ -37,6 +37,11 @@
         defaultValue: v('false'),
         description: 'Autofocus the component on mount.',
       }, {
+        name: 'backspaceRemoves',
+        type: 'Boolean',
+        defaultValue: v('true'),
+        description: 'Whether backspace removes an item if there is no text input.',
+      }, {
         name: 'branchNodesFirst',
         type: 'Boolean',
         defaultValue: v('false'),

@@ -57,9 +57,9 @@
 
         // https://css-tricks.com/snippets/javascript/javascript-keycodes/
         // https://stackoverflow.com/questions/4471582/javascript-keycode-vs-which
-        switch ('which' in evt ? evt.which : evt.keyCode) {
+        switch (/* istanbul ignore next */ 'which' in evt ? evt.which : evt.keyCode) {
           case KEY_CODES.BACKSPACE: {
-            if (!this.instance.searchQuery.length) {
+            if (this.instance.backspaceRemoves && !this.instance.searchQuery.length) {
               this.instance.maybeRemoveLastValue()
             }
             break
@@ -83,6 +83,7 @@
       },
 
       onMouseDown(evt) {
+        /* istanbul ignore next */
         if (this.instance.searchQuery.length) {
           // Prevent it from bubbling to the top level and triggering `preventDefault()`
           // to make the textbox unselectable

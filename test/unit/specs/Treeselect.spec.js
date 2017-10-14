@@ -20,6 +20,7 @@ async function typeSearchText(wrapper, text) {
     },
   })
   await sleep(300)
+  expect(wrapper.vm.searchQuery).toBe(text)
 }
 
 describe('Basic', () => {
@@ -1458,7 +1459,7 @@ describe('Props', () => {
     })
   })
 
-  it('若设置为展开，则应该自动加载子节点', () => {
+  it('should request children options loading when expanded', () => {
     // TODO: 需要考虑服务端渲染的情况
     const loadChildrenOptions = jasmine.createSpy('loadChildrenOptions')
     const wrapper = mount(Treeselect, {
@@ -2063,56 +2064,163 @@ describe('Methods', () => {
   })
 })
 
-describe('Esc 键', () => {
-  it('退格键', () => {
+describe('Keyboard Support', () => {
+  // currently avoriaz has a bad support for keyboard event testing
+  // so here we implement it ourself
+  function customTrigger(wrapper, eventType, eventData) {
+    const event = document.createEvent('Event')
+    event.initEvent(eventType, true, true)
+    Object.assign(event, eventData)
+    wrapper.element.dispatchEvent(event)
+    wrapper.update()
+  }
+
+  function queryInput(wrapper) {
+    return wrapper.find('input[type="text"]')[0]
+  }
+
+  const KEY_BACKSPACE = { which: 8, keyCode: 8 }
+  const KEY_ESCAPE = { which: 27, keyCode: 27 }
+  const KEY_A = { which: 65, keyCode: 65 }
+
+  describe('backspace key', () => {
+    let wrapper, input
+
+    beforeEach(() => {
+      wrapper = mount(Treeselect, {
+        propsData: {
+          options: [ {
+            id: 'a',
+            label: 'a',
+          }, {
+            id: 'b',
+            label: 'b',
+          } ],
+          multiple: true,
+          backspaceRemoves: true,
+          value: [ 'a', 'b' ],
+        },
+      })
+      input = queryInput(wrapper)
+
+      expect(wrapper.vm.searchQuery).toBe('')
+      expect(wrapper.vm.internalValue).toEqual([ 'a', 'b' ])
+    })
+
+    it('should remove the last value if search input is empty', () => {
+      customTrigger(input, 'keydown', KEY_BACKSPACE)
+      expect(wrapper.vm.internalValue).toEqual([ 'a' ])
+      customTrigger(input, 'keydown', KEY_BACKSPACE)
+      expect(wrapper.vm.internalValue).toEqual([])
+    })
+
+    it('should do nothing if search input has value', async done => {
+      await typeSearchText(wrapper, 'test')
+      expect(wrapper.vm.searchQuery).toBe('test')
+      customTrigger(input, 'keydown', KEY_BACKSPACE)
+      expect(wrapper.vm.internalValue).toEqual([ 'a', 'b' ])
+      done()
+    })
+
+    it('should do nothing when backspaceRemoves=false', () => {
+      wrapper.setProps({ backspaceRemoves: false })
+      customTrigger(input, 'keydown', KEY_BACKSPACE)
+      expect(wrapper.vm.internalValue).toEqual([ 'a', 'b' ])
+    })
+  })
+
+  describe('escape key', () => {
+    let wrapper, input
+
+    beforeEach(() => {
+      wrapper = mount(Treeselect, {
+        propsData: {
+          options: [ {
+            id: 'a',
+            label: 'a',
+          }, {
+            id: 'b',
+            label: 'b',
+          } ],
+          multiple: true,
+          escapeClearsValue: true,
+          value: [ 'a', 'b' ],
+        },
+      })
+      input = queryInput(wrapper)
+    })
+
+    it('should reset search query if input has value', async done => {
+      await typeSearchText(wrapper, 'test')
+      customTrigger(input, 'keydown', KEY_ESCAPE)
+      expect(wrapper.data()).toEqual(jasmine.objectContaining({
+        searchQuery: '',
+        internalValue: [ 'a', 'b' ],
+      }))
+      done()
+    })
+
+    it('should close the dropdown if input is empty', () => {
+      wrapper.vm.openMenu()
+      expect(wrapper.data()).toEqual(jasmine.objectContaining({
+        searchQuery: '',
+        internalValue: [ 'a', 'b' ],
+        isOpen: true,
+      }))
+      customTrigger(input, 'keydown', KEY_ESCAPE)
+      expect(wrapper.data()).toEqual(jasmine.objectContaining({
+        searchQuery: '',
+        internalValue: [ 'a', 'b' ],
+        isOpen: false,
+      }))
+    })
+
+    it('should reset value if dropdown is closed', () => {
+      expect(wrapper.data()).toEqual(jasmine.objectContaining({
+        searchQuery: '',
+        internalValue: [ 'a', 'b' ],
+        isOpen: false,
+      }))
+      customTrigger(input, 'keydown', KEY_ESCAPE)
+      expect(wrapper.data()).toEqual(jasmine.objectContaining({
+        searchQuery: '',
+        internalValue: [],
+        isOpen: false,
+      }))
+    })
+  })
+
+  it('should ignore any key press combined with modifier key', () => {
+    [ 'ctrlKey', 'shiftKey', 'metaKey', 'altKey' ].forEach(modifierKey => {
+      const wrapper = mount(Treeselect, {
+        propsData: {
+          options: [ {
+            id: 'a',
+            label: 'a',
+          } ],
+          multiple: true,
+          escapeClearsValue: true,
+          value: [ 'a' ],
+        },
+      })
+      const input = queryInput(wrapper)
+
+      customTrigger(input, 'keydown', { ...KEY_ESCAPE, [modifierKey]: true })
+      expect(wrapper.vm.internalValue).toEqual([ 'a' ])
+    })
+  })
+
+  it('any other key press should activate dropdown', () => {
     const wrapper = mount(Treeselect, {
       propsData: {
-        options: [ {
-          id: 'a',
-          label: 'a',
-        }, {
-          id: 'b',
-          label: 'b',
-        } ],
-        multiple: true,
-        escapeClearsValue: true,
+        options: [],
       },
     })
-    const input = wrapper.find('input[type="text"]')[0]
+    const input = queryInput(wrapper)
 
-    wrapper.setData({
-      searchQuery: 'keyword',
-      internalValue: [ 'a', 'b' ],
-      isOpen: true,
-      isFocused: true,
-    })
-
-    // reset search query
-    input.trigger('keydown.esc')
-    expect(wrapper.data()).toEqual(jasmine.objectContaining({
-      searchQuery: '',
-      internalValue: [ 'a', 'b' ],
-      isFocused: true,
-      isOpen: true,
-    }))
-
-    // close the dropdown
-    input.trigger('keydown.esc')
-    expect(wrapper.data()).toEqual(jasmine.objectContaining({
-      searchQuery: '',
-      internalValue: [ 'a', 'b' ],
-      isFocused: true,
-      isOpen: false,
-    }))
-
-    // reset value
-    input.trigger('keydown.esc')
-    expect(wrapper.data()).toEqual(jasmine.objectContaining({
-      searchQuery: '',
-      internalValue: [],
-      isFocused: true,
-      isOpen: false,
-    }))
+    expect(wrapper.vm.isOpen).toBe(false)
+    customTrigger(input, 'keydown', KEY_A)
+    expect(wrapper.vm.isOpen).toBe(true)
   })
 })
 
