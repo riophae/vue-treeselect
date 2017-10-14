@@ -584,7 +584,7 @@ export default {
     getNode(nodeId) {
       warning(
         () => nodeId != null,
-        () => `nodeId not valid: ${nodeId}`
+        () => `Invalid node id: ${nodeId}`
       )
 
       return this.nodeMap[nodeId] || {
@@ -603,9 +603,10 @@ export default {
     },
 
     checkIfBranchNode(node) {
+      /* istanbul ignore next */
       warning(
         () => node && node.isBranch,
-        () => `Should be of branch node: ${node}`
+        () => `Expected a branch node, instead got: ${node}`
       )
     },
 
@@ -939,7 +940,7 @@ export default {
       warning(
         () => !hasOwn(this.nodeMap, node.id),
         () => `Detected duplicate nodes with same id: ${JSON.stringify(node.id)}. ` +
-          `Their labels are ${JSON.stringify(this.nodeMap[node.id].label)} and ${JSON.stringify(node.label)}`
+          `Their labels are ${this.nodeMap[node.id].label} and ${node.label} respectively.`
       )
     },
 

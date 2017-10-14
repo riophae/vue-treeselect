@@ -350,26 +350,6 @@ describe('Basic', () => {
       expect(a.raw).toBe(rawA)
       expect(aa.raw).toBe(rawAa)
     })
-
-    // TODO: 应该把这段代码移动到别的位置？比如专门做参数验证的地方
-    it('should warn about the absent of `loadChildrenOptions` prop when unloaded branch node detected', () => {
-      spyOn(console, 'error')
-
-      mount(Treeselect, {
-        propsData: {
-          options: [ {
-            id: 'id',
-            label: 'label',
-            children: null,
-          } ],
-        },
-      })
-
-      expect(console.error).toHaveBeenCalledWith(
-        '[Vue-Treeselect Warning]',
-        'Unloaded branch node detected. `loadChildrenOptions` prop is required to load its children.',
-      )
-    })
   })
 
   it('rootOptions', () => {
@@ -422,6 +402,28 @@ describe('Basic', () => {
         expect(vm.internalValue).toBeEmptyArray()
       })
     })
+  })
+
+  it('should warn about duplicate node ids', () => {
+    spyOn(console, 'error')
+
+    mount(Treeselect, {
+      propsData: {
+        options: [ {
+          id: 'same_id',
+          label: 'a',
+        }, {
+          id: 'same_id',
+          label: 'b',
+        } ],
+      },
+    })
+
+    expect(console.error).toHaveBeenCalledWith(
+      '[Vue-Treeselect Warning]',
+      'Detected duplicate nodes with same id: "same_id". ' +
+        'Their labels are a and b respectively.'
+    )
   })
 
   it('should rebuild state after swithching from single to multiple', () => {
@@ -1949,6 +1951,55 @@ describe('Props', () => {
 
       done()
     })
+
+    it('should warn about the absent of `loadChildrenOptions` prop when unloaded branch node detected', () => {
+      spyOn(console, 'error')
+
+      mount(Treeselect, {
+        propsData: {
+          options: [ {
+            id: 'id',
+            label: 'label',
+            children: null,
+          } ],
+        },
+      })
+
+      expect(console.error).toHaveBeenCalledWith(
+        '[Vue-Treeselect Warning]',
+        'Unloaded branch node detected. `loadChildrenOptions` prop is required to load its children.',
+      )
+    })
+
+    it('shoud error if data is not array', async done => {
+      spyOn(console, 'error')
+
+      const wrapper = mount(Treeselect, {
+        propsData: {
+          options: [ {
+            id: 'a',
+            label: 'a',
+            children: null,
+          } ],
+          loadChildrenOptions(parentNode, callback) {
+            callback(null, /* non-arry */ null)
+          },
+        },
+        data: {
+          isOpen: true,
+        },
+      })
+      const { vm } = wrapper
+
+      vm.toggleExpanded(vm.nodeMap.a)
+      await vm.$nextTick()
+      expect(vm.nodeMap.a.error).toBe('Received unrecognizable data')
+      expect(console.error).toHaveBeenCalledWith(
+        '[Vue-Treeselect Warning]',
+        'Received unrecognizable data null while loading children options of node a'
+      )
+      done()
+    })
   })
 
   describe('searchable', () => {
@@ -2274,6 +2325,57 @@ describe('Methods', () => {
       wrapper.setProps({ disabled: true })
       wrapper.vm.openMenu()
       expect(wrapper.vm.isOpen).toBe(false)
+    })
+  })
+
+  describe('closeMenu()', () => {
+    let wrapper
+
+    beforeEach(() => {
+      wrapper = mount(Treeselect, {
+        propsData: {
+          options: [],
+        },
+        data: {
+          isOpen: true,
+        },
+      })
+    })
+
+    it('should close the dropdown', () => {
+      wrapper.vm.closeMenu()
+      expect(wrapper.vm.isOpen).toBe(false)
+    })
+  })
+
+  describe('getNode()', () => {
+    let wrapper
+
+    beforeEach(() => {
+      wrapper = mount(Treeselect, {
+        propsData: {
+          options: [ {
+            id: 'a',
+            label: 'a',
+          } ],
+        },
+      })
+    })
+
+    it('should be able to obtain normalized node by id', () => {
+      expect(wrapper.vm.getNode('a')).toEqual(jasmine.objectContaining({
+        id: 'a',
+        label: 'a',
+      }))
+    })
+
+    it('should warn about invalid node id', () => {
+      spyOn(console, 'error')
+      wrapper.vm.getNode(null)
+      expect(console.error).toHaveBeenCalledWith(
+        '[Vue-Treeselect Warning]',
+        'Invalid node id: null'
+      )
     })
   })
 })
