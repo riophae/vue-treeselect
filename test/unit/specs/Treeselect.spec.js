@@ -1,8 +1,8 @@
 import { mount } from 'avoriaz'
-import Treeselect from '../../../src/components/Treeselect'
-import TreeselectOption from '../../../src/components/Option'
-import SearchInput from '../../../src/components/SearchInput'
-import { UNCHECKED, INDETERMINATE, CHECKED } from '../../../src/constants'
+import Treeselect from '@riophae/vue-treeselect/components/Treeselect'
+import TreeselectOption from '@riophae/vue-treeselect/components/Option'
+import SearchInput from '@riophae/vue-treeselect/components/SearchInput'
+import { UNCHECKED, INDETERMINATE, CHECKED } from '@riophae/vue-treeselect/constants'
 
 function sleep(duration) {
   return new Promise(resolve => setTimeout(resolve, duration))

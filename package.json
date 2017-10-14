@@ -58,6 +58,7 @@
     "eslint": "^4.3.0",
     "eslint-config-riophae": "0.0.2",
     "eslint-friendly-formatter": "^3.0.0",
+    "eslint-import-resolver-webpack": "^0.8.3",
     "eslint-loader": "^1.7.1",
     "eslint-plugin-import": "^2.7.0",
     "eslint-plugin-vue": "^3.12.0",
