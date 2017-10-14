@@ -2180,7 +2180,7 @@ describe('Props', () => {
       expect(vm.internalValue).toEqual([ 'aaaa', 'bbb', 'cc', 'd' ])
     })
 
-    it('should reorder value immediately after component gets initialized', () => {
+    it('should re-sort value immediately after component gets initialized', () => {
       const wrapper = mount(Treeselect, {
         propsData: {
           multiple: true,
@@ -2192,6 +2192,21 @@ describe('Props', () => {
       const { vm } = wrapper
 
       expect(vm.internalValue).toEqual([ 'c', 'bb', 'aaa' ])
+    })
+
+    it('should re-sort value after prop value changes', () => {
+      const wrapper = mount(Treeselect, {
+        propsData: {
+          multiple: true,
+          options: generateOptions(4),
+          sortValueBy: 'LEVEL',
+          value: [ 'aaa', 'bb', 'c' ],
+        },
+      })
+
+      expect(wrapper.vm.internalValue).toEqual([ 'c', 'bb', 'aaa' ])
+      wrapper.setProps({ sortValueBy: 'INDEX' })
+      expect(wrapper.vm.internalValue).toEqual([ 'aaa', 'bb', 'c' ])
     })
   })
 })
