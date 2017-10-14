@@ -1988,7 +1988,7 @@ describe('Props', () => {
         },
       })
       const { vm } = wrapper
-      const { aaa, bb, c, dddd } = vm.nodeMap
+      const { aaa, ab, bb, c, dddd } = vm.nodeMap
 
       expect(vm.internalValue).toEqual([])
       vm.select(bb)
@@ -1999,6 +1999,8 @@ describe('Props', () => {
       expect(vm.internalValue).toEqual([ 'bb', 'aaa', 'dddd' ])
       vm.select(c)
       expect(vm.internalValue).toEqual([ 'c', 'bb', 'aaa', 'dddd' ])
+      vm.select(ab)
+      expect(vm.internalValue).toEqual([ 'c', 'ab', 'bb', 'aaa', 'dddd' ])
     })
 
     it('when sortValueBy="INDEX"', () => {
