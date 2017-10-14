@@ -803,10 +803,7 @@ export default {
 
     buildNodeCheckedStateMap() {
       const map = this.nodeCheckedStateMap = Object.create(null)
-
-      if (!this.multiple) {
-        return
-      }
+      if (!this.multiple) return
 
       this.selectedNodes.forEach(selectedNode => {
         map[selectedNode.id] = CHECKED
