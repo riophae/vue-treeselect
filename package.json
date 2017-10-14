@@ -25,7 +25,7 @@
     "bundle": "node build/bundle.js",
     "docs": "rimraf gh-pages && mkdir gh-pages && node build/build.js",
     "unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --watch",
-    "gh-pages": "gh-pages --dist gh-pages --branch gh-pages --dotfiles",
+    "gh-pages": "npm run docs && gh-pages --dist gh-pages --branch gh-pages --dotfiles",
     "testonly": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
     "test": "npm run testonly",
     "pretest": "npm run lint",
