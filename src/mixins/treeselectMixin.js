@@ -5,25 +5,13 @@ import {
   quickCompare, onlyOnLeftClick,
   hasOwn, last, findIndex, removeFromArray,
  } from '../utils'
-
-const UNCHECKED = 0
-const INDETERMINATE = 1
-const CHECKED = 2
-
-const UNMATCHED = 0
-const DESCENDANT_MATCHED = 1
-const MATCHED = 2
-
-const NO_PARENT_NODE = null
-
-const ALL_CHILDREN = 'ALL_CHILDREN'
-const ALL_DESCENDANTS = 'ALL_DESCENDANTS'
-const LEAF_CHILDREN = 'LEAF_CHILDREN'
-const LEAF_DESCENDANTS = 'LEAF_DESCENDANTS'
-
-const ORDER_SELECTED = 'ORDER_SELECTED'
-const LEVEL = 'LEVEL'
-const INDEX = 'INDEX'
+ import {
+   UNCHECKED, INDETERMINATE, CHECKED,
+   UNMATCHED, DESCENDANT_MATCHED, MATCHED,
+   NO_PARENT_NODE,
+   ALL_CHILDREN, ALL_DESCENDANTS, LEAF_CHILDREN, LEAF_DESCENDANTS,
+   ORDER_SELECTED, LEVEL, INDEX,
+ } from '../constants'
 
 function sortValueByIndex(a, b) {
   let i = 0

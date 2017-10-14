@@ -2,6 +2,7 @@ import { mount } from 'avoriaz'
 import Treeselect from '../../../src/components/Treeselect'
 import TreeselectOption from '../../../src/components/Option'
 import SearchInput from '../../../src/components/SearchInput'
+import { UNCHECKED, INDETERMINATE, CHECKED } from '../../../src/constants'
 
 function sleep(duration) {
   return new Promise(resolve => setTimeout(resolve, duration))
@@ -422,41 +423,6 @@ describe('Basic', () => {
     })
   })
 
-  it('单选', () => {
-    const wrapper = mount(Treeselect, {
-      propsData: {
-        multiple: false,
-        options: [ {
-          id: 'a',
-          label: 'a',
-          children: [ {
-            id: 'aa',
-            label: 'aa',
-          }, {
-            id: 'ab',
-            label: 'ab',
-          }, {
-            id: 'ac',
-            label: 'ac',
-          } ],
-        }, {
-          id: 'b',
-          label: 'b',
-        } ],
-      },
-    })
-    const { vm } = wrapper
-    const { a, aa } = vm.nodeMap
-
-    expect(vm.internalValue).toBeEmptyArray()
-    vm.select(a)
-    expect(vm.internalValue).toEqual([ 'a' ])
-    vm.select(aa)
-    expect(vm.internalValue).toEqual([ 'aa' ])
-    vm.select(aa)
-    expect(vm.internalValue).toEqual([ 'aa' ])
-  })
-
   it('should rebuild state after swithching from single to multiple', () => {
     const wrapper = mount(Treeselect, {
       propsData: {
@@ -506,6 +472,479 @@ describe('Basic', () => {
   })
 })
 
+describe('Single Select', () => {
+  it('basic', () => {
+    const wrapper = mount(Treeselect, {
+      propsData: {
+        multiple: false,
+        options: [ {
+          id: 'a',
+          label: 'a',
+          children: [ {
+            id: 'aa',
+            label: 'aa',
+          }, {
+            id: 'ab',
+            label: 'ab',
+          }, {
+            id: 'ac',
+            label: 'ac',
+          } ],
+        }, {
+          id: 'b',
+          label: 'b',
+        } ],
+      },
+    })
+    const { vm } = wrapper
+    const { a, aa } = vm.nodeMap
+
+    expect(vm.internalValue).toBeEmptyArray()
+    vm.select(a) // select one
+    expect(vm.internalValue).toEqual([ 'a' ])
+    expect(vm.selectedNodeMap).toEqual({ a: true })
+    vm.select(aa) // select another
+    expect(vm.internalValue).toEqual([ 'aa' ])
+    expect(vm.selectedNodeMap).toEqual({ aa: true })
+    vm.select(aa) // select again
+    expect(vm.internalValue).toEqual([ 'aa' ])
+    expect(vm.selectedNodeMap).toEqual({ aa: true })
+  })
+})
+
+describe('Multi-select', () => {
+  let wrapper, vm
+
+  beforeEach(() => {
+    wrapper = mount(Treeselect, {
+      propsData: {
+        multiple: true,
+        sortValueBy: 'ORDER_SELECTED',
+        options: [ {
+          id: 'a',
+          label: 'a',
+          children: [ {
+            id: 'aa',
+            label: 'aa',
+            children: [ {
+              id: 'aaa',
+              label: 'aaa',
+            }, {
+              id: 'aab',
+              label: 'aab',
+            } ],
+          }, {
+            id: 'ab',
+            label: 'ab',
+          } ],
+        }, {
+          id: 'b',
+          label: 'b',
+        } ],
+      },
+    })
+    vm = wrapper.vm
+  })
+
+  it('case #1', () => {
+    // current:
+    //   [ ] a <- select
+    //    |--[ ] aa
+    //    |   |--[ ] aaa
+    //    |   |--[ ] aab
+    //    |--[ ] ab
+    //   [ ] b
+    // expected result:
+    //   [v] a
+    //    |--[v] aa
+    //    |   |--[v] aaa
+    //    |   |--[v] aab
+    //    |--[v] ab
+    //   [ ] b
+    vm.select(vm.nodeMap.a)
+    expect(vm.internalValue).toEqual([ 'a' ])
+    expect(vm.selectedNodeMap).toEqual({ a: true })
+    expect(vm.nodeCheckedStateMap).toEqual({
+      a: CHECKED,
+      aa: CHECKED,
+      aaa: CHECKED,
+      aab: CHECKED,
+      ab: CHECKED,
+      b: UNCHECKED,
+    })
+
+    // current:
+    //   [v] a
+    //    |--[v] aa <- deselect
+    //    |   |--[v] aaa
+    //    |   |--[v] aab
+    //    |--[v] ab
+    //   [ ] b
+    // expected result:
+    //   [-] a
+    //    |--[ ] aa
+    //    |   |--[ ] aaa
+    //    |   |--[ ] aab
+    //    |--[v] ab
+    //   [ ] b
+    vm.select(vm.nodeMap.aa)
+    expect(vm.internalValue).toEqual([ 'ab' ])
+    expect(vm.selectedNodeMap).toEqual({ ab: true })
+    expect(vm.nodeCheckedStateMap).toEqual({
+      a: INDETERMINATE,
+      aa: UNCHECKED,
+      aaa: UNCHECKED,
+      aab: UNCHECKED,
+      ab: CHECKED,
+      b: UNCHECKED,
+    })
+
+    // current:
+    //   [-] a
+    //    |--[ ] aa
+    //    |   |--[ ] aaa
+    //    |   |--[ ] aab
+    //    |--[v] ab
+    //   [ ] b <- select
+    // expected result:
+    //   [-] a
+    //    |--[ ] aa
+    //    |   |--[ ] aaa
+    //    |   |--[ ] aab
+    //    |--[v] ab
+    //   [v] b
+    vm.select(vm.nodeMap.b)
+    expect(vm.internalValue).toEqual([ 'ab', 'b' ])
+    expect(vm.selectedNodeMap).toEqual({ ab: true, b: true })
+    expect(vm.nodeCheckedStateMap).toEqual({
+      a: INDETERMINATE,
+      aa: UNCHECKED,
+      aaa: UNCHECKED,
+      aab: UNCHECKED,
+      ab: CHECKED,
+      b: CHECKED,
+    })
+
+    // current:
+    //   [-] a
+    //    |--[ ] aa <- select again
+    //    |   |--[ ] aaa
+    //    |   |--[ ] aab
+    //    |--[v] ab
+    //   [v] b
+    // expected result:
+    //   [v] a
+    //    |--[v] aa
+    //    |   |--[v] aaa
+    //    |   |--[v] aab
+    //    |--[v] ab
+    //   [v] b
+    vm.select(vm.nodeMap.aa)
+    expect(vm.internalValue).toEqual([ 'b', 'a' ]) // a should be after b
+    expect(vm.selectedNodeMap).toEqual({ a: true, b: true })
+    expect(vm.nodeCheckedStateMap).toEqual({
+      a: CHECKED,
+      aa: CHECKED,
+      aaa: CHECKED,
+      aab: CHECKED,
+      ab: CHECKED,
+      b: CHECKED,
+    })
+  })
+
+  it('case #2', () => {
+    // current:
+    //   [ ] a <- select
+    //    |--[ ] aa
+    //    |   |--[ ] aaa
+    //    |   |--[ ] aab
+    //    |--[ ] ab
+    //   [ ] b
+    // expected result:
+    //   [v] a
+    //    |--[v] aa
+    //    |   |--[v] aaa
+    //    |   |--[v] aab
+    //    |--[v] ab
+    //   [ ] b
+    vm.select(vm.nodeMap.a)
+    expect(vm.internalValue).toEqual([ 'a' ])
+    expect(vm.selectedNodeMap).toEqual({ a: true })
+    expect(vm.nodeCheckedStateMap).toEqual({
+      a: CHECKED,
+      aa: CHECKED,
+      aaa: CHECKED,
+      aab: CHECKED,
+      ab: CHECKED,
+      b: UNCHECKED,
+    })
+
+    // current:
+    //   [v] a
+    //    |--[v] aa
+    //    |   |--[v] aaa
+    //    |   |--[v] aab
+    //    |--[v] ab
+    //   [ ] b <- select
+    // expected result:
+    //   [v] a
+    //    |--[v] aa
+    //    |   |--[v] aaa
+    //    |   |--[v] aab
+    //    |--[v] ab
+    //   [v] b
+    vm.select(vm.nodeMap.b)
+    expect(vm.internalValue).toEqual([ 'a', 'b' ])
+    expect(vm.selectedNodeMap).toEqual({ a: true, b: true })
+    expect(vm.nodeCheckedStateMap).toEqual({
+      a: CHECKED,
+      aa: CHECKED,
+      aaa: CHECKED,
+      aab: CHECKED,
+      ab: CHECKED,
+      b: CHECKED,
+    })
+
+    // current:
+    //   [v] a
+    //    |--[v] aa
+    //    |   |--[v] aaa <- deselect
+    //    |   |--[v] aab
+    //    |--[v] ab
+    //   [v] b
+    // expected result:
+    //   [-] a
+    //    |--[-] aa
+    //    |   |--[ ] aaa
+    //    |   |--[v] aab
+    //    |--[v] ab
+    //   [v] b
+    vm.select(vm.nodeMap.aaa)
+    expect(vm.internalValue).toEqual([ 'b', 'aab', 'ab' ]) // keep order
+    expect(vm.selectedNodeMap).toEqual({ aab: true, ab: true, b: true })
+    expect(vm.nodeCheckedStateMap).toEqual({
+      a: INDETERMINATE,
+      aa: INDETERMINATE,
+      aaa: UNCHECKED,
+      aab: CHECKED,
+      ab: CHECKED,
+      b: CHECKED,
+    })
+
+    // current:
+    //   [-] a
+    //    |--[-] aa
+    //    |   |--[ ] aaa <- select again
+    //    |   |--[v] aab
+    //    |--[v] ab
+    //   [v] b
+    // expected result:
+    //   [v] a
+    //    |--[v] aa
+    //    |   |--[v] aaa
+    //    |   |--[v] aab
+    //    |--[v] ab
+    //   [v] b
+    vm.select(vm.nodeMap.aaa)
+    expect(vm.internalValue).toEqual([ 'b', 'a' ]) // keep order
+    expect(vm.selectedNodeMap).toEqual({ a: true, b: true })
+    expect(vm.nodeCheckedStateMap).toEqual({
+      a: CHECKED,
+      aa: CHECKED,
+      aaa: CHECKED,
+      aab: CHECKED,
+      ab: CHECKED,
+      b: CHECKED,
+    })
+  })
+
+  it('case #3', () => {
+    // current:
+    //   [ ] a
+    //    |--[ ] aa
+    //    |   |--[ ] aaa <- select
+    //    |   |--[ ] aab
+    //    |--[ ] ab
+    //   [ ] b
+    // expected result:
+    //   [-] a
+    //    |--[-] aa
+    //    |   |--[v] aaa
+    //    |   |--[ ] aab
+    //    |--[ ] ab
+    //   [ ] b
+    vm.select(vm.nodeMap.aaa)
+    expect(vm.internalValue).toEqual([ 'aaa' ])
+    expect(vm.selectedNodeMap).toEqual({ aaa: true })
+    expect(vm.nodeCheckedStateMap).toEqual({
+      a: INDETERMINATE,
+      aa: INDETERMINATE,
+      aaa: CHECKED,
+      aab: UNCHECKED,
+      ab: UNCHECKED,
+      b: UNCHECKED,
+    })
+
+    // current:
+    //   [-] a
+    //    |--[-] aa
+    //    |   |--[v] aaa
+    //    |   |--[ ] aab
+    //    |--[ ] ab <- select
+    //   [ ] b
+    // expected result:
+    //   [-] a
+    //    |--[-] aa
+    //    |   |--[v] aaa
+    //    |   |--[ ] aab
+    //    |--[v] ab
+    //   [ ] b
+    vm.select(vm.nodeMap.ab)
+    expect(vm.internalValue).toEqual([ 'aaa', 'ab' ])
+    expect(vm.selectedNodeMap).toEqual({ aaa: true, ab: true })
+    expect(vm.nodeCheckedStateMap).toEqual({
+      a: INDETERMINATE,
+      aa: INDETERMINATE,
+      aaa: CHECKED,
+      aab: UNCHECKED,
+      ab: CHECKED,
+      b: UNCHECKED,
+    })
+
+    // current:
+    //   [-] a
+    //    |--[-] aa
+    //    |   |--[v] aaa
+    //    |   |--[ ] aab <- select
+    //    |--[v] ab
+    //   [ ] b
+    // expected result:
+    //   [v] a
+    //    |--[v] aa
+    //    |   |--[v] aaa
+    //    |   |--[v] aab
+    //    |--[v] ab
+    //   [ ] b
+    vm.select(vm.nodeMap.aab)
+    expect(vm.internalValue).toEqual([ 'a' ])
+    expect(vm.selectedNodeMap).toEqual({ a: true })
+    expect(vm.nodeCheckedStateMap).toEqual({
+      a: CHECKED,
+      aa: CHECKED,
+      aaa: CHECKED,
+      aab: CHECKED,
+      ab: CHECKED,
+      b: UNCHECKED,
+    })
+  })
+
+  it('case #4', () => {
+    // current:
+    //   [ ] a
+    //    |--[ ] aa
+    //    |   |--[ ] aaa
+    //    |   |--[ ] aab
+    //    |--[ ] ab <- select
+    //   [ ] b
+    // expected result:
+    //   [-] a
+    //    |--[ ] aa
+    //    |   |--[ ] aaa
+    //    |   |--[ ] aab
+    //    |--[v] ab
+    //   [ ] b
+    vm.select(vm.nodeMap.ab)
+    expect(vm.internalValue).toEqual([ 'ab' ])
+    expect(vm.selectedNodeMap).toEqual({ ab: true })
+    expect(vm.nodeCheckedStateMap).toEqual({
+      a: INDETERMINATE,
+      aa: UNCHECKED,
+      aaa: UNCHECKED,
+      aab: UNCHECKED,
+      ab: CHECKED,
+      b: UNCHECKED,
+    })
+
+    // current:
+    //   [-] a
+    //    |--[ ] aa
+    //    |   |--[ ] aaa
+    //    |   |--[ ] aab
+    //    |--[v] ab
+    //   [ ] b <- select
+    // expected result:
+    //   [-] a
+    //    |--[ ] aa
+    //    |   |--[ ] aaa
+    //    |   |--[ ] aab
+    //    |--[v] ab
+    //   [v] b
+    vm.select(vm.nodeMap.b)
+    expect(vm.internalValue).toEqual([ 'ab', 'b' ])
+    expect(vm.selectedNodeMap).toEqual({ ab: true, b: true })
+    expect(vm.nodeCheckedStateMap).toEqual({
+      a: INDETERMINATE,
+      aa: UNCHECKED,
+      aaa: UNCHECKED,
+      aab: UNCHECKED,
+      ab: CHECKED,
+      b: CHECKED,
+    })
+
+    // current:
+    //   [-] a
+    //    |--[ ] aa
+    //    |   |--[ ] aaa
+    //    |   |--[ ] aab <- select
+    //    |--[v] ab
+    //   [v] b
+    // expected result:
+    //   [-] a
+    //    |--[-] aa
+    //    |   |--[ ] aaa
+    //    |   |--[v] aab
+    //    |--[v] ab
+    //   [v] b
+    vm.select(vm.nodeMap.aab)
+    expect(vm.internalValue).toEqual([ 'ab', 'b', 'aab' ])
+    expect(vm.selectedNodeMap).toEqual({ aab: true, ab: true, b: true })
+    expect(vm.nodeCheckedStateMap).toEqual({
+      a: INDETERMINATE,
+      aa: INDETERMINATE,
+      aaa: UNCHECKED,
+      aab: CHECKED,
+      ab: CHECKED,
+      b: CHECKED,
+    })
+
+    // current:
+    //   [-] a
+    //    |--[-] aa
+    //    |   |--[ ] aaa <- select
+    //    |   |--[v] aab
+    //    |--[v] ab
+    //   [v] b
+    // expected result:
+    //   [v] a
+    //    |--[v] aa
+    //    |   |--[v] aaa
+    //    |   |--[v] aab
+    //    |--[v] ab
+    //   [v] b
+    vm.select(vm.nodeMap.aaa)
+    expect(vm.internalValue).toEqual([ 'b', 'a' ]) // keep order
+    expect(vm.selectedNodeMap).toEqual({ a: true, b: true })
+    expect(vm.nodeCheckedStateMap).toEqual({
+      a: CHECKED,
+      aa: CHECKED,
+      aaa: CHECKED,
+      aab: CHECKED,
+      ab: CHECKED,
+      b: CHECKED,
+    })
+  })
+})
+
 describe('SearchInput', () => {
   it('should disable auto complete', () => {
     const wrapper = mount(Treeselect, {
@@ -537,102 +976,6 @@ describe('SearchInput', () => {
 
 describe('Dropdown', () => {
   // TODO
-})
-
-describe('Multi-select', () => {
-  let wrapper, vm
-
-  beforeEach(() => {
-    wrapper = mount(Treeselect, {
-      propsData: {
-        multiple: true,
-        options: [ {
-          id: 'a',
-          label: 'a',
-          children: [ {
-            id: 'aa',
-            label: 'aa',
-            children: [ {
-              id: 'aaa',
-              label: 'aaa',
-            }, {
-              id: 'aab',
-              label: 'aab',
-            } ],
-          }, {
-            id: 'ab',
-            label: 'ab',
-          } ],
-        }, {
-          id: 'b',
-          label: 'b',
-        } ],
-      },
-    })
-    vm = wrapper.vm
-  })
-
-  it('case 1', () => {
-    // 选中一级节点
-    vm.select(vm.nodeMap.a)
-    expect(vm.internalValue).toEqual([ 'a' ])
-    // 取消选中刚才选中的节点的一个子节点
-    vm.select(vm.nodeMap.aa)
-    expect(vm.internalValue).toEqual([ 'ab' ])
-    // 选中另一个一级节点
-    vm.select(vm.nodeMap.b)
-    expect(vm.internalValue).toEqual([ 'ab', 'b' ])
-    // 把刚才取消选中的二级节点选回来
-    vm.select(vm.nodeMap.aa)
-    // 注意顺序
-    expect(vm.internalValue).toEqual([ 'b', 'a' ])
-  })
-
-  it('case 2', () => {
-    // 选中一级节点
-    vm.select(vm.nodeMap.a)
-    expect(vm.internalValue).toEqual([ 'a' ])
-    // 选中另一个一级节点
-    vm.select(vm.nodeMap.b)
-    expect(vm.internalValue).toEqual([ 'a', 'b' ])
-    // 取消选中一个已经选中的一级节点的三级节点
-    vm.select(vm.nodeMap.aaa)
-    // 注意顺序，以及同一个祖先节点下所有其他节点的选中情况
-    expect(vm.internalValue).toEqual([ 'b', 'aab', 'ab' ])
-    // 把刚才取消选中的三级节点选回来
-    vm.select(vm.nodeMap.aaa)
-    // 此时应该是全部选中的，注意顺序
-    expect(vm.internalValue).toEqual([ 'b', 'a' ])
-  })
-
-  it('case 3', () => {
-    // 选中一个三级节点
-    vm.select(vm.nodeMap.aaa)
-    expect(vm.internalValue).toEqual([ 'aaa' ])
-    // 选中刚刚选中的三级节点的父节点的所有兄弟节点
-    vm.select(vm.nodeMap.ab)
-    expect(vm.internalValue).toEqual([ 'aaa', 'ab' ])
-    // 再把所有三级节点都选中
-    vm.select(vm.nodeMap.aab)
-    // 于是一级节点被选中
-    expect(vm.internalValue).toEqual([ 'a' ])
-  })
-
-  it('case 4', () => {
-    // 选中一个二级节点
-    vm.select(vm.nodeMap.ab)
-    expect(vm.internalValue).toEqual([ 'ab' ])
-    // 选中一个一级节点
-    vm.select(vm.nodeMap.b)
-    expect(vm.internalValue).toEqual([ 'ab', 'b' ])
-    // 选中一个三级节点
-    vm.select(vm.nodeMap.aab)
-    expect(vm.internalValue).toEqual([ 'ab', 'b', 'aab' ])
-    // 再选中另一个三级节点
-    vm.select(vm.nodeMap.aaa)
-    // 所有节点被选中，注意顺序
-    expect(vm.internalValue).toEqual([ 'b', 'a' ])
-  })
 })
 
 describe('Props', () => {
@@ -1761,4 +2104,8 @@ describe('Esc 键', () => {
       isOpen: false,
     }))
   })
+})
+
+describe('Events', () => {
+  // TODO
 })
