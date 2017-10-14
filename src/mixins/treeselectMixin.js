@@ -598,17 +598,6 @@ export default {
       }
     },
 
-    getRawNodeById(nodeId) {
-      return this.nodeMap[nodeId].raw
-    },
-
-    getSelectedRawNodes() {
-      const value = this.getValue()
-      return this.multiple
-        ? value.map(this.getRawNodeById)
-        : this.getRawNodeById(value)
-    },
-
     isSelected(node) {
       return node.id in this.selectedNodeMap
     },
