@@ -2023,7 +2023,17 @@ describe('Props', () => {
     })
 
     it('should reorder value immediately after component gets initialized', () => {
-      // TODO
+      const wrapper = mount(Treeselect, {
+        propsData: {
+          multiple: true,
+          options: generateOptions(4),
+          sortValueBy: 'LEVEL',
+          value: [ 'aaa', 'bb', 'c' ],
+        },
+      })
+      const { vm } = wrapper
+
+      expect(vm.internalValue).toEqual([ 'c', 'bb', 'aaa' ])
     })
   })
 })

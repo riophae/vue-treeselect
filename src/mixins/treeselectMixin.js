@@ -780,13 +780,12 @@ export default {
         this.internalValue = Array.isArray(this.value)
           ? this.value.slice()
           : []
+        this.sortValue()
       } else {
         this.internalValue = this.value != null
           ? [ this.value ]
           : []
       }
-      // TODO
-      // this.sortValue()
     },
 
     initializeOptions() {
@@ -1073,8 +1072,8 @@ export default {
   },
 
   created() {
-    this.initializeValue()
     this.initializeOptions()
+    this.initializeValue()
     this.buildSelectedNodeMap()
     this.buildNodeCheckedStateMap()
   },
