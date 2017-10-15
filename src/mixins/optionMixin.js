@@ -19,13 +19,6 @@ export default {
         ? this.node.expandsOnSearch
         : this.node.isExpanded
     },
-
-    shouldShowCount() {
-      if (!this.node.isBranch) return false
-      return this.instance.searching
-        ? this.instance.showCountOnSearch
-        : this.instance.showCount
-    },
   },
 
   watch: {
