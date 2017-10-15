@@ -603,9 +603,9 @@ export default {
     },
 
     checkIfBranchNode(node) {
-      /* istanbul ignore next */
       warning(
         () => node && node.isBranch,
+        /* istanbul ignore next */
         () => `Expected a branch node, instead got: ${node}`
       )
     },
@@ -664,10 +664,6 @@ export default {
 
       evt.preventDefault()
       evt.stopPropagation()
-
-      if (this.disabled) {
-        return
-      }
 
       if (!this.isFocused) {
         this.focusInput()
@@ -762,10 +758,7 @@ export default {
     },
 
     toggleExpanded(node) {
-      warning(
-        () => node.isBranch,
-        () => 'Expected a branch node.',
-      )
+      this.checkIfBranchNode(node)
 
       if (this.searching) {
         node.expandsOnSearch = !node.expandsOnSearch
@@ -1083,6 +1076,7 @@ export default {
   },
 
   destroyed() {
+    /* istanbul ignore next */
     this.toggleTouchOutsideEvent(false)
   },
 }

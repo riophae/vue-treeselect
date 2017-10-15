@@ -4,12 +4,23 @@ import TreeselectOption from '@riophae/vue-treeselect/components/Option'
 import SearchInput from '@riophae/vue-treeselect/components/SearchInput'
 import { UNCHECKED, INDETERMINATE, CHECKED } from '@riophae/vue-treeselect/constants'
 
+const BUTTON_LEFT = { button: 0 }
+const KEY_BACKSPACE = { which: 8, keyCode: 8 }
+const KEY_ESCAPE = { which: 27, keyCode: 27 }
+const KEY_A = { which: 65, keyCode: 65 }
+
 function sleep(duration) {
   return new Promise(resolve => setTimeout(resolve, duration))
 }
 
-function getNodeId(node) {
-  return node.id
+// currently avoriaz has a bad support for keyboard event testing
+// so here we implement it ourself
+function customTrigger(wrapper, eventType, eventData) {
+  const event = document.createEvent('Event')
+  event.initEvent(eventType, true, true)
+  Object.assign(event, eventData)
+  wrapper.element.dispatchEvent(event)
+  wrapper.update()
 }
 
 async function typeSearchText(wrapper, text) {
@@ -960,28 +971,109 @@ describe('SearchInput', () => {
   })
 })
 
+describe('Control', () => {
+  it('should toggle the dropdown when arrow is clicked', () => {
+    const wrapper = mount(Treeselect, {
+      attachToDocument: true,
+      propsData: {
+        options: [],
+      },
+    })
+    const arrow = wrapper.first('.vue-treeselect__arrow-wrapper')
+
+    customTrigger(arrow, 'mousedown', BUTTON_LEFT)
+    expect(wrapper.vm.isOpen).toBe(true)
+    customTrigger(arrow, 'mousedown', BUTTON_LEFT)
+    expect(wrapper.vm.isOpen).toBe(false)
+  })
+})
+
 describe('Dropdown', () => {
-  // TODO
+  it('should close the dropdown after clicking anywhere outside the component', async done => {
+    const wrapper = mount(Treeselect, {
+      attachToDocument: true,
+      propsData: {
+        options: [],
+      },
+    })
+
+    wrapper.vm.openMenu()
+    await sleep(100) // wait for the event binding to take effect
+    const event = document.createEvent('event')
+    event.initEvent('touchstart', true, true)
+    document.body.dispatchEvent(event)
+    expect(wrapper.vm.isOpen).toBe(false)
+    done()
+  })
+
+  it('should open the dropdown after clicking the component when focused', () => {
+    const wrapper = mount(Treeselect, {
+      attachToDocument: true,
+      propsData: {
+        options: [],
+      },
+      data: {
+        isFocused: true,
+      },
+    })
+
+    customTrigger(wrapper, 'mousedown', BUTTON_LEFT)
+    expect(wrapper.vm.isOpen).toBe(true)
+  })
+
+  it('should close the dropdown after clicking the value when isOpen=true and searchable=false', () => {
+    const wrapper = mount(Treeselect, {
+      attachToDocument: true,
+      propsData: {
+        options: [ {
+          id: 'a',
+          label: 'a',
+          multiple: false,
+        } ],
+        searchable: false,
+      },
+      data: {
+        isOpen: true,
+        isFocused: true,
+      },
+    })
+
+    wrapper.vm.openMenu()
+    const value = wrapper.first('.vue-treeselect__value-wrapper')
+    customTrigger(value, 'mousedown', BUTTON_LEFT)
+    expect(wrapper.vm.isOpen).toBe(false)
+  })
+
+  it('click on option arrow should toggle expanded', () => {
+    const wrapper = mount(Treeselect, {
+      attachToDocument: true,
+      propsData: {
+        options: [ {
+          id: 'a',
+          label: 'a',
+          children: [],
+        } ],
+      },
+      data: {
+        isOpen: true,
+      },
+    })
+    const { a } = wrapper.vm.nodeMap
+
+    expect(a.isExpanded).toBe(false)
+    const option = wrapper.first(TreeselectOption)
+    const optionArrow = option.first('.vue-treeselect__option-arrow-wrapper')
+    customTrigger(optionArrow, 'mousedown', BUTTON_LEFT)
+    expect(a.isExpanded).toBe(true)
+    customTrigger(optionArrow, 'mousedown', BUTTON_LEFT)
+    expect(a.isExpanded).toBe(false)
+  })
 })
 
 describe('Keyboard Support', () => {
-  // currently avoriaz has a bad support for keyboard event testing
-  // so here we implement it ourself
-  function customTrigger(wrapper, eventType, eventData) {
-    const event = document.createEvent('Event')
-    event.initEvent(eventType, true, true)
-    Object.assign(event, eventData)
-    wrapper.element.dispatchEvent(event)
-    wrapper.update()
-  }
-
   function queryInput(wrapper) {
     return wrapper.find('input[type="text"]')[0]
   }
-
-  const KEY_BACKSPACE = { which: 8, keyCode: 8 }
-  const KEY_ESCAPE = { which: 27, keyCode: 27 }
-  const KEY_A = { which: 65, keyCode: 65 }
 
   describe('backspace key', () => {
     let wrapper, input
@@ -1172,8 +1264,8 @@ describe('Props', () => {
       })
       const { vm } = wrapper
 
-      expect(vm.normalizedOptions.map(getNodeId)).toEqual([ 'b', 'a', 'c' ])
-      expect(vm.nodeMap.b.children.map(getNodeId)).toEqual([ 'bb', 'ba', 'bc' ])
+      expect(vm.normalizedOptions.map(node => node.id)).toEqual([ 'b', 'a', 'c' ])
+      expect(vm.nodeMap.b.children.map(node => node.id)).toEqual([ 'bb', 'ba', 'bc' ])
     })
   })
 
@@ -1183,6 +1275,7 @@ describe('Props', () => {
     beforeEach(() => {
       wrapper = mount(Treeselect, {
         propsData: {
+          multiple: false,
           clearable: true,
           options: [ { id: 'a', label: 'a' } ],
           value: 'a',
@@ -1196,9 +1289,8 @@ describe('Props', () => {
 
     it('should reset value on mousedown', () => {
       expect(wrapper.vm.internalValue).toEqual([ 'a' ])
-      // TODO
-      // wrapper.find('.vue-treeselect__clear')[0].trigger('mousedown')
-      // expect(wrapper.vm.internalValue).toEqual([])
+      customTrigger(wrapper.first('.vue-treeselect__clear'), 'mousedown', BUTTON_LEFT)
+      expect(wrapper.vm.internalValue).toEqual([])
     })
 
     it('should hide when no options selected', () => {
@@ -1430,7 +1522,7 @@ describe('Props', () => {
       expect(vm.nodeMap.a.isExpanded).toBe(false)
       expect(vm.isSelected(vm.nodeMap.a)).toBe(false)
 
-      labelWrapperOfOptionA.trigger('click')
+      customTrigger(labelWrapperOfOptionA, 'mousedown', BUTTON_LEFT)
       expect(vm.isOpen).toBe(false)
       expect(vm.nodeMap.a.isExpanded).toBe(false)
       expect(vm.isSelected(vm.nodeMap.a)).toBe(true)
@@ -1463,12 +1555,12 @@ describe('Props', () => {
       expect(vm.nodeMap.a.isExpanded).toBe(false)
       expect(vm.isSelected(vm.nodeMap.a)).toBe(false)
 
-      labelWrapperOfOptionA.trigger('click')
+      customTrigger(labelWrapperOfOptionA, 'mousedown', BUTTON_LEFT)
       expect(vm.isOpen).toBe(true)
       expect(vm.nodeMap.a.isExpanded).toBe(true)
       expect(vm.isSelected(vm.nodeMap.a)).toBe(false)
 
-      labelWrapperOfOptionA.trigger('click')
+      customTrigger(labelWrapperOfOptionA, 'mousedown', BUTTON_LEFT)
       expect(vm.isOpen).toBe(true)
       expect(vm.nodeMap.a.isExpanded).toBe(false)
       expect(vm.isSelected(vm.nodeMap.a)).toBe(false)

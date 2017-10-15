@@ -9,14 +9,14 @@
         'vue-treeselect__option--hide': instance.searching && !(node.isMatched || node.hasMatchedChild),
       } ]">
       <div v-if="node.isLeaf" class="vue-treeselect__option-arrow-placeholder">&nbsp;</div>
-      <div v-else class="vue-treeselect__option-arrow-wrapper" @click="handleClickOnOptionArrow">
+      <div v-else class="vue-treeselect__option-arrow-wrapper" @mousedown="handleMouseDownOnOptionArrow">
         <transition name="vue-treeselect__option-arrow--prepare" appear>
           <span :class="[ 'vue-treeselect__option-arrow', {
             'vue-treeselect__option-arrow--rotated': shouldExpand,
           } ]"></span>
         </transition>
       </div>
-      <div class="vue-treeselect__label-wrapper" @click="handleClickOnOption">
+      <div class="vue-treeselect__label-wrapper" @mousedown="handleMouseDownOnOption">
         <div v-if="instance.multiple && !instance.disableBranchNodes" class="vue-treeselect__checkbox-wrapper">
           <span :class="[ 'vue-treeselect__checkbox', {
             'vue-treeselect__checkbox--checked': checkedState === CHECKED,

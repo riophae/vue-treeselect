@@ -1,3 +1,5 @@
+import { onlyOnLeftClick } from '../utils'
+
 export default {
   props: {
     node: {
@@ -36,16 +38,16 @@ export default {
   },
 
   methods: {
-    handleClickOnOption() {
+    handleMouseDownOnOption: onlyOnLeftClick(function handleMouseDownOnOptionArrow() {
       if (this.node.isBranch && this.instance.disableBranchNodes) {
         this.instance.toggleExpanded(this.node)
       } else {
         this.instance.select(this.node)
       }
-    },
+    }),
 
-    handleClickOnOptionArrow() {
+    handleMouseDownOnOptionArrow: onlyOnLeftClick(function handleMouseDownOnOptionArrow() {
       this.instance.toggleExpanded(this.node)
-    },
+    }),
   },
 }
