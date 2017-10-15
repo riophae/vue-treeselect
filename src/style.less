@@ -608,6 +608,8 @@
   background: @treeselect-dropdown-bg;
   line-height: @treeselect-dropdown-line-height;
   cursor: default; // set to normal cursor since text is not selectable
+  // https://css-tricks.com/snippets/css/momentum-scrolling-on-ios-overflow-elements/
+  -webkit-overflow-scrolling: touch;
 }
 
 .vue-treeselect__list-item > .vue-treeselect__list {
