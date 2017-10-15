@@ -1,12 +1,14 @@
-<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><title>Vue-Treeselect</title><meta name="description" content="A multi-select component with nested options for Vue.js"><meta property="og:title" content="Vue-Treeselect"><meta property="og:site_name" content="Vue-Treeselect"><meta property="og:url" content="https://riophae.github.io/vue-treeselect"><meta property="og:description" content="A multi-select component with nested options for Vue.js"><meta property="og:image" content="https://riophae.github.io/vue-treeselect/static/vue-logo.png"><meta property="twitter:title" content="Vue-Treeselect"><meta property="twitter:description" content="A multi-select component with nested options for Vue.js"><meta property="twitter:image" content="https://riophae.github.io/vue-treeselect/static/vue-logo.png"><link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600|Dosis:300,500"><link href="static/css/app.c66844f38f5b4e2c9e14abf69b5931e9.css" rel="stylesheet"></head><body><div id="app"><header class="site-header"><div class="container" id="header"><div class="site-header-logo"><a class="site-header-logo-link" href="/vue-treeselect">Vue<span class="site-header-logo-component-name">Treeselect</span></a></div><nav class="site-header-nav"><a class="site-header-nav-item" href="https://github.com/riophae/vue-treeselect/releases">v0.0.3</a><a class="site-header-nav-item" href="https://github.com/riophae/vue-treeselect"><img class="list-img" src="https://img.shields.io/github/stars/riophae/vue-treeselect.svg?style=social&amp;label=Star"></a></nav></div></header><div class="container"><section id="main"><div id="sidebar"><div class="sidebar-nav" :class="{ sticky: isNavSticky }"><section class="sidebar-nav-section"><h4 class="sidebar-nav-section-title">Introduction</h4><ul class="sidebar-nav-list"></ul></section><section class="sidebar-nav-section"><h4 class="sidebar-nav-section-title">Getting Started</h4><ul class="sidebar-nav-list"><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'installation' }"><a href="#installation">Installation</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'basic-usage' }"><a href="#basic-usage">Basic Usage</a></li></ul></section><section class="sidebar-nav-section"><h4 class="sidebar-nav-section-title">Guides</h4><ul class="sidebar-nav-list"><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'basic-features' }"><a href="#basic-features">Basic Features</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'more-features' }"><a href="#more-features">More Features</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'delayed-loading' }"><a href="#delayed-loading">Delayed Loading</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'flat-mode-and-sorting-value' }"><a href="#flat-mode-and-sorting-value">Flat Mode &amp; Sorting Value</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'disabling-branch-nodes' }"><a href="#disabling-branch-nodes">Disabling Branch Nodes</a></li></ul></section><section class="sidebar-nav-section"><h4 class="sidebar-nav-section-title">API</h4><ul class="sidebar-nav-list"><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'props' }"><a href="#props">Props</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'events' }"><a href="#events">Events</a></li></ul></section></div></div><div id="content"><h1 id="introduction">Introduction<a class="anchor" href="#introduction">#</a></h1><section><p><a href="https://github.com/riophae/vue-treeselect">vue-treeselect</a> is a multi-select component with nested options for <a href="https://www.vuejs.org">Vue.js 2</a>, featuring:</p>
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><title>Vue-Treeselect</title><meta name="description" content="A multi-select component with nested options for Vue.js"><meta property="og:title" content="Vue-Treeselect"><meta property="og:site_name" content="Vue-Treeselect"><meta property="og:url" content="https://riophae.github.io/vue-treeselect"><meta property="og:description" content="A multi-select component with nested options for Vue.js"><meta property="og:image" content="https://riophae.github.io/vue-treeselect/static/vue-logo.png"><meta property="twitter:title" content="Vue-Treeselect"><meta property="twitter:description" content="A multi-select component with nested options for Vue.js"><meta property="twitter:image" content="https://riophae.github.io/vue-treeselect/static/vue-logo.png"><link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600|Dosis:300,500"><link href="static/css/app.c66844f38f5b4e2c9e14abf69b5931e9.css" rel="stylesheet"></head><body><div id="app"><header class="site-header"><div class="container" id="header"><div class="site-header-logo"><a class="site-header-logo-link" href="/vue-treeselect">Vue<span class="site-header-logo-component-name">Treeselect</span></a></div><nav class="site-header-nav"><a class="site-header-nav-item" href="https://github.com/riophae/vue-treeselect/releases">v0.0.3</a><a class="site-header-nav-item" href="https://github.com/riophae/vue-treeselect"><img class="list-img" src="https://img.shields.io/github/stars/riophae/vue-treeselect.svg?style=social&amp;label=Star"></a></nav></div></header><div class="container"><section id="main"><div id="sidebar"><div class="sidebar-nav" :class="{ sticky: isNavSticky }"><section class="sidebar-nav-section"><h4 class="sidebar-nav-section-title">Introduction</h4><ul class="sidebar-nav-list"></ul></section><section class="sidebar-nav-section"><h4 class="sidebar-nav-section-title">Getting Started</h4><ul class="sidebar-nav-list"><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'installation' }"><a href="#installation">Installation</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'basic-usage' }"><a href="#basic-usage">Basic Usage</a></li></ul></section><section class="sidebar-nav-section"><h4 class="sidebar-nav-section-title">Guides</h4><ul class="sidebar-nav-list"><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'basic-features' }"><a href="#basic-features">Basic Features</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'more-features' }"><a href="#more-features">More Features</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'delayed-loading' }"><a href="#delayed-loading">Delayed Loading</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'flat-mode-and-sorting-value' }"><a href="#flat-mode-and-sorting-value">Flat Mode &amp; Sorting Value</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'disabling-branch-nodes' }"><a href="#disabling-branch-nodes">Disabling Branch Nodes</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'vuex-support' }"><a href="#vuex-support">Vuex Support</a></li></ul></section><section class="sidebar-nav-section"><h4 class="sidebar-nav-section-title">API</h4><ul class="sidebar-nav-list"><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'props' }"><a href="#props">Props</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'events' }"><a href="#events">Events</a></li></ul></section></div></div><div id="content"><h1 id="introduction">Introduction<a class="anchor" href="#introduction">#</a></h1><section><p><a href="https://github.com/riophae/vue-treeselect">vue-treeselect</a> is a multi-select component with nested options for <a href="https://www.vuejs.org">Vue.js 2</a>, featuring:</p>
 <ul>
 <li>Single select</li>
 <li>Multiple select</li>
 <li>Fuzzy searching</li>
 <li>Delayed loading (load data of deep level options only when needed)</li>
 <li>Keyboard support</li>
+<li>Vuex support</li>
 <li>Rich options &amp; highly customizable</li>
 <li>Supports <a href="https://github.com/riophae/vue-treeselect#browser-compatibility">a wide range of browsers</a></li>
+<li>&gt; 95% test coverage</li>
 </ul>
 <p><em>Requires Vue 2.2+</em></p>
 </section><h1 id="getting-started">Getting Started<a class="anchor" href="#getting-started">#</a></h1><section><h2 id="installation" data-section>Installation<a class="anchor" href="#installation">#</a></h2><p><strong>Install vue-treeselect using npm:</strong></p>
@@ -71,47 +73,45 @@
   &lt;pre class=&quot;result&quot;&gt;{{ value }}&lt;/pre&gt;
 &lt;/div&gt;
 </code></template><template slot="javascript"><code v-pre>export default {
-  data() {
-    return {
-      value: null,
-      options: [ {
-        id: 'fruits',
-        label: 'Fruits',
-        children: [ {
-          id: 'apple',
-          label: 'Apple 🍎',
-        }, {
-          id: 'grapes',
-          label: 'Grapes 🍇',
-        }, {
-          id: 'pear',
-          label: 'Pear 🍐',
-        }, {
-          id: 'strawberry',
-          label: 'Strawberry 🍓',
-        }, {
-          id: 'watermelon',
-          label: 'Watermelon 🍉',
-        } ],
+  data: () =&gt; ({
+    value: null,
+    options: [ {
+      id: 'fruits',
+      label: 'Fruits',
+      children: [ {
+        id: 'apple',
+        label: 'Apple 🍎',
       }, {
-        id: 'vegetables',
-        label: 'Vegetables',
-        children: [ {
-          id: 'corn',
-          label: 'Corn 🌽',
-        }, {
-          id: 'carrot',
-          label: 'Carrot 🥕',
-        }, {
-          id: 'eggplant',
-          label: 'Eggplant 🍆',
-        }, {
-          id: 'tomato',
-          label: 'Tomato 🍅',
-        } ],
+        id: 'grapes',
+        label: 'Grapes 🍇',
+      }, {
+        id: 'pear',
+        label: 'Pear 🍐',
+      }, {
+        id: 'strawberry',
+        label: 'Strawberry 🍓',
+      }, {
+        id: 'watermelon',
+        label: 'Watermelon 🍉',
       } ],
-    }
-  },
+    }, {
+      id: 'vegetables',
+      label: 'Vegetables',
+      children: [ {
+        id: 'corn',
+        label: 'Corn 🌽',
+      }, {
+        id: 'carrot',
+        label: 'Carrot 🥕',
+      }, {
+        id: 'eggplant',
+        label: 'Eggplant 🍆',
+      }, {
+        id: 'tomato',
+        label: 'Tomato 🍅',
+      } ],
+    } ],
+  }),
 }
 </code></template></demo><p>The first thing you need to learn is how to define options. There are two types of options: <strong>(a) folder options</strong> that are foldable &amp; may have children options, and <strong>(b) normal options</strong> that aren't &amp; don't. Here, I'd like to borrow the basic concepts from Computer Science and call the former as <strong>branch nodes</strong> and the latter as <strong>leaf nodes</strong>. These two kinds of nodes together compose the tree.</p>
 <p>Defining leaf nodes is quite simple:</p>
@@ -199,27 +199,25 @@ export default {
   v-model=&quot;value&quot;
 /&gt;
 </code></template><template slot="javascript"><code v-pre>export default {
-  data() {
-    return {
-      value: null,
-      disableVegetables: false,
-      options: [ {
-        id: 'success',
-        label: 'With children',
-        // declare an unloaded branch node
-        children: null,
-      }, {
-        id: 'no-children',
-        label: 'With no children',
-        // alternative approach
-        isBranch: true,
-      }, {
-        id: 'failure',
-        label: 'Demonstrates error handling',
-        children: null,
-      } ],
-    }
-  },
+  data: () =&gt; ({
+    value: null,
+    disableVegetables: false,
+    options: [ {
+      id: 'success',
+      label: 'With children',
+      // declare an unloaded branch node
+      children: null,
+    }, {
+      id: 'no-children',
+      label: 'With no children',
+      // alternative approach
+      isBranch: true,
+    }, {
+      id: 'failure',
+      label: 'Demonstrates error handling',
+      children: null,
+    } ],
+  }),
 
   methods: {
     loadChildrenOptions(parent, callback) {
@@ -291,10 +289,51 @@ export default {
 </code></template><template slot="javascript"><code v-pre>import countries from './data/countries-of-the-world'
 
 export default {
-  data() {
-    return {
-      options: countries,
-    }
+  data: () =&gt; ({
+    options: countries,
+  }),
+}
+</code></template></demo></section><section><h2 id="vuex-support" data-section>Vuex Support<a class="anchor" href="#vuex-support">#</a></h2><p>In all previous examples, we used <code>v-model</code> to sync value between application state and vue-treeselect, a.k.a two-way data binding. If you are using Vuex, we could make use of <code>:value</code> and <code>@input</code>, since <code>v-model</code> is just a syntax sugur for them in Vue 2.0.</p>
+<p>Concretely speaking, we can bind <code>getter</code> to <code>:value</code> to make vue-treeselect reflect any changes in your Vuex state and bind <code>action</code> or <code>mutation</code> to <code>@input</code> to update your Vuex state whenever value changes.</p>
+<demo><vuex-support slot="demo"></vuex-support><template slot="html"><code v-pre>&lt;div&gt;
+  &lt;treeselect
+    :options=&quot;options&quot;
+    :value=&quot;value&quot;
+    :searchable=&quot;false&quot;
+    @input=&quot;updateValue&quot;
+  /&gt;
+  &lt;pre class=&quot;result&quot;&gt;{{ value }}&lt;/pre&gt;
+&lt;/div&gt;
+</code></template><template slot="javascript"><code v-pre>import Vue from 'vue'
+import Vuex, { mapState, mapMutations } from 'vuex'
+import { generateOptions } from './utils'
+
+Vue.use(Vuex)
+
+const store = new Vuex.Store({
+  state: {
+    value: 'a',
+  },
+  mutations: {
+    updateValue(state, value) {
+      state.value = value
+    },
+  },
+})
+
+export default {
+  store,
+
+  data: () =&gt; ({
+    options: generateOptions(2),
+  }),
+
+  computed: {
+    ...mapState([ 'value' ]),
+  },
+
+  methods: {
+    ...mapMutations([ 'updateValue' ]),
   },
 }
-</code></template></demo></section><h1 id="api">API<a class="anchor" href="#api">#</a></h1><section><h2 id="props" data-section>Props<a class="anchor" href="#props">#</a></h2><doc-props></doc-props></section><section><h2 id="events" data-section>Events<a class="anchor" href="#events">#</a></h2><doc-events></doc-events></section></div></section></div><footer class="site-footer"><div class="container">Copyright &copy; 2017 <a href="https://github.com/riophae">Riophae Lee</a>. MIT Licensed.</div></footer></div><script src="static/prism.min.js"></script><script type="text/javascript" src="static/js/manifest.501924c573bb1e702e5e.js"></script><script type="text/javascript" src="static/js/vendor.3d218f00bddf30f41833.js"></script><script type="text/javascript" src="static/js/app.08ed4d02a734cf2fda40.js"></script></body></html>
+</code></template></demo></section><h1 id="api">API<a class="anchor" href="#api">#</a></h1><section><h2 id="props" data-section>Props<a class="anchor" href="#props">#</a></h2><doc-props></doc-props></section><section><h2 id="events" data-section>Events<a class="anchor" href="#events">#</a></h2><doc-events></doc-events></section></div></section></div><footer class="site-footer"><div class="container">Copyright &copy; 2017 <a href="https://github.com/riophae">Riophae Lee</a>. MIT Licensed.</div></footer></div><script src="static/prism.min.js"></script><script type="text/javascript" src="static/js/manifest.4878e1c2f93d10cade95.js"></script><script type="text/javascript" src="static/js/vendor.f43d0b7942580dbbca40.js"></script><script type="text/javascript" src="static/js/app.231240eacd4259b6ae30.js"></script></body></html>
