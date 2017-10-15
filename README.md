@@ -12,6 +12,7 @@
 - Fuzzy searching
 - Delayed loading (load data of deep level options only when needed)
 - Keyboard support
+- Vuex support
 - Rich options & highly customizable
 - Supports a wide range of browsers (see [below](#browser-compatibility))
 - \> 95% test coverage

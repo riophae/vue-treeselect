@@ -11,10 +11,8 @@
   import countries from './data/countries-of-the-world'
 
   export default {
-    data() {
-      return {
-        options: countries,
-      }
-    },
+    data: () => ({
+      options: countries,
+    }),
   }
 </script>

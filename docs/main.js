@@ -7,6 +7,7 @@ import MoreFeatures from './components/MoreFeatures'
 import DelayedLoading from './components/DelayedLoading'
 import FlatModeAndSortingValue from './components/FlatModeAndSortingValue'
 import DisablingBranchNodes from './components/DisablingBranchNodes'
+import VuexSupport from './components/VuexSupport'
 import DocProps from './components/DocProps'
 import DocEvents from './components/DocEvents'
 
@@ -32,6 +33,7 @@ new Vue({
     DelayedLoading,
     FlatModeAndSortingValue,
     DisablingBranchNodes,
+    VuexSupport,
     DocProps,
     DocEvents,
   },

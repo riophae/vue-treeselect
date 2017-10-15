@@ -66,3 +66,10 @@
   :markdown-it
     Set `disableBranchNodes` to `true` to prevent branch nodes from being selected. You may also want to show a count next to the label of each branch node by setting `showCount` to `true`.
   +demo('DisablingBranchNodes')
+
++guide('Vuex Support')
+  :markdown-it
+      In all previous examples, we used `v-model` to sync value between application state and vue-treeselect, a.k.a two-way data binding. If you are using Vuex, we could make use of `:value` and `@input`, since `v-model` is just a syntax sugur for them in Vue 2.0.
+
+      Concretely speaking, we can bind `getter` to `:value` to make vue-treeselect reflect any changes in your Vuex state and bind `action` or `mutation` to `@input` to update your Vuex state whenever value changes.
+  +demo('VuexSupport')

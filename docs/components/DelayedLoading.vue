@@ -10,27 +10,25 @@
 
 <script>
   export default {
-    data() {
-      return {
-        value: null,
-        disableVegetables: false,
-        options: [ {
-          id: 'success',
-          label: 'With children',
-          // declare an unloaded branch node
-          children: null,
-        }, {
-          id: 'no-children',
-          label: 'With no children',
-          // alternative approach
-          isBranch: true,
-        }, {
-          id: 'failure',
-          label: 'Demonstrates error handling',
-          children: null,
-        } ],
-      }
-    },
+    data: () => ({
+      value: null,
+      disableVegetables: false,
+      options: [ {
+        id: 'success',
+        label: 'With children',
+        // declare an unloaded branch node
+        children: null,
+      }, {
+        id: 'no-children',
+        label: 'With no children',
+        // alternative approach
+        isBranch: true,
+      }, {
+        id: 'failure',
+        label: 'Demonstrates error handling',
+        children: null,
+      } ],
+    }),
 
     methods: {
       loadChildrenOptions(parent, callback) {
