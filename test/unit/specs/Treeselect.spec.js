@@ -966,8 +966,23 @@ describe('SearchInput', () => {
         options: [],
       },
     })
-    const input = wrapper.find('.vue-treeselect__input')[0]
+    const input = wrapper.first('.vue-treeselect__input')
     expect(input.element.getAttribute('autocomplete')).toBe('off')
+  })
+
+  it('should be unable to focus when disabled=true', () => {
+    const wrapper = mount(Treeselect, {
+      propsData: {
+        options: [],
+        autofocus: false,
+        searchable: true,
+        disabled: true,
+      },
+    })
+
+    expect(wrapper.vm.isFocused).toBe(false)
+    wrapper.vm.focusInput()
+    expect(wrapper.vm.isFocused).toBe(false)
   })
 })
 
@@ -1072,7 +1087,7 @@ describe('Dropdown', () => {
 
 describe('Keyboard Support', () => {
   function queryInput(wrapper) {
-    return wrapper.find('input[type="text"]')[0]
+    return wrapper.first('input[type="text"]')
   }
 
   describe('backspace key', () => {
@@ -1179,6 +1194,16 @@ describe('Keyboard Support', () => {
         isOpen: false,
       }))
     })
+
+    it('should not reset value when escapeClearsValue=false', () => {
+      wrapper.setProps({ escapeClearsValue: false })
+      customTrigger(input, 'keydown', KEY_ESCAPE)
+      expect(wrapper.data()).toEqual(jasmine.objectContaining({
+        searchQuery: '',
+        internalValue: [ 'a', 'b' ],
+        isOpen: false,
+      }))
+    })
   })
 
   it('should ignore any key press combined with modifier key', () => {
@@ -1226,7 +1251,7 @@ describe('Props', () => {
           searchable: true,
         },
       })
-      const input = wrapper.find('.vue-treeselect__input')[0].element
+      const input = wrapper.first('.vue-treeselect__input').element
       expect(document.activeElement).toBe(input)
     })
   })
@@ -1322,7 +1347,7 @@ describe('Props', () => {
         },
       })
 
-      expect(wrapper.find('.vue-treeselect__clear')[0].getAttribute('title')).toBe('$MULTI_TITLE$')
+      expect(wrapper.first('.vue-treeselect__clear').getAttribute('title')).toBe('$MULTI_TITLE$')
     })
   })
 
@@ -1420,7 +1445,7 @@ describe('Props', () => {
         },
       })
 
-      expect(wrapper.find('.vue-treeselect__clear')[0].getAttribute('title')).toBe('$SINGLE_TITLE$')
+      expect(wrapper.first('.vue-treeselect__clear').getAttribute('title')).toBe('$SINGLE_TITLE$')
     })
   })
 
@@ -1626,8 +1651,8 @@ describe('Props', () => {
         },
       })
 
-      const dropdown = wrapper.find('.vue-treeselect__dropdown')[0]
-      const noOptionsTip = dropdown.find('.vue-treeselect__no-options-tip')[0]
+      const dropdown = wrapper.first('.vue-treeselect__dropdown')
+      const noOptionsTip = dropdown.first('.vue-treeselect__no-options-tip')
       expect(noOptionsTip.text().trim()).toBe('No options available.')
     })
   })
@@ -1776,8 +1801,8 @@ describe('Props', () => {
         },
       })
 
-      const $inputWrapper = wrapper.find('.vue-treeselect__input-wrapper')[0]
-      const $input = wrapper.find('.vue-treeselect__input')[0]
+      const $inputWrapper = wrapper.first('.vue-treeselect__input-wrapper')
+      const $input = wrapper.first('.vue-treeselect__input')
       expect($inputWrapper.hasAttribute('tabindex')).toBe(false)
       expect($input.hasAttribute('tabindex')).toBe(true)
     })
@@ -1791,7 +1816,7 @@ describe('Props', () => {
         },
       })
 
-      const $inputWrapper = wrapper.find('.vue-treeselect__input-wrapper')[0]
+      const $inputWrapper = wrapper.first('.vue-treeselect__input-wrapper')
       expect($inputWrapper.hasAttribute('tabindex')).toBe(true)
     })
 
@@ -1803,7 +1828,7 @@ describe('Props', () => {
         },
       })
 
-      const $inputWrapper = wrapper.find('.vue-treeselect__input-wrapper')[0]
+      const $inputWrapper = wrapper.first('.vue-treeselect__input-wrapper')
       expect($inputWrapper.hasAttribute('tabindex')).toBe(false)
     })
 
@@ -1817,7 +1842,7 @@ describe('Props', () => {
         },
       })
 
-      const $input = wrapper.find('.vue-treeselect__input')[0]
+      const $input = wrapper.first('.vue-treeselect__input')
       expect($input.getAttribute('tabindex')).toBe('1')
     })
   })
@@ -1881,7 +1906,7 @@ describe('Props', () => {
       expect(vm.visibleValue).toEqual([ a ])
       expect(wrapper.find('.vue-treeselect__multi-value-item').length).toBe(1)
       expect(wrapper.contains('.vue-treeselect__limit-tip')).toBe(true)
-      expect(wrapper.find('.vue-treeselect__limit-tip')[0].text()).toBe('and 3 more')
+      expect(wrapper.first('.vue-treeselect__limit-tip').text()).toBe('and 3 more')
     })
   })
 

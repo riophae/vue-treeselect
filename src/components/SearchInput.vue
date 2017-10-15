@@ -27,14 +27,15 @@
 
     methods: {
       focus() {
-        this.$refs.input.focus()
+        this.$refs.input && this.$refs.input.focus()
       },
 
       blur() {
-        this.$refs.input.blur()
+        this.$refs.input && this.$refs.input.blur()
       },
 
       onFocus() {
+        /* istanbul ignore else */
         if (!this.instance.disabled) {
           this.instance.isFocused = true
           this.instance.openMenu()
@@ -75,6 +76,7 @@
             break
           }
           default: {
+            /* istanbul ignore else */
             if (!this.instance.isOpen) {
               this.instance.openMenu()
             }
