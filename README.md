@@ -14,6 +14,7 @@
 - Keyboard support
 - Rich options & highly customizable
 - Supports a wide range of browsers (see [below](#browser-compatibility))
+- \> 95% test coverage
 
 *Requires Vue 2.2+*
 
