@@ -15,6 +15,8 @@
 - Rich options & highly customizable
 - Supports a wide range of browsers (see [below](#browser-compatibility))
 
+*Requires Vue 2.2+*
+
 ### Installation
 
 **Install vue-treeselect using npm:**
