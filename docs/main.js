@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Treeselect from '../src'
 
+import Anchor from './components/Anchor'
 import Demo from './components/Demo'
 import BasicFeatures from './components/BasicFeatures'
 import MoreFeatures from './components/MoreFeatures'
@@ -27,6 +28,7 @@ function calculateNavPositions() {
 
 new Vue({
   components: {
+    Anchor,
     Demo,
     BasicFeatures,
     MoreFeatures,

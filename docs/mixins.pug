@@ -17,13 +17,15 @@ mixin section(name)
   - toc.push({ name, subs: [] })
   h1(id=kebabCase(name))
     =name
-    a.anchor(href='#' + kebabCase(name)) #
+    a.anchor(href='#' + kebabCase(name))
+      anchor
 
 mixin subsection(name)
   - toc[toc.length - 1].subs.push(name)
   h2(id=kebabCase(name) data-section)
     =name
-    a.anchor(href='#' + kebabCase(name)) #
+    a.anchor(href='#' + kebabCase(name))
+      anchor
 
 mixin guide(name)
   section

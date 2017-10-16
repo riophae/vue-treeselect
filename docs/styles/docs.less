@@ -227,26 +227,24 @@ h2 {
 .anchor {
   display: inline-block;
   margin-left: 8px;
-  background: url(../assets/web-link.svg) no-repeat;
-  background-size: contain;
-  overflow: hidden;
-  opacity: .25;
-  text-indent: 200%;
   text-decoration: none;
-  white-space: nowrap;
 
-  h1 & {
+  svg {
+    color: rgba(0, 0, 0, .25);
+  }
+
+  svg:hover {
+    color: @palette-Light-Blue-600;
+  }
+
+  h1 & svg {
     width: 16px;
     height: 16px;
   }
 
-  h2 & {
+  h2 & svg {
     width: 12px;
     height: 12px;
-  }
-
-  &:hover {
-    opacity: .85;
   }
 }
 
