@@ -983,21 +983,13 @@ export default {
     _selectNode(node) {
       this.addValue(node)
 
-      if (this.multiple && !this.flat) {
-        this.selectedNodes.forEach(selectedNode => {
-          if (selectedNode.ancestors.indexOf(node) !== -1) {
-            this.removeValue(selectedNode)
-          }
-        })
+      if (this.multiple && !this.flat && !node.isRootNode) {
+        const { parentNode } = node
+        const siblings = parentNode.children
 
-        if (!node.isRootNode) {
-          const { parentNode } = node
-          const siblings = parentNode.children
-
-          if (siblings.every(this.isSelected)) {
-            siblings.forEach(this.removeValue)
-            this._selectNode(parentNode)
-          }
+        if (siblings.every(this.isSelected)) {
+          siblings.forEach(this.removeValue)
+          this._selectNode(parentNode)
         }
       }
     },
@@ -1005,31 +997,23 @@ export default {
     _deselectNode(node) {
       this.removeValue(node)
 
-      if (this.multiple && !this.flat) {
-        this.selectedNodes.forEach(selectedNode => {
-          if (selectedNode.ancestors.indexOf(node) !== -1) {
-            this.removeValue(selectedNode)
-          }
-        })
+      if (this.multiple && !this.flat && !node.isRootNode) {
+        const checkedAncestorNodeIndex = findIndex(node.ancestors, this.isSelected)
 
-        if (!node.isRootNode) {
-          const checkedAncestorNodeIndex = findIndex(node.ancestors, this.isSelected)
+        if (checkedAncestorNodeIndex !== -1) {
+          const checkedAncestorNode = node.ancestors[checkedAncestorNodeIndex]
+          const nodesToBeExcluded = node.ancestors.concat(node)
 
-          if (checkedAncestorNodeIndex !== -1) {
-            const checkedAncestorNode = node.ancestors[checkedAncestorNodeIndex]
-            const nodesToBeExcluded = node.ancestors.concat(node)
-
-            this.removeValue(checkedAncestorNode)
-            this.traverseDescendants(
-              checkedAncestorNode,
-              node.level,
-              descendantNode => {
-                if (nodesToBeExcluded.indexOf(descendantNode) === -1) {
-                  this.addValue(descendantNode)
-                }
+          this.removeValue(checkedAncestorNode)
+          this.traverseDescendants(
+            checkedAncestorNode,
+            node.level,
+            descendantNode => {
+              if (nodesToBeExcluded.indexOf(descendantNode) === -1) {
+                this.addValue(descendantNode)
               }
-            )
-          }
+            }
+          )
         }
       }
     },

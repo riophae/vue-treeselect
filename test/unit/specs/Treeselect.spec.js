@@ -664,6 +664,84 @@ describe('Multi-select', () => {
       ab: CHECKED,
       b: CHECKED,
     })
+
+    // current:
+    //   [v] a <- deselect
+    //    |--[v] aa
+    //    |   |--[v] aaa
+    //    |   |--[v] aab
+    //    |--[v] ab
+    //   [v] b
+    // expected result:
+    //   [ ] a
+    //    |--[ ] aa
+    //    |   |--[ ] aaa
+    //    |   |--[ ] aab
+    //    |--[ ] ab
+    //   [v] b
+    vm.select(vm.nodeMap.a)
+    expect(vm.internalValue).toEqual([ 'b' ])
+    expect(vm.selectedNodeMap).toEqual({ b: true })
+    expect(vm.nodeCheckedStateMap).toEqual({
+      a: UNCHECKED,
+      aa: UNCHECKED,
+      aaa: UNCHECKED,
+      aab: UNCHECKED,
+      ab: UNCHECKED,
+      b: CHECKED,
+    })
+
+    // current:
+    //   [ ] a
+    //    |--[ ] aa <- select
+    //    |   |--[ ] aaa
+    //    |   |--[ ] aab
+    //    |--[ ] ab
+    //   [v] b
+    // expected result:
+    //   [-] a
+    //    |--[v] aa
+    //    |   |--[v] aaa
+    //    |   |--[v] aab
+    //    |--[ ] ab
+    //   [v] b
+    vm.select(vm.nodeMap.aa)
+    expect(vm.internalValue).toEqual([ 'b', 'aa' ])
+    expect(vm.selectedNodeMap).toEqual({ aa: true, b: true })
+    expect(vm.nodeCheckedStateMap).toEqual({
+      a: INDETERMINATE,
+      aa: CHECKED,
+      aaa: CHECKED,
+      aab: CHECKED,
+      ab: UNCHECKED,
+      b: CHECKED,
+    })
+
+    // current:
+    //   [ ] a
+    //    |--[v] aa <- deselect
+    //    |   |--[v] aaa
+    //    |   |--[v] aab
+    //    |--[ ] ab
+    //   [v] b
+    // expected result:
+    //   [ ] a
+    //    |--[ ] aa
+    //    |   |--[ ] aaa
+    //    |   |--[ ] aab
+    //    |--[ ] ab
+    //   [v] b
+    vm.select(vm.nodeMap.aa)
+    expect(vm.internalValue).toEqual([ 'b' ])
+    expect(vm.selectedNodeMap).toEqual({ b: true })
+    expect(vm.nodeCheckedStateMap).toEqual({
+      a: UNCHECKED,
+      aa: UNCHECKED,
+      aaa: UNCHECKED,
+      aab: UNCHECKED,
+      ab: UNCHECKED,
+      b: CHECKED,
+    })
   })
 
   it('case #2', () => {
