@@ -66,7 +66,8 @@ export default {
     },
 
     /**
-     * Whether backspace removes an item if there is no text input
+     * Whether pressing backspace removes the last item if there is no text input
+     * @default true
      * @type {boolean}
      */
     backspaceRemoves: {
@@ -133,6 +134,16 @@ export default {
      * @type {boolean}
      */
     closeOnSelect: {
+      type: Boolean,
+      default: true,
+    },
+
+    /**
+     * Whether pressing delete key removes the last item if there is no text input
+     * @default true
+     * @type {boolean}
+     */
+    deleteRemoves: {
       type: Boolean,
       default: true,
     },

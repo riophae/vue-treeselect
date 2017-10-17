@@ -40,7 +40,7 @@
         name: 'backspaceRemoves',
         type: 'Boolean',
         defaultValue: v('true'),
-        description: 'Whether backspace removes an item if there is no text input.',
+        description: 'Whether pressing backspace removes the last item if there is no text input.',
       }, {
         name: 'branchNodesFirst',
         type: 'Boolean',
@@ -71,6 +71,11 @@
         type: 'Boolean',
         defaultValue: v('true'),
         description: `Whether to close the menu after selecting an option. Use only when ${v(':multiple="true"')}.`,
+      }, {
+        name: 'deleteRemoves',
+        type: 'Boolean',
+        defaultValue: v('true'),
+        description: 'Whether pressing delete key removes the last item if there is no text input.',
       }, {
         name: 'disableBranchNodes',
         type: 'Boolean',

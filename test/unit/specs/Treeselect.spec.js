@@ -6,6 +6,7 @@ import { UNCHECKED, INDETERMINATE, CHECKED } from '@riophae/vue-treeselect/const
 
 const BUTTON_LEFT = { button: 0 }
 const KEY_BACKSPACE = { which: 8, keyCode: 8 }
+const KEY_DELETE = { which: 46, keyCode: 46 }
 const KEY_ESCAPE = { which: 27, keyCode: 27 }
 const KEY_A = { which: 65, keyCode: 65 }
 
@@ -1280,6 +1281,52 @@ describe('Keyboard Support', () => {
     it('should do nothing when backspaceRemoves=false', () => {
       wrapper.setProps({ backspaceRemoves: false })
       customTrigger(input, 'keydown', KEY_BACKSPACE)
+      expect(wrapper.vm.internalValue).toEqual([ 'a', 'b' ])
+    })
+  })
+
+  describe('delete key', () => {
+    let wrapper, input
+
+    beforeEach(() => {
+      wrapper = mount(Treeselect, {
+        propsData: {
+          options: [ {
+            id: 'a',
+            label: 'a',
+          }, {
+            id: 'b',
+            label: 'b',
+          } ],
+          multiple: true,
+          deleteRemoves: true,
+          value: [ 'a', 'b' ],
+        },
+      })
+      input = queryInput(wrapper)
+
+      expect(wrapper.vm.searchQuery).toBe('')
+      expect(wrapper.vm.internalValue).toEqual([ 'a', 'b' ])
+    })
+
+    it('should remove the last value if search input is empty', () => {
+      customTrigger(input, 'keydown', KEY_DELETE)
+      expect(wrapper.vm.internalValue).toEqual([ 'a' ])
+      customTrigger(input, 'keydown', KEY_DELETE)
+      expect(wrapper.vm.internalValue).toEqual([])
+    })
+
+    it('should do nothing if search input has value', async done => {
+      await typeSearchText(wrapper, 'test')
+      expect(wrapper.vm.searchQuery).toBe('test')
+      customTrigger(input, 'keydown', KEY_DELETE)
+      expect(wrapper.vm.internalValue).toEqual([ 'a', 'b' ])
+      done()
+    })
+
+    it('should do nothing when backspaceRemoves=false', () => {
+      wrapper.setProps({ deleteRemoves: false })
+      customTrigger(input, 'keydown', KEY_DELETE)
       expect(wrapper.vm.internalValue).toEqual([ 'a', 'b' ])
     })
   })
