@@ -1644,6 +1644,7 @@ describe('Props', () => {
   describe('disableBranchNodes', () => {
     it('when multiple=false & disableBranchNodes=false', () => {
       const wrapper = mount(Treeselect, {
+        attachToDocument: true,
         propsData: {
           disableBranchNodes: false,
           closeOnSelect: true,
@@ -1677,6 +1678,7 @@ describe('Props', () => {
 
     it('when multiple=false & disableBranchNodes=true', () => {
       const wrapper = mount(Treeselect, {
+        attachToDocument: true,
         propsData: {
           disableBranchNodes: true,
           closeOnSelect: true,
