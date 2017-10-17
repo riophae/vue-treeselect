@@ -582,6 +582,10 @@ export default {
   },
 
   methods: {
+    resetFlags() {
+      this._blurOnSelect = false
+    },
+
     getValue() {
       return this.multiple
         ? this.internalValue.slice()
@@ -683,8 +687,14 @@ export default {
         }
       }
 
-      // focus the input or prevent blurring
-      this.focusInput()
+      if (this._blurOnSelect) {
+        this.blurInput()
+      } else {
+        // focus the input or prevent blurring
+        this.focusInput()
+      }
+
+      this.resetFlags()
     }),
 
     handleMouseDownOnClear: onlyOnLeftClick(function handleMouseDownOnClear(evt) {
@@ -986,10 +996,10 @@ export default {
 
       if (this.single && this.closeOnSelect) {
         this.closeMenu()
-      }
 
-      if (this.single) {
-        this.blurInput()
+        if (this.searchable) {
+          this._blurOnSelect = true
+        }
       }
     },
 
@@ -1078,6 +1088,7 @@ export default {
   },
 
   created() {
+    this.resetFlags()
     this.initializeOptions()
     this.initializeValue()
     this.buildSelectedNodeMap()

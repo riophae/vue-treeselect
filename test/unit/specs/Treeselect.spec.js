@@ -524,6 +524,32 @@ describe('Single Select', () => {
     expect(vm.internalValue).toEqual([ 'aa' ])
     expect(vm.selectedNodeMap).toEqual({ aa: true })
   })
+
+  it('should blur the input after selecting an option when closeOnSelect=true & searchable=true', () => {
+    const wrapper = mount(Treeselect, {
+      attachToDocument: true,
+      propsData: {
+        options: [ {
+          id: 'a',
+          label: 'a',
+        } ],
+        multiple: false,
+        searchable: true,
+        closeOnSelect: true,
+      },
+      data: {
+        isOpen: true,
+      },
+    })
+    const labelWrapper = wrapper.first(TreeselectOption).first('.vue-treeselect__label-wrapper')
+
+    customTrigger(labelWrapper, 'mousedown', BUTTON_LEFT)
+    expect(wrapper.data()).toEqual(jasmine.objectContaining({
+      internalValue: [ 'a' ],
+      isFocused: false,
+      isOpen: false,
+    }))
+  })
 })
 
 describe('Multi-select', () => {
