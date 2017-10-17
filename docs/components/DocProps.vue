@@ -152,6 +152,16 @@
         defaultValue: v('"No options available."'),
         description: 'Text displayed when there are no available options.',
       }, {
+        name: 'openOnClick',
+        type: 'Boolean',
+        defaultValue: v(true),
+        description: `Whether to automatically open the menu when the control is clicked`,
+      }, {
+        name: 'openOnFocus',
+        type: 'Boolean',
+        defaultValue: v(false),
+        description: `Whether to automatically open the menu when the control is focused`,
+      }, {
         name: 'options',
         type: 'Object[]',
         defaultValue: NO_DEFAULT_VALUE,

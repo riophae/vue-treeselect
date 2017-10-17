@@ -1122,7 +1122,7 @@ describe('Control', () => {
 })
 
 describe('Dropdown', () => {
-  it('should close the dropdown after clicking anywhere outside the component', async done => {
+  it('should blur the input & close the dropdown after clicking anywhere outside the component', async done => {
     const wrapper = mount(Treeselect, {
       attachToDocument: true,
       propsData: {
@@ -1133,13 +1133,16 @@ describe('Dropdown', () => {
     wrapper.vm.openMenu()
     await sleep(100) // wait for the event binding to take effect
     const event = document.createEvent('event')
-    event.initEvent('touchstart', true, true)
+    event.initEvent('mousedown', true, true)
     document.body.dispatchEvent(event)
-    expect(wrapper.vm.isOpen).toBe(false)
+    expect(wrapper.data()).toEqual(jasmine.objectContaining({
+      isFocused: false,
+      isOpen: false,
+    }))
     done()
   })
 
-  it('should open the dropdown after clicking the component when focused', () => {
+  it('should open the dropdown after clicking the control when focused', () => {
     const wrapper = mount(Treeselect, {
       attachToDocument: true,
       propsData: {
@@ -1149,8 +1152,9 @@ describe('Dropdown', () => {
         isFocused: true,
       },
     })
+    const valueWrapper = wrapper.first('.vue-treeselect__value-wrapper')
 
-    customTrigger(wrapper, 'mousedown', BUTTON_LEFT)
+    customTrigger(valueWrapper, 'mousedown', BUTTON_LEFT)
     expect(wrapper.vm.isOpen).toBe(true)
   })
 

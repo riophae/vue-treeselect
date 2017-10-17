@@ -5,6 +5,8 @@
       :clearable="clearable"
       :searchable="searchable"
       :disabled="disabled"
+      :open-on-click="openOnClick"
+      :open-on-focus="openOnFocus"
       :clear-on-select="clearOnSelect"
       :close-on-select="closeOnSelect"
       :options="options"
@@ -18,6 +20,10 @@
       <label><input type="checkbox" v-model="clearable">Clearable</label>
       <label><input type="checkbox" v-model="searchable">Searchable</label>
       <label><input type="checkbox" v-model="disabled">Disabled</label>
+    </p>
+    <p>
+      <label><input type="checkbox" v-model="openOnClick">Open on click</label>
+      <label><input type="checkbox" v-model="openOnFocus">Open on focus</label>
     </p>
     <p>
       <label><input type="checkbox" v-model="clearOnSelect">Clear on select</label>
@@ -35,6 +41,8 @@
       clearable: true,
       searchable: true,
       disabled: false,
+      openOnClick: true,
+      openOnFocus: false,
       clearOnSelect: true,
       closeOnSelect: false,
       value: [ 'a' ],

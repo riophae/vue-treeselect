@@ -27,7 +27,9 @@
 
     methods: {
       focus() {
-        this.$refs.input && this.$refs.input.focus()
+        if (!this.instance.disabled) {
+          this.$refs.input && this.$refs.input.focus()
+        }
       },
 
       blur() {
@@ -35,9 +37,9 @@
       },
 
       onFocus() {
+        this.instance.isFocused = true
         /* istanbul ignore else */
-        if (!this.instance.disabled) {
-          this.instance.isFocused = true
+        if (!this.instance.isOpen && this.instance.openOnFocus) {
           this.instance.openMenu()
         }
       },

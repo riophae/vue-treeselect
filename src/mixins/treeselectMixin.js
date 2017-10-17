@@ -302,6 +302,26 @@ export default {
     },
 
     /**
+     * Whether to automatically open the menu when the control is clicked
+     * @default true
+     * @type {boolean}
+     */
+    openOnClick: {
+      type: Boolean,
+      default: true,
+    },
+
+    /**
+     * Whether to automatically open the menu when the control is focused
+     * @default false
+     * @type {boolean}
+     */
+    openOnFocus: {
+      type: Boolean,
+      default: false,
+    },
+
+    /**
      * Array of available options
      * @type {!Object[]}
      */
@@ -531,7 +551,7 @@ export default {
     },
 
     isOpen(newValue) {
-      this.toggleTouchOutsideEvent(newValue)
+      this.toggleClickOutsideEvent(newValue)
       // reset search query after dropdown closes
       if (!newValue) this.searchQuery = ''
     },
@@ -643,11 +663,11 @@ export default {
       })
     },
 
-    toggleTouchOutsideEvent(enabled) {
+    toggleClickOutsideEvent(enabled) {
       if (enabled) {
-        document.addEventListener('touchstart', this.handleTouchOutside, false)
+        document.addEventListener('mousedown', this.handleClickOutside, false)
       } else {
-        document.removeEventListener('touchstart', this.handleTouchOutside, false)
+        document.removeEventListener('mousedown', this.handleClickOutside, false)
       }
     },
 
@@ -660,40 +680,46 @@ export default {
     },
 
     handleMouseDown: onlyOnLeftClick(function handleMouseDown(evt) {
-      const isClickedOnValue = this.$refs.value.$el.contains(evt.target)
-
       evt.preventDefault()
       evt.stopPropagation()
 
-      if (!this.isFocused) {
-        this.focusInput()
-      } else if (!this.isOpen) {
-        this.openMenu()
-      } else if (!this.searchable && this.isOpen && isClickedOnValue) {
-        this.closeMenu()
+      if (this.disabled) return
+
+      const isClickedOnValue = this.$refs.value.$el.contains(evt.target)
+      const wasFocused = this.isFocused
+
+      if (isClickedOnValue) {
+        if (this.isOpen && !this.searchable) {
+          this.closeMenu()
+        } else if (!this.isOpen && (this.openOnClick || wasFocused)) {
+          this.openMenu()
+        }
       }
+
+      // focus the input or prevent blurring
+      this.focusInput()
     }),
 
     handleMouseDownOnClear: onlyOnLeftClick(function handleMouseDownOnClear(evt) {
-      if (!this.isFocused) {
-        // If the control isn't focused, stop propagation to
-        // prevent the menu from being opened
-        evt.stopPropagation()
-      }
+      evt.stopPropagation()
+      evt.preventDefault()
 
       this.clear()
+      this.focusInput()
     }),
 
     handleMouseDownOnArrow: onlyOnLeftClick(function handleMouseDownOnArrow(evt) {
-      if (this.isOpen) {
-        evt.stopPropagation()
-        this.closeMenu()
-      }
-      // If the menu isn't open, let the event bubble to the main handleMouseDown
+      evt.preventDefault()
+      evt.stopPropagation()
+
+      // focus the input or prevent blurring
+      this.focusInput()
+      this.toggleMenu()
     }),
 
-    handleTouchOutside(evt) {
+    handleClickOutside(evt) {
       if (this.$refs.wrapper && !this.$refs.wrapper.contains(evt.target)) {
+        this.blurInput()
         this.closeMenu()
       }
     },
@@ -755,6 +781,14 @@ export default {
       if (this.disabled || this.isOpen) return
       this.isOpen = true
       this.$emit('open', this.id)
+    },
+
+    toggleMenu() {
+      if (this.isOpen) {
+        this.closeMenu()
+      } else {
+        this.openMenu()
+      }
     },
 
     toggleExpanded(node) {
@@ -1069,6 +1103,6 @@ export default {
 
   destroyed() {
     /* istanbul ignore next */
-    this.toggleTouchOutsideEvent(false)
+    this.toggleClickOutsideEvent(false)
   },
 }
