@@ -2025,30 +2025,79 @@ describe('Props', () => {
       expect(wrapper.contains('.vue-treeselect__input')).toBe(true)
     })
 
-    it('when disabled=true', () => {
-      const wrapper = mount(Treeselect, {
-        propsData: {
-          options: [],
-          searchable: true,
-          disabled: true,
-        },
+    describe('when disabled=true', () => {
+      it('should hide the input but keep the input wrapper', () => {
+        const wrapper = mount(Treeselect, {
+          propsData: {
+            options: [],
+            searchable: true,
+            disabled: true,
+          },
+        })
+
+        expect(wrapper.contains('.vue-treeselect__input-wrapper')).toBe(true)
+        expect(wrapper.contains('.vue-treeselect__input')).toBe(false)
       })
 
-      expect(wrapper.contains('.vue-treeselect__input-wrapper')).toBe(true)
-      expect(wrapper.contains('.vue-treeselect__input')).toBe(false)
-    })
+      it('should close the dropdown when setting disabled from false to true', () => {
+        const wrapper = mount(Treeselect, {
+          propsData: {
+            options: [],
+            disabled: false,
+          },
+        })
 
-    it('should close the dropdown when gets disabled', () => {
-      const wrapper = mount(Treeselect, {
-        propsData: {
-          options: [],
-          disabled: false,
-        },
+        wrapper.vm.openMenu()
+        expect(wrapper.vm.isOpen).toBe(true)
+        wrapper.setProps({ disabled: true })
+        expect(wrapper.vm.isOpen).toBe(false)
       })
 
-      wrapper.vm.openMenu()
-      wrapper.setProps({ disabled: true })
-      expect(wrapper.vm.isOpen).toBe(false)
+      it('the control should reject all clicks', () => {
+        const wrapper = mount(Treeselect, {
+          attachToDocument: true,
+          propsData: {
+            options: [],
+            disabled: true,
+          },
+        })
+        const valueWrapper = wrapper.first('.vue-treeselect__value-wrapper')
+
+        customTrigger(valueWrapper, 'mousedown', BUTTON_LEFT)
+        expect(wrapper.data()).toEqual(jasmine.objectContaining({
+          isFocused: false,
+          isOpen: false,
+        }))
+      })
+
+      it('the control should be non-focusable', () => {
+        const wrapper = mount(Treeselect, {
+          attachToDocument: true,
+          propsData: {
+            options: [],
+            disabled: true,
+          },
+        })
+
+        wrapper.vm.focusInput()
+        expect(wrapper.data()).toEqual(jasmine.objectContaining({
+          isFocused: false,
+        }))
+      })
+
+      it('should be uanble to open the menu', () => {
+        const wrapper = mount(Treeselect, {
+          propsData: {
+            options: [],
+            disabled: true,
+          },
+        })
+
+        wrapper.vm.openMenu()
+        expect(wrapper.data()).toEqual(jasmine.objectContaining({
+          isOpen: false,
+        }))
+      })
     })
   })
 
