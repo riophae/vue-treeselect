@@ -55,12 +55,12 @@
         name: 'clearAllText',
         type: 'String',
         defaultValue: v('"Clear all"'),
-        description: `Title for the "×" icon when ${v('multiple: true')}.`,
+        description: `Title for the "×" icon when ${v(':multiple="true"')}.`,
       }, {
         name: 'clearOnSelect',
         type: 'Boolean',
-        defaultValue: `Defaults to ${v('false')} when ${v('multiple: true')}; always ${v('true')} otherwise.`,
-        description: `Whether to clear the search input after selecting an option. Use only when ${v('multiple: true')}. For single-select mode, it ${s('always')} clears the input after selecting regardless of the prop value.`,
+        defaultValue: `Defaults to ${v('false')} when ${v(':multiple="true"')}; always ${v('true')} otherwise.`,
+        description: `Whether to clear the search input after selecting an option. Use only when ${v(':multiple="true"')}. For single-select mode, it ${s('always')} clears the input after selecting regardless of the prop value.`,
       }, {
         name: 'clearValueText',
         type: 'String',
@@ -69,8 +69,8 @@
       }, {
         name: 'closeOnSelect',
         type: 'Boolean',
-        defaultValue: `Defaults to ${v('true')} when ${v('multiple: false')}; defaults to ${v('false')} otherwise.`,
-        description: `Whether to close the menu after selecting an option.`,
+        defaultValue: v('true'),
+        description: `Whether to close the menu after selecting an option. Use only when ${v(':multiple="true"')}.`,
       }, {
         name: 'disableBranchNodes',
         type: 'Boolean',

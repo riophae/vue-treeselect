@@ -128,14 +128,13 @@ export default {
 
     /**
      * Whether to close the menu after selecting an option?
+     * Use only when `multiple` is `true`.
+     * @default true
      * @type {boolean}
      */
     closeOnSelect: {
-      // Defining an ALL type to avoid type casting, then we
-      // will be able to know whether the prop value is specified and
-      // determine default value based on value of `multiple` prop.
-      // See computed property `shouldCloseOnSelect`.
-      type: null,
+      type: Boolean,
+      default: true,
     },
 
     /**
@@ -516,18 +515,6 @@ export default {
      */
     shouldShowClearIcon() {
       return this.clearable && !this.disabled && this.hasValue
-    },
-
-    /**
-     * Should automatically close the menu after selecting an option?
-     * @type {boolean}
-     */
-    shouldCloseOnSelect() {
-      if (this.closeOnSelect == null && !this.multiple) {
-        // defaults to true if single-select mode
-        return true
-      }
-      return !!this.closeOnSelect
     },
 
     /**
@@ -976,7 +963,7 @@ export default {
     },
 
     select(node) {
-      if (!this.multiple) {
+      if (this.single) {
         this.clear()
       }
 
@@ -997,7 +984,7 @@ export default {
         this.searchQuery = ''
       }
 
-      if (this.shouldCloseOnSelect) {
+      if (this.single && this.closeOnSelect) {
         this.closeMenu()
       }
 
