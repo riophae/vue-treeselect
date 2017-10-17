@@ -127,7 +127,7 @@ export default {
     },
 
     /**
-     * Whether to close the dropdown after selecting an option?
+     * Whether to close the menu after selecting an option?
      * @type {boolean}
      */
     closeOnSelect: {
@@ -252,7 +252,7 @@ export default {
     },
 
     /**
-     * Sets `maxHeight` style value of the dropdown
+     * Sets `maxHeight` style value of the menu
      * @default 300
      * @type {number}
      */
@@ -448,7 +448,7 @@ export default {
   data: () => ({
     internalValue: [],
     isFocused: false, // whether the control has been focused
-    isOpen: false, // whether the dropdown is open
+    isOpen: false, // whether the menu is open
     nodeCheckedStateMap: Object.create(null), // used for multi-select mode
     nodeMap: Object.create(null), // map: nodeId -> node
     normalizedOptions: null, // normalized options tree
@@ -519,7 +519,7 @@ export default {
     },
 
     /**
-     * Should automatically close the dropdown after selecting an option?
+     * Should automatically close the menu after selecting an option?
      * @type {boolean}
      */
     shouldCloseOnSelect() {
@@ -546,13 +546,13 @@ export default {
 
   watch: {
     disabled(newValue) {
-      // force close the dropdown after disabling the control
+      // force close the menu after disabling the control
       if (newValue && this.isOpen) this.closeMenu()
     },
 
     isOpen(newValue) {
       this.toggleClickOutsideEvent(newValue)
-      // reset search query after dropdown closes
+      // reset search query after menu closes
       if (!newValue) this.searchQuery = ''
     },
 

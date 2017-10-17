@@ -1105,7 +1105,7 @@ describe('SearchInput', () => {
 })
 
 describe('Control', () => {
-  it('should toggle the dropdown when arrow is clicked', () => {
+  it('should toggle the menu when arrow is clicked', () => {
     const wrapper = mount(Treeselect, {
       attachToDocument: true,
       propsData: {
@@ -1122,7 +1122,7 @@ describe('Control', () => {
 })
 
 describe('Dropdown', () => {
-  it('should blur the input & close the dropdown after clicking anywhere outside the component', async done => {
+  it('should blur the input & close the menu after clicking anywhere outside the component', async done => {
     const wrapper = mount(Treeselect, {
       attachToDocument: true,
       propsData: {
@@ -1142,7 +1142,7 @@ describe('Dropdown', () => {
     done()
   })
 
-  it('should open the dropdown after clicking the control when focused', () => {
+  it('should open the menu after clicking the control when focused', () => {
     const wrapper = mount(Treeselect, {
       attachToDocument: true,
       propsData: {
@@ -1158,7 +1158,7 @@ describe('Dropdown', () => {
     expect(wrapper.vm.isOpen).toBe(true)
   })
 
-  it('should close the dropdown after clicking the value when isOpen=true and searchable=false', () => {
+  it('should close the menu after clicking the value when isOpen=true and searchable=false', () => {
     const wrapper = mount(Treeselect, {
       attachToDocument: true,
       propsData: {
@@ -1289,7 +1289,7 @@ describe('Keyboard Support', () => {
       done()
     })
 
-    it('should close the dropdown if input is empty', () => {
+    it('should close the menu if input is empty', () => {
       wrapper.vm.openMenu()
       expect(wrapper.data()).toEqual(jasmine.objectContaining({
         searchQuery: '',
@@ -1303,7 +1303,7 @@ describe('Keyboard Support', () => {
       }))
     })
 
-    it('should reset value if dropdown is closed', () => {
+    it('should reset value if menu is closed', () => {
       expect(wrapper.data()).toEqual(jasmine.objectContaining({
         searchQuery: '',
         internalValue: [ 'a', 'b' ],
@@ -1348,7 +1348,7 @@ describe('Keyboard Support', () => {
     })
   })
 
-  it('any other key press should activate dropdown', () => {
+  it('any other key press should activate menu', () => {
     const wrapper = mount(Treeselect, {
       propsData: {
         options: [],
@@ -1572,7 +1572,7 @@ describe('Props', () => {
   })
 
   describe('closeOnSelect', () => {
-    it('closes the dropdown after selecting when closeOnSelect=true', () => {
+    it('closes the menu after selecting when closeOnSelect=true', () => {
       const wrapper = mount(Treeselect, {
         propsData: {
           closeOnSelect: true,
@@ -1589,7 +1589,7 @@ describe('Props', () => {
       expect(vm.isOpen).toBe(false)
     })
 
-    it('keeps the dropdown open after selecting when closeOnSelect!=true', () => {
+    it('keeps the menu open after selecting when closeOnSelect!=true', () => {
       const wrapper = mount(Treeselect, {
         propsData: {
           closeOnSelect: false,

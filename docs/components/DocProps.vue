@@ -70,7 +70,7 @@
         name: 'closeOnSelect',
         type: 'Boolean',
         defaultValue: `Defaults to ${v('true')} when ${v('multiple: false')}; defaults to ${v('false')} otherwise.`,
-        description: `Whether to close the dropdown after selecting an option.`,
+        description: `Whether to close the menu after selecting an option.`,
       }, {
         name: 'disableBranchNodes',
         type: 'Boolean',
@@ -130,7 +130,7 @@
         name: 'maxHeight',
         type: 'Number',
         defaultValue: v('300'),
-        description: `Sets ${v('maxHeight')} style value of the dropdown.`,
+        description: `Sets ${v('maxHeight')} style value of the menu.`,
       }, {
         name: 'multiple',
         type: 'Boolean',

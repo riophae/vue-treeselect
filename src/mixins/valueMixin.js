@@ -20,8 +20,8 @@ export default {
     handleMouseDownOnValue: onlyOnLeftClick(function handleMouseDownOnValue(evt) {
       /* istanbul ignore next */
       if (!this.instance.isOpen) {
-        // If the dropdown is closed, stop bubbling to
-        // prevent the dropdown from being activated
+        // If the menu is closed, stop bubbling to
+        // prevent the menu from being activated
         evt.stopPropagation()
       }
     }),

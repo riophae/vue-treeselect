@@ -23,11 +23,11 @@
       events: [ {
         name: 'open',
         attributes: '(id)',
-        description: 'Emitted when the dropdown opens.',
+        description: 'Emitted when the menu opens.',
       }, {
         name: 'close',
         attributes: '(value, id)',
-        description: 'Emitted when the dropdown closes.',
+        description: 'Emitted when the menu closes.',
       }, {
         name: 'input',
         attributes: '(value, id)',
