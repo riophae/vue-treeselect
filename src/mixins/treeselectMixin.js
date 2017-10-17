@@ -997,23 +997,31 @@ export default {
     _deselectNode(node) {
       this.removeValue(node)
 
-      if (this.multiple && !this.flat && !node.isRootNode) {
-        const checkedAncestorNodeIndex = findIndex(node.ancestors, this.isSelected)
+      if (this.multiple && !this.flat) {
+        this.selectedNodes.forEach(selectedNode => {
+          if (selectedNode.ancestors.indexOf(node) !== -1) {
+            this.removeValue(selectedNode)
+          }
+        })
 
-        if (checkedAncestorNodeIndex !== -1) {
-          const checkedAncestorNode = node.ancestors[checkedAncestorNodeIndex]
-          const nodesToBeExcluded = node.ancestors.concat(node)
+        if (!node.isRootNode) {
+          const checkedAncestorNodeIndex = findIndex(node.ancestors, this.isSelected)
 
-          this.removeValue(checkedAncestorNode)
-          this.traverseDescendants(
-            checkedAncestorNode,
-            node.level,
-            descendantNode => {
-              if (nodesToBeExcluded.indexOf(descendantNode) === -1) {
-                this.addValue(descendantNode)
+          if (checkedAncestorNodeIndex !== -1) {
+            const checkedAncestorNode = node.ancestors[checkedAncestorNodeIndex]
+            const nodesToBeExcluded = node.ancestors.concat(node)
+
+            this.removeValue(checkedAncestorNode)
+            this.traverseDescendants(
+              checkedAncestorNode,
+              node.level,
+              descendantNode => {
+                if (nodesToBeExcluded.indexOf(descendantNode) === -1) {
+                  this.addValue(descendantNode)
+                }
               }
-            }
-          )
+            )
+          }
         }
       }
     },
