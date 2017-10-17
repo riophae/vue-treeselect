@@ -1609,61 +1609,35 @@ describe('Props', () => {
           isOpen: true,
         },
       })
-      const { vm } = wrapper
+      const labelWrapper = wrapper.first('.vue-treeselect__label-wrapper')
 
-      vm.select(vm.nodeMap.a)
-      expect(vm.isOpen).toBe(false)
+      customTrigger(labelWrapper, 'mousedown', BUTTON_LEFT)
+      expect(wrapper.data()).toEqual(jasmine.objectContaining({
+        internalValue: [ 'a' ],
+        isOpen: false,
+      }))
     })
 
-    it('keeps the menu open after selecting when closeOnSelect!=true', () => {
+    it('keeps the menu open after selecting when closeOnSelect=false', () => {
       const wrapper = mount(Treeselect, {
         propsData: {
           closeOnSelect: false,
           multiple: false,
+          searchable: true,
           options: [ { id: 'a', label: 'a' } ],
         },
         data: {
           isOpen: true,
         },
       })
-      const { vm } = wrapper
+      const labelWrapper = wrapper.first('.vue-treeselect__label-wrapper')
 
-      vm.select(vm.nodeMap.a)
-      expect(vm.isOpen).toBe(true)
-    })
-
-    it('defaults to true when multiple=false', () => {
-      const wrapper = mount(Treeselect, {
-        propsData: {
-          // closeOnSelect: <Not Specified>,
-          multiple: false,
-          options: [ { id: 'a', label: 'a' } ],
-        },
-        data: {
-          isOpen: true,
-        },
-      })
-      const { vm } = wrapper
-
-      vm.select(vm.nodeMap.a)
-      expect(vm.isOpen).toBe(false)
-    })
-
-    it('defaults to false when multiple=true', () => {
-      const wrapper = mount(Treeselect, {
-        propsData: {
-          // closeOnSelect: <Not Specified>,
-          multiple: true,
-          options: [ { id: 'a', label: 'a' } ],
-        },
-        data: {
-          isOpen: true,
-        },
-      })
-      const { vm } = wrapper
-
-      vm.select(vm.nodeMap.a)
-      expect(vm.isOpen).toBe(true)
+      customTrigger(labelWrapper, 'mousedown', BUTTON_LEFT)
+      expect(wrapper.data()).toEqual(jasmine.objectContaining({
+        internalValue: [ 'a' ],
+        isOpen: true,
+        isFocused: false, // auto blur
+      }))
     })
   })
 
