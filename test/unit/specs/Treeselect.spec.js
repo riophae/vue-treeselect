@@ -1764,6 +1764,143 @@ describe('Props', () => {
     })
   })
 
+  describe('openOnClick', () => {
+    it('when openOnClick=false', () => {
+      const wrapper = mount(Treeselect, {
+        attachToDocument: true,
+        propsData: {
+          options: [],
+          openOnClick: false,
+        },
+      })
+      const valueWrapper = wrapper.first('.vue-treeselect__value-wrapper')
+
+      expect(wrapper.data()).toEqual(jasmine.objectContaining({
+        isFocused: false,
+        isOpen: false,
+      }))
+
+      customTrigger(valueWrapper, 'mousedown', BUTTON_LEFT)
+      expect(wrapper.data()).toEqual(jasmine.objectContaining({
+        isFocused: true,
+        isOpen: false,
+      }))
+
+      customTrigger(valueWrapper, 'mousedown', BUTTON_LEFT)
+      expect(wrapper.data()).toEqual(jasmine.objectContaining({
+        isFocused: true,
+        isOpen: true,
+      }))
+    })
+
+    it('when openOnClick=true', () => {
+      const wrapper = mount(Treeselect, {
+        attachToDocument: true,
+        propsData: {
+          options: [],
+          openOnClick: true,
+        },
+      })
+      const valueWrapper = wrapper.first('.vue-treeselect__value-wrapper')
+
+      expect(wrapper.data()).toEqual(jasmine.objectContaining({
+        isFocused: false,
+        isOpen: false,
+      }))
+
+      customTrigger(valueWrapper, 'mousedown', BUTTON_LEFT)
+      expect(wrapper.data()).toEqual(jasmine.objectContaining({
+        isFocused: true,
+        isOpen: true,
+      }))
+    })
+  })
+
+  describe('openOnFocus', () => {
+    it('when openOnFocus=false', () => {
+      const wrapper = mount(Treeselect, {
+        attachToDocument: true,
+        propsData: {
+          options: [],
+          openOnFocus: false,
+        },
+      })
+      const valueWrapper = wrapper.first('.vue-treeselect__value-wrapper')
+
+      expect(wrapper.data()).toEqual(jasmine.objectContaining({
+        isFocused: false,
+        isOpen: false,
+      }))
+
+      wrapper.vm.focusInput()
+      expect(wrapper.data()).toEqual(jasmine.objectContaining({
+        isFocused: true,
+        isOpen: false,
+      }))
+
+      customTrigger(valueWrapper, 'mousedown', BUTTON_LEFT)
+      expect(wrapper.data()).toEqual(jasmine.objectContaining({
+        isFocused: true,
+        isOpen: true,
+      }))
+    })
+
+    it('when openOnFocus=true', () => {
+      const wrapper = mount(Treeselect, {
+        attachToDocument: true,
+        propsData: {
+          options: [],
+          openOnFocus: true,
+        },
+      })
+
+      expect(wrapper.data()).toEqual(jasmine.objectContaining({
+        isFocused: false,
+        isOpen: false,
+      }))
+
+      wrapper.vm.focusInput()
+      expect(wrapper.data()).toEqual(jasmine.objectContaining({
+        isFocused: true,
+        isOpen: true,
+      }))
+    })
+
+    describe('combined with autofocus', () => {
+      it('when openOnFocus=false', () => {
+        const wrapper = mount(Treeselect, {
+          attachToDocument: true,
+          propsData: {
+            options: [],
+            autofocus: true,
+            openOnFocus: false,
+          },
+        })
+
+        expect(wrapper.data()).toEqual(jasmine.objectContaining({
+          isFocused: true,
+          isOpen: false,
+        }))
+      })
+
+      it('when openOnFocus=true', () => {
+        const wrapper = mount(Treeselect, {
+          attachToDocument: true,
+          propsData: {
+            options: [],
+            autofocus: true,
+            openOnFocus: true,
+          },
+        })
+
+        expect(wrapper.data()).toEqual(jasmine.objectContaining({
+          isFocused: true,
+          isOpen: true,
+        }))
+      })
+    })
+  })
+
   describe('options', () => {
     it('show tip when `options` is an empty array', () => {
       const wrapper = mount(Treeselect, {
