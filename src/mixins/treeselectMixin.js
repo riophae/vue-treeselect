@@ -595,6 +595,7 @@ export default {
   methods: {
     resetFlags() {
       this._blurOnSelect = false
+      this._wasClickedOnValueItem = false
     },
 
     getValue() {
@@ -687,13 +688,12 @@ export default {
 
       if (this.disabled) return
 
-      const isClickedOnValue = this.$refs.value.$el.contains(evt.target)
-      const wasFocused = this.isFocused
+      const isClickedOnValueWrapper = this.$refs.value.$el.contains(evt.target)
 
-      if (isClickedOnValue) {
-        if (this.isOpen && !this.searchable) {
+      if (isClickedOnValueWrapper) {
+        if (this.isOpen && !this.searchable && !this._wasClickedOnValueItem) {
           this.closeMenu()
-        } else if (!this.isOpen && (this.openOnClick || wasFocused)) {
+        } else if (!this.isOpen && (this.openOnClick || this.isFocused)) {
           this.openMenu()
         }
       }

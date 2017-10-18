@@ -1185,15 +1185,15 @@ describe('Dropdown', () => {
     expect(wrapper.vm.isOpen).toBe(true)
   })
 
-  it('should close the menu after clicking the value when isOpen=true and searchable=false', () => {
+  it('should close the menu after clicking inside the value wrapper when isOpen=true and searchable=false', () => {
     const wrapper = mount(Treeselect, {
       attachToDocument: true,
       propsData: {
         options: [ {
           id: 'a',
           label: 'a',
-          multiple: false,
         } ],
+        multiple: false,
         searchable: false,
       },
       data: {
@@ -1206,6 +1206,40 @@ describe('Dropdown', () => {
     const value = wrapper.first('.vue-treeselect__value-wrapper')
     customTrigger(value, 'mousedown', BUTTON_LEFT)
     expect(wrapper.vm.isOpen).toBe(false)
+  })
+
+  it('should not close the menu after clicking a value remove button when multiple=true & searchable=false', () => {
+    const wrapper = mount(Treeselect, {
+      attachToDocument: true,
+      propsData: {
+        multiple: true,
+        options: [ {
+          id: 'a',
+          label: 'a',
+        }, {
+          id: 'b',
+          label: 'b',
+        } ],
+        value: [ 'a', 'b' ],
+      },
+      data: {
+        isOpen: true,
+      },
+    })
+
+    const [ firstRemove, secondRemove ] = wrapper.find('.vue-treeselect__value-icon-remove')
+
+    customTrigger(firstRemove, 'mousedown', BUTTON_LEFT)
+    expect(wrapper.data()).toEqual(jasmine.objectContaining({
+      isOpen: true,
+      internalValue: [ 'b' ],
+    }))
+
+    customTrigger(secondRemove, 'mousedown', BUTTON_LEFT)
+    expect(wrapper.data()).toEqual(jasmine.objectContaining({
+      isOpen: true,
+      internalValue: [],
+    }))
   })
 
   it('click on option arrow should toggle expanded', () => {

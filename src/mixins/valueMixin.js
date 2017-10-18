@@ -1,3 +1,5 @@
+import { onlyOnLeftClick } from '../utils'
+
 export default {
   computed: {
     limitText() {
@@ -14,5 +16,9 @@ export default {
     blurInput() {
       this.$refs.input.blur()
     },
+
+    handleMouseDownOnValue: onlyOnLeftClick(function handleMouseDownOnValue() {
+      this.instance._wasClickedOnValueItem = true
+    }),
   },
 }
