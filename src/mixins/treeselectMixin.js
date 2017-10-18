@@ -911,7 +911,7 @@ export default {
           normalized.isExpanded = level < this.defaultExpandLevel
           normalized.hasMatchedChild = false
           normalized.expandsOnSearch = false
-          normalized.error = ''
+          normalized.loadingChildrenError = ''
           normalized.count = {
             [ALL_CHILDREN]: 0,
             [ALL_DESCENDANTS]: 0,
@@ -952,9 +952,9 @@ export default {
         node.isPending = false
 
         if (err) {
-          node.error = this.loadChildrenErrorText(err)
+          node.loadingChildrenError = this.loadChildrenErrorText(err)
         } else if (!Array.isArray(children)) {
-          node.error = 'Received unrecognizable data'
+          node.loadingChildrenError = 'Received unrecognizable data'
           warning(
             () => false,
             () => `Received unrecognizable data ${children} while loading children options of node ${node.id}`
@@ -962,7 +962,7 @@ export default {
         } else {
           node.children = this.normalize(node, children)
           node.isLoaded = true
-          node.error = ''
+          node.loadingChildrenError = ''
           this.buildNodeCheckedStateMap()
         }
       }

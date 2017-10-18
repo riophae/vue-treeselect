@@ -96,7 +96,7 @@ describe('Basic', () => {
         index: jasmine.any(Array),
         children: jasmine.any(Array),
         level: jasmine.any(Number),
-        error: jasmine.any(String),
+        loadingChildrenError: jasmine.any(String),
         count: {
           ALL_CHILDREN: jasmine.any(Number),
           ALL_DESCENDANTS: jasmine.any(Number),
@@ -2379,7 +2379,7 @@ describe('Props', () => {
         callback(error)
         expect(a.isPending).toBe(false)
         expect(a.isLoaded).toBe(false)
-        expect(a.error).toBe(`Failed to load children options: ${error.message}.`)
+        expect(a.loadingChildrenError).toBe(`Failed to load children options: ${error.message}.`)
       })
       const wrapper = mount(Treeselect, {
         propsData: {
@@ -2409,7 +2409,7 @@ describe('Props', () => {
         if (c === 0) {
           const error = new Error('$ERROR$')
           callback(error)
-          expect(a.error).toBe(`Failed to load children options: ${error.message}.`)
+          expect(a.loadingChildrenError).toBe(`Failed to load children options: ${error.message}.`)
         } else if (c === 1) {
           expect(a.isPending).toBe(true)
           expect(a.isLoaded).toBe(false)
@@ -2420,7 +2420,7 @@ describe('Props', () => {
           expect(a.isPending).toBe(false)
           expect(a.isLoaded).toBe(true)
           expect(a.children).toBeNonEmptyArray()
-          expect(a.error).toBe('')
+          expect(a.loadingChildrenError).toBe('')
         } else {
           throw new Error('unknown error')
         }
@@ -2501,7 +2501,7 @@ describe('Props', () => {
 
       vm.toggleExpanded(vm.nodeMap.a)
       await vm.$nextTick()
-      expect(vm.nodeMap.a.error).toBe('Received unrecognizable data')
+      expect(vm.nodeMap.a.loadingChildrenError).toBe('Received unrecognizable data')
       expect(console.error).toHaveBeenCalledWith(
         '[Vue-Treeselect Warning]',
         'Received unrecognizable data null while loading children options of node a'

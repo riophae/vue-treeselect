@@ -55,10 +55,10 @@
         <div class="vue-treeselect__icon-wrapper"><span class="vue-treeselect__icon-loader"></span></div>
         <span class="vue-treeselect__loading-tip-text">{{ instance.loadingText }}</span>
       </div>
-      <div v-else-if="node.error" class="vue-treeselect__error-tip">
+      <div v-else-if="node.loadingChildrenError" class="vue-treeselect__error-tip">
         <div class="vue-treeselect__icon-wrapper"><span class="vue-treeselect__icon-error"></span></div>
         <span class="vue-treeselect__error-tip-text">
-          {{ node.error }}
+          {{ node.loadingChildrenError }}
           <a class="vue-treeselect__retry" @click="instance.loadChildren(node)" :title="instance.retryTitle">
             {{ instance.retryText }}
           </a>
