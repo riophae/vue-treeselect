@@ -1,5 +1,3 @@
-import { onlyOnLeftClick } from '../utils'
-
 export default {
   computed: {
     limitText() {
@@ -16,14 +14,5 @@ export default {
     blurInput() {
       this.$refs.input.blur()
     },
-
-    handleMouseDownOnValue: onlyOnLeftClick(function handleMouseDownOnValue(evt) {
-      /* istanbul ignore next */
-      if (!this.instance.isOpen) {
-        // If the menu is closed, stop bubbling to
-        // prevent the menu from being activated
-        evt.stopPropagation()
-      }
-    }),
   },
 }
