@@ -1,3 +1,4 @@
+import Vue from 'vue'
 import { mount } from 'avoriaz'
 import Treeselect from '@riophae/vue-treeselect/components/Treeselect'
 import TreeselectOption from '@riophae/vue-treeselect/components/Option'
@@ -433,8 +434,8 @@ describe('Basic', () => {
 
     expect(console.error).toHaveBeenCalledWith(
       '[Vue-Treeselect Warning]',
-      'Detected duplicate nodes with same id: "same_id". ' +
-        'Their labels are a and b respectively.'
+      'Detected duplicate presence of node id "same_id". ' +
+        'Their labels are "a" and "b" respectively.'
     )
   })
 
@@ -484,6 +485,42 @@ describe('Basic', () => {
       a: 2,
       aa: 2,
     })
+  })
+
+  it('v-model support', async done => {
+    // avoriaz doesn't support testing v-model
+    // so here we write vanila vue code
+    const vm = new Vue({
+      components: { Treeselect },
+      template: `
+        <div>
+          <treeselect
+            v-model="value"
+            :options="options"
+            :multiple="true"
+          />
+        </div>
+      `,
+      data: {
+        value: [],
+        options: [ {
+          id: 'a',
+          label: 'a',
+        }, {
+          id: 'b',
+          label: 'b',
+        } ],
+      },
+    }).$mount()
+    const comp = vm.$children[0]
+
+    comp.select(comp.nodeMap.a)
+    await comp.$nextTick()
+    expect(vm.value).toEqual([ 'a' ])
+    comp.select(comp.nodeMap.a)
+    await comp.$nextTick()
+    expect(vm.value).toEqual([])
+    done()
   })
 })
 
@@ -2766,6 +2803,8 @@ describe('Props', () => {
       expect(wrapper.vm.internalValue).toEqual([ 'c', 'bb', 'aaa' ])
       wrapper.setProps({ sortValueBy: 'INDEX' })
       expect(wrapper.vm.internalValue).toEqual([ 'aaa', 'bb', 'c' ])
+      wrapper.setProps({ sortValueBy: 'LEVEL' })
+      expect(wrapper.vm.internalValue).toEqual([ 'c', 'bb', 'aaa' ])
     })
   })
 })

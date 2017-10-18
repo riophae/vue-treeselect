@@ -974,8 +974,8 @@ export default {
     checkDuplication(node) {
       warning(
         () => !hasOwn(this.nodeMap, node.id),
-        () => `Detected duplicate nodes with same id: ${JSON.stringify(node.id)}. ` +
-          `Their labels are ${this.nodeMap[node.id].label} and ${node.label} respectively.`
+        () => `Detected duplicate presence of node id ${JSON.stringify(node.id)}. ` +
+          `Their labels are "${this.nodeMap[node.id].label}" and "${node.label}" respectively.`
       )
     },
 
