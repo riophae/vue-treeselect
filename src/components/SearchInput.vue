@@ -17,13 +17,13 @@
     }),
 
     computed: {
-      needAutoSize() {
+      needsAutoSize() {
         return this.instance.multiple
       },
     },
 
     updated() {
-      if (this.needAutoSize) this.updateInputWidth()
+      if (this.needsAutoSize) this.updateInputWidth()
     },
 
     methods: {
@@ -110,7 +110,7 @@
 
         if (this.instance.searchable && !this.instance.disabled) {
           children.push(this.renderInput(h))
-          if (this.needAutoSize) children.push(this.renderSizer(h))
+          if (this.needsAutoSize) children.push(this.renderSizer(h))
         }
 
         if (!this.instance.searchable) {
@@ -147,7 +147,7 @@
             value: this.instance.searchQuery,
           },
           style: {
-            width: this.needAutoSize ? `${this.inputWidth}px` : null,
+            width: this.needsAutoSize ? `${this.inputWidth}px` : null,
           },
           on: {
             focus: this.onFocus,
