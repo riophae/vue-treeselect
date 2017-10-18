@@ -18,7 +18,7 @@
         <span :class="[ 'vue-treeselect__arrow', { 'vue-treeselect__arrow--rotated': isOpen } ]"></span>
       </div>
     </div>
-    <div v-if="isOpen" class="vue-treeselect__dropdown" :style="{ maxHeight: maxHeight + 'px' }">
+    <div v-if="isOpen" class="vue-treeselect__menu" :style="{ maxHeight: maxHeight + 'px' }">
       <div v-if="searching && noSearchResults" class="vue-treeselect__no-results-tip">
         <div class="vue-treeselect__icon-wrapper"><span class="vue-treeselect__icon-warning"></span></div>
         <span class="vue-treeselect__no-results-tip-text">{{ noResultsText }}</span>

@@ -55,11 +55,11 @@
 @treeselect-single-input-font-size: inherit;
 @treeselect-multi-input-font-size: @treeselect-multi-value-font-size;
 
-@treeselect-dropdown-bg: #fff;
-@treeselect-dropdown-padding-y: 3px;
-@treeselect-dropdown-line-height: 180%;
-@treeselect-dropdown-box-shadow: 0 1px 0 rgba(0, 0, 0, .06);
-@treeselect-dropdown-border-top-color: #f2f2f2;
+@treeselect-menu-bg: #fff;
+@treeselect-menu-padding-y: 3px;
+@treeselect-menu-line-height: 180%;
+@treeselect-menu-box-shadow: 0 1px 0 rgba(0, 0, 0, .06);
+@treeselect-menu-border-top-color: #f2f2f2;
 
 @treeselect-arrow-size: 5px;
 @treeselect-arrow-color: #ccc;
@@ -582,12 +582,12 @@
 
 
 /**
- * Dropdown
+ * Menu
  */
 
-.vue-treeselect__dropdown {
+.vue-treeselect__menu {
   .border-radius-bottom(@treeselect-border-radius-lg);
-  .vertical-padding(@treeselect-dropdown-padding-y);
+  .vertical-padding(@treeselect-menu-padding-y);
 
   display: block;
   position: absolute;
@@ -599,10 +599,10 @@
   overflow-x: hidden;
   overflow-y: auto;
   border: 1px solid @treeselect-control-border-color-active;
-  border-top-color: @treeselect-dropdown-border-top-color;
-  box-shadow: @treeselect-dropdown-box-shadow;
-  background: @treeselect-dropdown-bg;
-  line-height: @treeselect-dropdown-line-height;
+  border-top-color: @treeselect-menu-border-top-color;
+  box-shadow: @treeselect-menu-box-shadow;
+  background: @treeselect-menu-bg;
+  line-height: @treeselect-menu-line-height;
   cursor: default; // set to normal cursor since text is not selectable
   // https://css-tricks.com/snippets/css/momentum-scrolling-on-ios-overflow-elements/
   -webkit-overflow-scrolling: touch;

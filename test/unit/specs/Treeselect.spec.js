@@ -1185,7 +1185,7 @@ describe('Control', () => {
   })
 })
 
-describe('Dropdown', () => {
+describe('Menu', () => {
   it('should blur the input & close the menu after clicking anywhere outside the component', async done => {
     const wrapper = mount(Treeselect, {
       attachToDocument: true,
@@ -2030,8 +2030,8 @@ describe('Props', () => {
         },
       })
 
-      const dropdown = wrapper.first('.vue-treeselect__dropdown')
-      const noOptionsTip = dropdown.first('.vue-treeselect__no-options-tip')
+      const menu = wrapper.first('.vue-treeselect__menu')
+      const noOptionsTip = menu.first('.vue-treeselect__no-options-tip')
       expect(noOptionsTip.text().trim()).toBe('No options available.')
     })
   })
@@ -2157,7 +2157,7 @@ describe('Props', () => {
         expect(wrapper.contains('.vue-treeselect__input')).toBe(false)
       })
 
-      it('should close the dropdown when setting disabled from false to true', () => {
+      it('should close the menu when setting disabled from false to true', () => {
         const wrapper = mount(Treeselect, {
           propsData: {
             options: [],
@@ -2863,7 +2863,7 @@ describe('Methods', () => {
       expect(wrapper.vm.isOpen).toBe(false)
     })
 
-    it('should activate the dropdown', () => {
+    it('should activate the menu', () => {
       wrapper.vm.openMenu()
       expect(wrapper.vm.isOpen).toBe(true)
     })
@@ -2889,7 +2889,7 @@ describe('Methods', () => {
       })
     })
 
-    it('should close the dropdown', () => {
+    it('should close the menu', () => {
       wrapper.vm.closeMenu()
       expect(wrapper.vm.isOpen).toBe(false)
     })
