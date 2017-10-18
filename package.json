@@ -87,6 +87,7 @@
     "optimize-css-assets-webpack-plugin": "^3.0.0",
     "optimize-js-plugin": "0.0.4",
     "ora": "^1.2.0",
+    "postcss-easings": "^1.0.0",
     "pug": "^2.0.0-rc.4",
     "pug-loader": "^2.3.0",
     "raw-loader": "^0.5.1",
