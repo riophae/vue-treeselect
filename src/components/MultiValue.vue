@@ -3,12 +3,12 @@
     <transition-group
       tag="div"
       class="vue-treeselect__multi-value"
-      name="vue-treeselect__multi-value-item--pop"
+      name="vue-treeselect__multi-value-item--zoom"
       appear>
       <template v-for="node in instance.visibleValue">
         <div class="vue-treeselect__multi-value-item-wrapper" :key="`value-${node.id}`" @mousedown="handleMouseDownOnValue">
           <div class="vue-treeselect__multi-value-item">
-            <span class="vue-treeselect__multi-value-label">{{ node.label }}</span><span class="vue-treeselect__icon vue-treeselect__value-icon-remove" @mousedown="instance.select(node)">&times;</span>
+            <span class="vue-treeselect__multi-value-label">{{ node.label }}</span><span class="vue-treeselect__icon vue-treeselect__value-remove" @mousedown="instance.select(node)">&times;</span>
           </div>
         </div>
       </template>

@@ -237,26 +237,25 @@
   }
 }
 
-// TODO: 名字需要改
-.vue-treeselect__multi-value-item--pop-enter-active,
-.vue-treeselect__multi-value-item--pop-leave-active {
+.vue-treeselect__multi-value-item--zoom-enter-active,
+.vue-treeselect__multi-value-item--zoom-leave-active {
   transition-duration: @treeselect-transition-duration;
   transition-property: transform, opacity;
   transition-timing-function: ease;
 }
 
-.vue-treeselect__multi-value-item--pop-enter,
-.vue-treeselect__multi-value-item--pop-leave-to {
+.vue-treeselect__multi-value-item--zoom-enter,
+.vue-treeselect__multi-value-item--zoom-leave-to {
   transform: scale(.7);
   opacity: 0;
 }
 
-.vue-treeselect__multi-value-item--pop-leave-active {
+.vue-treeselect__multi-value-item--zoom-leave-active {
   // trigger animation when element is removed
   position: absolute;
 }
 
-.vue-treeselect__multi-value-item--pop-move {
+.vue-treeselect__multi-value-item--zoom-move {
   transition: @treeselect-transition-duration transform ease;
 }
 
@@ -408,7 +407,7 @@
   }
 }
 
-.vue-treeselect__value-icon-remove,
+.vue-treeselect__value-remove,
 .vue-treeselect__multi-value-label {
   display: inline-block;
   margin: @treeselect-multi-value-margin-y @treeselect-multi-value-margin-x;
@@ -416,7 +415,7 @@
   vertical-align: middle;
 }
 
-.vue-treeselect__value-icon-remove {
+.vue-treeselect__value-remove {
   .clickable();
 
   border-left: 1px solid @treeselect-multi-value-remove-border-color;
@@ -661,7 +660,6 @@
 .vue-treeselect__option-arrow--rotated {
   transform: rotateZ(90deg);
 
-  // TODO
   &.vue-treeselect__option-arrow--prepare-enter {
     transform: rotateZ(0) !important;
   }

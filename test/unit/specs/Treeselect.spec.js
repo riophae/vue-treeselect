@@ -1227,7 +1227,7 @@ describe('Dropdown', () => {
       },
     })
 
-    const [ firstRemove, secondRemove ] = wrapper.find('.vue-treeselect__value-icon-remove')
+    const [ firstRemove, secondRemove ] = wrapper.find('.vue-treeselect__value-remove')
 
     customTrigger(firstRemove, 'mousedown', BUTTON_LEFT)
     expect(wrapper.data()).toEqual(jasmine.objectContaining({
