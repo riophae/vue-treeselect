@@ -2020,6 +2020,15 @@ describe('Props', () => {
   })
 
   describe('options', () => {
+    it('should be optional', () => {
+      spyOn(console, 'error')
+
+      const wrapper = mount(Treeselect)
+
+      expect(wrapper.vm.normalizedOptions).toBeEmptyArray()
+      expect(console.error).not.toHaveBeenCalled()
+    })
+
     it('show tip when `options` is an empty array', () => {
       const wrapper = mount(Treeselect, {
         propsData: {
