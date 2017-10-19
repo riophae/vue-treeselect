@@ -1143,11 +1143,7 @@ describe('Multi-select', () => {
 
 describe('SearchInput', () => {
   it('should disable auto complete', () => {
-    const wrapper = mount(Treeselect, {
-      propsData: {
-        options: [],
-      },
-    })
+    const wrapper = mount(Treeselect)
     const input = wrapper.first('.vue-treeselect__input')
     expect(input.element.getAttribute('autocomplete')).toBe('off')
   })
@@ -1155,7 +1151,6 @@ describe('SearchInput', () => {
   it('should be unable to focus when disabled=true', () => {
     const wrapper = mount(Treeselect, {
       propsData: {
-        options: [],
         autofocus: false,
         searchable: true,
         disabled: true,
@@ -1172,9 +1167,6 @@ describe('Control', () => {
   it('should toggle the menu when arrow is clicked', () => {
     const wrapper = mount(Treeselect, {
       attachToDocument: true,
-      propsData: {
-        options: [],
-      },
     })
     const arrow = wrapper.first('.vue-treeselect__arrow-wrapper')
 
@@ -1189,9 +1181,6 @@ describe('Menu', () => {
   it('should blur the input & close the menu after clicking anywhere outside the component', async done => {
     const wrapper = mount(Treeselect, {
       attachToDocument: true,
-      propsData: {
-        options: [],
-      },
     })
 
     wrapper.vm.openMenu()
@@ -1209,9 +1198,6 @@ describe('Menu', () => {
   it('should open the menu after clicking the control when focused', () => {
     const wrapper = mount(Treeselect, {
       attachToDocument: true,
-      propsData: {
-        options: [],
-      },
       data: {
         isFocused: true,
       },
@@ -1493,11 +1479,7 @@ describe('Keyboard Support', () => {
   })
 
   it('any other key press should activate menu', () => {
-    const wrapper = mount(Treeselect, {
-      propsData: {
-        options: [],
-      },
-    })
+    const wrapper = mount(Treeselect)
     const input = queryInput(wrapper)
 
     expect(wrapper.vm.isOpen).toBe(false)
@@ -1512,7 +1494,6 @@ describe('Props', () => {
       const wrapper = mount(Treeselect, {
         attachToDocument: true,
         propsData: {
-          options: [],
           autofocus: true,
           searchable: true,
         },
@@ -1887,7 +1868,6 @@ describe('Props', () => {
       const wrapper = mount(Treeselect, {
         attachToDocument: true,
         propsData: {
-          options: [],
           openOnClick: false,
         },
       })
@@ -1915,7 +1895,6 @@ describe('Props', () => {
       const wrapper = mount(Treeselect, {
         attachToDocument: true,
         propsData: {
-          options: [],
           openOnClick: true,
         },
       })
@@ -1939,7 +1918,6 @@ describe('Props', () => {
       const wrapper = mount(Treeselect, {
         attachToDocument: true,
         propsData: {
-          options: [],
           openOnFocus: false,
         },
       })
@@ -1967,7 +1945,6 @@ describe('Props', () => {
       const wrapper = mount(Treeselect, {
         attachToDocument: true,
         propsData: {
-          options: [],
           openOnFocus: true,
         },
       })
@@ -1989,7 +1966,6 @@ describe('Props', () => {
         const wrapper = mount(Treeselect, {
           attachToDocument: true,
           propsData: {
-            options: [],
             autofocus: true,
             openOnFocus: false,
           },
@@ -2005,7 +1981,6 @@ describe('Props', () => {
         const wrapper = mount(Treeselect, {
           attachToDocument: true,
           propsData: {
-            options: [],
             autofocus: true,
             openOnFocus: true,
           },
@@ -2031,9 +2006,6 @@ describe('Props', () => {
 
     it('show tip when `options` is an empty array', () => {
       const wrapper = mount(Treeselect, {
-        propsData: {
-          options: [],
-        },
         data: {
           isOpen: true,
         },
@@ -2142,7 +2114,6 @@ describe('Props', () => {
     it('when disabled=false', () => {
       const wrapper = mount(Treeselect, {
         propsData: {
-          options: [],
           searchable: true,
           disabled: false,
         },
@@ -2156,7 +2127,6 @@ describe('Props', () => {
       it('should hide the input but keep the input wrapper', () => {
         const wrapper = mount(Treeselect, {
           propsData: {
-            options: [],
             searchable: true,
             disabled: true,
           },
@@ -2169,7 +2139,6 @@ describe('Props', () => {
       it('should close the menu when setting disabled from false to true', () => {
         const wrapper = mount(Treeselect, {
           propsData: {
-            options: [],
             disabled: false,
           },
         })
@@ -2184,7 +2153,6 @@ describe('Props', () => {
         const wrapper = mount(Treeselect, {
           attachToDocument: true,
           propsData: {
-            options: [],
             disabled: true,
           },
         })
@@ -2201,7 +2169,6 @@ describe('Props', () => {
         const wrapper = mount(Treeselect, {
           attachToDocument: true,
           propsData: {
-            options: [],
             disabled: true,
           },
         })
@@ -2215,7 +2182,6 @@ describe('Props', () => {
       it('should be uanble to open the menu', () => {
         const wrapper = mount(Treeselect, {
           propsData: {
-            options: [],
             disabled: true,
           },
         })
@@ -2232,7 +2198,6 @@ describe('Props', () => {
     it('when disabled=false & searchable=true', () => {
       const wrapper = mount(Treeselect, {
         propsData: {
-          options: [],
           searchable: true,
           disabled: false,
         },
@@ -2247,7 +2212,6 @@ describe('Props', () => {
     it('when disabled=false & searchable=false', () => {
       const wrapper = mount(Treeselect, {
         propsData: {
-          options: [],
           searchable: false,
           disabled: false,
         },
@@ -2260,7 +2224,6 @@ describe('Props', () => {
     it('when disabled=true', () => {
       const wrapper = mount(Treeselect, {
         propsData: {
-          options: [],
           disabled: true,
         },
       })
@@ -2272,7 +2235,6 @@ describe('Props', () => {
     it('customized value', () => {
       const wrapper = mount(Treeselect, {
         propsData: {
-          options: [],
           searchable: true,
           disabled: false,
           tabIndex: 1,
@@ -2564,7 +2526,6 @@ describe('Props', () => {
             propsData: {
               multiple: true,
               searchable: true,
-              options: [],
             },
           })
 
@@ -2583,7 +2544,6 @@ describe('Props', () => {
             propsData: {
               multiple: false,
               searchable: true,
-              options: [],
             },
           })
 
@@ -2595,7 +2555,6 @@ describe('Props', () => {
         const wrapper = mount(Treeselect, {
           propsData: {
             searchable: true,
-            options: [],
           },
         })
 
@@ -2672,7 +2631,6 @@ describe('Props', () => {
             propsData: {
               multiple: true,
               searchable: false,
-              options: [],
             },
           })
 
@@ -2687,7 +2645,6 @@ describe('Props', () => {
             propsData: {
               multiple: false,
               searchable: false,
-              options: [],
             },
           })
 
@@ -2846,7 +2803,6 @@ describe('Methods', () => {
     const wrapper = mount(Treeselect, {
       attachToDocument: true,
       propsData: {
-        options: [],
         disabled: false,
         searchable: true,
         autofocus: false,
@@ -2864,11 +2820,7 @@ describe('Methods', () => {
     let wrapper
 
     beforeEach(() => {
-      wrapper = mount(Treeselect, {
-        propsData: {
-          options: [],
-        },
-      })
+      wrapper = mount(Treeselect)
       expect(wrapper.vm.isOpen).toBe(false)
     })
 
@@ -2889,9 +2841,6 @@ describe('Methods', () => {
 
     beforeEach(() => {
       wrapper = mount(Treeselect, {
-        propsData: {
-          options: [],
-        },
         data: {
           isOpen: true,
         },
