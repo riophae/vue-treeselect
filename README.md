@@ -104,6 +104,10 @@ It should function well on IE9, but the style can be slightly broken due to the 
 
 In addition, this component lib is designed to be used primarily on desktop browsers. Although it should work on mobile browsers as well, the user experience won't be ideal.
 
+### Bugs
+
+You can use this [pen](https://codepen.io/riophae/pen/MExgzP) to reproduce bugs and then open an issue.
+
 ### Contributing
 
 1. Fork & clone the repo
