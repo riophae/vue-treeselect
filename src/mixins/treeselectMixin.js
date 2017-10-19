@@ -333,7 +333,7 @@ export default {
 
     /**
      * Array of available options
-     * @type {!Object[]}
+     * @type {Object[]}
      */
     options: {
       type: Array,

@@ -1,25 +1,22 @@
 <template>
-  <div>
-    <table class="striped">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Default</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="prop in props" :key="prop[0]">
-          <td><strong>{{ prop.name }}</strong><span class="mark-required" v-if="prop.isRequired">*</span></td>
-          <td class="nowrap">{{ prop.type }}</td>
-          <td v-html="prop.defaultValue"></td>
-          <td v-html="prop.description"></td>
-        </tr>
-      </tbody>
-    </table>
-    <i><span class="mark-required">*</span>: Required</i>
-  </div>
+  <table class="striped">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Default</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="prop in props" :key="prop[0]">
+        <td><strong>{{ prop.name }}</strong></td>
+        <td class="nowrap">{{ prop.type }}</td>
+        <td v-html="prop.defaultValue"></td>
+        <td v-html="prop.description"></td>
+      </tr>
+    </tbody>
+  </table>
 </template>
 
 <script>
@@ -171,7 +168,6 @@
         type: 'Object[]',
         defaultValue: NO_DEFAULT_VALUE,
         description: `Array of available options. See ${link('#basic-features')} to learn how to define them.`,
-        isRequired: true,
       }, {
         name: 'placeholder',
         type: 'String',
