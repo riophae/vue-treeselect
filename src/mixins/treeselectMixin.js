@@ -361,6 +361,15 @@ export default {
     },
 
     /**
+     * Whether to retain the scroll position on menu reopen
+     * @type {boolean}
+     */
+    retainScrollPosition: {
+      type: Boolean,
+      default: true,
+    },
+
+    /**
      * Text displayed asking user whether to retry loading children options
      * @default "Retry?"
      * @type {string}
@@ -479,6 +488,7 @@ export default {
     searching: false,
     searchQuery: '',
     selectedNodeMap: Object.create(null),
+    lastScrollPosition: 0,
   }),
 
   computed: {
@@ -794,6 +804,9 @@ export default {
     closeMenu() {
       if (!this.isOpen) return
       this.isOpen = false
+      if (this.retainScrollPosition) {
+        this.lastScrollPosition = this.$refs.menu && this.$refs.menu.scrollTop
+      }
       this.$emit('close', this.getValue(), this.id)
     },
 
@@ -801,6 +814,7 @@ export default {
       if (this.disabled || this.isOpen) return
       this.isOpen = true
       this.$nextTick(this.adjustPosition)
+      if (this.retainScrollPosition) this.$nextTick(this.restoreScrollPosition)
       this.$emit('open', this.id)
     },
 
@@ -1108,6 +1122,10 @@ export default {
       } else if (this.sortValueBy === INDEX) {
         this.internalValue.sort((a, b) => sortValueByIndex(this.nodeMap[a], this.nodeMap[b]))
       }
+    },
+
+    restoreScrollPosition() {
+      if (this.$refs.menu) this.$refs.menu.scrollTop = this.lastScrollPosition
     },
 
     adjustPosition() {

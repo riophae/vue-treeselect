@@ -179,6 +179,11 @@
         defaultValue: v('"Select..."'),
         description: "Field placeholder, displayed when there's no value.",
       }, {
+        name: 'retainScrollPosition',
+        type: 'Boolean',
+        defaultValue: v('true'),
+        description: 'Retain the scroll position on menu reopen.',
+      }, {
         name: 'retryText',
         type: 'String',
         defaultValue: v('"Retry?"'),
