@@ -312,6 +312,16 @@ export default {
     },
 
     /**
+     * Fixed opening direction
+     * @default "auto"
+     * @type {string}
+     */
+    openDirection: {
+      type: String,
+      default: 'auto',
+    },
+
+    /**
      * Whether to automatically open the menu when the control is clicked
      * @default true
      * @type {boolean}
@@ -463,6 +473,8 @@ export default {
     nodeMap: Object.create(null), // map: nodeId -> node
     normalizedOptions: null, // normalized options tree
     noSearchResults: true, // whether there is any matching search results
+    optimizedHeight: 0,
+    prefferedOpenDirection: 'below',
     searchingCount: Object.create(null),
     searching: false,
     searchQuery: '',
@@ -788,6 +800,7 @@ export default {
     openMenu() {
       if (this.disabled || this.isOpen) return
       this.isOpen = true
+      this.$nextTick(this.adjustPosition)
       this.$emit('open', this.id)
     },
 
@@ -1094,6 +1107,23 @@ export default {
         this.internalValue.sort((a, b) => sortValueByLevel(this.nodeMap[a], this.nodeMap[b]))
       } else if (this.sortValueBy === INDEX) {
         this.internalValue.sort((a, b) => sortValueByIndex(this.nodeMap[a], this.nodeMap[b]))
+      }
+    },
+
+    adjustPosition() {
+      if (typeof window === 'undefined') return
+
+      const rect = this.$el.getBoundingClientRect()
+      const spaceAbove = rect.top
+      const spaceBelow = window.innerHeight - rect.bottom
+      const hasEnoughSpaceBelow = spaceBelow > this.maxHeight
+
+      if (hasEnoughSpaceBelow || spaceBelow > spaceAbove || this.openDirection === 'below' || this.openDirection === 'bottom') {
+        this.prefferedOpenDirection = 'below'
+        this.optimizedHeight = Math.min(spaceBelow - 40, this.maxHeight)
+      } else {
+        this.prefferedOpenDirection = 'above'
+        this.optimizedHeight = Math.min(spaceAbove - 40, this.maxHeight)
       }
     },
   },

@@ -59,7 +59,7 @@
 @treeselect-menu-padding-y: 3px;
 @treeselect-menu-line-height: 180%;
 @treeselect-menu-box-shadow: 0 1px 0 rgba(0, 0, 0, .06);
-@treeselect-menu-border-top-color: #f2f2f2;
+@treeselect-control-menu-divider-color: #f2f2f2;
 
 @treeselect-arrow-size: 5px;
 @treeselect-arrow-color: #ccc;
@@ -314,10 +314,16 @@
   }
 
   .vue-treeselect--open &,
-  .vue-treeselect--open &:hover {
-    .border-radius-bottom(0);
-
+  &:hover {
     border-color: @treeselect-control-border-color-active;
+  }
+
+  .vue-treeselect--open.vue-treeselect--open-below & {
+    .border-radius-bottom(0);
+  }
+
+  .vue-treeselect--open.vue-treeselect--open-above & {
+    .border-radius-top(0);
   }
 }
 
@@ -586,26 +592,38 @@
  */
 
 .vue-treeselect__menu {
-  .border-radius-bottom(@treeselect-border-radius-lg);
   .vertical-padding(@treeselect-menu-padding-y);
 
   display: block;
   position: absolute;
-  top: 100%;
   right: 0;
   left: 0;
   z-index: 1;
-  margin-top: (-@treeselect-control-border-width);
   overflow-x: hidden;
   overflow-y: auto;
   border: 1px solid @treeselect-control-border-color-active;
-  border-top-color: @treeselect-menu-border-top-color;
-  box-shadow: @treeselect-menu-box-shadow;
   background: @treeselect-menu-bg;
   line-height: @treeselect-menu-line-height;
   cursor: default; // set to normal cursor since text is not selectable
   // https://css-tricks.com/snippets/css/momentum-scrolling-on-ios-overflow-elements/
   -webkit-overflow-scrolling: touch;
+
+  .vue-treeselect--open-below & {
+    .border-radius-bottom(@treeselect-border-radius-lg);
+
+    top: 100%;
+    margin-top: (-@treeselect-control-border-width);
+    border-top-color: @treeselect-control-menu-divider-color;
+    box-shadow: @treeselect-menu-box-shadow;
+  }
+
+  .vue-treeselect--open-above & {
+    .border-radius-top(@treeselect-border-radius-lg);
+
+    bottom: 100%;
+    margin-bottom: (-@treeselect-control-border-width);
+    border-bottom-color: @treeselect-control-menu-divider-color;
+  }
 }
 
 .vue-treeselect__list-item > .vue-treeselect__list {

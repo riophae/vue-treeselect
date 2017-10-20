@@ -154,6 +154,11 @@
         defaultValue: v('"No options available."'),
         description: 'Text displayed when there are no available options.',
       }, {
+        name: 'openDirection',
+        type: 'String',
+        defaultValue: v('"auto"'),
+        description: `By default the menu will open whereever there is more space once there is not enough space below to open at ${v('maxHeight')}. Use this prop to force the menu to always open in specified direction. Acceptable values: ${v('"below"')}, ${v('"bottom"')}, ${v('"above"')} or ${v('"top"')}.`,
+      }, {
         name: 'openOnClick',
         type: 'Boolean',
         defaultValue: v(true),
