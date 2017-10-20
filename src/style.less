@@ -665,7 +665,8 @@
   vertical-align: middle;
   transition: @treeselect-transition-duration transform @treeselect-arrow-transition-timing-function;
 
-  .vue-treeselect__option-arrow-wrapper:hover & {
+  .vue-treeselect__option-arrow-wrapper:hover &,
+  .vue-treeselect--branch-nodes-disabled .vue-treeselect__option:hover & {
     border-left-color: @treeselect-arrow-color-hover;
   }
 }

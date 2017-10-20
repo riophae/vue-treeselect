@@ -10,6 +10,7 @@
       'vue-treeselect--open': isOpen,
       'vue-treeselect--open-above': prefferedOpenDirection === 'above',
       'vue-treeselect--open-below': prefferedOpenDirection === 'below',
+      'vue-treeselect--branch-nodes-disabled': disableBranchNodes,
     } ]"
     @mousedown="handleMouseDown"
     ref="wrapper">
