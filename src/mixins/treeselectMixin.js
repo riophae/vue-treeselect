@@ -262,6 +262,14 @@ export default {
     },
 
     /**
+     * Function used for dynamic loading root options
+     * @type {function}
+     */
+    loadRootOptions: {
+      type: Function,
+    },
+
+    /**
      * Sets `maxHeight` style value of the menu
      * @default 300
      * @type {number}
@@ -347,7 +355,6 @@ export default {
      */
     options: {
       type: Array,
-      default: () => [],
     },
 
     /**
@@ -484,6 +491,9 @@ export default {
     noSearchResults: true, // whether there is any matching search results
     optimizedHeight: 0,
     prefferedOpenDirection: 'below',
+    rootOptionsLoaded: false,
+    loadingRootOptions: false,
+    loadingRootOptionsError: '',
     searchingCount: Object.create(null),
     searching: false,
     searchQuery: '',
@@ -615,9 +625,33 @@ export default {
   },
 
   methods: {
+    verifyProps() {
+      if (!this.loadRootOptions) {
+        if (!this.options) {
+          warning(
+            () => false,
+            () => 'Required prop `options` is not provided.'
+          )
+        } else if (!Array.isArray(this.options)) {
+          warning(
+            () => false,
+            () => `Expected prop \`options\` to be an array, instead got: ${this.options}.`
+          )
+        }
+      }
+    },
+
     resetFlags() {
       this._blurOnSelect = false
       this._wasClickedOnValueItem = false
+    },
+
+    initialize(rootOptions) {
+      if (Array.isArray(rootOptions)) this.rootOptionsLoaded = true
+      this.initializeRootOptions(rootOptions || [])
+      this.initializeValue()
+      this.buildSelectedNodeMap()
+      this.buildNodeCheckedStateMap()
     },
 
     getValue() {
@@ -748,6 +782,7 @@ export default {
     }),
 
     handleClickOutside(evt) {
+      /* istanbul ignore else */
       if (this.$refs.wrapper && !this.$refs.wrapper.contains(evt.target)) {
         this.blurInput()
         this.closeMenu()
@@ -804,8 +839,9 @@ export default {
     closeMenu() {
       if (!this.isOpen) return
       this.isOpen = false
-      if (this.retainScrollPosition) {
-        this.lastScrollPosition = this.$refs.menu && this.$refs.menu.scrollTop
+      /* istanbul ignore else */
+      if (this.retainScrollPosition && this.$refs.menu) {
+        this.lastScrollPosition = this.$refs.menu.scrollTop
       }
       this.$emit('close', this.getValue(), this.id)
     },
@@ -814,7 +850,9 @@ export default {
       if (this.disabled || this.isOpen) return
       this.isOpen = true
       this.$nextTick(this.adjustPosition)
+      /* istanbul ignore else */
       if (this.retainScrollPosition) this.$nextTick(this.restoreScrollPosition)
+      if (!this.rootOptionsLoaded) this.loadOptions(true)
       this.$emit('open', this.id)
     },
 
@@ -849,8 +887,8 @@ export default {
       }
     },
 
-    initializeOptions() {
-      this.normalizedOptions = this.normalize(NO_PARENT_NODE, this.options)
+    initializeRootOptions(rootOptions) {
+      this.normalizedOptions = this.normalize(NO_PARENT_NODE, rootOptions)
     },
 
     buildSelectedNodeMap() {
@@ -950,7 +988,7 @@ export default {
             : []
 
           if (normalized.isExpanded && !normalized.isLoaded) {
-            this.loadChildren(normalized)
+            this.loadOptions(false, normalized)
           }
         }
 
@@ -973,29 +1011,54 @@ export default {
       return normalizedOptions
     },
 
-    loadChildren(node) {
-      const rawData = node.raw
-      const callback = (err, children) => {
-        node.isPending = false
+    loadOptions(isRootLevel, parentNode) {
+      if (isRootLevel) {
+        if (this.loadingRootOptions) return
 
-        if (err) {
-          node.loadingChildrenError = this.loadChildrenErrorText(err)
-        } else if (!Array.isArray(children)) {
-          node.loadingChildrenError = 'Received unrecognizable data'
-          warning(
-            () => false,
-            () => `Received unrecognizable data ${children} while loading children options of node ${node.id}`
-          )
-        } else {
-          node.children = this.normalize(node, children)
-          node.isLoaded = true
-          node.loadingChildrenError = ''
-          this.buildNodeCheckedStateMap()
+        const callback = (err, data) => {
+          this.loadingRootOptions = false
+
+          if (err) {
+            this.loadingRootOptionsError = err.message || /* istanbul ignore next */ String(err)
+          } else if (!data) {
+            this.loadingRootOptionsError = 'no data received'
+          } else if (!Array.isArray(data)) {
+            this.loadingRootOptionsError = 'received unrecognizable data'
+          } else {
+            this.initialize(data)
+            this.rootOptionsLoaded = true
+          }
         }
-      }
 
-      node.isPending = true
-      this.loadChildrenOptions(rawData, callback)
+        this.loadingRootOptions = true
+        this.loadingRootOptionsError = ''
+        this.loadRootOptions(callback)
+      } else {
+        if (parentNode.isPending) return
+
+        const rawData = parentNode.raw
+        const callback = (err, children) => {
+          parentNode.isPending = false
+
+          if (err) {
+            parentNode.loadingChildrenError = this.loadChildrenErrorText(err)
+          } else if (!Array.isArray(children)) {
+            parentNode.loadingChildrenError = 'Received unrecognizable data'
+            warning(
+              () => false,
+              () => `Received unrecognizable data ${children} while loading children options of node ${parentNode.id}`
+            )
+          } else {
+            parentNode.children = this.normalize(parentNode, children)
+            parentNode.isLoaded = true
+            this.buildNodeCheckedStateMap()
+          }
+        }
+
+        parentNode.isPending = true
+        parentNode.loadingChildrenError = ''
+        this.loadChildrenOptions(rawData, callback)
+      }
     },
 
     checkDuplication(node) {
@@ -1147,11 +1210,9 @@ export default {
   },
 
   created() {
+    this.verifyProps()
     this.resetFlags()
-    this.initializeOptions()
-    this.initializeValue()
-    this.buildSelectedNodeMap()
-    this.buildNodeCheckedStateMap()
+    this.initialize(this.options)
   },
 
   mounted() {

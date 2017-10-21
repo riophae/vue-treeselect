@@ -129,6 +129,11 @@
         defaultValue: NO_DEFAULT_VALUE,
         description: `As the name suggests, it's used for dynamic loading options. See ${link('#delayed-loading')} for detailed information.`,
       }, {
+        name: 'loadRootOptions',
+        type: 'Function',
+        defaultValue: NO_DEFAULT_VALUE,
+        description: `Used for delayed loading root options. See ${link('#delayed-loading')} for detailed information.`,
+      }, {
         name: 'maxHeight',
         type: 'Number',
         defaultValue: v('300'),

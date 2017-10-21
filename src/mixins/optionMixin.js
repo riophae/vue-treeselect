@@ -23,9 +23,9 @@ export default {
 
   watch: {
     'node.isExpanded'(newValue) {
-      if (newValue === true && !this.node.isLoaded && !this.node.isPending) {
+      if (newValue === true && !this.node.isLoaded) {
         // load children when expanded
-        this.instance.loadChildren(this.node)
+        this.instance.loadOptions(false, this.node)
       }
     },
   },

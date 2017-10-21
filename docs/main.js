@@ -6,6 +6,7 @@ import Demo from './components/Demo'
 import BasicFeatures from './components/BasicFeatures'
 import MoreFeatures from './components/MoreFeatures'
 import DelayedLoading from './components/DelayedLoading'
+import DelayedRootOptions from './components/DelayedRootOptions'
 import FlatModeAndSortingValue from './components/FlatModeAndSortingValue'
 import DisablingBranchNodes from './components/DisablingBranchNodes'
 import VuexSupport from './components/VuexSupport'
@@ -33,6 +34,7 @@ new Vue({
     BasicFeatures,
     MoreFeatures,
     DelayedLoading,
+    DelayedRootOptions,
     FlatModeAndSortingValue,
     DisablingBranchNodes,
     VuexSupport,

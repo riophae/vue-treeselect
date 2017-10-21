@@ -45,10 +45,14 @@
 +guide('Delayed Loading')
   :markdown-it
     If you have a large number of deeply nested options, you might want to load options only of the most top levels on initial load and load the rest only when needed. You can achieve that by following these steps:
+
       1. Declare an *unloaded* branch node by setting `children: null` or `isBranch: true`
       2. Provide a `loadChildrenOptions` prop
-      3. Whenever an unloaded branch node gets expanded, the `loadChildrenOptions` function will be called within which the job requesting data from remote server could be performed
+      3. Whenever an unloaded branch node gets expanded, `loadChildrenOptions(parentNode, callback)` will be called within which the job requesting data from remote server could be performed
   +demo('DelayedLoading')
+  :markdown-it
+    If you want the root level options to be delayed loaded as well, omit the `options` prop and provide an extra `loadRootOptions` prop. When the menu is opened, `loadRootOptions(callback)` will be called and you can do the AJAX stuff at this point.
+  +demo('DelayedRootOptions')
 
 +guide('Flat Mode & Sorting Value')
   :markdown-it
