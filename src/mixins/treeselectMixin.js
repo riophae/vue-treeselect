@@ -603,10 +603,10 @@ export default {
     },
 
     value(newValue) {
-      const _newValue = this.multiple
-        ? newValue.slice()
-        : newValue == null
-          ? []
+      const _newValue = (!newValue && newValue !== 0)
+        ? []
+        : this.multiple
+          ? newValue.slice()
           : [ newValue ]
       const hasChanged = !quickCompare(_newValue, this.internalValue)
 
@@ -1190,6 +1190,7 @@ export default {
     },
 
     adjustPosition() {
+      // istanbul ignore next
       if (typeof window === 'undefined') return
 
       const rect = this.$el.getBoundingClientRect()
