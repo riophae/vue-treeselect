@@ -2055,7 +2055,7 @@ describe('Props', () => {
 
       mount(Treeselect, {
         propsData: {
-          loadRootOptions() {},
+          loadRootOptions() { /* empty */ },
         },
       })
 

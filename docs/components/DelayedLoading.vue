@@ -36,19 +36,22 @@
         // We just use `setTimeout()` here to simulate an async operation
         // instead of requesting a real API server for demo purpose.
         switch (parent.id) {
-          case 'success':
+          case 'success': {
             const children = [ {
               id: 'child',
               label: 'Child option',
             } ]
             setTimeout(() => callback(null, children), 2000)
             break
-          case 'no-children':
+          }
+          case 'no-children': {
             setTimeout(() => callback(null, []), 2000)
             break
-          case 'failure':
+          }
+          case 'failure': {
             setTimeout(() => callback(new Error('Network error')), 2000)
             break
+          }
           default: /* Empty */
         }
       },
