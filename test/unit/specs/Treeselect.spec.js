@@ -1186,7 +1186,7 @@ describe('Control', () => {
 })
 
 describe('Menu', () => {
-  it('should blur the input & close the menu after clicking anywhere outside the component', async done => {
+  it('should blur the input & close the menu after clicking anywhere outside the component', () => {
     const wrapper = mount(Treeselect, {
       attachToDocument: true,
       propsData: {
@@ -1195,7 +1195,6 @@ describe('Menu', () => {
     })
 
     wrapper.vm.openMenu()
-    await sleep(100) // wait for the event binding to take effect
     const event = document.createEvent('event')
     event.initEvent('mousedown', true, true)
     document.body.dispatchEvent(event)
@@ -1203,7 +1202,6 @@ describe('Menu', () => {
       isFocused: false,
       isOpen: false,
     }))
-    done()
   })
 
   it('should open the menu after clicking the control when focused', () => {
@@ -2414,7 +2412,7 @@ describe('Props', () => {
       const { a } = vm.nodeMap
 
       vm.toggleExpanded(a)
-      await sleep(100)
+      await vm.$nextTick()
       expect(loadChildrenOptions).toHaveBeenCalled()
       done()
     })
@@ -2444,7 +2442,7 @@ describe('Props', () => {
       const { a } = vm.nodeMap
 
       vm.toggleExpanded(a)
-      await sleep(100)
+      await vm.$nextTick()
       expect(loadChildrenOptions).toHaveBeenCalled()
       done()
     })

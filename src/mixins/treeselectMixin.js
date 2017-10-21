@@ -580,12 +580,6 @@ export default {
       if (newValue && this.isOpen) this.closeMenu()
     },
 
-    isOpen(newValue) {
-      this.toggleClickOutsideEvent(newValue)
-      // reset search query after menu closes
-      if (!newValue) this.searchQuery = ''
-    },
-
     multiple(newValue) {
       if (newValue) {
         // needs to rebuild the state tree when switching from
@@ -843,6 +837,9 @@ export default {
       if (this.retainScrollPosition && this.$refs.menu) {
         this.lastScrollPosition = this.$refs.menu.scrollTop
       }
+      this.toggleClickOutsideEvent(false)
+      // reset search query after menu closes
+      this.searchQuery = ''
       this.$emit('close', this.getValue(), this.id)
     },
 
@@ -853,6 +850,7 @@ export default {
       /* istanbul ignore else */
       if (this.retainScrollPosition) this.$nextTick(this.restoreScrollPosition)
       if (!this.rootOptionsLoaded) this.loadOptions(true)
+      this.toggleClickOutsideEvent(true)
       this.$emit('open', this.id)
     },
 
