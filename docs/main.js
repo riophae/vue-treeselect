@@ -1,3 +1,4 @@
+import 'yaku/lib/global'
 import Vue from 'vue'
 import Treeselect from '../src'
 
