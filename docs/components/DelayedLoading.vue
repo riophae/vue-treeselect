@@ -12,7 +12,6 @@
   export default {
     data: () => ({
       value: null,
-      disableVegetables: false,
       options: [ {
         id: 'success',
         label: 'With children',
