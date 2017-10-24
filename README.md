@@ -102,8 +102,6 @@ Note: please use a desktop browser since the website hasn't been optimized for m
 
 It should function well on IE9, but the style can be slightly broken due to the lack of support of some relatively newer CSS features, such as `transition` and `animation`. Nevertheless it should look 90% same as on modern browsers.
 
-In addition, this component lib is designed to be used primarily on desktop browsers. Although it should work on mobile browsers as well, the user experience won't be ideal.
-
 ### Bugs
 
 You can use this [pen](https://codepen.io/riophae/pen/MExgzP) to reproduce bugs and then open an issue.
