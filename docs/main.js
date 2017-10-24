@@ -2,18 +2,6 @@ import 'yaku/lib/global'
 import Vue from 'vue'
 import Treeselect from '../src'
 
-import Anchor from './components/Anchor'
-import Demo from './components/Demo'
-import BasicFeatures from './components/BasicFeatures'
-import MoreFeatures from './components/MoreFeatures'
-import DelayedLoading from './components/DelayedLoading'
-import DelayedRootOptions from './components/DelayedRootOptions'
-import FlatModeAndSortingValue from './components/FlatModeAndSortingValue'
-import DisablingBranchNodes from './components/DisablingBranchNodes'
-import VuexSupport from './components/VuexSupport'
-import DocProps from './components/DocProps'
-import DocEvents from './components/DocEvents'
-
 import './styles/docs.less'
 import './styles/prism.less'
 
@@ -28,20 +16,18 @@ function calculateNavPositions() {
     }))
 }
 
+function loadComponents() {
+  const components = {}
+  const context = require.context('./components', false, /\.vue$/)
+  context.keys().forEach(key => {
+    const componentName = key.replace(/^\.\/|\.vue$/g, '')
+    components[componentName] = context(key).default
+  })
+  return components
+}
+
 new Vue({
-  components: {
-    Anchor,
-    Demo,
-    BasicFeatures,
-    MoreFeatures,
-    DelayedLoading,
-    DelayedRootOptions,
-    FlatModeAndSortingValue,
-    DisablingBranchNodes,
-    VuexSupport,
-    DocProps,
-    DocEvents,
-  },
+  components: loadComponents(),
 
   el: '#app',
 
