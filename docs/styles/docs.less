@@ -1,3 +1,5 @@
+/* stylelint-disable declaration-no-important */
+
 @import "~google-material-color/dist/palette.less";
 
 /* Utils */
@@ -53,7 +55,7 @@ dl, h1, h2, h3, h4, h5, h6, ol, p, pre, ul {
 }
 
 address, dl, ol, p, pre, ul {
-  margin-bottom: .5em;
+  margin-bottom: 0.5em;
 }
 
 pre, code {
@@ -62,7 +64,7 @@ pre, code {
 
 code:not([class*="language-"]) {
   padding: 2px 3px;
-  background: rgba(0, 0, 0, .04);
+  background: rgba(0, 0, 0, 0.04);
   border-radius: 3px;
   font-size: 12px;
 }
@@ -83,7 +85,7 @@ input[type="radio"] {
   margin-right: auto;
 }
 
-[class*=container] {
+[class*="container"] {
   padding-left: 20px;
   padding-right: 20px;
 }
@@ -102,12 +104,12 @@ a img {
 }
 
 h1, h2, h3, h4 {
-  color: #2c3e50;
-  letter-spacing: .5px;
+  color: #2C3E50;
+  letter-spacing: 0.5px;
 }
 
 h1, h2 {
-  margin: 1em 0 .45em;
+  margin: 1em 0 0.45em;
   line-height: 1.2;
 }
 
@@ -126,7 +128,7 @@ h2 {
 .site-header {
   .vertical-padding(15px);
 
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #EEE;
 }
 
 #header {
@@ -178,13 +180,13 @@ h2 {
 
 .site-header-logo-link {
   padding-left: 2em;
-  background: url(../../static/vue-logo.png) left center no-repeat;
+  background: url("../../static/vue-logo.png") left center no-repeat;
   background-size: 1.5em 1.5em;
   font-size: 24px;
-  font-family: "Dosis", "Source Sans Pro", "Helvetica Neue", Arial, sans-serif;
+  font-family: Dosis, "Source Sans Pro", "Helvetica Neue", Arial, sans-serif;
   font-weight: 300;
-  color: rgba(255, 255, 255, .9);
-  color: #2c3e50;
+  color: rgba(255, 255, 255, 0.9);
+  color: #2C3E50;
 }
 
 .site-header-logo-component-name {
@@ -200,8 +202,8 @@ h2 {
 .site-header-nav-item {
   display: inline-block;
   margin-left: 1em;
-  font-size: .875rem;
-  color: #34495e;
+  font-size: 0.875rem;
+  color: #34495E;
   vertical-align: middle;
 }
 
@@ -212,7 +214,7 @@ h2 {
 
 /* Main */
 
-#main {
+#main { // stylelint-disable-line no-duplicate-selectors
   padding-top: 3em;
 
   h1 {
@@ -230,7 +232,7 @@ h2 {
   text-decoration: none;
 
   svg {
-    color: rgba(0, 0, 0, .25);
+    color: rgba(0, 0, 0, 0.25);
   }
 
   svg:hover {
@@ -254,7 +256,7 @@ p.tip {
   position: relative;
   margin: 1em 0;
   padding: 12px 20px 12px 48px;
-  background: #f8f8f8;
+  background: #F8F8F8;
   border-radius: 5px;
 
   &::before {
@@ -268,7 +270,7 @@ p.tip {
     width: @size;
     height: @size;
     border-radius: 50%;
-    color: #fff;
+    color: #FFF;
     text-align: center;
     font-weight: 400;
     line-height: @size;
@@ -281,7 +283,7 @@ p.tip {
   margin: 1em 0;
   width: 100%;
   border-radius: 5px;
-  border: 1px solid #eee;
+  border: 1px solid #EEE;
 
   p {
     margin: 5px 10px;
@@ -296,15 +298,15 @@ p.tip {
 
 .example-label {
   display: block;
-  padding: .75em 1em;
+  padding: 0.75em 1em;
   width: 100%;
   background: #F8F8F8;
   box-sizing: border-box;
-  color: rgba(0, 0, 0, .6);
+  color: rgba(0, 0, 0, 0.6);
   font-weight: 700;
   font-size: 12px;
   line-height: 1;
-  letter-spacing: .5px;
+  letter-spacing: 0.5px;
   text-transform: uppercase;
 }
 
@@ -312,8 +314,8 @@ p.tip {
   margin-right: -8px;
   float: right;
   font-weight: 400;
-  font-size: .9em;
-  color: #aaa;
+  font-size: 0.9em;
+  color: #AAA;
   letter-spacing: 0;
 }
 
@@ -332,7 +334,7 @@ p.tip {
 }
 
 .example-demo .example-inner,
-.example-code pre[class*="language-"] {
+  .example-code pre[class*="language-"] {
   padding: 15px;
 }
 
@@ -340,7 +342,7 @@ p.tip {
   pre.result {
     margin: 1em 0;
     padding: 1em 1.5em;
-    background: rgba(0, 0, 0, .025);
+    background: rgba(0, 0, 0, 0.025);
     border: 0;
     border-radius: 5px;
     font-size: 12px;
@@ -348,7 +350,7 @@ p.tip {
 }
 
 .example-code {
-  border-left: 1px solid #eee;
+  border-left: 1px solid #EEE;
 
   .example-inner {
     max-height: 300px;
@@ -383,10 +385,10 @@ pre[class*="language-"] {
     right: 0;
     top: 0;
     padding: 5px 10px 0;
-    color: #ccc;
-    font-size: .9em;
+    color: #CCC;
+    font-size: 0.9em;
     font-weight: 600;
-    letter-spacing: .5px;
+    letter-spacing: 0.5px;
   }
 }
 
@@ -410,24 +412,24 @@ table {
 
   thead,
   &.striped tr:nth-of-type(2n) {
-    background: #f8f8f8;
+    background: #F8F8F8;
   }
 
   th {
     text-align: left;
     font-size: 15px;
     font-weight: 400;
-    letter-spacing: .5px;
+    letter-spacing: 0.5px;
   }
 
   th,
   td {
-    padding: .4em;
-    border-bottom: 1px solid #eee;
+    padding: 0.4em;
+    border-bottom: 1px solid #EEE;
   }
 
   tbody tr:hover {
-    background: #f2f2f2 !important;
+    background: #F2F2F2 !important;
   }
 }
 
@@ -462,7 +464,7 @@ label input[type="checkbox"] {
 }
 
 .sidebar-nav-section-title {
-  margin-bottom: .6em;
+  margin-bottom: 0.6em;
   font-size: 13px;
   font-weight: 600;
   text-transform: uppercase;
@@ -490,8 +492,8 @@ label input[type="checkbox"] {
   .vertical-padding(30px);
 
   margin-top: 30px;
-  border-top: 1px solid #eee;
+  border-top: 1px solid #EEE;
   text-align: center;
   font-size: 13px;
-  letter-spacing: .5px;
+  letter-spacing: 0.5px;
 }
