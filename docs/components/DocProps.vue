@@ -34,6 +34,11 @@
         defaultValue: v('false'),
         description: 'Autofocus the component on mount.',
       }, {
+        name: 'autoLoadRootOptions',
+        type: 'Boolean',
+        defaultValue: v('true'),
+        description: 'Automatically load root options on mount.',
+      }, {
         name: 'backspaceRemoves',
         type: 'Boolean',
         defaultValue: v('true'),

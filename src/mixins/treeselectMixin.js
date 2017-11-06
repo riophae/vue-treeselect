@@ -66,6 +66,16 @@ export default {
     },
 
     /**
+     * Automatically load root options on mount?
+     * @default true
+     * @type {boolean}
+     */
+    autoLoadRootOptions: {
+      type: Boolean,
+      default: true,
+    },
+
+    /**
      * Whether pressing backspace removes the last item if there is no text input
      * @default true
      * @type {boolean}
@@ -1216,6 +1226,7 @@ export default {
 
   mounted() {
     if (this.autofocus) this.$refs.value.focusInput()
+    if (!this.rootOptionsLoaded && this.autoLoadRootOptions) this.loadOptions(true)
   },
 
   destroyed() {
