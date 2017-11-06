@@ -27,11 +27,13 @@
           </span>
         </div>
         <label class="vue-treeselect__label">
-          {{ node.label }}
-          <span v-if="node.isBranch" class="vue-treeselect__count">
-            <template v-if="!instance.searching && instance.showCount">({{ node.count[instance.showCountOf] }})</template>
-            <template v-else-if="instance.searching && instance.showCountOnSearchComputed" class="vue-treeselect__count">({{ instance.searchingCount[node.id][instance.showCountOf] }})</template>
-          </span>
+          <slot name="option" :option="node">
+            {{ node.label }}
+            <span v-if="node.isBranch" class="vue-treeselect__count">
+              <template v-if="!instance.searching && instance.showCount">({{ node.count[instance.showCountOf] }})</template>
+              <template v-else-if="instance.searching && instance.showCountOnSearchComputed" class="vue-treeselect__count">({{ instance.searchingCount[node.id][instance.showCountOf] }})</template>
+            </span>
+          </slot>
         </label>
       </div>
     </div>
