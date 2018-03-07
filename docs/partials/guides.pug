@@ -71,6 +71,15 @@
     Set `disableBranchNodes` to `true` to prevent branch nodes from being selected. You may also want to show a count next to the label of each branch node by setting `showCount` to `true`.
   +demo('DisablingBranchNodes')
 
++guide('Customizing Option Label')
+  :markdown-it
+    You can customize the label of each option. vue-treeselect utilizes Vue's [scoped slot](https://vuejs.org/v2/guide/components.html#Scoped-Slots) feature and provides some props you should use in your customized template:
+
+    - `node` - a normalized node object
+    - `count` & `shouldShowCount` - the count number and a boolean indicates whether the count should be displayed
+    - `labelClassName` & `countClassName` - CSS classnames for making the style correct
+  +demo('CustomizingOptionLabel')
+
 +guide('Vuex Support')
   :markdown-it
       In all previous examples, we used `v-model` to sync value between application state and vue-treeselect, a.k.a two-way data binding. If you are using Vuex, we could make use of `:value` and `@input`, since `v-model` is just a syntax sugur for them in Vue 2.0.
