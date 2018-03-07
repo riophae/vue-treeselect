@@ -1,10 +1,7 @@
 <template>
   <label class="vue-treeselect__label">
     {{ node.label }}
-    <span v-if="node.isBranch" class="vue-treeselect__count">
-      <template v-if="!instance.searching && instance.showCount">({{ node.count[instance.showCountOf] }})</template>
-      <template v-else-if="instance.searching && instance.showCountOnSearchComputed" class="vue-treeselect__count">({{ instance.searchingCount[node.id][instance.showCountOf] }})</template>
-    </span>
+    <span v-if="shouldShowCount" class="vue-treeselect__count">({{ count }})</span>
   </label>
 </template>
 
@@ -19,6 +16,20 @@
       instance: {
         type: Object,
         required: true,
+      },
+    },
+    computed: {
+      shouldShowCount() {
+        return this.node.isBranch && (
+          this.instance.searching
+            ? this.instance.showCountOnSearchComputed
+            : this.instance.showCount
+          )
+      },
+      count() {
+        return this.instance.searching
+          ? this.instance.searchingCount[this.node.id][this.instance.showCountOf]
+          : this.node.count[this.instance.showCountOf]
       },
     },
   }
