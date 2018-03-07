@@ -576,7 +576,7 @@ export default {
      */
     showCountOnSearchComputed() {
       // Vue not allows set default prop value based on another prop value
-      // so use computed property to workaround
+      // so use computed property as a workaround
       return typeof this.showCountOnSearch === 'boolean'
         ? this.showCountOnSearch
         : this.showCount

@@ -26,7 +26,7 @@
             <span class="vue-treeselect__checkbox-mark"></span>
           </span>
         </div>
-        <slot name="option-label" :node="node" :instance="instance"></slot>
+        <slot name="option-label" :node="node" :should-show-count="shouldShowCount" :count="count"></slot>
       </div>
     </div>
     <div
@@ -39,8 +39,8 @@
             :node="childNode"
             :key="childNode.id"
             >
-            <template slot="option-label" slot-scope="{ node, instance }">
-              <slot name="option-label" :node="node" :instance="instance"></slot>
+            <template slot="option-label" slot-scope="{ node, shouldShowCount, count }">
+              <slot name="option-label" :node="node" :should-show-count="shouldShowCount" :count="count"></slot>
             </template>
           </vue-treeselect--option>
         </template>

@@ -37,9 +37,9 @@
             :node="rootNode"
             :key="rootNode.id"
             >
-            <template slot="option-label" slot-scope="{ node, instance }">
-              <slot name="option-label" :node="node" :instance="instance">
-                <option-label-default :node="node" :instance="instance" />
+            <template slot="option-label" slot-scope="{ node, shouldShowCount, count }">
+              <slot name="option-label" :node="node" :should-show-count="shouldShowCount" :count="count">
+                <option-label-default :node="node" :should-show-count="shouldShowCount" :count="count" />
               </slot>
             </template>
           </treeselect-option>
