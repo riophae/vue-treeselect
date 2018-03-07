@@ -38,7 +38,8 @@
             :key="rootNode.id"
             >
             <template slot="option-label" slot-scope="{ node, shouldShowCount, count, labelClassName, countClassName }">
-              <slot name="option-label" :node="node" :should-show-count="shouldShowCount" :count="count">
+              <slot name="option-label" :node="node" :should-show-count="shouldShowCount" :count="count"
+                :label-class-name="labelClassName" :count-class-name="countClassName">
                 <label :class="labelClassName">
                   {{ node.label }}
                   <span v-if="shouldShowCount" :class="countClassName">({{ count }})</span>
