@@ -17,7 +17,7 @@ base.entry = {
 }
 
 const banner = `
-vue-treeselect v${version} | (c) 2017 Riophae Lee
+vue-treeselect v${version} | (c) 2017-2018 Riophae Lee
 Released under the MIT License.
 https://github.com/riophae/vue-treeselect
 `.trim()
