@@ -23,9 +23,9 @@
   export default {
     data: () => ({
       slots: [ {
-        name: 'option',
-        props: [ 'option', 'instance' ].map(v).join(', '),
-        description: 'Slot for custom option template.',
+        name: 'option-label',
+        props: [ 'node', 'instance' ].map(v).join(', '),
+        description: 'Slot for custom option label template.',
       } ],
     }),
   }

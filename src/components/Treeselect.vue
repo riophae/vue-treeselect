@@ -36,7 +36,13 @@
             v-for="rootNode in normalizedOptions"
             :node="rootNode"
             :key="rootNode.id"
-            />
+            >
+            <template slot="option-label" slot-scope="{ node, instance }">
+              <slot name="option-label" :node="node" :instance="instance">
+                <option-label-default :node="node" :instance="instance" />
+              </slot>
+            </template>
+          </treeselect-option>
         </div>
       </template>
       <template v-else>
@@ -63,10 +69,11 @@
   import MultiValue from './MultiValue'
   import SingleValue from './SingleValue'
   import TreeselectOption from './Option'
+  import OptionLabelDefault from './OptionLabelDefault'
 
   export default {
     name: 'vue-treeselect',
-    components: { TreeselectOption },
+    components: { TreeselectOption, OptionLabelDefault },
     mixins: [ treeselectMixin ],
     computed: {
       ValueComponent() {
