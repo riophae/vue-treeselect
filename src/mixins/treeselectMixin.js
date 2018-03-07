@@ -66,6 +66,26 @@ export default {
     },
 
     /**
+     * Automatically load root options on mount?
+     * @default true
+     * @type {boolean}
+     */
+    autoLoadRootOptions: {
+      type: Boolean,
+      default: true,
+    },
+
+    /**
+     * If the selection menu should be opened
+     * @default false
+     * @type {boolean}
+     */
+    allwaysOpened: {
+      type: Boolean,
+      default: false,
+    },
+
+    /**
      * Whether pressing backspace removes the last item if there is no text input
      * @default true
      * @type {boolean}
@@ -566,7 +586,7 @@ export default {
      */
     showCountOnSearchComputed() {
       // Vue not allows set default prop value based on another prop value
-      // so use computed property to workaround
+      // so use computed property as a workaround
       return typeof this.showCountOnSearch === 'boolean'
         ? this.showCountOnSearch
         : this.showCount
@@ -934,7 +954,7 @@ export default {
 
         const isRootNode = parentNode === NO_PARENT_NODE
         const { id, label, children } = node
-        const { isDisabled = false } = node
+        const isDisabled = node._disabled
         const isBranch = (
           Array.isArray(children) ||
           children === null ||
@@ -952,8 +972,8 @@ export default {
           ancestors,
           index: _index,
           parentNode,
-          isDisabled, // TODO
           isMatched,
+          isDisabled,
           isLeaf,
           isBranch,
           isRootNode,
@@ -1216,6 +1236,8 @@ export default {
 
   mounted() {
     if (this.autofocus) this.$refs.value.focusInput()
+    if (!this.rootOptionsLoaded && this.autoLoadRootOptions) this.loadOptions(true)
+    if (this.allwaysOpened) this.$nextTick(this.adjustPosition)
   },
 
   destroyed() {

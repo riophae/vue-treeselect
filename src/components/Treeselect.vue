@@ -17,11 +17,11 @@
     <div class="vue-treeselect__control">
       <component :is="ValueComponent" ref="value" />
       <div v-if="shouldShowClearIcon" class="vue-treeselect__clear" :title="multiple ? clearAllText : clearValueText" @mousedown="handleMouseDownOnClear">&times;</div>
-      <div class="vue-treeselect__arrow-wrapper" @mousedown="handleMouseDownOnArrow">
+      <div class="vue-treeselect__arrow-wrapper" @mousedown="handleMouseDownOnArrow" v-if="!allwaysOpened">
         <span :class="[ 'vue-treeselect__arrow', { 'vue-treeselect__arrow--rotated': isOpen } ]"></span>
       </div>
     </div>
-    <div v-if="isOpen" class="vue-treeselect__menu" ref="menu" :style="{ maxHeight: optimizedHeight + 'px' }">
+    <div v-if="isOpen || allwaysOpened" class="vue-treeselect__menu" ref="menu" :style="{ maxHeight: optimizedHeight + 'px' || allwaysOpened && 'auto' }">
       <template v-if="rootOptionsLoaded">
         <div v-if="searching && noSearchResults" class="vue-treeselect__no-results-tip">
           <div class="vue-treeselect__icon-wrapper"><span class="vue-treeselect__icon-warning"></span></div>
@@ -36,7 +36,13 @@
             v-for="rootNode in normalizedOptions"
             :node="rootNode"
             :key="rootNode.id"
-            />
+            >
+            <template slot="option-label" slot-scope="{ node, shouldShowCount, count }">
+              <slot name="option-label" :node="node" :should-show-count="shouldShowCount" :count="count">
+                <option-label-default :node="node" :should-show-count="shouldShowCount" :count="count" />
+              </slot>
+            </template>
+          </treeselect-option>
         </div>
       </template>
       <template v-else>
@@ -63,10 +69,11 @@
   import MultiValue from './MultiValue'
   import SingleValue from './SingleValue'
   import TreeselectOption from './Option'
+  import OptionLabelDefault from './OptionLabelDefault'
 
   export default {
     name: 'vue-treeselect',
-    components: { TreeselectOption },
+    components: { TreeselectOption, OptionLabelDefault },
     mixins: [ treeselectMixin ],
     computed: {
       ValueComponent() {

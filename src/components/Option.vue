@@ -17,7 +17,7 @@
         </transition>
       </div>
       <div class="vue-treeselect__label-wrapper" @mousedown="handleMouseDownOnOption">
-        <div v-if="instance.multiple && !instance.disableBranchNodes" class="vue-treeselect__checkbox-wrapper">
+        <div v-if="instance.multiple && !instance.disableBranchNodes" class="vue-treeselect__checkbox-wrapper" :class="{ disabled: node.isDisabled }">
           <span :class="[ 'vue-treeselect__checkbox', {
             'vue-treeselect__checkbox--checked': checkedState === CHECKED,
             'vue-treeselect__checkbox--indeterminate': checkedState === INDETERMINATE,
@@ -26,13 +26,7 @@
             <span class="vue-treeselect__checkbox-mark"></span>
           </span>
         </div>
-        <label class="vue-treeselect__label">
-          {{ node.label }}
-          <span v-if="node.isBranch" class="vue-treeselect__count">
-            <template v-if="!instance.searching && instance.showCount">({{ node.count[instance.showCountOf] }})</template>
-            <template v-else-if="instance.searching && instance.showCountOnSearchComputed" class="vue-treeselect__count">({{ instance.searchingCount[node.id][instance.showCountOf] }})</template>
-          </span>
-        </label>
+        <slot name="option-label" :node="node" :should-show-count="shouldShowCount" :count="count"></slot>
       </div>
     </div>
     <div
@@ -44,7 +38,11 @@
             v-for="childNode in node.children"
             :node="childNode"
             :key="childNode.id"
-            />
+            >
+            <template slot="option-label" slot-scope="{ node, shouldShowCount, count }">
+              <slot name="option-label" :node="node" :should-show-count="shouldShowCount" :count="count"></slot>
+            </template>
+          </vue-treeselect--option>
         </template>
         <div v-else class="vue-treeselect__no-children-tip">
           <div class="vue-treeselect__icon-wrapper"><span class="vue-treeselect__icon-warning"></span></div>
@@ -70,9 +68,11 @@
 
 <script>
   import optionMixin from '../mixins/optionMixin'
+  import OptionLabelDefault from './OptionLabelDefault'
 
   export default {
     name: 'vue-treeselect--option',
+    components: { OptionLabelDefault },
     inject: [ 'instance', 'UNCHECKED', 'INDETERMINATE', 'CHECKED' ],
     mixins: [ optionMixin ],
   }

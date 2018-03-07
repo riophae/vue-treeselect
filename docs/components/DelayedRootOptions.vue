@@ -1,5 +1,8 @@
 <template>
-  <treeselect :load-root-options="loadRootOptions" />
+  <treeselect
+    :load-root-options="loadRootOptions"
+    :auto-load-root-options="false"
+    />
 </template>
 
 <script>

@@ -98,14 +98,14 @@ Note: please use a desktop browser since the website hasn't been optimized for m
 - Chrome
 - Edge
 - Firefox
-- IE9+
+- IE ≥ 9
 - Safari
 
-It should function well on IE9, but the style can be slightly broken due to the lack of support of some relatively newer CSS features, such as `transition` and `animation`. Nevertheless it should look 90% same as on modern browsers.
+It should function well on IE9, but the style can be slightly broken due to the lack of support of some relatively new CSS features, such as `transition` and `animation`. Nevertheless it should look 90% same as on modern browsers.
 
 ### Bugs
 
-You can use this [pen](https://codepen.io/riophae/pen/MExgzP) to reproduce bugs and then open an issue.
+You can use this [pen](https://codepen.io/riophae/pen/MExgzP) to reproduce bugs and then [open an issue](https://github.com/riophae/vue-treeselect/issues/new).
 
 ### Contributing
 
