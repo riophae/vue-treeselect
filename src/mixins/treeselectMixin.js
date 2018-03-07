@@ -76,6 +76,16 @@ export default {
     },
 
     /**
+     * If the selection menu should be opened
+     * @default false
+     * @type {boolean}
+     */
+    allwaysOpened: {
+      type: Boolean,
+      default: false,
+    },
+
+    /**
      * Whether pressing backspace removes the last item if there is no text input
      * @default true
      * @type {boolean}
@@ -1227,6 +1237,7 @@ export default {
   mounted() {
     if (this.autofocus) this.$refs.value.focusInput()
     if (!this.rootOptionsLoaded && this.autoLoadRootOptions) this.loadOptions(true)
+    if (this.allwaysOpened) this.$nextTick(this.adjustPosition)
   },
 
   destroyed() {
