@@ -37,9 +37,12 @@
             :node="rootNode"
             :key="rootNode.id"
             >
-            <template slot="option-label" slot-scope="{ node, shouldShowCount, count }">
+            <template slot="option-label" slot-scope="{ node, shouldShowCount, count, labelClassName, countClassName }">
               <slot name="option-label" :node="node" :should-show-count="shouldShowCount" :count="count">
-                <option-label-default :node="node" :should-show-count="shouldShowCount" :count="count" />
+                <label :class="labelClassName">
+                  {{ node.label }}
+                  <span v-if="shouldShowCount" :class="countClassName">({{ count }})</span>
+                </label>
               </slot>
             </template>
           </treeselect-option>
@@ -69,11 +72,10 @@
   import MultiValue from './MultiValue'
   import SingleValue from './SingleValue'
   import TreeselectOption from './Option'
-  import OptionLabelDefault from './OptionLabelDefault'
 
   export default {
     name: 'vue-treeselect',
-    components: { TreeselectOption, OptionLabelDefault },
+    components: { TreeselectOption },
     mixins: [ treeselectMixin ],
     computed: {
       ValueComponent() {

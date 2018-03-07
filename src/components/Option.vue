@@ -26,7 +26,9 @@
             <span class="vue-treeselect__checkbox-mark"></span>
           </span>
         </div>
-        <slot name="option-label" :node="node" :should-show-count="shouldShowCount" :count="count"></slot>
+        <slot name="option-label" :node="node" :should-show-count="shouldShowCount" :count="count"
+          label-class-name="vue-treeselect__label" count-class-name="vue-treeselect__count">
+        </slot>
       </div>
     </div>
     <div
@@ -39,8 +41,10 @@
             :node="childNode"
             :key="childNode.id"
             >
-            <template slot="option-label" slot-scope="{ node, shouldShowCount, count }">
-              <slot name="option-label" :node="node" :should-show-count="shouldShowCount" :count="count"></slot>
+            <template slot="option-label" slot-scope="{ node, shouldShowCount, count, labelClassName, countClassName }">
+              <slot name="option-label" :node="node" :should-show-count="shouldShowCount" :count="count"
+                :label-class-name="labelClassName" :count-class-name="countClassName">
+              </slot>
             </template>
           </vue-treeselect--option>
         </template>
@@ -68,11 +72,9 @@
 
 <script>
   import optionMixin from '../mixins/optionMixin'
-  import OptionLabelDefault from './OptionLabelDefault'
 
   export default {
     name: 'vue-treeselect--option',
-    components: { OptionLabelDefault },
     inject: [ 'instance', 'UNCHECKED', 'INDETERMINATE', 'CHECKED' ],
     mixins: [ optionMixin ],
   }
