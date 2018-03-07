@@ -87,7 +87,7 @@ The library will be exposed as `window.VueTreeselect.Treeselect`. Note that, Vue
 <style src="@riophae/vue-treeselect/dist/vue-treeselect.min.css"></style>
 ```
 
-### Documentation & Examples
+### Documentation & Live Demo
 
 [Visit the website](https://riophae.github.io/vue-treeselect)
 
@@ -127,6 +127,6 @@ Some icons used in this project:
 
 ### License
 
-Copyright (c) 2017 [Riophae Lee](https://github.com/riophae).
+Copyright (c) 2017-2018 [Riophae Lee](https://github.com/riophae).
 
 Released under the [MIT License](https://github.com/riophae/vue-treeselect/blob/master/LICENSE.md).
