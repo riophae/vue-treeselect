@@ -3,6 +3,7 @@
     :multiple="true"
     :options="options"
     :show-count="true"
+    :allways-opened="true"
     placeholder="Select your favourite(s)..."
   />
 </template>
