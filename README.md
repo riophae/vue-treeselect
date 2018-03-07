@@ -105,7 +105,7 @@ It should function well on IE9, but the style can be slightly broken due to the 
 
 ### Bugs
 
-You can use this [pen](https://codepen.io/riophae/pen/MExgzP) to reproduce bugs and then open an issue.
+You can use this [pen](https://codepen.io/riophae/pen/MExgzP) to reproduce bugs and then [open an issue](https://github.com/riophae/vue-treeselect/issues/new).
 
 ### Contributing
 
