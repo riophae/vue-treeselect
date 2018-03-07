@@ -48,7 +48,7 @@ export default {
     handleMouseDownOnOption: onlyOnLeftClick(function handleMouseDownOnOptionArrow() {
       if (this.node.isBranch && this.instance.disableBranchNodes) {
         this.instance.toggleExpanded(this.node)
-      } else {
+      } else if (!this.node.isDisabled) {
         this.instance.select(this.node)
       }
     }),
