@@ -1,6 +1,6 @@
 <template>
   <label :class="CN__VUE_TREESELECT__LABLE">
-    {{ node.label }}
+    <span :class="{ disabled: node.isDisabled }">{{ node.label }}</span>
     <span v-if="shouldShowCount" :class="CN__VUE_TREESELECT__COUNT">({{ count }})</span>
   </label>
 </template>

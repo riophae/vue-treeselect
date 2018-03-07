@@ -944,7 +944,7 @@ export default {
 
         const isRootNode = parentNode === NO_PARENT_NODE
         const { id, label, children } = node
-        const { isDisabled = false } = node
+        const isDisabled = node._disabled
         const isBranch = (
           Array.isArray(children) ||
           children === null ||
@@ -962,8 +962,8 @@ export default {
           ancestors,
           index: _index,
           parentNode,
-          isDisabled, // TODO
           isMatched,
+          isDisabled,
           isLeaf,
           isBranch,
           isRootNode,
