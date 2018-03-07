@@ -2,8 +2,8 @@
   <table class="striped">
     <thead>
       <tr>
-        <th>Name</th>
-        <th>Props</th>
+        <th style="width: 6em">Name</th>
+        <th style="width: 250px">Props</th>
         <th>Description</th>
       </tr>
     </thead>
@@ -11,7 +11,7 @@
       <tr v-for="slot in slots" :key="slot.name">
         <td><strong>{{ slot.name }}</strong></td>
         <td v-html="slot.props"></td>
-        <td>{{ slot.description }}</td>
+        <td v-html="slot.description"></td>
       </tr>
     </tbody>
   </table>
@@ -19,13 +19,14 @@
 
 <script>
   const v = text => `<code>${text}</code>`
+  const link = (target, text = 'here') => `<a href="${target}">${text}</a>`
 
   export default {
     data: () => ({
       slots: [ {
         name: 'option-label',
         props: [ 'node', 'shouldShowCount', 'count', 'labelClassName', 'countClassName' ].map(v).join(', '),
-        description: 'Slot for custom option label template.',
+        description: `Slot for custom option label template. See ${link('#customizing-option-label')} for detailed information.`,
       } ],
     }),
   }
