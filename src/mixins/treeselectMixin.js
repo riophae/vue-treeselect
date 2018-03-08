@@ -954,7 +954,7 @@ export default {
 
         const isRootNode = parentNode === NO_PARENT_NODE
         const { id, label, children } = node
-        const isDisabled = node._disabled
+        const isDisabled = !!node.disabled
         const isBranch = (
           Array.isArray(children) ||
           children === null ||

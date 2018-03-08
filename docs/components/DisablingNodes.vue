@@ -20,7 +20,7 @@
         }, {
           id: 'appletwo',
           label: 'Apple Two 📺',
-          _disabled: true,
+          disabled: true,
         }, {
           id: 'grapes',
           label: 'Grapes 🍇',
