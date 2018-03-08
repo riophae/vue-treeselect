@@ -29,6 +29,11 @@
   export default {
     data: () => ({
       props: [ {
+        name: 'alwaysOpen',
+        type: 'Boolean',
+        defaultValue: v('false'),
+        description: 'Whether the menu should be always open.',
+      }, {
         name: 'autofocus',
         type: 'Boolean',
         defaultValue: v('false'),
@@ -102,7 +107,7 @@
         name: 'flat',
         type: 'Boolean',
         defaultValue: v('false'),
-        description: `Whether to enable flat mode or not. See ${link('#flat-mode-and-sorting-value')} for detailed information.`,
+        description: `Whether to enable flat mode or not. See ${link('#flat-mode-and-sort-values')} for detailed information.`,
       }, {
         name: 'id',
         type: 'String | Number',
@@ -212,7 +217,7 @@
         name: 'showCount',
         type: 'Boolean',
         defaultValue: v('false'),
-        description: `Whether to show a children count next to the label of each branch node. See ${link('#disabling-branch-nodes')} for example.`,
+        description: `Whether to show a children count next to the label of each branch node. See ${link('#disable-branch-nodes')} for example.`,
       }, {
         name: 'showCountOf',
         type: 'String',
@@ -227,7 +232,7 @@
         name: 'sortValueBy',
         type: 'String',
         defaultValue: v('"ORDER_SELECTED"'),
-        description: `In which order the selected options should be displayed. Acceptable values: ${v('"ORDER_SELECTED"')}, ${v('"LEVEL"')} or ${v('"INDEX"')}. See ${link('#flat-mode-and-sorting-value')} for example.`,
+        description: `In which order the selected options should be displayed. Acceptable values: ${v('"ORDER_SELECTED"')}, ${v('"LEVEL"')} or ${v('"INDEX"')}. See ${link('#flat-mode-and-sort-values')} for example.`,
       }, {
         name: 'tabIndex',
         type: 'Number',

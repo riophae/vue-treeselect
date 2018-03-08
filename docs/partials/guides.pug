@@ -34,7 +34,7 @@
 
     Then you can pass an array of these nodes as the `options` prop.
   p.tip
-    :markdown-it
+    :markdown-it(inline)
       Note that, because a complex state tree needs to be maintained internally, vue-treeselect will copy `options` and will not react to the changes of the original array. In other words, directly modify `options` **will not** work as expected. If children options needs to be dynamically loaded, see [below](#delayed-loading).
 
 +guide('More Features')
@@ -54,7 +54,7 @@
     If you want the root level options to be delayed loaded as well, omit the `options` prop and provide an extra `loadRootOptions` prop. By default, vue-treeselect will try loading root options by calling `loadRootOptions(callback)` after the component is mounted. In this example I have disabled that feature, and root options will be loaded when the menu is opened.
   +demo('DelayedRootOptions')
 
-+guide('Flat Mode & Sorting Value')
++guide('Flat Mode & Sort Values')
   :markdown-it
     In all previous examples, we used the default non-flat mode of vue-treeselect, which means:
 
@@ -64,21 +64,21 @@
     Sometimes we don't need that mechanism, and want branch nodes and leaf nodes don't affect each other. In this case, flat mode should be used, as demonstrated in the following.
 
     If you want to control the order in which selected options to be displayed, use the `sortValueBy` prop.
-  +demo('FlatModeAndSortingValue')
+  +demo('FlatModeAndSortValues')
 
-+guide('Disabling Branch Nodes')
++guide('Disable Branch Nodes')
   :markdown-it
     Set `disableBranchNodes` to `true` to prevent branch nodes from being selected. You may also want to show a count next to the label of each branch node by setting `showCount` to `true`.
-  +demo('DisablingBranchNodes')
+  +demo('DisableBranchNodes')
 
-+guide('Customizing Option Label')
++guide('Customize Option Label')
   :markdown-it
     You can customize the label of each option. vue-treeselect utilizes Vue's [scoped slot](https://vuejs.org/v2/guide/components.html#Scoped-Slots) feature and provides some props you should use in your customized template:
 
     - `node` - a normalized node object
     - `count` & `shouldShowCount` - the count number and a boolean indicates whether the count should be displayed
     - `labelClassName` & `countClassName` - CSS classnames for making the style correct
-  +demo('CustomizingOptionLabel')
+  +demo('CustomizeOptionLabel')
 
 +guide('Vuex Support')
   :markdown-it
@@ -87,7 +87,7 @@
       Concretely speaking, we can bind `getter` to `:value` to make vue-treeselect reflect any changes in your Vuex state, and bind `action` or `mutation` to `@input` to update your Vuex state whenever the value changes.
   +demo('VuexSupport')
 
-+guide('Disable item selection')
++guide('Disable Item Selection')
   :markdown-it
       You can disable item selection by setting a `disabled` property to your model item. This property is false by default.
-  +demo('DisablingNodes')
+  +demo('DisableItemSelection')

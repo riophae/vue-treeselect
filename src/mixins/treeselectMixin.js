@@ -76,11 +76,11 @@ export default {
     },
 
     /**
-     * If the selection menu should be opened
+     * Whether the menu should be always open
      * @default false
      * @type {boolean}
      */
-    allwaysOpened: {
+    alwaysOpen: {
       type: Boolean,
       default: false,
     },
@@ -1237,7 +1237,7 @@ export default {
   mounted() {
     if (this.autofocus) this.$refs.value.focusInput()
     if (!this.rootOptionsLoaded && this.autoLoadRootOptions) this.loadOptions(true)
-    if (this.allwaysOpened) this.$nextTick(this.adjustPosition)
+    if (this.alwaysOpen) this.$nextTick(this.adjustPosition)
   },
 
   destroyed() {

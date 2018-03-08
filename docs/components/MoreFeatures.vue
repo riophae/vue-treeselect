@@ -9,6 +9,7 @@
       :open-on-focus="openOnFocus"
       :clear-on-select="clearOnSelect"
       :close-on-select="closeOnSelect"
+      :always-open="alwaysOpen"
       :options="options"
       :limit="3"
       :max-height="200"
@@ -29,6 +30,9 @@
       <label><input type="checkbox" v-model="clearOnSelect">Clear on select</label>
       <label><input type="checkbox" v-model="closeOnSelect">Close on select</label>
     </p>
+    <p>
+      <label><input type="checkbox" v-model="alwaysOpen">Always open</label>
+    </p>
   </div>
 </template>
 
@@ -45,6 +49,7 @@
       openOnFocus: false,
       clearOnSelect: true,
       closeOnSelect: false,
+      alwaysOpen: false,
       value: [ 'a' ],
       options: generateOptions(2),
     }),

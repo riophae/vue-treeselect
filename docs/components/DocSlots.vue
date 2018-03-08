@@ -26,7 +26,7 @@
       slots: [ {
         name: 'option-label',
         props: [ 'node', 'shouldShowCount', 'count', 'labelClassName', 'countClassName' ].map(v).join(', '),
-        description: `Slot for custom option label template. See ${link('#customizing-option-label')} for detailed information.`,
+        description: `Slot for custom option label template. See ${link('#customize-option-label')} for detailed information.`,
       } ],
     }),
   }

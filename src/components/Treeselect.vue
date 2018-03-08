@@ -17,11 +17,11 @@
     <div class="vue-treeselect__control">
       <component :is="ValueComponent" ref="value" />
       <div v-if="shouldShowClearIcon" class="vue-treeselect__clear" :title="multiple ? clearAllText : clearValueText" @mousedown="handleMouseDownOnClear">&times;</div>
-      <div class="vue-treeselect__arrow-wrapper" @mousedown="handleMouseDownOnArrow" v-if="!allwaysOpened">
+      <div class="vue-treeselect__arrow-wrapper" @mousedown="handleMouseDownOnArrow" v-if="!alwaysOpen">
         <span :class="[ 'vue-treeselect__arrow', { 'vue-treeselect__arrow--rotated': isOpen } ]"></span>
       </div>
     </div>
-    <div v-if="isOpen || allwaysOpened" class="vue-treeselect__menu" ref="menu" :style="{ maxHeight: optimizedHeight + 'px' || allwaysOpened && 'auto' }">
+    <div v-if="isOpen || alwaysOpen" class="vue-treeselect__menu" ref="menu" :style="{ maxHeight: optimizedHeight + 'px' || alwaysOpen && 'auto' }">
       <template v-if="rootOptionsLoaded">
         <div v-if="searching && noSearchResults" class="vue-treeselect__no-results-tip">
           <div class="vue-treeselect__icon-wrapper"><span class="vue-treeselect__icon-warning"></span></div>
