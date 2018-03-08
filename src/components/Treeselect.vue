@@ -17,7 +17,7 @@
     <div class="vue-treeselect__control">
       <component :is="ValueComponent" ref="value" />
       <div v-if="shouldShowClearIcon" class="vue-treeselect__clear" :title="multiple ? clearAllText : clearValueText" @mousedown="handleMouseDownOnClear">&times;</div>
-      <div class="vue-treeselect__arrow-wrapper" @mousedown="handleMouseDownOnArrow" v-if="!alwaysOpen">
+      <div v-if="!isOpen || !alwaysOpen" class="vue-treeselect__arrow-wrapper" @mousedown="handleMouseDownOnArrow">
         <span :class="[ 'vue-treeselect__arrow', { 'vue-treeselect__arrow--rotated': isOpen } ]"></span>
       </div>
     </div>

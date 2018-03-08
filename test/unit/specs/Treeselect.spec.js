@@ -1526,6 +1526,7 @@ describe('Props', () => {
         },
       })
 
+      wrapper.update() // the arrow exists on first render
       expect(wrapper.contains('.vue-treeselect__arrow-wrapper')).toBe(false)
     })
 
@@ -1583,6 +1584,18 @@ describe('Props', () => {
       expect(vm.isOpen).toBe(false)
       wrapper.setProps({ disabled: false })
       expect(vm.isOpen).toBe(true)
+    })
+
+    it('should show the arrow when disabled', () => {
+      const wrapper = mount(Treeselect, {
+        propsData: {
+          options: [],
+          alwaysOpen: true,
+          disabled: true,
+        },
+      })
+
+      expect(wrapper.contains('.vue-treeselect__arrow-wrapper')).toBe(true)
     })
 
     it('set `alwaysOpen` from true to false should close the menu and show the arrow', () => {
