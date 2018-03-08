@@ -1243,7 +1243,7 @@ export default {
   mounted() {
     if (this.autofocus) this.$refs.value.focusInput()
     if (!this.rootOptionsLoaded && this.autoLoadRootOptions) this.loadOptions(true)
-    if (this.alwaysOpen) this.$nextTick(this.openMenu)
+    if (this.alwaysOpen) this.openMenu()
   },
 
   destroyed() {

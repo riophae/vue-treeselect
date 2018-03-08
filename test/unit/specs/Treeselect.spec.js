@@ -1505,6 +1505,102 @@ describe('Keyboard Support', () => {
 })
 
 describe('Props', () => {
+  describe('alwaysOpen', () => {
+    it('should auto open the menu on mount', () => {
+      const wrapper = mount(Treeselect, {
+        propsData: {
+          options: [],
+          alwaysOpen: true,
+        },
+      })
+      const { vm } = wrapper
+
+      expect(vm.isOpen).toBe(true)
+    })
+
+    it('should hide the arrow', () => {
+      const wrapper = mount(Treeselect, {
+        propsData: {
+          options: [],
+          alwaysOpen: true,
+        },
+      })
+
+      expect(wrapper.contains('.vue-treeselect__arrow-wrapper')).toBe(false)
+    })
+
+    it('the menu should be unclosable', () => {
+      const wrapper = mount(Treeselect, {
+        propsData: {
+          options: [],
+          alwaysOpen: true,
+        },
+      })
+      const { vm } = wrapper
+
+      vm.closeMenu()
+      expect(vm.isOpen).toBe(true)
+    })
+
+    it('when disabled=true, should not auto open the menu on mount', () => {
+      const wrapper = mount(Treeselect, {
+        propsData: {
+          options: [],
+          alwaysOpen: true,
+          disabled: true,
+        },
+      })
+      const { vm } = wrapper
+
+      expect(vm.isOpen).toBe(false)
+    })
+
+    it('set disabled=true should close the already opened menu', () => {
+      const wrapper = mount(Treeselect, {
+        propsData: {
+          options: [],
+          alwaysOpen: true,
+          disabled: false,
+        },
+      })
+      const { vm } = wrapper
+
+      expect(vm.isOpen).toBe(true)
+      wrapper.setProps({ disabled: true })
+      expect(vm.isOpen).toBe(false)
+    })
+
+    it('set `disabled` from true to false should open the menu', () => {
+      const wrapper = mount(Treeselect, {
+        propsData: {
+          options: [],
+          alwaysOpen: true,
+          disabled: true,
+        },
+      })
+      const { vm } = wrapper
+
+      expect(vm.isOpen).toBe(false)
+      wrapper.setProps({ disabled: false })
+      expect(vm.isOpen).toBe(true)
+    })
+
+    it('set `alwaysOpen` from true to false should close the menu and show the arrow', () => {
+      const wrapper = mount(Treeselect, {
+        propsData: {
+          options: [],
+          alwaysOpen: true,
+        },
+      })
+      const { vm } = wrapper
+
+      expect(vm.isOpen).toBe(true)
+      wrapper.setProps({ alwaysOpen: false })
+      expect(vm.isOpen).toBe(false)
+      expect(wrapper.contains('.vue-treeselect__arrow-wrapper')).toBe(true)
+    })
+  })
+
   describe('autofocus', () => {
     it('should focus the search input on mount', () => {
       const wrapper = mount(Treeselect, {
@@ -1521,7 +1617,7 @@ describe('Props', () => {
   })
 
   describe('branchNodesFirst', () => {
-    it('should place branch nodes ahead of leaf nodes when branchNodesFirst = true', () => {
+    it('should place branch nodes ahead of leaf nodes when branchNodesFirst=true', () => {
       const wrapper = mount(Treeselect, {
         propsData: {
           branchNodesFirst: true,
