@@ -595,9 +595,15 @@ export default {
   },
 
   watch: {
+    alwaysOpen(newValue) {
+      if (newValue) this.openMenu()
+      else this.closeMenu()
+    },
+
     disabled(newValue) {
       // force close the menu after disabling the control
       if (newValue && this.isOpen) this.closeMenu()
+      if (!newValue && !this.isOpen && this.alwaysOpen) this.openMenu()
     },
 
     multiple(newValue) {
@@ -851,7 +857,7 @@ export default {
     },
 
     closeMenu() {
-      if (!this.isOpen) return
+      if (!this.isOpen || (!this.disabled && this.alwaysOpen)) return
       this.isOpen = false
       /* istanbul ignore else */
       if (this.retainScrollPosition && this.$refs.menu) {
@@ -1237,7 +1243,7 @@ export default {
   mounted() {
     if (this.autofocus) this.$refs.value.focusInput()
     if (!this.rootOptionsLoaded && this.autoLoadRootOptions) this.loadOptions(true)
-    if (this.alwaysOpen) this.$nextTick(this.adjustPosition)
+    if (this.alwaysOpen) this.$nextTick(this.openMenu)
   },
 
   destroyed() {

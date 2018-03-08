@@ -21,7 +21,7 @@
         <span :class="[ 'vue-treeselect__arrow', { 'vue-treeselect__arrow--rotated': isOpen } ]"></span>
       </div>
     </div>
-    <div v-if="isOpen || alwaysOpen" class="vue-treeselect__menu" ref="menu" :style="{ maxHeight: optimizedHeight + 'px' || alwaysOpen && 'auto' }">
+    <div v-if="isOpen" class="vue-treeselect__menu" ref="menu" :style="{ maxHeight: optimizedHeight + 'px' }">
       <template v-if="rootOptionsLoaded">
         <div v-if="searching && noSearchResults" class="vue-treeselect__no-results-tip">
           <div class="vue-treeselect__icon-wrapper"><span class="vue-treeselect__icon-warning"></span></div>
