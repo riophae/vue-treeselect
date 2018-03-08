@@ -111,10 +111,10 @@ You can use this [pen](https://codepen.io/riophae/pen/MExgzP) to reproduce bugs 
 
 1. Fork & clone the repo
 2. Install dependencies by `yarn` or `npm install`
-3. Check out a new branch
+3. Check out a new branch **from `dev`**
 4. `npm run dev` & hack
 5. Make sure `npm test` passes
-6. Push your changes & create a pull request
+6. Push your changes & create a pull request to `dev`
 
 ### Credits
 
