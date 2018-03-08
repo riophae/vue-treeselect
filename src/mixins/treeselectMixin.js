@@ -76,6 +76,16 @@ export default {
     },
 
     /**
+     * If the selection menu should be opened
+     * @default false
+     * @type {boolean}
+     */
+    allwaysOpened: {
+      type: Boolean,
+      default: false,
+    },
+
+    /**
      * Whether pressing backspace removes the last item if there is no text input
      * @default true
      * @type {boolean}
@@ -944,7 +954,7 @@ export default {
 
         const isRootNode = parentNode === NO_PARENT_NODE
         const { id, label, children } = node
-        const { isDisabled = false } = node
+        const isDisabled = node._disabled
         const isBranch = (
           Array.isArray(children) ||
           children === null ||
@@ -962,8 +972,8 @@ export default {
           ancestors,
           index: _index,
           parentNode,
-          isDisabled, // TODO
           isMatched,
+          isDisabled,
           isLeaf,
           isBranch,
           isRootNode,
@@ -1227,6 +1237,7 @@ export default {
   mounted() {
     if (this.autofocus) this.$refs.value.focusInput()
     if (!this.rootOptionsLoaded && this.autoLoadRootOptions) this.loadOptions(true)
+    if (this.allwaysOpened) this.$nextTick(this.adjustPosition)
   },
 
   destroyed() {

@@ -85,7 +85,7 @@
     "ora": "^1.2.0",
     "postcss-easings": "^1.0.0",
     "pre-commit": "^1.2.2",
-    "pug": "^2.0.0-rc.4",
+    "pug": "^2.0.0",
     "pug-loader": "^2.3.0",
     "raw-loader": "^0.5.1",
     "rimraf": "^2.6.0",

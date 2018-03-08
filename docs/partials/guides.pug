@@ -34,7 +34,7 @@
 
     Then you can pass an array of these nodes as the `options` prop.
   p.tip
-    :markdown-it(inline)
+    :markdown-it
       Note that, because a complex state tree needs to be maintained internally, vue-treeselect will copy `options` and will not react to the changes of the original array. In other words, directly modify `options` **will not** work as expected. If children options needs to be dynamically loaded, see [below](#delayed-loading).
 
 +guide('More Features')
@@ -86,3 +86,8 @@
 
       Concretely speaking, we can bind `getter` to `:value` to make vue-treeselect reflect any changes in your Vuex state, and bind `action` or `mutation` to `@input` to update your Vuex state whenever the value changes.
   +demo('VuexSupport')
+
++guide('Disable item selection')
+  :markdown-it
+      You can disable item selection by setting a `_disabled` property to your model item. This property is false by default.
+  +demo('DisablingNodes')
