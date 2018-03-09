@@ -3,6 +3,7 @@
     :multiple="true"
     :options="options"
     :show-count="true"
+    :value="value"
     placeholder="Select your favourite(s)..."
   />
 </template>
@@ -11,45 +12,33 @@
   export default {
     data: () => ({
       options: [ {
-        id: 'fruits',
-        label: 'Fruits',
+        id: 'folder',
+        label: 'Normal Folder',
         children: [ {
-          id: 'apple',
-          label: 'Apple 🍎',
-        }, {
-          id: 'appletwo',
-          label: 'Apple Two 📺',
+          id: 'disabled-checked',
+          label: 'Checked',
           disabled: true,
         }, {
-          id: 'grapes',
-          label: 'Grapes 🍇',
+          id: 'disabled-unchecked',
+          label: 'Unchecked',
+          disabled: true,
         }, {
-          id: 'pear',
-          label: 'Pear 🍐',
-        }, {
-          id: 'strawberry',
-          label: 'Strawberry 🍓',
-        }, {
-          id: 'watermelon',
-          label: 'Watermelon 🍉',
+          id: 'normal-1',
+          label: 'Normal',
         } ],
       }, {
-        id: 'vegetables',
-        label: 'Vegetables',
+        id: 'disabled-folder',
+        label: 'Disabled Folder',
+        disabled: true,
         children: [ {
-          id: 'corn',
-          label: 'Corn 🌽',
+          id: 'normal-2',
+          label: 'Item',
         }, {
-          id: 'carrot',
-          label: 'Carrot 🥕',
-        }, {
-          id: 'eggplant',
-          label: 'Eggplant 🍆',
-        }, {
-          id: 'tomato',
-          label: 'Tomato 🍅',
+          id: 'normal-3',
+          label: 'Item',
         } ],
       } ],
+      value: [ 'disabled-checked' ],
     }),
   }
 </script>

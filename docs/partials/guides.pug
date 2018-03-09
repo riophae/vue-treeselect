@@ -71,6 +71,11 @@
     Set `disableBranchNodes` to `true` to prevent branch nodes from being selected. You may also want to show a count next to the label of each branch node by setting `showCount` to `true`.
   +demo('DisableBranchNodes')
 
++guide('Disable Item Selection')
+  :markdown-it
+      You can disable item selection by setting `disabled: true` to a leaf node.
+  +demo('DisableItemSelection')
+
 +guide('Customize Option Label')
   :markdown-it
     You can customize the label of each option. vue-treeselect utilizes Vue's [scoped slot](https://vuejs.org/v2/guide/components.html#Scoped-Slots) feature and provides some props you should use in your customized template:
@@ -86,8 +91,3 @@
 
       Concretely speaking, we can bind `getter` to `:value` to make vue-treeselect reflect any changes in your Vuex state, and bind `action` or `mutation` to `@input` to update your Vuex state whenever the value changes.
   +demo('VuexSupport')
-
-+guide('Disable Item Selection')
-  :markdown-it
-      You can disable item selection by setting a `disabled` property to your model item. This property is false by default.
-  +demo('DisableItemSelection')

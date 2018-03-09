@@ -17,11 +17,12 @@
         </transition>
       </div>
       <div class="vue-treeselect__label-wrapper" @mousedown="handleMouseDownOnOption">
-        <div v-if="instance.multiple && !instance.disableBranchNodes" class="vue-treeselect__checkbox-wrapper" :class="{ disabled: node.isDisabled }">
+        <div v-if="instance.multiple && !instance.disableBranchNodes" class="vue-treeselect__checkbox-wrapper">
           <span :class="[ 'vue-treeselect__checkbox', {
             'vue-treeselect__checkbox--checked': checkedState === CHECKED,
             'vue-treeselect__checkbox--indeterminate': checkedState === INDETERMINATE,
             'vue-treeselect__checkbox--unchecked': checkedState === UNCHECKED,
+            'vue-treeselect__checkbox--disabled': node.disabled,
           } ]">
             <span class="vue-treeselect__checkbox-mark"></span>
           </span>

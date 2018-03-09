@@ -43,9 +43,9 @@
 @treeselect-multi-value-item-bg: @palette-Light-Blue-50;
 @treeselect-multi-value-item-border-width: 1px;
 @treeselect-multi-value-item-border-color: transparent;
-@treeselect-multi-value-item-font-color-disabled: #DDD;
+@treeselect-multi-value-item-font-color-disabled: #555;
 @treeselect-multi-value-item-bg-disabled: #FFF;
-@treeselect-multi-value-item-border-color-disabled: #EEE;
+@treeselect-multi-value-item-border-color-disabled: #E5E5E5;
 @treeselect-multi-value-remove-color: @treeselect-multi-value-font-color;
 @treeselect-multi-value-remove-color-hover: @palette-Red-600;
 @treeselect-multi-value-remove-border-color: #FFF;
@@ -92,7 +92,11 @@
 @treeselect-checkbox-checked-border-color-hover: @treeselect-checkbox-color-highlight;
 @treeselect-checkbox-checked-bg-hover: @treeselect-checkbox-color-highlight;
 @treeselect-checkbox-check-mark-color-hover: #FFF;
+@treeselect-checkbox-disabled-border-color: @treeselect-checkbox-border-color;
+@treeselect-checkbox-disabled-bg-color: darken(@treeselect-checkbox-bg, 3%);
+@treeselect-checkbox-disabled-check-mark-color: @treeselect-checkbox-disabled-border-color;
 @treeselect-option-label-color: inherit;
+@treeselect-option-label-color-disabled: rgba(0, 0, 0, 0.25);
 
 @treeselect-loader-color-dark: @palette-Light-Blue-600;
 @treeselect-loader-color-light: @palette-Light-Blue-100;
@@ -110,6 +114,18 @@
 
 .clickable() {
   cursor: pointer;
+}
+
+.inputtable() {
+  cursor: text;
+}
+
+.forbidden() {
+  cursor: not-allowed;
+}
+
+.reset-cursor() {
+  cursor: default;
 }
 
 .rounded() {
@@ -329,7 +345,7 @@
     // the real input is small and not covering the whole control
     // show an I-shape cursor to give user a hint that
     // clicking anywhere in the control will make the input focused
-    cursor: text;
+    .inputtable();
   }
 }
 
@@ -422,10 +438,10 @@
 }
 
 .vue-treeselect__multi-value-label {
+  .reset-cursor();
   .text-truncate();
 
   max-width: 100%;
-  cursor: default;
   user-select: none;
 }
 
@@ -437,13 +453,14 @@
 }
 
 .vue-treeselect__limit-tip-text {
+  .reset-cursor();
+
   display: block;
   margin: @treeselect-multi-value-margin-y @treeselect-multi-value-margin-x;
   padding: (@treeselect-multi-value-padding-y + @treeselect-multi-value-item-border-width) @treeselect-multi-value-padding-x;
   color: @treeselect-limit-tip-font-color;
   font-size: @treeselect-limit-tip-font-size;
   font-weight: @treeselect-limit-tip-font-weight;
-  cursor: default;
 }
 
 .vue-treeselect__input-wrapper {
@@ -545,7 +562,7 @@
   .clickable();
 
   .vue-treeselect--disabled & {
-    cursor: default;
+    .reset-cursor();
   }
 }
 
@@ -580,6 +597,7 @@
  */
 
 .vue-treeselect__menu {
+  .reset-cursor(); // set to normal cursor since text is unselectable
   .vertical-padding(@treeselect-menu-padding-y);
 
   display: block;
@@ -592,7 +610,6 @@
   border: 1px solid @treeselect-control-border-color-active;
   background: @treeselect-menu-bg;
   line-height: @treeselect-menu-line-height;
-  cursor: default; // set to normal cursor since text is not selectable
   // https://css-tricks.com/snippets/css/momentum-scrolling-on-ios-overflow-elements/
   -webkit-overflow-scrolling: touch;
 
@@ -620,10 +637,6 @@
 
 .vue-treeselect__option {
   .row();
-}
-
-.vue-treeselect__option--disabled {
-  cursor: default;
 }
 
 .vue-treeselect__option--selected {
@@ -669,43 +682,28 @@
 
 .vue-treeselect__label-wrapper {
   .cell();
+  .clickable();
 
   display: table;
   width: 100%;
   table-layout: fixed;
   color: @treeselect-option-label-color;
+
+  .vue-treeselect__option--disabled & {
+    .forbidden();
+
+    color: @treeselect-option-label-color-disabled;
+  }
 }
 
 .vue-treeselect__checkbox-wrapper {
-  .clickable();
-
   display: table-cell;
   width: @treeselect-narrow-cell-width;
   min-width: @treeselect-narrow-cell-width;
   height: 100%;
   text-align: center;
   vertical-align: middle;
-
-  &.disabled {
-    cursor: no-drop;
-
-    .vue-treeselect__checkbox {
-      border-color: @treeselect-multi-value-item-border-color-disabled;
-      background-color: @treeselect-multi-value-item-bg-disabled;
-    }
-  }
 }
-
-.vue-treeselect__label-wrapper:hover {
-  .vue-treeselect__checkbox-wrapper.disabled {
-    border-color: @treeselect-multi-value-item-border-color-disabled;
-    * {
-      border-color: @treeselect-multi-value-item-border-color-disabled;
-      background-color: @treeselect-multi-value-item-bg-disabled;
-    }
-  }
-}
-
 
 .vue-treeselect__checkbox {
   display: block;
@@ -811,19 +809,34 @@
   }
 }
 
+.vue-treeselect__checkbox--disabled {
+  border-color: @treeselect-checkbox-disabled-border-color;
+  background-color: @treeselect-checkbox-disabled-bg-color;
+
+  .vue-treeselect__label-wrapper:hover & {
+    border-color: @treeselect-checkbox-disabled-border-color;
+    background-color: @treeselect-checkbox-disabled-bg-color;
+  }
+
+  .vue-treeselect__checkbox-mark::before,
+  .vue-treeselect__checkbox-mark::after {
+    border-color: @treeselect-checkbox-disabled-check-mark-color;
+
+    .vue-treeselect__label-wrapper:hover & {
+      border-color: @treeselect-checkbox-disabled-check-mark-color;
+    }
+  }
+}
+
+
 .vue-treeselect__label {
-  .clickable();
   .text-truncate();
 
   display: table-cell;
   padding-left: @treeselect-padding;
   max-width: 100%;
   vertical-align: middle;
-
-  & > .disabled {
-    color: @treeselect-multi-value-item-font-color-disabled;
-    cursor: no-drop;
-  }
+  cursor: inherit; // override user agent style
 }
 
 .vue-treeselect__count {
