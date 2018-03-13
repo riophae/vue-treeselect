@@ -1173,15 +1173,14 @@ export default {
 
       if (this.multiple && !this.flat && !node.isRootNode) {
         let curr = node
-        while (true) {
+        do {
           curr = curr.parentNode
           const siblings = curr.children
           if (siblings.every(this.isSelected)) {
             siblings.forEach(this.removeValue)
             this.addValue(curr)
           }
-          if (curr.isRootNode) break
-        }
+        } while (!curr.isRootNode)
       }
     },
 
