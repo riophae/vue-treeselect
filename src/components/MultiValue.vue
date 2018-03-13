@@ -7,7 +7,7 @@
       appear>
       <template v-for="node in instance.visibleValue">
         <div class="vue-treeselect__multi-value-item-wrapper" :key="`value-${node.id}`" @mousedown="handleMouseDownOnValue">
-          <div class="vue-treeselect__multi-value-item">
+          <div :class="[ 'vue-treeselect__multi-value-item', { 'vue-treeselect__multi-value-item-disabled': node.isDisabled } ]">
             <span class="vue-treeselect__multi-value-label">{{ node.label }}</span><span class="vue-treeselect__icon vue-treeselect__value-remove" @mousedown="instance.select(node)">&times;</span>
           </div>
         </div>

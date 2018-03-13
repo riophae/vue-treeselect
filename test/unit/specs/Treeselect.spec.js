@@ -5,6 +5,9 @@ import TreeselectOption from '@riophae/vue-treeselect/components/Option'
 import SearchInput from '@riophae/vue-treeselect/components/SearchInput'
 import { UNCHECKED, INDETERMINATE, CHECKED } from '@riophae/vue-treeselect/constants'
 
+// disable the tip that suggests using devtools extension
+Vue.config.devtools = false
+
 const BUTTON_LEFT = { button: 0 }
 const KEY_BACKSPACE = { which: 8, keyCode: 8 }
 const KEY_DELETE = { which: 46, keyCode: 46 }
@@ -87,10 +90,11 @@ describe('Basic', () => {
         isRootNode: jasmine.any(Boolean),
         isExpanded: jasmine.any(Boolean),
         isMatched: jasmine.any(Boolean),
-        disabled: jasmine.any(Boolean),
+        isDisabled: jasmine.any(Boolean),
         isLoaded: jasmine.any(Boolean),
         isPending: jasmine.any(Boolean),
         hasMatchedChild: jasmine.any(Boolean),
+        hasDisabledDescendants: jasmine.any(Boolean),
         expandsOnSearch: jasmine.any(Boolean),
         parentNode: jasmine.any(Object),
         ancestors: jasmine.any(Array),
@@ -114,7 +118,7 @@ describe('Basic', () => {
         isBranch: jasmine.any(Boolean),
         isRootNode: jasmine.any(Boolean),
         isMatched: jasmine.any(Boolean),
-        disabled: jasmine.any(Boolean),
+        isDisabled: jasmine.any(Boolean),
         parentNode: jasmine.any(Object),
         ancestors: jasmine.any(Array),
         index: jasmine.any(Array),
@@ -136,6 +140,136 @@ describe('Basic', () => {
 
       expect(vm.nodeMap.a.id).toBe('a')
       expect(vm.nodeMap.a.label).toBe('a')
+    })
+
+    describe('isDisabled', () => {
+      it('flat=false', () => {
+        const wrapper = mount(Treeselect, {
+          propsData: {
+            flat: false,
+            options: [ {
+              id: 'a',
+              label: 'a',
+              isDisabled: true,
+              children: [ {
+                id: 'aa',
+                label: 'aa',
+              } ],
+            }, {
+              id: 'b',
+              label: 'b',
+              children: [ {
+                id: 'ba',
+                label: 'ba',
+                isDisabled: true,
+              }, {
+                id: 'bb',
+                label: 'bb',
+              } ],
+            }, {
+              id: 'c',
+              label: 'c',
+              children: [ {
+                id: 'ca',
+                label: 'ca',
+                isDisabled: true,
+                children: [ {
+                  id: 'caa',
+                  label: 'caa',
+                } ],
+              } ],
+            } ],
+          },
+        })
+        const { vm } = wrapper
+        const { a, aa, b, ba, bb, c, ca, caa } = vm.nodeMap
+
+        expect(a.isDisabled).toBe(true)
+        expect(aa.isDisabled).toBe(true)
+        expect(b.isDisabled).toBe(false)
+        expect(ba.isDisabled).toBe(true)
+        expect(bb.isDisabled).toBe(false)
+        expect(c.isDisabled).toBe(false)
+        expect(ca.isDisabled).toBe(true)
+        expect(caa.isDisabled).toBe(true)
+      })
+
+      it('flat=true', () => {
+        const wrapper = mount(Treeselect, {
+          propsData: {
+            flat: true,
+            options: [ {
+              id: 'a',
+              label: 'a',
+              isDisabled: true,
+              children: [ {
+                id: 'aa',
+                label: 'aa',
+              } ],
+            }, {
+              id: 'b',
+              label: 'b',
+              children: [ {
+                id: 'ba',
+                label: 'ba',
+                isDisabled: true,
+              }, {
+                id: 'bb',
+                label: 'bb',
+              } ],
+            }, {
+              id: 'c',
+              label: 'c',
+              children: [ {
+                id: 'ca',
+                label: 'ca',
+                isDisabled: true,
+                children: [ {
+                  id: 'caa',
+                  label: 'caa',
+                } ],
+              } ],
+            } ],
+          },
+        })
+        const { vm } = wrapper
+        const { a, aa, b, ba, bb, c, ca, caa } = vm.nodeMap
+
+        expect(a.isDisabled).toBe(true)
+        expect(aa.isDisabled).toBe(false)
+        expect(b.isDisabled).toBe(false)
+        expect(ba.isDisabled).toBe(true)
+        expect(bb.isDisabled).toBe(false)
+        expect(c.isDisabled).toBe(false)
+        expect(ca.isDisabled).toBe(true)
+        expect(caa.isDisabled).toBe(false)
+      })
+    })
+
+    it('hasDisabledDescendants', () => {
+      const wrapper = mount(Treeselect, {
+        propsData: {
+          flat: true,
+          options: [ {
+            id: 'a',
+            label: 'a',
+            children: [ {
+              id: 'aa',
+              label: 'aa',
+              isDisabled: true,
+              children: [ {
+                id: 'aaa',
+                label: 'aaa',
+              } ],
+            } ],
+          } ],
+        },
+      })
+      const { vm } = wrapper
+      const { a, aa } = vm.nodeMap
+
+      expect(a.hasDisabledDescendants).toBe(true)
+      expect(aa.hasDisabledDescendants).toBe(false)
     })
 
     it('isLeaf & isBranch & isLoaded', () => {
@@ -1220,7 +1354,7 @@ describe('Menu', () => {
     expect(wrapper.vm.isOpen).toBe(true)
   })
 
-  it('should close the menu after clicking inside the value wrapper when isOpen=true and searchable=false', () => {
+  it('should close the menu after clicking inside the value wrapper when isOpen=true && searchable=false', () => {
     const wrapper = mount(Treeselect, {
       attachToDocument: true,
       propsData: {
@@ -1243,7 +1377,7 @@ describe('Menu', () => {
     expect(wrapper.vm.isOpen).toBe(false)
   })
 
-  it('should not close the menu after clicking a value remove button when multiple=true & searchable=false', () => {
+  it('should not close the menu after clicking a value remove button when multiple=true && searchable=false', () => {
     const wrapper = mount(Treeselect, {
       attachToDocument: true,
       propsData: {
@@ -1501,6 +1635,391 @@ describe('Keyboard Support', () => {
     expect(wrapper.vm.isOpen).toBe(false)
     customTrigger(input, 'keydown', KEY_A)
     expect(wrapper.vm.isOpen).toBe(true)
+  })
+})
+
+describe('Disable Item Selection', () => {
+  describe('Single-select', () => {
+    it('basic', () => {
+      const wrapper = mount(Treeselect, {
+        propsData: {
+          multiple: false,
+          options: [ {
+            id: 'a',
+            label: 'a',
+            isDisabled: true,
+          }, {
+            id: 'b',
+            label: 'b',
+          } ],
+          value: 'a',
+        },
+      })
+      const { vm } = wrapper
+
+      vm.select(vm.nodeMap.b)
+      expect(vm.internalValue).toEqual([ 'b' ])
+      vm.select(vm.nodeMap.a)
+      expect(vm.internalValue).toEqual([ 'b' ])
+    })
+
+    it('nested', () => {
+      const wrapper = mount(Treeselect, {
+        propsData: {
+          multiple: false,
+          options: [ {
+            id: 'a',
+            label: 'a',
+            isDisabled: true,
+            children: [ {
+              id: 'aa',
+              label: 'aa',
+            } ],
+          }, {
+            id: 'b',
+            label: 'b',
+            children: [ {
+              id: 'ba',
+              label: 'ba',
+              isDisabled: true,
+            }, {
+              id: 'bb',
+              label: 'bb',
+            } ],
+          }, {
+            id: 'c',
+            label: 'c',
+            children: [ {
+              id: 'ca',
+              label: 'ca',
+              isDisabled: true,
+            }, {
+              id: 'cb',
+              label: 'cb',
+              children: [ {
+                id: 'cba',
+                label: 'cba',
+                isDisabled: true,
+              }, {
+                id: 'cbb',
+                label: 'cbb',
+              } ],
+            } ],
+          } ],
+        },
+      })
+      const { vm } = wrapper
+
+      vm.select(vm.nodeMap.a)
+      expect(vm.internalValue).toEqual([])
+      vm.select(vm.nodeMap.aa)
+      expect(vm.internalValue).toEqual([])
+      vm.select(vm.nodeMap.b)
+      expect(vm.internalValue).toEqual([ 'b' ])
+      vm.select(vm.nodeMap.ba)
+      expect(vm.internalValue).toEqual([ 'b' ])
+      vm.select(vm.nodeMap.bb)
+      expect(vm.internalValue).toEqual([ 'bb' ])
+      vm.select(vm.nodeMap.c)
+      expect(vm.internalValue).toEqual([ 'c' ])
+      vm.select(vm.nodeMap.ca)
+      expect(vm.internalValue).toEqual([ 'c' ])
+      vm.select(vm.nodeMap.cb)
+      expect(vm.internalValue).toEqual([ 'cb' ])
+      vm.select(vm.nodeMap.cba)
+      expect(vm.internalValue).toEqual([ 'cb' ])
+      vm.select(vm.nodeMap.cbb)
+      expect(vm.internalValue).toEqual([ 'cbb' ])
+    })
+  })
+
+  describe('Multi-select', () => {
+    describe('flat=false', () => {
+      it('basic', () => {
+        const wrapper = mount(Treeselect, {
+          propsData: {
+            options: [ {
+              id: 'a',
+              label: 'a',
+              isDisabled: true,
+            }, {
+              id: 'b',
+              label: 'b',
+              isDisabled: true,
+            }, {
+              id: 'c',
+              label: 'c',
+            } ],
+            multiple: true,
+            value: [ 'a' ],
+          },
+        })
+        const { vm } = wrapper
+
+        vm.select(vm.nodeMap.a)
+        expect(vm.internalValue).toEqual([ 'a' ])
+        vm.select(vm.nodeMap.b)
+        expect(vm.internalValue).toEqual([ 'a' ])
+        vm.select(vm.nodeMap.c)
+        expect(vm.internalValue).toEqual([ 'a', 'c' ])
+      })
+
+      it('disabled parent node', () => {
+        const wrapper = mount(Treeselect, {
+          propsData: {
+            options: [ {
+              id: 'a',
+              label: 'a',
+              isDisabled: true,
+              children: [ {
+                id: 'aa',
+                label: 'aa',
+              }, {
+                id: 'ab',
+                label: 'ab',
+              } ],
+            }, {
+              id: 'b',
+              label: 'b',
+              isDisabled: true,
+              children: [ {
+                id: 'ba',
+                label: 'ba',
+              }, {
+                id: 'bb',
+                label: 'bb',
+              } ],
+            }, {
+              id: 'c',
+              label: 'c',
+              isDisabled: true,
+              children: [ {
+                id: 'ca',
+                label: 'ca',
+              }, {
+                id: 'cb',
+                label: 'cb',
+              } ],
+            } ],
+            multiple: true,
+            value: [ 'ba', 'c' ],
+          },
+        })
+        const { vm } = wrapper
+
+        vm.select(vm.nodeMap.a)
+        expect(vm.internalValue).toEqual([ 'ba', 'c' ])
+        vm.select(vm.nodeMap.b)
+        expect(vm.internalValue).toEqual([ 'ba', 'c' ])
+        vm.select(vm.nodeMap.c)
+        expect(vm.internalValue).toEqual([ 'ba', 'c' ])
+      })
+
+      it('disabled child node', () => {
+        const wrapper = mount(Treeselect, {
+          propsData: {
+            options: [ {
+              id: 'a',
+              label: 'a',
+              children: [ {
+                id: 'aa',
+                label: 'aa',
+                isDisabled: true,
+              }, {
+                id: 'ab',
+                label: 'ab',
+              } ],
+            }, {
+              id: 'b',
+              label: 'b',
+              children: [ {
+                id: 'ba',
+                label: 'ba',
+                isDisabled: true,
+              }, {
+                id: 'bb',
+                label: 'bb',
+                isDisabled: true,
+              } ],
+            }, {
+              id: 'c',
+              label: 'c',
+              children: [ {
+                id: 'ca',
+                label: 'ca',
+                isDisabled: true,
+              }, {
+                id: 'cb',
+                label: 'cb',
+                isDisabled: true,
+              } ],
+            }, {
+              id: 'd',
+              label: 'd',
+              children: [ {
+                id: 'da',
+                label: 'da',
+                isDisabled: true,
+              }, {
+                id: 'db',
+                label: 'db',
+                isDisabled: true,
+              }, {
+                id: 'dc',
+                label: 'dc',
+              } ],
+            } ],
+            multiple: true,
+            value: [ 'aa', 'b', 'da' ],
+          },
+        })
+        const { vm } = wrapper
+
+        vm.select(vm.nodeMap.a)
+        expect(vm.internalValue).toEqual([ 'aa', 'b', 'da' ])
+        vm.select(vm.nodeMap.ab)
+        expect(vm.internalValue).toEqual([ 'b', 'da', 'a' ])
+        vm.select(vm.nodeMap.a)
+        expect(vm.internalValue).toEqual([ 'b', 'da', 'aa' ])
+        vm.select(vm.nodeMap.ab)
+        expect(vm.internalValue).toEqual([ 'b', 'da', 'a' ])
+        vm.select(vm.nodeMap.b)
+        expect(vm.internalValue).toEqual([ 'b', 'da', 'a' ])
+        vm.select(vm.nodeMap.c)
+        expect(vm.internalValue).toEqual([ 'b', 'da', 'a' ])
+        vm.select(vm.nodeMap.d)
+        expect(vm.internalValue).toEqual([ 'b', 'da', 'a' ])
+        vm.select(vm.nodeMap.dc)
+        expect(vm.internalValue).toEqual([ 'b', 'da', 'a', 'dc' ])
+        vm.select(vm.nodeMap.d)
+        expect(vm.internalValue).toEqual([ 'b', 'da', 'a' ])
+      })
+
+      it('nested', () => {
+        const wrapper = mount(Treeselect, {
+          propsData: {
+            options: [ {
+              id: 'a',
+              label: 'a',
+              children: [ {
+                id: 'aa',
+                label: 'aa',
+                isDisabled: true,
+                children: [ {
+                  id: 'aaa',
+                  label: 'aaa',
+                }, {
+                  id: 'aab',
+                  label: 'aab',
+                } ],
+              }, {
+                id: 'ab',
+                label: 'ab',
+                children: [ {
+                  id: 'aba',
+                  label: 'aba',
+                  isDisabled: true,
+                }, {
+                  id: 'abb',
+                  label: 'abb',
+                } ],
+              } ],
+            } ],
+            multiple: true,
+            value: [ 'aa', 'aba' ],
+          },
+        })
+        const { vm } = wrapper
+
+        vm.select(vm.nodeMap.a)
+        expect(vm.internalValue).toEqual([ 'aa', 'aba' ])
+        vm.select(vm.nodeMap.ab)
+        expect(vm.internalValue).toEqual([ 'aa', 'aba' ])
+        vm.select(vm.nodeMap.abb)
+        expect(vm.internalValue).toEqual([ 'a' ])
+      })
+    })
+
+    describe('flat=true', () => {
+      it('basic', () => {
+        const wrapper = mount(Treeselect, {
+          propsData: {
+            flat: true,
+            multiple: true,
+            options: [ {
+              id: 'a',
+              label: 'a',
+              isDisabled: true,
+              children: [ {
+                id: 'aa',
+                label: 'aa',
+              } ],
+            }, {
+              id: 'b',
+              label: 'b',
+              children: [ {
+                id: 'ba',
+                label: 'ba',
+                isDisabled: true,
+              }, {
+                id: 'bb',
+                label: 'bb',
+              } ],
+            } ],
+          },
+        })
+        const { vm } = wrapper
+
+        vm.select(vm.nodeMap.a)
+        expect(vm.internalValue).toEqual([])
+        vm.select(vm.nodeMap.aa)
+        expect(vm.internalValue).toEqual([ 'aa' ])
+        vm.select(vm.nodeMap.aa)
+        expect(vm.internalValue).toEqual([])
+        vm.select(vm.nodeMap.b)
+        expect(vm.internalValue).toEqual([ 'b' ])
+        vm.select(vm.nodeMap.ba)
+        expect(vm.internalValue).toEqual([ 'b' ])
+        vm.select(vm.nodeMap.bb)
+        expect(vm.internalValue).toEqual([ 'b', 'bb' ])
+      })
+
+      it('nested', () => {
+        const wrapper = mount(Treeselect, {
+          propsData: {
+            flat: true,
+            multiple: true,
+            options: [ {
+              id: 'a',
+              label: 'a',
+              children: [ {
+                id: 'aa',
+                label: 'aa',
+                isDisabled: true,
+                children: [ {
+                  id: 'aaa',
+                  label: 'aaa',
+                  isDisabled: true,
+                }, {
+                  id: 'aab',
+                  label: 'aab',
+                } ],
+              } ],
+            } ],
+          },
+        })
+        const { vm } = wrapper
+
+        vm.select(vm.nodeMap.a)
+        expect(vm.internalValue).toEqual([ 'a' ])
+        vm.select(vm.nodeMap.aa)
+        expect(vm.internalValue).toEqual([ 'a' ])
+        vm.select(vm.nodeMap.aaa)
+        expect(vm.internalValue).toEqual([ 'a' ])
+        vm.select(vm.nodeMap.aab)
+        expect(vm.internalValue).toEqual([ 'a', 'aab' ])
+      })
+    })
   })
 })
 

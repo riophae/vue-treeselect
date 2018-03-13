@@ -2,9 +2,7 @@
   <treeselect
     :multiple="true"
     :options="options"
-    :show-count="true"
     :value="value"
-    placeholder="Select your favourite(s)..."
   />
 </template>
 
@@ -17,24 +15,24 @@
         children: [ {
           id: 'disabled-checked',
           label: 'Checked',
-          disabled: true,
+          isDisabled: true,
         }, {
           id: 'disabled-unchecked',
           label: 'Unchecked',
-          disabled: true,
+          isDisabled: true,
         }, {
-          id: 'normal-1',
-          label: 'Normal',
+          id: 'item-1',
+          label: 'Item',
         } ],
       }, {
         id: 'disabled-folder',
         label: 'Disabled Folder',
-        disabled: true,
+        isDisabled: true,
         children: [ {
-          id: 'normal-2',
+          id: 'item-2',
           label: 'Item',
         }, {
-          id: 'normal-3',
+          id: 'item-3',
           label: 'Item',
         } ],
       } ],

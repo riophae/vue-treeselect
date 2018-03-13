@@ -1,7 +1,7 @@
 <template>
   <div class="vue-treeselect__list-item">
     <div :class="[ 'vue-treeselect__option', {
-        'vue-treeselect__option--disabled': node.disabled,
+        'vue-treeselect__option--disabled': node.isDisabled,
         'vue-treeselect__option--root': node.isRootNode,
         'vue-treeselect__option--child': !node.isRootNode,
         'vue-treeselect__option--selected': instance.isSelected(node),
@@ -22,7 +22,7 @@
             'vue-treeselect__checkbox--checked': checkedState === CHECKED,
             'vue-treeselect__checkbox--indeterminate': checkedState === INDETERMINATE,
             'vue-treeselect__checkbox--unchecked': checkedState === UNCHECKED,
-            'vue-treeselect__checkbox--disabled': node.disabled,
+            'vue-treeselect__checkbox--disabled': node.isDisabled,
           } ]">
             <span class="vue-treeselect__checkbox-mark"></span>
           </span>

@@ -43,9 +43,11 @@
 @treeselect-multi-value-item-bg: @palette-Light-Blue-50;
 @treeselect-multi-value-item-border-width: 1px;
 @treeselect-multi-value-item-border-color: transparent;
-@treeselect-multi-value-item-font-color-disabled: #555;
-@treeselect-multi-value-item-bg-disabled: #FFF;
-@treeselect-multi-value-item-border-color-disabled: #E5E5E5;
+@treeselect-multi-value-font-color-disabled: @treeselect-multi-value-font-color;
+@treeselect-multi-value-item-bg-disabled: greyscale(@treeselect-multi-value-item-bg);
+@treeselect-multi-value-item-font-color-control-disabled: #555;
+@treeselect-multi-value-item-bg-control-disabled: #FFF;
+@treeselect-multi-value-item-border-color-control-disabled: #E5E5E5;
 @treeselect-multi-value-remove-color: @treeselect-multi-value-font-color;
 @treeselect-multi-value-remove-color-hover: @palette-Red-600;
 @treeselect-multi-value-remove-border-color: #FFF;
@@ -407,10 +409,15 @@
   white-space: nowrap; // force option label and "×" to be displayed in the same line
   vertical-align: top;
 
+  &.vue-treeselect__multi-value-item-disabled {
+    color: @treeselect-multi-value-font-color-disabled;
+    background: @treeselect-multi-value-item-bg;
+  }
+
   .vue-treeselect--disabled & {
-    background: @treeselect-multi-value-item-bg-disabled;
-    border-color: @treeselect-multi-value-item-border-color-disabled;
-    color: @treeselect-multi-value-item-font-color-disabled;
+    background: @treeselect-multi-value-item-bg-control-disabled;
+    border-color: @treeselect-multi-value-item-border-color-control-disabled;
+    color: @treeselect-multi-value-item-font-color-control-disabled;
   }
 }
 
@@ -432,7 +439,8 @@
     color: @treeselect-multi-value-remove-color-hover;
   }
 
-  .vue-treeselect--disabled & {
+  .vue-treeselect--disabled &,
+  .vue-treeselect__multi-value-item-disabled & {
     display: none;
   }
 }

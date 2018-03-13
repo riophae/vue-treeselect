@@ -68,12 +68,12 @@
 
 +guide('Disable Branch Nodes')
   :markdown-it
-    Set `disableBranchNodes` to `true` to prevent branch nodes from being selected. You may also want to show a count next to the label of each branch node by setting `showCount` to `true`.
+    Set `disableBranchNodes: true` to make branch nodes uncheckable and treat them as collapsible folders only. You may also want to show a count next to the label of each branch node by setting `showCount: true`.
   +demo('DisableBranchNodes')
 
 +guide('Disable Item Selection')
   :markdown-it
-      You can disable item selection by setting `disabled: true` to a leaf node.
+      You can disable item selection by setting `isDisabled: true` on any leaf node or branch node. Setting on a branch node will disable all its descendants as well.
   +demo('DisableItemSelection')
 
 +guide('Customize Option Label')

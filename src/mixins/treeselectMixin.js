@@ -532,11 +532,19 @@ export default {
     },
 
     /**
-     * Has any options has been selected?
+     * Has any option been selected?
      * @type {boolean}
      */
     hasValue() {
       return this.selectedNodesNumber > 0
+    },
+
+    /**
+     * Has any undisabled option been selected?
+     * @type {boolean}
+     */
+    hasUndisabledValue() {
+      return this.hasValue && this.selectedNodes.some(node => !node.isDisabled)
     },
 
     /**
@@ -577,7 +585,7 @@ export default {
      * @type {boolean}
      */
     shouldShowClearIcon() {
-      return this.clearable && !this.disabled && this.hasValue
+      return this.clearable && !this.disabled && this.hasUndisabledValue
     },
 
     /**
@@ -698,7 +706,12 @@ export default {
     },
 
     isSelected(node) {
+      // whether a node is selected (single-select mode) or fully-checked (multi-select mode)
       return node.id in this.selectedNodeMap
+    },
+
+    withoutDisabled(nodes) {
+      return nodes.filter(node => !node.isDisabled)
     },
 
     checkIfBranchNode(node) {
@@ -717,7 +730,7 @@ export default {
 
       if (parentNode.isBranch && parentNode.level < maxLevel) {
         parentNode.children.forEach(child => {
-          // post-order traversal
+          // DFS + post-order traversal
           this.traverseDescendants(child, maxLevel, callback)
           callback(child)
         })
@@ -953,14 +966,14 @@ export default {
       })
     },
 
-    normalize(parentNode, options) {
-      let normalizedOptions = options.map((node, index) => {
+    normalize(parentNode, nodes) {
+      let normalizedOptions = nodes.map((node, index) => {
         this.checkDuplication(node)
         this.verifyNodeShape(node)
 
         const isRootNode = parentNode === NO_PARENT_NODE
         const { id, label, children } = node
-        const { disabled = false } = node
+        const isDisabled = !!node.isDisabled || (!this.flat && !isRootNode && parentNode.isDisabled)
         const isBranch = (
           Array.isArray(children) ||
           children === null ||
@@ -978,8 +991,8 @@ export default {
           ancestors,
           index: _index,
           parentNode,
+          isDisabled,
           isMatched,
-          disabled,
           isLeaf,
           isBranch,
           isRootNode,
@@ -999,6 +1012,7 @@ export default {
           normalized.isPending = false
           normalized.isExpanded = level < this.defaultExpandLevel
           normalized.hasMatchedChild = false
+          normalized.hasDisabledDescendants = false
           normalized.expandsOnSearch = false
           normalized.loadingChildrenError = ''
           normalized.count = {
@@ -1021,6 +1035,10 @@ export default {
         if (parentNode !== NO_PARENT_NODE) {
           parentNode.count.ALL_CHILDREN += 1
           if (isLeaf) parentNode.count.LEAF_CHILDREN += 1
+        }
+
+        if (isDisabled) {
+          normalized.ancestors.forEach(ancestor => ancestor.hasDisabledDescendants = true)
         }
 
         return normalized
@@ -1098,6 +1116,8 @@ export default {
     },
 
     select(node) {
+      if (node.isDisabled) return
+
       if (this.single) {
         this.clear()
       }
@@ -1130,31 +1150,57 @@ export default {
 
     clear() {
       if (this.hasValue) {
-        this.internalValue = []
+        this.internalValue = this.multiple
+          ? this.internalValue.filter(nodeId => this.getNode(nodeId).isDisabled)
+          : []
         this.buildSelectedNodeMap()
         this.buildNodeCheckedStateMap()
       }
     },
 
     _selectNode(node) {
+      if (this.flat) {
+        this.addValue(node)
+        return
+      }
+
+      if (this.multiple && node.isBranch && node.hasDisabledDescendants) {
+        this.withoutDisabled(node.children).forEach(this._selectNode)
+        return
+      }
+
       this.addValue(node)
 
       if (this.multiple && !this.flat && !node.isRootNode) {
-        const { parentNode } = node
-        const siblings = parentNode.children
-
-        if (siblings.every(this.isSelected)) {
-          siblings.forEach(this.removeValue)
-          this._selectNode(parentNode)
+        let curr = node
+        while (true) {
+          curr = curr.parentNode
+          const siblings = curr.children
+          if (siblings.every(this.isSelected)) {
+            siblings.forEach(this.removeValue)
+            this.addValue(curr)
+          }
+          if (curr.isRootNode) break
         }
       }
     },
 
     _deselectNode(node) {
+      if (node.hasDisabledDescendants) {
+        if (this.isSelected(node)) {
+          const disabledChildren = node.children.filter(child => child.isDisabled)
+          if (node.children.length !== disabledChildren.length) {
+            this.removeValue(node)
+            disabledChildren.forEach(this.addValue)
+          }
+          return
+        }
+      }
+
       this.removeValue(node)
 
       if (this.multiple && !this.flat) {
-        this.selectedNodes.forEach(selectedNode => {
+        this.withoutDisabled(this.selectedNodes).forEach(selectedNode => {
           if (selectedNode.ancestors.indexOf(node) !== -1) {
             this.removeValue(selectedNode)
           }
