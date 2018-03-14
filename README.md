@@ -114,7 +114,7 @@ You can use this [pen](https://codepen.io/riophae/pen/MExgzP) to reproduce bugs 
 3. Check out a new branch **from `dev`**
 4. `npm run dev` & hack
 5. Make sure `npm test` passes
-6. Push your changes & create a pull request to `dev`
+6. Push your changes & file a pull request to `dev` branch
 
 ### Credits
 
