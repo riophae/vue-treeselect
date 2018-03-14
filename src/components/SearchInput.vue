@@ -45,7 +45,12 @@
         }
       },
 
-      onBlur() {
+      onBlur(event) {
+        const result = this.props.onBlur(event)
+        if(result === false) {
+          this.instance.isFocussed = true
+          return
+        }
         this.instance.isFocused = false
         this.instance.closeMenu()
       },
