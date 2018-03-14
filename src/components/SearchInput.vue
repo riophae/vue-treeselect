@@ -39,7 +39,7 @@
 
       onFocus() {
         this.instance.isFocused = true
-        /* istanbul ignore else */
+        // istanbul ignore else
         if (!this.instance.isOpen && this.instance.openOnFocus) {
           this.instance.openMenu()
         }
@@ -47,6 +47,7 @@
 
       onBlur() {
         // #15
+        // istanbul ignore next
         if (document.activeElement === this.instance.$refs.menu) {
           this.focus()
           return
@@ -91,7 +92,7 @@
           break
         }
         default: {
-          /* istanbul ignore else */
+          // istanbul ignore else
           if (!this.instance.isOpen) {
             this.instance.openMenu()
           }
@@ -100,7 +101,7 @@
       },
 
       onMouseDown(evt) {
-        /* istanbul ignore next */
+        // istanbul ignore next
         if (this.instance.searchQuery.length) {
           // Prevent it from bubbling to the top level and triggering `preventDefault()`
           // to make the textbox unselectable
