@@ -89,7 +89,7 @@ const webpackConfig = merge(baseWebpackConfig, {
       to: path.join(__dirname, '../gh-pages/static'),
     }, {
       from: path.join(__dirname, '../docs/CNAME'),
-      to: path.join(__dirname, '../gh-pages/CNAME'),
+      to: path.join(__dirname, '../gh-pages'),
     }, {
       from: path.join(__dirname, '../.circleci'),
       to: path.join(__dirname, '../gh-pages/.circleci'),
