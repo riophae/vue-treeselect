@@ -46,6 +46,12 @@
       },
 
       onBlur() {
+        // #15
+        if (document.activeElement === this.instance.$refs.menu) {
+          this.focus()
+          return
+        }
+
         this.instance.isFocused = false
         this.instance.closeMenu()
       },
