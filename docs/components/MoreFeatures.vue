@@ -14,7 +14,7 @@
       :limit="3"
       :max-height="200"
       v-model="value"
-    />
+      />
     <pre class="result">{{ value }}</pre>
     <p>
       <label><input type="checkbox" v-model="multiple">Multi-select</label>

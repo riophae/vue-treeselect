@@ -12,8 +12,8 @@
       <tr v-for="prop in props" :key="prop[0]">
         <td><strong>{{ prop.name }}</strong></td>
         <td class="nowrap">{{ prop.type }}</td>
-        <td v-html="prop.defaultValue"></td>
-        <td v-html="prop.description"></td>
+        <td v-html="prop.defaultValue" />
+        <td v-html="prop.description" />
       </tr>
     </tbody>
   </table>

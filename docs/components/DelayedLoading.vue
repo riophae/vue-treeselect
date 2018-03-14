@@ -5,7 +5,7 @@
     :load-children-options="loadChildrenOptions"
     placeholder="Try expanding any folder option..."
     v-model="value"
-  />
+    />
 </template>
 
 <script>
@@ -36,23 +36,23 @@
         // We just use `setTimeout()` here to simulate an async operation
         // instead of requesting a real API server for demo purpose.
         switch (parent.id) {
-          case 'success': {
-            const children = [ {
-              id: 'child',
-              label: 'Child option',
-            } ]
-            setTimeout(() => callback(null, children), 2000)
-            break
-          }
-          case 'no-children': {
-            setTimeout(() => callback(null, []), 2000)
-            break
-          }
-          case 'failure': {
-            setTimeout(() => callback(new Error('Network error')), 2000)
-            break
-          }
-          default: /* Empty */
+        case 'success': {
+          const children = [ {
+            id: 'child',
+            label: 'Child option',
+          } ]
+          setTimeout(() => callback(null, children), 2000)
+          break
+        }
+        case 'no-children': {
+          setTimeout(() => callback(null, []), 2000)
+          break
+        }
+        case 'failure': {
+          setTimeout(() => callback(new Error('Network error')), 2000)
+          break
+        }
+        default: /* Empty */
         }
       },
     },

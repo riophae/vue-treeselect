@@ -5,7 +5,7 @@
       :value="value"
       :searchable="false"
       @input="updateValue"
-    />
+      />
     <pre class="result">{{ value }}</pre>
   </div>
 </template>

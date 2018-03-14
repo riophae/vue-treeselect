@@ -3,7 +3,7 @@
     :multiple="true"
     :options="options"
     :value="value"
-  />
+    />
 </template>
 
 <script>

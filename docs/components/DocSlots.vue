@@ -10,8 +10,8 @@
     <tbody>
       <tr v-for="slot in slots" :key="slot.name">
         <td><strong>{{ slot.name }}</strong></td>
-        <td v-html="slot.props"></td>
-        <td v-html="slot.description"></td>
+        <td v-html="slot.props" />
+        <td v-html="slot.description" />
       </tr>
     </tbody>
   </table>

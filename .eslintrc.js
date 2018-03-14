@@ -10,12 +10,15 @@ module.exports = {
     },
   },
   rules: {
+    'import/exports-last': 0,
+    'import/no-named-as-default': 0,
+    'import/no-extraneous-dependencies': 0,
+    'vue/attributes-order': 0,
     indent: 0, // not working well with .vue files so disable it
-    'prefer-destructuring': 0,
+    'multiline-comment-style': 0,
     'no-warning-comments': 0,
     'no-undefined': 0,
     'no-extra-parens': 0,
-    'import/no-named-as-default': 0,
-    'import/no-extraneous-dependencies': 0,
+    'prefer-destructuring': 0,
   },
 }

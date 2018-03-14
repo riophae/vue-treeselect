@@ -62,34 +62,34 @@
         // https://css-tricks.com/snippets/javascript/javascript-keycodes/
         // https://stackoverflow.com/questions/4471582/javascript-keycode-vs-which
         switch (/* istanbul ignore next */ 'which' in evt ? evt.which : evt.keyCode) {
-          case KEY_CODES.BACKSPACE: {
-            if (this.instance.backspaceRemoves && !this.instance.searchQuery.length) {
-              this.instance.maybeRemoveLastValue()
-            }
-            break
+        case KEY_CODES.BACKSPACE: {
+          if (this.instance.backspaceRemoves && !this.instance.searchQuery.length) {
+            this.instance.maybeRemoveLastValue()
           }
-          case KEY_CODES.DELETE: {
-            if (this.instance.deleteRemoves && !this.instance.searchQuery.length) {
-              this.instance.maybeRemoveLastValue()
-            }
-            break
+          break
+        }
+        case KEY_CODES.DELETE: {
+          if (this.instance.deleteRemoves && !this.instance.searchQuery.length) {
+            this.instance.maybeRemoveLastValue()
           }
-          case KEY_CODES.ESCAPE: {
-            if (this.instance.searchQuery.length) {
-              this.instance.searchQuery = ''
-            } else if (this.instance.isOpen) {
-              this.instance.closeMenu()
-            } else if (this.instance.escapeClearsValue) {
-              this.instance.clear()
-            }
-            break
+          break
+        }
+        case KEY_CODES.ESCAPE: {
+          if (this.instance.searchQuery.length) {
+            this.instance.searchQuery = ''
+          } else if (this.instance.isOpen) {
+            this.instance.closeMenu()
+          } else if (this.instance.escapeClearsValue) {
+            this.instance.clear()
           }
-          default: {
-            /* istanbul ignore else */
-            if (!this.instance.isOpen) {
-              this.instance.openMenu()
-            }
+          break
+        }
+        default: {
+          /* istanbul ignore else */
+          if (!this.instance.isOpen) {
+            this.instance.openMenu()
           }
+        }
         }
       },
 

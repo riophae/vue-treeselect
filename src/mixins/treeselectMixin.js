@@ -4,14 +4,14 @@ import {
   warning,
   quickCompare, onlyOnLeftClick,
   hasOwn, last, findIndex, removeFromArray,
- } from '../utils'
- import {
-   UNCHECKED, INDETERMINATE, CHECKED,
-   UNMATCHED, DESCENDANT_MATCHED, MATCHED,
-   NO_PARENT_NODE,
-   ALL_CHILDREN, ALL_DESCENDANTS, LEAF_CHILDREN, LEAF_DESCENDANTS,
-   ORDER_SELECTED, LEVEL, INDEX,
- } from '../constants'
+} from '../utils'
+import {
+  UNCHECKED, INDETERMINATE, CHECKED,
+  UNMATCHED, DESCENDANT_MATCHED, MATCHED,
+  NO_PARENT_NODE,
+  ALL_CHILDREN, ALL_DESCENDANTS, LEAF_CHILDREN, LEAF_DESCENDANTS,
+  ORDER_SELECTED, LEVEL, INDEX,
+} from '../constants'
 
 function sortValueByIndex(a, b) {
   let i = 0
@@ -243,11 +243,11 @@ export default {
       default: Infinity,
     },
 
-  /**
-   * Function that processes the message shown when selected elements pass the defined limit
-   * @default count => `and ${count} more`
-   * @type {function(number): string}
-   */
+    /**
+     * Function that processes the message shown when selected elements pass the defined limit
+     * @default count => `and ${count} more`
+     * @type {function(number): string}
+     */
     limitText: {
       type: Function,
       default: limitTextDefault,

@@ -8,7 +8,7 @@
       :default-expand-level="1"
       placeholder="Try selecting some options."
       v-model="value"
-    />
+      />
     <p><strong>Sort value by:</strong></p>
     <p>
       <label><input type="radio" value="ORDER_SELECTED" v-model="sortValueBy"><code>"ORDER_SELECTED"</code> - Order selected (default)</label><br>

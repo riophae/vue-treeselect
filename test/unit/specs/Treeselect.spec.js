@@ -96,7 +96,7 @@ describe('Basic', () => {
         hasMatchedChild: jasmine.any(Boolean),
         hasDisabledDescendants: jasmine.any(Boolean),
         expandsOnSearch: jasmine.any(Boolean),
-        parentNode: jasmine.any(Object),
+        parentNode: null,
         ancestors: jasmine.any(Array),
         index: jasmine.any(Array),
         children: jasmine.any(Array),
@@ -626,15 +626,6 @@ describe('Basic', () => {
     // so here we write vanila vue code
     const vm = new Vue({
       components: { Treeselect },
-      template: `
-        <div>
-          <treeselect
-            v-model="value"
-            :options="options"
-            :multiple="true"
-          />
-        </div>
-      `,
       data: {
         value: [],
         options: [ {
@@ -645,6 +636,15 @@ describe('Basic', () => {
           label: 'b',
         } ],
       },
+      template: `
+        <div>
+          <treeselect
+            v-model="value"
+            :options="options"
+            :multiple="true"
+          />
+        </div>
+      `,
     }).$mount()
     const comp = vm.$children[0]
 
