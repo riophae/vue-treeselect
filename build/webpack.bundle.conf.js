@@ -19,7 +19,7 @@ base.entry = {
 const banner = `
 vue-treeselect v${version} | (c) 2017-2018 Riophae Lee
 Released under the MIT License.
-https://github.com/riophae/vue-treeselect
+https://vue-treeselect.js.org/
 `.trim()
 
 const webpackConfig = merge(base, {

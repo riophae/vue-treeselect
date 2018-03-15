@@ -89,7 +89,7 @@ The library will be exposed as `window.VueTreeselect.Treeselect`. Note that, Vue
 
 ### Documentation & Live Demo
 
-[Visit the website](https://riophae.github.io/vue-treeselect)
+[Visit the website](https://vue-treeselect.js.org/)
 
 Note: please use a desktop browser since the website hasn't been optimized for mobile devices.
 
