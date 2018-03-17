@@ -68,11 +68,11 @@
 @treeselect-arrow-color-hover: @palette-Grey-700;
 @treeselect-arrow-transition-timing-function: ease-out-expo;
 
-@treeselect-clear-color: @treeselect-arrow-color;
-@treeselect-clear-font-size: floor(@treeselect-control-height / 2);
+@treeselect-x-color: @treeselect-arrow-color;
+@treeselect-x-font-size: floor(@treeselect-control-height / 2);
 // Arial is ideal for the character "×" and available across all platforms
-@treeselect-clear-font-family: Arial, sans-serif;
-@treeselect-clear-color-hover: @palette-Red-600;
+@treeselect-x-font-family: Arial, sans-serif;
+@treeselect-x-color-hover: @palette-Red-600;
 
 @treeselect-checkbox-size: @treeselect-icon-size;
 @treeselect-checkbox-border-radius: @treeselect-border-radius-sm;
@@ -550,18 +550,18 @@
   white-space: pre;
 }
 
-.vue-treeselect__clear {
+.vue-treeselect__x {
   .narrow-cell();
   .clickable();
 
-  color: @treeselect-clear-color;
-  font-size: @treeselect-clear-font-size;
-  font-family: @treeselect-clear-font-family;
+  color: @treeselect-x-color;
+  font-size: @treeselect-x-font-size;
+  font-family: @treeselect-x-font-family;
   line-height: 0;
   animation: @treeselect-transition-duration vue-treeselect-animation-fade-in ease-out-circ;
 
   &:hover {
-    color: @treeselect-clear-color-hover;
+    color: @treeselect-x-color-hover;
   }
 }
 

@@ -2238,29 +2238,29 @@ describe('Props', () => {
     })
 
     it('should show "×" icon', () => {
-      expect(wrapper.contains('.vue-treeselect__clear')).toBe(true)
+      expect(wrapper.contains('.vue-treeselect__x')).toBe(true)
     })
 
     it('should reset value on mousedown', () => {
       expect(wrapper.vm.internalValue).toEqual([ 'a' ])
-      customTrigger(wrapper.first('.vue-treeselect__clear'), 'mousedown', BUTTON_LEFT)
+      customTrigger(wrapper.first('.vue-treeselect__x'), 'mousedown', BUTTON_LEFT)
       expect(wrapper.vm.internalValue).toEqual([])
     })
 
     it('should hide when no options selected', () => {
       wrapper.vm.clear()
       wrapper.update()
-      expect(wrapper.contains('.vue-treeselect__clear')).toBe(false)
+      expect(wrapper.contains('.vue-treeselect__x')).toBe(false)
     })
 
     it('should hide when disabled=true', () => {
       wrapper.setProps({ disabled: true })
-      expect(wrapper.contains('.vue-treeselect__clear')).toBe(false)
+      expect(wrapper.contains('.vue-treeselect__x')).toBe(false)
     })
 
     it('should hide when clearable=false', () => {
       wrapper.setProps({ clearable: false })
-      expect(wrapper.contains('.vue-treeselect__clear')).toBe(false)
+      expect(wrapper.contains('.vue-treeselect__x')).toBe(false)
     })
   })
 
@@ -2276,7 +2276,7 @@ describe('Props', () => {
         },
       })
 
-      expect(wrapper.first('.vue-treeselect__clear').getAttribute('title')).toBe('$MULTI_TITLE$')
+      expect(wrapper.first('.vue-treeselect__x').getAttribute('title')).toBe('$MULTI_TITLE$')
     })
   })
 
@@ -2374,7 +2374,7 @@ describe('Props', () => {
         },
       })
 
-      expect(wrapper.first('.vue-treeselect__clear').getAttribute('title')).toBe('$SINGLE_TITLE$')
+      expect(wrapper.first('.vue-treeselect__x').getAttribute('title')).toBe('$SINGLE_TITLE$')
     })
   })
 
