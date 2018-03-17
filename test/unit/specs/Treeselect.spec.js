@@ -1275,369 +1275,6 @@ describe('Multi-select', () => {
   })
 })
 
-describe('SearchInput', () => {
-  it('should disable auto complete', () => {
-    const wrapper = mount(Treeselect, {
-      propsData: {
-        options: [],
-      },
-    })
-    const input = wrapper.first('.vue-treeselect__input')
-    expect(input.element.getAttribute('autocomplete')).toBe('off')
-  })
-
-  it('should be unable to focus when disabled=true', () => {
-    const wrapper = mount(Treeselect, {
-      propsData: {
-        options: [],
-        autofocus: false,
-        searchable: true,
-        disabled: true,
-      },
-    })
-
-    expect(wrapper.vm.isFocused).toBe(false)
-    wrapper.vm.focusInput()
-    expect(wrapper.vm.isFocused).toBe(false)
-  })
-})
-
-describe('Control', () => {
-  it('should toggle the menu when arrow is clicked', () => {
-    const wrapper = mount(Treeselect, {
-      attachToDocument: true,
-      propsData: {
-        options: [],
-      },
-    })
-    const arrow = wrapper.first('.vue-treeselect__arrow-wrapper')
-
-    customTrigger(arrow, 'mousedown', BUTTON_LEFT)
-    expect(wrapper.vm.isOpen).toBe(true)
-    customTrigger(arrow, 'mousedown', BUTTON_LEFT)
-    expect(wrapper.vm.isOpen).toBe(false)
-  })
-})
-
-describe('Menu', () => {
-  it('should blur the input & close the menu after clicking anywhere outside the component', () => {
-    const wrapper = mount(Treeselect, {
-      attachToDocument: true,
-      propsData: {
-        options: [],
-      },
-    })
-
-    wrapper.vm.openMenu()
-    const event = document.createEvent('event')
-    event.initEvent('mousedown', true, true)
-    document.body.dispatchEvent(event)
-    expect(wrapper.data()).toEqual(jasmine.objectContaining({
-      isFocused: false,
-      isOpen: false,
-    }))
-  })
-
-  it('should open the menu after clicking the control when focused', () => {
-    const wrapper = mount(Treeselect, {
-      attachToDocument: true,
-      propsData: {
-        options: [],
-      },
-      data: {
-        isFocused: true,
-      },
-    })
-    const valueWrapper = wrapper.first('.vue-treeselect__value-wrapper')
-
-    customTrigger(valueWrapper, 'mousedown', BUTTON_LEFT)
-    expect(wrapper.vm.isOpen).toBe(true)
-  })
-
-  it('should close the menu after clicking inside the value wrapper when isOpen=true && searchable=false', () => {
-    const wrapper = mount(Treeselect, {
-      attachToDocument: true,
-      propsData: {
-        options: [ {
-          id: 'a',
-          label: 'a',
-        } ],
-        multiple: false,
-        searchable: false,
-      },
-      data: {
-        isOpen: true,
-        isFocused: true,
-      },
-    })
-
-    wrapper.vm.openMenu()
-    const value = wrapper.first('.vue-treeselect__value-wrapper')
-    customTrigger(value, 'mousedown', BUTTON_LEFT)
-    expect(wrapper.vm.isOpen).toBe(false)
-  })
-
-  it('should not close the menu after clicking a value remove button when multiple=true && searchable=false', () => {
-    const wrapper = mount(Treeselect, {
-      attachToDocument: true,
-      propsData: {
-        multiple: true,
-        options: [ {
-          id: 'a',
-          label: 'a',
-        }, {
-          id: 'b',
-          label: 'b',
-        } ],
-        value: [ 'a', 'b' ],
-      },
-      data: {
-        isOpen: true,
-      },
-    })
-
-    const [ firstRemove, secondRemove ] = wrapper.find('.vue-treeselect__value-remove')
-
-    customTrigger(firstRemove, 'mousedown', BUTTON_LEFT)
-    expect(wrapper.data()).toEqual(jasmine.objectContaining({
-      isOpen: true,
-      internalValue: [ 'b' ],
-    }))
-
-    customTrigger(secondRemove, 'mousedown', BUTTON_LEFT)
-    expect(wrapper.data()).toEqual(jasmine.objectContaining({
-      isOpen: true,
-      internalValue: [],
-    }))
-  })
-
-  it('click on option arrow should toggle expanded', () => {
-    const wrapper = mount(Treeselect, {
-      attachToDocument: true,
-      propsData: {
-        options: [ {
-          id: 'a',
-          label: 'a',
-          children: [],
-        } ],
-      },
-      data: {
-        isOpen: true,
-      },
-    })
-    const { a } = wrapper.vm.nodeMap
-
-    expect(a.isExpanded).toBe(false)
-    const option = wrapper.first(TreeselectOption)
-    const optionArrow = option.first('.vue-treeselect__option-arrow-wrapper')
-    customTrigger(optionArrow, 'mousedown', BUTTON_LEFT)
-    expect(a.isExpanded).toBe(true)
-    customTrigger(optionArrow, 'mousedown', BUTTON_LEFT)
-    expect(a.isExpanded).toBe(false)
-  })
-})
-
-describe('Keyboard Support', () => {
-  function queryInput(wrapper) {
-    return wrapper.first('input[type="text"]')
-  }
-
-  describe('backspace key', () => {
-    let wrapper, input
-
-    beforeEach(() => {
-      wrapper = mount(Treeselect, {
-        propsData: {
-          options: [ {
-            id: 'a',
-            label: 'a',
-          }, {
-            id: 'b',
-            label: 'b',
-          } ],
-          multiple: true,
-          backspaceRemoves: true,
-          value: [ 'a', 'b' ],
-        },
-      })
-      input = queryInput(wrapper)
-
-      expect(wrapper.vm.searchQuery).toBe('')
-      expect(wrapper.vm.internalValue).toEqual([ 'a', 'b' ])
-    })
-
-    it('should remove the last value if search input is empty', () => {
-      customTrigger(input, 'keydown', KEY_BACKSPACE)
-      expect(wrapper.vm.internalValue).toEqual([ 'a' ])
-      customTrigger(input, 'keydown', KEY_BACKSPACE)
-      expect(wrapper.vm.internalValue).toEqual([])
-    })
-
-    it('should do nothing if search input has value', async done => {
-      await typeSearchText(wrapper, 'test')
-      expect(wrapper.vm.searchQuery).toBe('test')
-      customTrigger(input, 'keydown', KEY_BACKSPACE)
-      expect(wrapper.vm.internalValue).toEqual([ 'a', 'b' ])
-      done()
-    })
-
-    it('should do nothing when backspaceRemoves=false', () => {
-      wrapper.setProps({ backspaceRemoves: false })
-      customTrigger(input, 'keydown', KEY_BACKSPACE)
-      expect(wrapper.vm.internalValue).toEqual([ 'a', 'b' ])
-    })
-  })
-
-  describe('delete key', () => {
-    let wrapper, input
-
-    beforeEach(() => {
-      wrapper = mount(Treeselect, {
-        propsData: {
-          options: [ {
-            id: 'a',
-            label: 'a',
-          }, {
-            id: 'b',
-            label: 'b',
-          } ],
-          multiple: true,
-          deleteRemoves: true,
-          value: [ 'a', 'b' ],
-        },
-      })
-      input = queryInput(wrapper)
-
-      expect(wrapper.vm.searchQuery).toBe('')
-      expect(wrapper.vm.internalValue).toEqual([ 'a', 'b' ])
-    })
-
-    it('should remove the last value if search input is empty', () => {
-      customTrigger(input, 'keydown', KEY_DELETE)
-      expect(wrapper.vm.internalValue).toEqual([ 'a' ])
-      customTrigger(input, 'keydown', KEY_DELETE)
-      expect(wrapper.vm.internalValue).toEqual([])
-    })
-
-    it('should do nothing if search input has value', async done => {
-      await typeSearchText(wrapper, 'test')
-      expect(wrapper.vm.searchQuery).toBe('test')
-      customTrigger(input, 'keydown', KEY_DELETE)
-      expect(wrapper.vm.internalValue).toEqual([ 'a', 'b' ])
-      done()
-    })
-
-    it('should do nothing when backspaceRemoves=false', () => {
-      wrapper.setProps({ deleteRemoves: false })
-      customTrigger(input, 'keydown', KEY_DELETE)
-      expect(wrapper.vm.internalValue).toEqual([ 'a', 'b' ])
-    })
-  })
-
-  describe('escape key', () => {
-    let wrapper, input
-
-    beforeEach(() => {
-      wrapper = mount(Treeselect, {
-        propsData: {
-          options: [ {
-            id: 'a',
-            label: 'a',
-          }, {
-            id: 'b',
-            label: 'b',
-          } ],
-          multiple: true,
-          escapeClearsValue: true,
-          value: [ 'a', 'b' ],
-        },
-      })
-      input = queryInput(wrapper)
-    })
-
-    it('should reset search query if input has value', async done => {
-      await typeSearchText(wrapper, 'test')
-      customTrigger(input, 'keydown', KEY_ESCAPE)
-      expect(wrapper.data()).toEqual(jasmine.objectContaining({
-        searchQuery: '',
-        internalValue: [ 'a', 'b' ],
-      }))
-      done()
-    })
-
-    it('should close the menu if input is empty', () => {
-      wrapper.vm.openMenu()
-      expect(wrapper.data()).toEqual(jasmine.objectContaining({
-        searchQuery: '',
-        internalValue: [ 'a', 'b' ],
-      }))
-      customTrigger(input, 'keydown', KEY_ESCAPE)
-      expect(wrapper.data()).toEqual(jasmine.objectContaining({
-        searchQuery: '',
-        internalValue: [ 'a', 'b' ],
-        isOpen: false,
-      }))
-    })
-
-    it('should reset value if menu is closed', () => {
-      expect(wrapper.data()).toEqual(jasmine.objectContaining({
-        searchQuery: '',
-        internalValue: [ 'a', 'b' ],
-        isOpen: false,
-      }))
-      customTrigger(input, 'keydown', KEY_ESCAPE)
-      expect(wrapper.data()).toEqual(jasmine.objectContaining({
-        searchQuery: '',
-        internalValue: [],
-        isOpen: false,
-      }))
-    })
-
-    it('should not reset value when escapeClearsValue=false', () => {
-      wrapper.setProps({ escapeClearsValue: false })
-      customTrigger(input, 'keydown', KEY_ESCAPE)
-      expect(wrapper.data()).toEqual(jasmine.objectContaining({
-        searchQuery: '',
-        internalValue: [ 'a', 'b' ],
-        isOpen: false,
-      }))
-    })
-  })
-
-  it('should ignore any key press combined with modifier key', () => {
-    [ 'ctrlKey', 'shiftKey', 'metaKey', 'altKey' ].forEach(modifierKey => {
-      const wrapper = mount(Treeselect, {
-        propsData: {
-          options: [ {
-            id: 'a',
-            label: 'a',
-          } ],
-          multiple: true,
-          escapeClearsValue: true,
-          value: [ 'a' ],
-        },
-      })
-      const input = queryInput(wrapper)
-
-      customTrigger(input, 'keydown', { ...KEY_ESCAPE, [modifierKey]: true })
-      expect(wrapper.vm.internalValue).toEqual([ 'a' ])
-    })
-  })
-
-  it('any other key press should activate menu', () => {
-    const wrapper = mount(Treeselect, {
-      propsData: {
-        options: [],
-      },
-    })
-    const input = queryInput(wrapper)
-
-    expect(wrapper.vm.isOpen).toBe(false)
-    customTrigger(input, 'keydown', KEY_A)
-    expect(wrapper.vm.isOpen).toBe(true)
-  })
-})
-
 describe('Disable Item Selection', () => {
   describe('Single-select', () => {
     it('basic', () => {
@@ -2020,6 +1657,369 @@ describe('Disable Item Selection', () => {
         expect(vm.internalValue).toEqual([ 'a', 'aab' ])
       })
     })
+  })
+})
+
+describe('SearchInput', () => {
+  it('should disable auto complete', () => {
+    const wrapper = mount(Treeselect, {
+      propsData: {
+        options: [],
+      },
+    })
+    const input = wrapper.first('.vue-treeselect__input')
+    expect(input.element.getAttribute('autocomplete')).toBe('off')
+  })
+
+  it('should be unable to focus when disabled=true', () => {
+    const wrapper = mount(Treeselect, {
+      propsData: {
+        options: [],
+        autofocus: false,
+        searchable: true,
+        disabled: true,
+      },
+    })
+
+    expect(wrapper.vm.isFocused).toBe(false)
+    wrapper.vm.focusInput()
+    expect(wrapper.vm.isFocused).toBe(false)
+  })
+})
+
+describe('Control', () => {
+  it('should toggle the menu when arrow is clicked', () => {
+    const wrapper = mount(Treeselect, {
+      attachToDocument: true,
+      propsData: {
+        options: [],
+      },
+    })
+    const arrow = wrapper.first('.vue-treeselect__arrow-wrapper')
+
+    customTrigger(arrow, 'mousedown', BUTTON_LEFT)
+    expect(wrapper.vm.isOpen).toBe(true)
+    customTrigger(arrow, 'mousedown', BUTTON_LEFT)
+    expect(wrapper.vm.isOpen).toBe(false)
+  })
+})
+
+describe('Menu', () => {
+  it('should blur the input & close the menu after clicking anywhere outside the component', () => {
+    const wrapper = mount(Treeselect, {
+      attachToDocument: true,
+      propsData: {
+        options: [],
+      },
+    })
+
+    wrapper.vm.openMenu()
+    const event = document.createEvent('event')
+    event.initEvent('mousedown', true, true)
+    document.body.dispatchEvent(event)
+    expect(wrapper.data()).toEqual(jasmine.objectContaining({
+      isFocused: false,
+      isOpen: false,
+    }))
+  })
+
+  it('should open the menu after clicking the control when focused', () => {
+    const wrapper = mount(Treeselect, {
+      attachToDocument: true,
+      propsData: {
+        options: [],
+      },
+      data: {
+        isFocused: true,
+      },
+    })
+    const valueWrapper = wrapper.first('.vue-treeselect__value-wrapper')
+
+    customTrigger(valueWrapper, 'mousedown', BUTTON_LEFT)
+    expect(wrapper.vm.isOpen).toBe(true)
+  })
+
+  it('should close the menu after clicking inside the value wrapper when isOpen=true && searchable=false', () => {
+    const wrapper = mount(Treeselect, {
+      attachToDocument: true,
+      propsData: {
+        options: [ {
+          id: 'a',
+          label: 'a',
+        } ],
+        multiple: false,
+        searchable: false,
+      },
+      data: {
+        isOpen: true,
+        isFocused: true,
+      },
+    })
+
+    wrapper.vm.openMenu()
+    const value = wrapper.first('.vue-treeselect__value-wrapper')
+    customTrigger(value, 'mousedown', BUTTON_LEFT)
+    expect(wrapper.vm.isOpen).toBe(false)
+  })
+
+  it('should not close the menu after clicking a value remove button when multiple=true && searchable=false', () => {
+    const wrapper = mount(Treeselect, {
+      attachToDocument: true,
+      propsData: {
+        multiple: true,
+        options: [ {
+          id: 'a',
+          label: 'a',
+        }, {
+          id: 'b',
+          label: 'b',
+        } ],
+        value: [ 'a', 'b' ],
+      },
+      data: {
+        isOpen: true,
+      },
+    })
+
+    const [ firstRemove, secondRemove ] = wrapper.find('.vue-treeselect__value-remove')
+
+    customTrigger(firstRemove, 'mousedown', BUTTON_LEFT)
+    expect(wrapper.data()).toEqual(jasmine.objectContaining({
+      isOpen: true,
+      internalValue: [ 'b' ],
+    }))
+
+    customTrigger(secondRemove, 'mousedown', BUTTON_LEFT)
+    expect(wrapper.data()).toEqual(jasmine.objectContaining({
+      isOpen: true,
+      internalValue: [],
+    }))
+  })
+
+  it('click on option arrow should toggle expanded', () => {
+    const wrapper = mount(Treeselect, {
+      attachToDocument: true,
+      propsData: {
+        options: [ {
+          id: 'a',
+          label: 'a',
+          children: [],
+        } ],
+      },
+      data: {
+        isOpen: true,
+      },
+    })
+    const { a } = wrapper.vm.nodeMap
+
+    expect(a.isExpanded).toBe(false)
+    const option = wrapper.first(TreeselectOption)
+    const optionArrow = option.first('.vue-treeselect__option-arrow-wrapper')
+    customTrigger(optionArrow, 'mousedown', BUTTON_LEFT)
+    expect(a.isExpanded).toBe(true)
+    customTrigger(optionArrow, 'mousedown', BUTTON_LEFT)
+    expect(a.isExpanded).toBe(false)
+  })
+})
+
+describe('Keyboard Support', () => {
+  function queryInput(wrapper) {
+    return wrapper.first('input[type="text"]')
+  }
+
+  describe('backspace key', () => {
+    let wrapper, input
+
+    beforeEach(() => {
+      wrapper = mount(Treeselect, {
+        propsData: {
+          options: [ {
+            id: 'a',
+            label: 'a',
+          }, {
+            id: 'b',
+            label: 'b',
+          } ],
+          multiple: true,
+          backspaceRemoves: true,
+          value: [ 'a', 'b' ],
+        },
+      })
+      input = queryInput(wrapper)
+
+      expect(wrapper.vm.searchQuery).toBe('')
+      expect(wrapper.vm.internalValue).toEqual([ 'a', 'b' ])
+    })
+
+    it('should remove the last value if search input is empty', () => {
+      customTrigger(input, 'keydown', KEY_BACKSPACE)
+      expect(wrapper.vm.internalValue).toEqual([ 'a' ])
+      customTrigger(input, 'keydown', KEY_BACKSPACE)
+      expect(wrapper.vm.internalValue).toEqual([])
+    })
+
+    it('should do nothing if search input has value', async done => {
+      await typeSearchText(wrapper, 'test')
+      expect(wrapper.vm.searchQuery).toBe('test')
+      customTrigger(input, 'keydown', KEY_BACKSPACE)
+      expect(wrapper.vm.internalValue).toEqual([ 'a', 'b' ])
+      done()
+    })
+
+    it('should do nothing when backspaceRemoves=false', () => {
+      wrapper.setProps({ backspaceRemoves: false })
+      customTrigger(input, 'keydown', KEY_BACKSPACE)
+      expect(wrapper.vm.internalValue).toEqual([ 'a', 'b' ])
+    })
+  })
+
+  describe('delete key', () => {
+    let wrapper, input
+
+    beforeEach(() => {
+      wrapper = mount(Treeselect, {
+        propsData: {
+          options: [ {
+            id: 'a',
+            label: 'a',
+          }, {
+            id: 'b',
+            label: 'b',
+          } ],
+          multiple: true,
+          deleteRemoves: true,
+          value: [ 'a', 'b' ],
+        },
+      })
+      input = queryInput(wrapper)
+
+      expect(wrapper.vm.searchQuery).toBe('')
+      expect(wrapper.vm.internalValue).toEqual([ 'a', 'b' ])
+    })
+
+    it('should remove the last value if search input is empty', () => {
+      customTrigger(input, 'keydown', KEY_DELETE)
+      expect(wrapper.vm.internalValue).toEqual([ 'a' ])
+      customTrigger(input, 'keydown', KEY_DELETE)
+      expect(wrapper.vm.internalValue).toEqual([])
+    })
+
+    it('should do nothing if search input has value', async done => {
+      await typeSearchText(wrapper, 'test')
+      expect(wrapper.vm.searchQuery).toBe('test')
+      customTrigger(input, 'keydown', KEY_DELETE)
+      expect(wrapper.vm.internalValue).toEqual([ 'a', 'b' ])
+      done()
+    })
+
+    it('should do nothing when backspaceRemoves=false', () => {
+      wrapper.setProps({ deleteRemoves: false })
+      customTrigger(input, 'keydown', KEY_DELETE)
+      expect(wrapper.vm.internalValue).toEqual([ 'a', 'b' ])
+    })
+  })
+
+  describe('escape key', () => {
+    let wrapper, input
+
+    beforeEach(() => {
+      wrapper = mount(Treeselect, {
+        propsData: {
+          options: [ {
+            id: 'a',
+            label: 'a',
+          }, {
+            id: 'b',
+            label: 'b',
+          } ],
+          multiple: true,
+          escapeClearsValue: true,
+          value: [ 'a', 'b' ],
+        },
+      })
+      input = queryInput(wrapper)
+    })
+
+    it('should reset search query if input has value', async done => {
+      await typeSearchText(wrapper, 'test')
+      customTrigger(input, 'keydown', KEY_ESCAPE)
+      expect(wrapper.data()).toEqual(jasmine.objectContaining({
+        searchQuery: '',
+        internalValue: [ 'a', 'b' ],
+      }))
+      done()
+    })
+
+    it('should close the menu if input is empty', () => {
+      wrapper.vm.openMenu()
+      expect(wrapper.data()).toEqual(jasmine.objectContaining({
+        searchQuery: '',
+        internalValue: [ 'a', 'b' ],
+      }))
+      customTrigger(input, 'keydown', KEY_ESCAPE)
+      expect(wrapper.data()).toEqual(jasmine.objectContaining({
+        searchQuery: '',
+        internalValue: [ 'a', 'b' ],
+        isOpen: false,
+      }))
+    })
+
+    it('should reset value if menu is closed', () => {
+      expect(wrapper.data()).toEqual(jasmine.objectContaining({
+        searchQuery: '',
+        internalValue: [ 'a', 'b' ],
+        isOpen: false,
+      }))
+      customTrigger(input, 'keydown', KEY_ESCAPE)
+      expect(wrapper.data()).toEqual(jasmine.objectContaining({
+        searchQuery: '',
+        internalValue: [],
+        isOpen: false,
+      }))
+    })
+
+    it('should not reset value when escapeClearsValue=false', () => {
+      wrapper.setProps({ escapeClearsValue: false })
+      customTrigger(input, 'keydown', KEY_ESCAPE)
+      expect(wrapper.data()).toEqual(jasmine.objectContaining({
+        searchQuery: '',
+        internalValue: [ 'a', 'b' ],
+        isOpen: false,
+      }))
+    })
+  })
+
+  it('should ignore any key press combined with modifier key', () => {
+    [ 'ctrlKey', 'shiftKey', 'metaKey', 'altKey' ].forEach(modifierKey => {
+      const wrapper = mount(Treeselect, {
+        propsData: {
+          options: [ {
+            id: 'a',
+            label: 'a',
+          } ],
+          multiple: true,
+          escapeClearsValue: true,
+          value: [ 'a' ],
+        },
+      })
+      const input = queryInput(wrapper)
+
+      customTrigger(input, 'keydown', { ...KEY_ESCAPE, [modifierKey]: true })
+      expect(wrapper.vm.internalValue).toEqual([ 'a' ])
+    })
+  })
+
+  it('any other key press should activate menu', () => {
+    const wrapper = mount(Treeselect, {
+      propsData: {
+        options: [],
+      },
+    })
+    const input = queryInput(wrapper)
+
+    expect(wrapper.vm.isOpen).toBe(false)
+    customTrigger(input, 'keydown', KEY_A)
+    expect(wrapper.vm.isOpen).toBe(true)
   })
 })
 
