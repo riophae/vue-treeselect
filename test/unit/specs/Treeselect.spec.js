@@ -2139,7 +2139,22 @@ describe('Props', () => {
       expect(wrapper.contains('.vue-treeselect__arrow-wrapper')).toBe(true)
     })
 
-    it('set `alwaysOpen` from true to false should close the menu and show the arrow', () => {
+    it('set `alwaysOpen` from `false` to `true` should open the menu and hide the arrow', () => {
+      const wrapper = mount(Treeselect, {
+        propsData: {
+          options: [],
+          alwaysOpen: false,
+        },
+      })
+      const { vm } = wrapper
+
+      expect(vm.isOpen).toBe(false)
+      wrapper.setProps({ alwaysOpen: true })
+      expect(vm.isOpen).toBe(true)
+      expect(wrapper.contains('.vue-treeselect__arrow-wrapper')).toBe(false)
+    })
+
+    it('set `alwaysOpen` from `true` to `false` should close the menu and show the arrow', () => {
       const wrapper = mount(Treeselect, {
         propsData: {
           options: [],
