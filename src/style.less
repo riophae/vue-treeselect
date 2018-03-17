@@ -22,14 +22,14 @@
 @treeselect-control-height: 36px;
 @treeselect-control-inner-height: @treeselect-control-height - @treeselect-control-border-width * 2;
 @treeselect-control-border-width: 1px;
-@treeselect-control-border-color: #DDD;
-@treeselect-control-border-color-hover: #CFCFCF;
+@treeselect-control-border-color: #ddd;
+@treeselect-control-border-color-hover: #cfcfcf;
 @treeselect-control-border-color-active: @treeselect-control-border-color-hover;
 @treeselect-control-border-color-focus: @palette-Light-Blue-600;
 @treeselect-control-border-radius: @treeselect-border-radius-lg;
-@treeselect-control-bg: #FFF;
+@treeselect-control-bg: #fff;
 @treeselect-control-box-shadow-focus: 0 0 0 3px fade(@treeselect-control-border-color-focus, 10%);
-@treeselect-control-bg-disabled: #F9F9F9;
+@treeselect-control-bg-disabled: #f9f9f9;
 
 @treeselect-placeholder-font-color: @palette-Grey-400;
 @treeselect-single-value-font-color: #333;
@@ -46,25 +46,25 @@
 @treeselect-multi-value-font-color-disabled: @treeselect-multi-value-font-color;
 @treeselect-multi-value-item-bg-disabled: greyscale(@treeselect-multi-value-item-bg);
 @treeselect-multi-value-item-font-color-control-disabled: #555;
-@treeselect-multi-value-item-bg-control-disabled: #FFF;
-@treeselect-multi-value-item-border-color-control-disabled: #E5E5E5;
+@treeselect-multi-value-item-bg-control-disabled: #fff;
+@treeselect-multi-value-item-border-color-control-disabled: #e5e5e5;
 @treeselect-multi-value-remove-color: @treeselect-multi-value-font-color;
 @treeselect-multi-value-remove-color-hover: @palette-Red-600;
-@treeselect-multi-value-remove-border-color: #FFF;
+@treeselect-multi-value-remove-border-color: #fff;
 @treeselect-limit-tip-font-color: @palette-Grey-500;
 @treeselect-limit-tip-font-size: @treeselect-multi-value-font-size;
 @treeselect-limit-tip-font-weight: 600;
 @treeselect-single-input-font-size: inherit;
 @treeselect-multi-input-font-size: @treeselect-multi-value-font-size;
 
-@treeselect-menu-bg: #FFF;
+@treeselect-menu-bg: #fff;
 @treeselect-menu-padding-y: 3px;
 @treeselect-menu-line-height: 180%;
 @treeselect-menu-box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06);
-@treeselect-control-menu-divider-color: #F2F2F2;
+@treeselect-control-menu-divider-color: #f2f2f2;
 
 @treeselect-arrow-size: 5px;
-@treeselect-arrow-color: #CCC;
+@treeselect-arrow-color: #ccc;
 @treeselect-arrow-color-hover: @palette-Grey-700;
 @treeselect-arrow-transition-timing-function: ease-out-expo;
 
@@ -79,21 +79,21 @@
 @treeselect-checkbox-color: @palette-Grey-300;
 @treeselect-checkbox-color-highlight: @palette-Light-Blue-600;
 @treeselect-checkbox-border-color: @treeselect-checkbox-color;
-@treeselect-checkbox-bg: #FFF;
+@treeselect-checkbox-bg: #fff;
 @treeselect-checkbox-border-color-hover: @treeselect-checkbox-color-highlight;
-@treeselect-checkbox-bg-hover: #FFF;
+@treeselect-checkbox-bg-hover: #fff;
 @treeselect-checkbox-indeterminate-border-color: @treeselect-checkbox-color-highlight;
 @treeselect-checkbox-indeterminate-bg: @treeselect-checkbox-color-highlight;
-@treeselect-checkbox-minus-mark-color: #FFF;
+@treeselect-checkbox-minus-mark-color: #fff;
 @treeselect-checkbox-indeterminate-border-color-hover: @treeselect-checkbox-color-highlight;
 @treeselect-checkbox-indeterminate-bg-hover: @treeselect-checkbox-color-highlight;
-@treeselect-checkbox-minus-mark-color-hover: #FFF;
+@treeselect-checkbox-minus-mark-color-hover: #fff;
 @treeselect-checkbox-checked-border-color: @treeselect-checkbox-color-highlight;
 @treeselect-checkbox-checked-bg: @treeselect-checkbox-color-highlight;
-@treeselect-checkbox-check-mark-color: #FFF;
+@treeselect-checkbox-check-mark-color: #fff;
 @treeselect-checkbox-checked-border-color-hover: @treeselect-checkbox-color-highlight;
 @treeselect-checkbox-checked-bg-hover: @treeselect-checkbox-color-highlight;
-@treeselect-checkbox-check-mark-color-hover: #FFF;
+@treeselect-checkbox-check-mark-color-hover: #fff;
 @treeselect-checkbox-disabled-border-color: @treeselect-checkbox-border-color;
 @treeselect-checkbox-disabled-bg-color: darken(@treeselect-checkbox-bg, 3%);
 @treeselect-checkbox-disabled-check-mark-color: @treeselect-checkbox-disabled-border-color;
@@ -407,7 +407,7 @@
   color: @treeselect-multi-value-font-color;
   font-size: @treeselect-multi-value-font-size;
   white-space: nowrap; // force option label and "×" to be displayed in the same line
-  vertical-align: top;
+  vertical-align: top; // stylelint-disable-line plugin/declaration-block-no-ignored-properties
 
   &.vue-treeselect__multi-value-item-disabled {
     color: @treeselect-multi-value-font-color-disabled;
@@ -908,7 +908,7 @@
     top: 2.5px;
     width: 2px;
     height: 1px;
-    border: 0 solid #FFF;
+    border: 0 solid #fff;
     border-top-width: 5px;
     border-bottom-width: 1px;
   }
@@ -930,7 +930,7 @@
     display: block;
     position: absolute;
     content: "";
-    background: #FFF;
+    background: #fff;
     transform: rotate(45deg);
   }
 
