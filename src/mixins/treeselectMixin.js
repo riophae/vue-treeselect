@@ -972,7 +972,7 @@ export default {
         this.verifyNodeShape(node)
 
         const isRootNode = parentNode === NO_PARENT_NODE
-        const { id, label, children } = node
+        const { id, label, children, isDefaultExpanded } = node
         const isDisabled = !!node.isDisabled || (!this.flat && !isRootNode && parentNode.isDisabled)
         const isBranch = (
           Array.isArray(children) ||
@@ -1010,7 +1010,9 @@ export default {
 
           normalized.isLoaded = isLoaded
           normalized.isPending = false
-          normalized.isExpanded = level < this.defaultExpandLevel
+          normalized.isExpanded = typeof isDefaultExpanded === 'boolean'
+            ? isDefaultExpanded
+            : level < this.defaultExpandLevel
           normalized.hasMatchedChild = false
           normalized.hasDisabledDescendants = false
           normalized.expandsOnSearch = false

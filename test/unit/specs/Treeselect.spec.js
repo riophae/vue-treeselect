@@ -328,6 +328,28 @@ describe('Basic', () => {
       }))
     })
 
+    it('isDefaultExpanded', () => {
+      const wrapper = mount(Treeselect, {
+        propsData: {
+          options: [ {
+            id: 'a',
+            label: 'a',
+            isDefaultExpanded: true,
+            children: [],
+          }, {
+            id: 'b',
+            label: 'b',
+            isDefaultExpanded: false,
+            children: [],
+          } ],
+        },
+      })
+      const { a, b } = wrapper.vm.nodeMap
+
+      expect(a).toEqual(jasmine.objectContaining({ isExpanded: true }))
+      expect(b).toEqual(jasmine.objectContaining({ isExpanded: false }))
+    })
+
     it('isRootNode', () => {
       const wrapper = mount(Treeselect, {
         propsData: {
@@ -2445,6 +2467,39 @@ describe('Props', () => {
 
       expect(a.isExpanded).toBe(true)
       expect(aa.isExpanded).toBe(true)
+    })
+
+    it('with `node.isDefaultExpanded`', () => {
+      const wrapper = mount(Treeselect, {
+        propsData: {
+          options: [ {
+            id: 'a',
+            label: 'a',
+            children: [ {
+              id: 'aa',
+              label: 'aa',
+              children: [],
+            } ],
+          }, {
+            id: 'b',
+            label: 'b',
+            isDefaultExpanded: false,
+            children: [ {
+              id: 'bb',
+              label: 'bb',
+              isDefaultExpanded: true,
+              children: [],
+            } ],
+          } ],
+          defaultExpandLevel: 1,
+        },
+      })
+      const { a, aa, b, bb } = wrapper.vm.nodeMap
+
+      expect(a.isExpanded).toBe(true)
+      expect(aa.isExpanded).toBe(false)
+      expect(b.isExpanded).toBe(false)
+      expect(bb.isExpanded).toBe(true)
     })
 
     it('should request children options loading when expanded', () => {
