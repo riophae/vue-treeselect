@@ -16,3 +16,5 @@ export const LEAF_DESCENDANTS = 'LEAF_DESCENDANTS'
 export const ORDER_SELECTED = 'ORDER_SELECTED'
 export const LEVEL = 'LEVEL'
 export const INDEX = 'INDEX'
+
+export const INPUT_DEBOUNCE_DELAY = 200

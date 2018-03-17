@@ -1,16 +1,19 @@
 import fuzzysearch from 'fuzzysearch'
 import debounce from 'lodash/debounce'
+
 import {
   warning,
   quickCompare, onlyOnLeftClick,
   hasOwn, last, findIndex, removeFromArray,
 } from '../utils'
+
 import {
   UNCHECKED, INDETERMINATE, CHECKED,
   UNMATCHED, DESCENDANT_MATCHED, MATCHED,
   NO_PARENT_NODE,
   ALL_CHILDREN, ALL_DESCENDANTS, LEAF_CHILDREN, LEAF_DESCENDANTS,
   ORDER_SELECTED, LEVEL, INDEX,
+  INPUT_DEBOUNCE_DELAY,
 } from '../constants'
 
 function sortValueByIndex(a, b) {
@@ -184,6 +187,16 @@ export default {
      * @type {boolean}
      */
     disabled: {
+      type: Boolean,
+      default: false,
+    },
+
+    /**
+     * Disable the fuzzy matching functionality?
+     * @default false
+     * @type {boolean}
+     */
+    disableFuzzyMatching: {
       type: Boolean,
       default: false,
     },
@@ -625,7 +638,7 @@ export default {
     searchQuery: debounce(function onSearchQueryChange() {
       this.handleSearch()
       this.$emit('search-change', this.searchQuery, this.id)
-    }, 200),
+    }, INPUT_DEBOUNCE_DELAY),
 
     sortValueBy() {
       // re-sort value when value of `sortValueBy` prop has changed
@@ -840,11 +853,12 @@ export default {
             }
           }
         })
+        const lowerCasedSearchQuery = this.searchQuery.toLowerCase()
         this.traverseAllNodes(node => {
-          const isMatched = node.isMatched = fuzzysearch(
-            this.searchQuery.toLowerCase(),
-            node.label.toLowerCase(),
-          )
+          const isMatched = node.isMatched = this.disableFuzzyMatching
+            ? node.lowerCasedLabel.indexOf(lowerCasedSearchQuery) !== -1
+            : fuzzysearch(lowerCasedSearchQuery, node.lowerCasedLabel)
+
           if (isMatched) {
             this.noSearchResults = false
             node.ancestors.forEach(ancestor => this.searchingCount[ancestor.id].ALL_DESCENDANTS++)
@@ -973,6 +987,7 @@ export default {
 
         const isRootNode = parentNode === NO_PARENT_NODE
         const { id, label, children, isDefaultExpanded } = node
+        const lowerCasedLabel = label.toLowerCase() // used for option filtering
         const isDisabled = !!node.isDisabled || (!this.flat && !isRootNode && parentNode.isDisabled)
         const isBranch = (
           Array.isArray(children) ||
@@ -991,6 +1006,7 @@ export default {
           ancestors,
           index: _index,
           parentNode,
+          lowerCasedLabel,
           isDisabled,
           isMatched,
           isLeaf,

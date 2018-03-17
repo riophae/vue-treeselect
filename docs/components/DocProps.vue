@@ -94,6 +94,11 @@
         defaultValue: v('false'),
         description: 'Whether to disable the control or not.',
       }, {
+        name: 'disableFuzzyMatching',
+        type: 'Boolean',
+        defaultValue: v('false'),
+        description: `The fuzzy matching functionality is enabled by default. Set to ${v('true')} to disable it.`,
+      }, {
         name: 'defaultExpandLevel',
         type: 'Number',
         defaultValue: v('0'),

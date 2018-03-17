@@ -1,9 +1,10 @@
 import Vue from 'vue'
 import { mount } from 'avoriaz'
+import sleep from 'yaku/lib/sleep'
 import Treeselect from '@riophae/vue-treeselect/components/Treeselect'
 import TreeselectOption from '@riophae/vue-treeselect/components/Option'
 import SearchInput from '@riophae/vue-treeselect/components/SearchInput'
-import { UNCHECKED, INDETERMINATE, CHECKED } from '@riophae/vue-treeselect/constants'
+import { UNCHECKED, INDETERMINATE, CHECKED, INPUT_DEBOUNCE_DELAY } from '@riophae/vue-treeselect/constants'
 
 // disable the tip that suggests using devtools extension
 Vue.config.devtools = false
@@ -13,10 +14,6 @@ const KEY_BACKSPACE = { which: 8, keyCode: 8 }
 const KEY_DELETE = { which: 46, keyCode: 46 }
 const KEY_ESCAPE = { which: 27, keyCode: 27 }
 const KEY_A = { which: 65, keyCode: 65 }
-
-function sleep(duration) {
-  return new Promise(resolve => setTimeout(resolve, duration))
-}
 
 // currently avoriaz has a bad support for keyboard event testing
 // so here we implement it ourself
@@ -35,7 +32,7 @@ async function typeSearchText(wrapper, text) {
       value: text,
     },
   })
-  await sleep(300)
+  await sleep(INPUT_DEBOUNCE_DELAY + 10)
   expect(wrapper.vm.searchQuery).toBe(text)
 }
 
@@ -85,6 +82,7 @@ describe('Basic', () => {
       expect(a).toEqual({
         id: jasmine.any(String),
         label: jasmine.any(String),
+        lowerCasedLabel: jasmine.any(String),
         isLeaf: jasmine.any(Boolean),
         isBranch: jasmine.any(Boolean),
         isRootNode: jasmine.any(Boolean),
@@ -114,6 +112,7 @@ describe('Basic', () => {
       expect(aa).toEqual({
         id: jasmine.any(String),
         label: jasmine.any(String),
+        lowerCasedLabel: jasmine.any(String),
         isLeaf: jasmine.any(Boolean),
         isBranch: jasmine.any(Boolean),
         isRootNode: jasmine.any(Boolean),
@@ -140,6 +139,21 @@ describe('Basic', () => {
 
       expect(vm.nodeMap.a.id).toBe('a')
       expect(vm.nodeMap.a.label).toBe('a')
+    })
+
+    it('lowerCasedLabel', () => {
+      const wrapper = mount(Treeselect, {
+        propsData: {
+          options: [ {
+            id: 'a',
+            label: 'A',
+          } ],
+        },
+      })
+      const { vm } = wrapper
+
+      expect(vm.nodeMap.a.label).toBe('A')
+      expect(vm.nodeMap.a.lowerCasedLabel).toBe('a')
     })
 
     describe('isDisabled', () => {
@@ -2782,6 +2796,36 @@ describe('Props', () => {
           isOpen: false,
         }))
       })
+    })
+  })
+
+  describe('disableFuzzyMatching', () => {
+    let wrapper, vm
+
+    beforeEach(() => {
+      wrapper = mount(Treeselect, {
+        propsData: {
+          options: [ {
+            id: 'jamesblunt',
+            label: 'James Blunt',
+          } ],
+        },
+      })
+      vm = wrapper.vm
+    })
+
+    it('when disableFuzzyMatching=false', async done => {
+      wrapper.setProps({ disableFuzzyMatching: false })
+      await typeSearchText(wrapper, 'jb')
+      expect(vm.nodeMap.jamesblunt.isMatched).toBe(true)
+      done()
+    })
+
+    it('when disableFuzzyMatching=true', async done => {
+      wrapper.setProps({ disableFuzzyMatching: true })
+      await typeSearchText(wrapper, 'jb')
+      expect(vm.nodeMap.jamesblunt.isMatched).toBe(false)
+      done()
     })
   })
 
