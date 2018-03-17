@@ -18,7 +18,7 @@
 </template>
 
 <script>
-  const v = text => `<code>${text}</code>`
+  const v = code => `<code>${code}</code>`
   const link = (target, text = 'here') => `<a href="${target}">${text}</a>`
 
   export default {

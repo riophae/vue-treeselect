@@ -22,7 +22,7 @@
 <script>
   /* eslint-disable no-template-curly-in-string */
   const NO_DEFAULT_VALUE = '–'
-  const v = defaultValue => `<code>${defaultValue}</code>`
+  const v = code => `<code>${code}</code>`
   const s = text => `<strong>${text}</strong>`
   const link = (target, text = 'here') => `<a href="${target}">${text}</a>`
 
