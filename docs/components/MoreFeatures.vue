@@ -51,7 +51,7 @@
       closeOnSelect: false,
       alwaysOpen: false,
       value: [ 'a' ],
-      options: generateOptions(2),
+      options: generateOptions(2, 3),
     }),
 
     watch: {
