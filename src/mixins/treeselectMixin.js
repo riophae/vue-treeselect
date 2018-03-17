@@ -1159,7 +1159,7 @@ export default {
     },
 
     _selectNode(node) {
-      if (this.flat) {
+      if (this.flat || this.disableBranchNodes) {
         this.addValue(node)
         return
       }
@@ -1185,7 +1185,7 @@ export default {
     },
 
     _deselectNode(node) {
-      if (node.hasDisabledDescendants) {
+      if (node.isBranch && node.hasDisabledDescendants) {
         if (this.isSelected(node)) {
           const disabledChildren = node.children.filter(child => child.isDisabled)
           if (node.children.length !== disabledChildren.length) {

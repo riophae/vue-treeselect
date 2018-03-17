@@ -17,7 +17,7 @@
         </transition>
       </div>
       <div class="vue-treeselect__label-wrapper" @mousedown="handleMouseDownOnOption">
-        <div v-if="instance.multiple && !instance.disableBranchNodes" class="vue-treeselect__checkbox-wrapper">
+        <div v-if="instance.multiple && (!instance.disableBranchNodes || node.isLeaf)" class="vue-treeselect__checkbox-wrapper">
           <span :class="[ 'vue-treeselect__checkbox', {
             'vue-treeselect__checkbox--checked': checkedState === CHECKED,
             'vue-treeselect__checkbox--indeterminate': checkedState === INDETERMINATE,
@@ -31,9 +31,7 @@
           label-class-name="vue-treeselect__label" count-class-name="vue-treeselect__count" />
       </div>
     </div>
-    <div
-      v-if="shouldExpand"
-      class="vue-treeselect__list">
+    <div v-if="shouldExpand" class="vue-treeselect__list">
       <template v-if="node.isLoaded">
         <template v-if="node.children.length">
           <vue-treeselect--option

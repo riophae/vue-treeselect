@@ -658,7 +658,7 @@ describe('Basic', () => {
   })
 })
 
-describe('Single Select', () => {
+describe('Single-select', () => {
   it('basic', () => {
     const wrapper = mount(Treeselect, {
       propsData: {
@@ -2386,125 +2386,150 @@ describe('Props', () => {
   })
 
   describe('disableBranchNodes', () => {
-    it('when multiple=false & disableBranchNodes=false', () => {
-      const wrapper = mount(Treeselect, {
+    let wrapper, vm
+
+    const getLabelWrapperOfBranchNode = () => {
+      vm.openMenu() // ensure the menu is opened otherwise the options won't be displayed
+      wrapper.update()
+      const branchNode = wrapper.find(TreeselectOption)[0]
+      expect(branchNode.vm.node.id).toBe('branch')
+      return branchNode.first('.vue-treeselect__label-wrapper')
+    }
+
+    const getLabelWrapperOfLeafNode = () => {
+      vm.openMenu() // ensure the menu is opened otherwise the options won't be displayed
+      wrapper.update()
+      const leafNode = wrapper.find(TreeselectOption)[1]
+      expect(leafNode.vm.node.id).toBe('leaf')
+      return leafNode.first('.vue-treeselect__label-wrapper')
+    }
+
+    const clickOnLabelOfBranchNode = () => {
+      const labelWrapperOfBranchNode = getLabelWrapperOfBranchNode()
+      customTrigger(labelWrapperOfBranchNode, 'mousedown', BUTTON_LEFT)
+    }
+
+    beforeEach(() => {
+      wrapper = mount(Treeselect, {
         attachToDocument: true,
         propsData: {
-          disableBranchNodes: false,
-          closeOnSelect: true,
-          multiple: false,
+          defaultExpandLevel: Infinity,
+          flat: false,
           options: [ {
-            id: 'a',
-            label: 'a',
+            id: 'branch',
+            label: 'branch',
             children: [ {
-              id: 'aa',
-              label: 'aa',
+              id: 'leaf',
+              label: 'leaf',
             } ],
           } ],
         },
-        data: {
-          isOpen: true,
-        },
       })
-      const { vm } = wrapper
-      const optionA = wrapper.first(TreeselectOption)
-      const labelWrapperOfOptionA = optionA.first('.vue-treeselect__label-wrapper')
-
-      expect(optionA.vm.node.id).toBe('a')
-      expect(vm.nodeMap.a.isExpanded).toBe(false)
-      expect(vm.isSelected(vm.nodeMap.a)).toBe(false)
-
-      customTrigger(labelWrapperOfOptionA, 'mousedown', BUTTON_LEFT)
-      expect(vm.isOpen).toBe(false)
-      expect(vm.nodeMap.a.isExpanded).toBe(false)
-      expect(vm.isSelected(vm.nodeMap.a)).toBe(true)
+      vm = wrapper.vm
     })
 
-    it('when multiple=false & disableBranchNodes=true', () => {
-      const wrapper = mount(Treeselect, {
-        attachToDocument: true,
-        propsData: {
-          disableBranchNodes: true,
-          closeOnSelect: true,
-          multiple: false,
-          options: [ {
-            id: 'a',
-            label: 'a',
-            children: [ {
-              id: 'aa',
-              label: 'aa',
-            } ],
-          } ],
-        },
-        data: {
-          isOpen: true,
-        },
+    describe('when disableBranchNodes=false', () => {
+      beforeEach(() => {
+        wrapper.setProps({ disableBranchNodes: false })
       })
-      const { vm } = wrapper
-      const optionA = wrapper.first(TreeselectOption)
-      const labelWrapperOfOptionA = optionA.first('.vue-treeselect__label-wrapper')
 
-      expect(optionA.vm.node.id).toBe('a')
-      expect(vm.nodeMap.a.isExpanded).toBe(false)
-      expect(vm.isSelected(vm.nodeMap.a)).toBe(false)
+      it('a branch node should have checkbox when multiple=true', () => {
+        wrapper.setProps({ multiple: true })
+        const labelWrapperOfBranchNode = getLabelWrapperOfBranchNode()
 
-      customTrigger(labelWrapperOfOptionA, 'mousedown', BUTTON_LEFT)
-      expect(vm.isOpen).toBe(true)
-      expect(vm.nodeMap.a.isExpanded).toBe(true)
-      expect(vm.isSelected(vm.nodeMap.a)).toBe(false)
+        expect(labelWrapperOfBranchNode.contains('.vue-treeselect__checkbox')).toBe(true)
+      })
 
-      customTrigger(labelWrapperOfOptionA, 'mousedown', BUTTON_LEFT)
-      expect(vm.isOpen).toBe(true)
-      expect(vm.nodeMap.a.isExpanded).toBe(false)
-      expect(vm.isSelected(vm.nodeMap.a)).toBe(false)
+      it('a leaf node should have checkbox too when multiple=true', () => {
+        wrapper.setProps({ multiple: true })
+        const labelWrapperOfLeafNode = getLabelWrapperOfLeafNode()
+
+        expect(labelWrapperOfLeafNode.contains('.vue-treeselect__checkbox')).toBe(true)
+      })
+
+      it('click on label of a branch node should toggle checking state when multiple=true', () => {
+        wrapper.setProps({ multiple: true })
+
+        expect(vm.isSelected(vm.nodeMap.branch)).toBe(false)
+        clickOnLabelOfBranchNode()
+        expect(vm.isSelected(vm.nodeMap.branch)).toBe(true)
+        clickOnLabelOfBranchNode()
+        expect(vm.isSelected(vm.nodeMap.branch)).toBe(false)
+      })
+
+      it('click on label of a branch node should not toggle expanding state when multiple=true', () => {
+        wrapper.setProps({ multiple: true })
+
+        expect(vm.nodeMap.branch.isExpanded).toBe(true)
+        clickOnLabelOfBranchNode()
+        expect(vm.nodeMap.branch.isExpanded).toBe(true)
+      })
+
+      it('click on label of a branch node should close the dropdown when multiple=false & closeOnSelect=true', () => {
+        wrapper.setProps({ multiple: false, closeOnSelect: true })
+        vm.openMenu()
+        wrapper.update()
+
+        expect(vm.isOpen).toBe(true)
+        clickOnLabelOfBranchNode()
+        expect(vm.isOpen).toBe(false)
+      })
     })
 
-    it('when multiple=true & disableBranchNodes=false', () => {
-      const wrapper = mount(Treeselect, {
-        propsData: {
-          disableBranchNodes: false,
-          multiple: true,
-          options: [ {
-            id: 'a',
-            label: 'a',
-            children: [ {
-              id: 'aa',
-              label: 'aa',
-            } ],
-          } ],
-        },
-        data: {
-          isOpen: true,
-        },
+    describe('when disableBranchNodes=true', () => {
+      beforeEach(() => {
+        wrapper.setProps({ disableBranchNodes: true })
       })
-      const optionA = wrapper.first(TreeselectOption)
-      const labelWrapperOfOptionA = optionA.first('.vue-treeselect__label-wrapper')
 
-      expect(labelWrapperOfOptionA.contains('.vue-treeselect__checkbox')).toBe(true)
-    })
+      it('a branch node should not have checkbox when multiple=true', () => {
+        wrapper.setProps({ multiple: true })
+        const labelWrapperOfBranchNode = getLabelWrapperOfBranchNode()
 
-    it('when multiple=true & disableBranchNodes=true', () => {
-      const wrapper = mount(Treeselect, {
-        propsData: {
-          disableBranchNodes: true,
-          multiple: true,
-          options: [ {
-            id: 'a',
-            label: 'a',
-            children: [ {
-              id: 'aa',
-              label: 'aa',
-            } ],
-          } ],
-        },
-        data: {
-          isOpen: true,
-        },
+        expect(labelWrapperOfBranchNode.contains('.vue-treeselect__checkbox')).toBe(false)
       })
-      const optionA = wrapper.first(TreeselectOption)
-      const labelWrapperOfOptionA = optionA.first('.vue-treeselect__label-wrapper')
 
-      expect(labelWrapperOfOptionA.contains('.vue-treeselect__checkbox')).toBe(false)
+      it('a leaf node should have checkbox when multiple=true', () => {
+        wrapper.setProps({ multiple: true })
+        const labelWrapperOfLeafNode = getLabelWrapperOfLeafNode()
+
+        expect(labelWrapperOfLeafNode.contains('.vue-treeselect__checkbox')).toBe(true)
+      })
+
+      it('click on label of a branch node should not toggle checking state when multiple=true', () => {
+        wrapper.setProps({ multiple: true })
+
+        expect(vm.isSelected(vm.nodeMap.branch)).toBe(false)
+        clickOnLabelOfBranchNode()
+        expect(vm.isSelected(vm.nodeMap.branch)).toBe(false)
+      })
+
+      it('click on label of a branch node should toggle expanding state when multiple=true', () => {
+        wrapper.setProps({ multiple: true })
+
+        expect(vm.nodeMap.branch.isExpanded).toBe(true)
+        clickOnLabelOfBranchNode()
+        expect(vm.nodeMap.branch.isExpanded).toBe(false)
+        clickOnLabelOfBranchNode()
+        expect(vm.nodeMap.branch.isExpanded).toBe(true)
+      })
+
+      it('click on label of a branch node should not close the dropdown when multiple=false & closeOnSelect=true', () => {
+        wrapper.setProps({ multiple: false, closeOnSelect: true })
+        vm.openMenu()
+        wrapper.update()
+
+        expect(vm.isOpen).toBe(true)
+        clickOnLabelOfBranchNode()
+        expect(vm.isOpen).toBe(true)
+      })
+
+      it('should not auto-select ancestor nodes like flat-mode', () => {
+        wrapper.setProps({ multiple: true })
+
+        vm.select(vm.nodeMap.leaf)
+        expect(vm.isSelected(vm.nodeMap.leaf)).toBe(true)
+        expect(vm.isSelected(vm.nodeMap.branch)).toBe(false)
+      })
     })
   })
 
