@@ -33,7 +33,7 @@
         <tr>
           <td><strong>isDisabled</strong></td>
           <td><code>Boolean</code></td>
-          <td>Used to disable item selection.</td>
+          <td>Used to disable item selection. See <a href="#disable-item-selection">here</a> for detailed information.</td>
         </tr>
         <tr>
           <td><strong>isDefaultExpanded</strong></td>
