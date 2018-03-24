@@ -79,18 +79,12 @@ export function find(arr, predicate, ctx) {
   return undefined
 }
 
-export function findIndexFallback(arr, predicate, ctx) {
+export function findIndex(arr, predicate, ctx) {
   for (let i = 0, len = arr.length; i < len; i++) {
     if (predicate.call(ctx, arr[i], i, arr)) return i
   }
 
   return -1
-}
-
-export function findIndex(arr, predicate, ctx) {
-  return typeof Array.prototype.findIndex === 'function'
-    ? arr.findIndex(predicate, ctx)
-    : findIndexFallback(arr, predicate, ctx)
 }
 
 export function removeFromArray(arr, elem) {

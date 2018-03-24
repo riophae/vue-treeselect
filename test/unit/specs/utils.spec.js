@@ -130,15 +130,10 @@ describe('Utils', () => {
 
     it('should return the index of element in the array', () => {
       expect(findIndex([ 1, 2, 3 ], n => n % 2 === 0)).toBe(1)
-      expect(findIndex([ 1 ], n => n < 0)).toBe(-1)
     })
 
-    it('should be able to polyfill', () => {
-      const origin = Array.prototype.findIndex
-      Array.prototype.findIndex = null // eslint-disable-line no-extend-native
-      expect(findIndex([ 1, 2, 3 ], n => n % 2 === 0)).toBe(1)
+    it('should return -1 if not matched', () => {
       expect(findIndex([ 1 ], n => n < 0)).toBe(-1)
-      Array.prototype.findIndex = origin // eslint-disable-line no-extend-native
     })
   })
 
