@@ -560,6 +560,36 @@ describe('Basic', () => {
     })
   })
 
+  describe('fallback node', () => {
+    it('shape', () => {
+      const wrapper = mount(Treeselect, {
+        propsData: {
+          options: [],
+        },
+      })
+      const { vm } = wrapper
+
+      expect(vm.nodeMap).toBeEmptyObject()
+      wrapper.setProps({ value: 'test' })
+      expect(vm.nodeMap.test).toEqual({
+        id: jasmine.any(String),
+        label: jasmine.any(String),
+        ancestors: [],
+        parentNode: null,
+        isFallbackNode: true,
+        isLeaf: true,
+        isBranch: false,
+        isDisabled: false,
+        index: [ -1 ],
+        level: 0,
+        raw: {
+          id: jasmine.any(String),
+          label: jasmine.any(String),
+        },
+      })
+    })
+  })
+
   it('should accept undefined/null', () => {
     [ true, false ].forEach(multiple => {
       [ undefined, null ].forEach(value => {
@@ -607,6 +637,31 @@ describe('Basic', () => {
       'Detected duplicate presence of node id "same_id". ' +
         'Their labels are "a" and "b" respectively.'
     )
+  })
+
+  it('fallback nodes should not be considered duplicate', () => {
+    jasmine.clock().install()
+    spyOn(console, 'error')
+
+    const DELAY = 200
+    mount(Treeselect, {
+      propsData: {
+        value: 'a',
+        loadRootOptions(callback) {
+          setTimeout(() => {
+            callback(null, [ {
+              id: 'a',
+              label: 'a',
+            } ])
+          }, DELAY)
+        },
+      },
+    })
+
+    jasmine.clock().tick(DELAY + 1)
+    expect(console.error).not.toHaveBeenCalled()
+
+    jasmine.clock().uninstall()
   })
 
   it('should rebuild state after swithching from single to multiple', () => {
@@ -3163,6 +3218,58 @@ describe('Props', () => {
       jasmine.clock().uninstall()
       done()
     })
+
+    it('should override fallback nodes', async done => {
+      jasmine.clock().install()
+
+      const DELAY = 200
+      const wrapper = mount(Treeselect, {
+        propsData: {
+          options: [ {
+            id: 'a',
+            label: 'a',
+            children: null,
+          } ],
+          value: 'aa',
+          loadChildrenOptions(parentNode, callback) {
+            setTimeout(() => {
+              callback(null, [ {
+                id: 'aa',
+                label: 'aa',
+              }, {
+                id: 'ab',
+                label: 'ab',
+              } ])
+            }, DELAY)
+          },
+        },
+        data: {
+          isOpen: true,
+        },
+      })
+      const { vm } = wrapper
+
+      expect(vm.nodeMap.aa).toEqual(jasmine.objectContaining({
+        id: 'aa',
+        label: 'aa (unknown)',
+        isFallbackNode: true,
+      }))
+
+      expect(vm.nodeMap.a.isLoaded).toBe(false)
+      vm.toggleExpanded(vm.nodeMap.a)
+      await vm.$nextTick()
+      expect(vm.nodeMap.a.isPending).toBe(true)
+
+      jasmine.clock().tick(DELAY + 1)
+      expect(vm.nodeMap.a.isLoaded).toBe(true)
+      expect(vm.nodeMap.aa).toEqual(jasmine.objectContaining({
+        id: 'aa',
+        label: 'aa',
+      }))
+
+      jasmine.clock().uninstall()
+      done()
+    })
   })
 
   describe('loadRootOptions', () => {
@@ -3280,6 +3387,10 @@ describe('Props', () => {
       vm.closeMenu()
       vm.openMenu()
       expect(loadRootOptions.calls.count()).toBe(1)
+    })
+
+    it('should override fallback nodes', () => {
+      // the same with `loadChildrenOptions`
     })
   })
 

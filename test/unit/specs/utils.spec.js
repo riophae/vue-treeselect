@@ -113,6 +113,18 @@ describe('Utils', () => {
     })
   })
 
+  describe('find', () => {
+    const { find } = utils
+
+    it('should return the element if matched', () => {
+      expect(find([ 1, 2, 3 ], n => n % 2 === 0)).toBe(2)
+    })
+
+    it('should return undefined if not matched', () => {
+      expect(find([ 1 ], n => n < 0)).toBe(undefined)
+    })
+  })
+
   describe('findIndex', () => {
     const { findIndex } = utils
 

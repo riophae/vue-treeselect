@@ -4,7 +4,7 @@ import debounce from 'lodash/debounce'
 import {
   warning,
   quickCompare, onlyOnLeftClick,
-  hasOwn, last, findIndex, removeFromArray,
+  hasOwn, last, find, findIndex, removeFromArray,
 } from '../utils'
 
 import {
@@ -707,15 +707,48 @@ export default {
         () => `Invalid node id: ${nodeId}`
       )
 
-      return this.nodeMap[nodeId] || {
-        id: nodeId,
-        label: `${nodeId} (unknown)`,
+      if (nodeId == null) return null
+
+      return nodeId in this.nodeMap
+        ? this.nodeMap[nodeId]
+        : this.createFallbackNode(nodeId)
+    },
+
+    createFallbackNode(id) {
+      // in case there is a default selected node that is not loaded into the tree yet
+      // we create a fallback node to keep the component working
+      // when the real data is loaded, we'll override this fake node
+
+      const matchNode = node => node && node.id === id
+
+      let label
+      // try extracting the label from `value`
+      if (this.multiple) {
+        // TODO: `label` can be other customized key name
+        label = Array.isArray(this.value) && (find(this.value, matchNode) || {}).label
+      } else {
+        label = (find(this.value, matchNode) || {}).label
+      }
+      // can not get the label, create one by the node id
+      label = label || `${id} (unknown)`
+      const fallback = this.nodeMap[id] = {
+        id,
+        label,
         ancestors: [],
         parentNode: NO_PARENT_NODE,
-        isUnknownNode: true,
+        isFallbackNode: true,
         isLeaf: true,
         isBranch: false,
+        isDisabled: false,
+        index: [ -1 ],
+        level: 0,
+        raw: {
+          id,
+          label,
+        },
       }
+
+      return fallback
     },
 
     isSelected(node) {
@@ -1123,7 +1156,7 @@ export default {
 
     checkDuplication(node) {
       warning(
-        () => !hasOwn(this.nodeMap, node.id),
+        () => !(hasOwn(this.nodeMap, node.id) && !this.nodeMap[node.id].isFallbackNode),
         () => `Detected duplicate presence of node id ${JSON.stringify(node.id)}. ` +
           `Their labels are "${this.nodeMap[node.id].label}" and "${node.label}" respectively.`
       )
