@@ -247,7 +247,12 @@
         name: 'value',
         type: 'Array',
         defaultValue: NO_DEFAULT_VALUE,
-        description: 'An array of node ids as the initial field value.',
+        description: `An array of node ids or nodes as the initial field value. The format depends on the ${v('valueFormat')} prop.`,
+      }, {
+        name: 'valueFormat',
+        type: 'String',
+        defaultValue: v('"id"'),
+        description: `Format of ${v('value')} prop. Acceptable values: ${v('"id"')} and ${v('"object"')}.`,
       } ],
     }),
   }
