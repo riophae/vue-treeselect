@@ -514,25 +514,33 @@ export default {
     value: null,
   },
 
-  data: () => ({
-    internalValue: [],
-    isFocused: false, // whether the control has been focused
-    isOpen: false, // whether the menu is open
-    nodeCheckedStateMap: Object.create(null), // used for multi-select mode
-    nodeMap: Object.create(null), // map: nodeId -> node
-    normalizedOptions: null, // normalized options tree
-    noSearchResults: true, // whether there is any matching search results
-    optimizedHeight: 0,
-    prefferedOpenDirection: 'below',
-    rootOptionsLoaded: false,
-    loadingRootOptions: false,
-    loadingRootOptionsError: '',
-    searchingCount: Object.create(null),
-    searching: false,
-    searchQuery: '',
-    selectedNodeMap: Object.create(null),
-    lastScrollPosition: 0,
-  }),
+  data() {
+    return {
+      internalValue: this.multiple
+        ? Array.isArray(this.value)
+          ? this.value.slice()
+          : []
+        : this.value != null
+          ? [ this.value ]
+          : [],
+      isFocused: false, // whether the control has been focused
+      isOpen: false, // whether the menu is open
+      nodeCheckedStateMap: Object.create(null), // used for multi-select mode
+      nodeMap: Object.create(null), // map: nodeId -> node
+      normalizedOptions: null, // normalized options tree
+      noSearchResults: true, // whether there is any matching search result
+      optimizedHeight: 0,
+      prefferedOpenDirection: 'below',
+      rootOptionsLoaded: false,
+      loadingRootOptions: false,
+      loadingRootOptionsError: '',
+      searchingCount: Object.create(null),
+      searching: false,
+      searchQuery: '',
+      selectedNodeMap: Object.create(null),
+      lastScrollPosition: 0,
+    }
+  },
 
   computed: {
     /* eslint-disable valid-jsdoc */
@@ -690,7 +698,7 @@ export default {
     initialize(rootOptions) {
       if (Array.isArray(rootOptions)) this.rootOptionsLoaded = true
       this.initializeRootOptions(rootOptions || [])
-      this.initializeValue()
+      this.sortValue()
       this.buildSelectedNodeMap()
       this.buildNodeCheckedStateMap()
     },
@@ -958,19 +966,6 @@ export default {
       }
     },
 
-    initializeValue() {
-      if (this.multiple) {
-        this.internalValue = Array.isArray(this.value)
-          ? this.value.slice()
-          : []
-        this.sortValue()
-      } else {
-        this.internalValue = this.value != null
-          ? [ this.value ]
-          : []
-      }
-    },
-
     initializeRootOptions(rootOptions) {
       this.normalizedOptions = this.normalize(NO_PARENT_NODE, rootOptions)
     },
@@ -1183,6 +1178,7 @@ export default {
         this._deselectNode(node)
       }
 
+      this.sortValue()
       this.buildSelectedNodeMap()
       this.buildNodeCheckedStateMap()
 
@@ -1281,7 +1277,6 @@ export default {
     addValue(node) {
       this.internalValue.push(node.id)
       this.selectedNodeMap[node.id] = true
-      this.sortValue()
     },
 
     removeValue(node) {
@@ -1300,6 +1295,7 @@ export default {
     },
 
     sortValue() {
+      if (this.single) return
       if (this.sortValueBy === LEVEL) {
         this.internalValue.sort((a, b) => sortValueByLevel(this.nodeMap[a], this.nodeMap[b]))
       } else if (this.sortValueBy === INDEX) {
