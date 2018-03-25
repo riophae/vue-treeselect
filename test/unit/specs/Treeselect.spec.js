@@ -588,9 +588,47 @@ describe('Basic', () => {
         },
       })
     })
+
+    describe('label', () => {
+      it('extract label from value object', () => {
+        const wrapper = mount(Treeselect, {
+          propsData: {
+            value: {
+              id: 'id',
+              label: 'label',
+            },
+            options: [],
+            valueFormat: 'object',
+          },
+        })
+        const { vm } = wrapper
+
+        expect(vm.nodeMap.id).toEqual(jasmine.objectContaining({
+          id: 'id',
+          label: 'label',
+          isFallbackNode: true,
+        }))
+      })
+
+      it('default label', () => {
+        const wrapper = mount(Treeselect, {
+          propsData: {
+            value: 'a',
+            options: [],
+          },
+        })
+        const { vm } = wrapper
+
+        expect(vm.nodeMap.a).toEqual(jasmine.objectContaining({
+          id: 'a',
+          label: 'a (unknown)',
+          isFallbackNode: true,
+        }))
+      })
+    })
   })
 
-  it('should accept undefined/null', () => {
+  it('should accept undefined/null as value', () => {
     [ true, false ].forEach(multiple => {
       [ undefined, null ].forEach(value => {
         const wrapper = mount(Treeselect, {
@@ -3904,6 +3942,169 @@ describe('Props', () => {
 
       const $input = wrapper.first('.vue-treeselect__input')
       expect($input.getAttribute('tabindex')).toBe('1')
+    })
+  })
+
+  describe('valueFormat', () => {
+    describe('when valueFormat=id', () => {
+      it('single-select', async done => {
+        const vm = new Vue({
+          components: { Treeselect },
+          data: {
+            value: 'a',
+            options: [ {
+              id: 'a',
+              label: 'a',
+            }, {
+              id: 'b',
+              label: 'b',
+            } ],
+          },
+          template: `
+            <div>
+              <treeselect
+                v-model="value"
+                :options="options"
+                value-format="id"
+              />
+            </div>
+          `,
+        }).$mount()
+        const comp = vm.$children[0]
+
+        expect(comp.internalValue).toEqual([ 'a' ])
+
+        comp.select(comp.nodeMap.b)
+        await comp.$nextTick()
+        expect(comp.internalValue).toEqual([ 'b' ])
+        expect(vm.value).toEqual('b')
+
+        done()
+      })
+
+      it('multi-select', async done => {
+        const vm = new Vue({
+          components: { Treeselect },
+          data: {
+            value: [ 'a' ],
+            options: [ {
+              id: 'a',
+              label: 'a',
+            }, {
+              id: 'b',
+              label: 'b',
+            } ],
+          },
+          template: `
+            <div>
+              <treeselect
+                v-model="value"
+                :options="options"
+                :multiple="true"
+                value-format="id"
+              />
+            </div>
+          `,
+        }).$mount()
+        const comp = vm.$children[0]
+
+        expect(comp.internalValue).toEqual([ 'a' ])
+
+        comp.select(comp.nodeMap.b)
+        await comp.$nextTick()
+        expect(comp.internalValue).toEqual([ 'a', 'b' ])
+        expect(vm.value).toEqual([ 'a', 'b' ])
+
+        done()
+      })
+    })
+
+    describe('when valueFormat=object', () => {
+      it('single-select', async done => {
+        const vm = new Vue({
+          components: { Treeselect },
+          data: {
+            value: {
+              id: 'a',
+              label: 'a',
+            },
+            options: [ {
+              id: 'a',
+              label: 'a',
+            }, {
+              id: 'b',
+              label: 'b',
+            } ],
+          },
+          template: `
+            <div>
+              <treeselect
+                v-model="value"
+                :options="options"
+                value-format="object"
+              />
+            </div>
+          `,
+        }).$mount()
+        const comp = vm.$children[0]
+
+        expect(comp.internalValue).toEqual([ 'a' ])
+
+        comp.select(comp.nodeMap.b)
+        await comp.$nextTick()
+        expect(comp.internalValue).toEqual([ 'b' ])
+        expect(vm.value).toEqual({
+          id: 'b',
+          label: 'b',
+        })
+
+        done()
+      })
+
+      it('multi-select', async done => {
+        const vm = new Vue({
+          components: { Treeselect },
+          data: {
+            value: [ {
+              id: 'a',
+              label: 'a',
+            } ],
+            options: [ {
+              id: 'a',
+              label: 'a',
+            }, {
+              id: 'b',
+              label: 'b',
+            } ],
+          },
+          template: `
+            <div>
+              <treeselect
+                v-model="value"
+                :options="options"
+                :multiple="true"
+                value-format="object"
+              />
+            </div>
+          `,
+        }).$mount()
+        const comp = vm.$children[0]
+
+        expect(comp.internalValue).toEqual([ 'a' ])
+
+        comp.select(comp.nodeMap.b)
+        await comp.$nextTick()
+        expect(comp.internalValue).toEqual([ 'a', 'b' ])
+        expect(vm.value).toEqual([ {
+          id: 'a',
+          label: 'a',
+        }, {
+          id: 'b',
+          label: 'b',
+        } ])
+
+        done()
+      })
     })
   })
 })

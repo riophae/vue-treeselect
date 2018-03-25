@@ -3,7 +3,7 @@ import debounce from 'lodash/debounce'
 
 import {
   warning,
-  quickCompare, onlyOnLeftClick,
+  quickDiff, onlyOnLeftClick,
   hasOwn, last, find, findIndex, removeFromArray,
 } from '../utils'
 
@@ -512,17 +512,24 @@ export default {
      * @type {?Array}
      */
     value: null,
+
+    /**
+     * Format of `value` prop
+     * Acceptable values:
+     *   - "id"
+     *   - "object"
+     * @default "id"
+     * @type {string}
+     */
+    valueFormat: {
+      type: String,
+      default: 'id',
+    },
   },
 
   data() {
     return {
-      internalValue: this.multiple
-        ? Array.isArray(this.value)
-          ? this.value.slice()
-          : []
-        : this.value != null
-          ? [ this.value ]
-          : [],
+      internalValue: this.extractNodeIdsFromValue(),
       isFocused: false, // whether the control has been focused
       isOpen: false, // whether the menu is open
       nodeCheckedStateMap: Object.create(null), // used for multi-select mode
@@ -657,16 +664,12 @@ export default {
       this.$emit('input', this.getValue(), this.id)
     },
 
-    value(newValue) {
-      const _newValue = (!newValue && newValue !== 0)
-        ? []
-        : this.multiple
-          ? newValue.slice()
-          : [ newValue ]
-      const hasChanged = !quickCompare(_newValue, this.internalValue)
+    value() {
+      const newInternalValue = this.extractNodeIdsFromValue()
+      const hasChanged = quickDiff(newInternalValue, this.internalValue)
 
       if (hasChanged) {
-        this.internalValue = _newValue
+        this.internalValue = newInternalValue
         this.buildSelectedNodeMap()
         this.buildNodeCheckedStateMap()
       }
@@ -704,9 +707,14 @@ export default {
     },
 
     getValue() {
-      return this.multiple
-        ? this.internalValue.slice()
-        : this.internalValue[0]
+      if (this.valueFormat === 'id') {
+        return this.multiple
+          ? this.internalValue.slice()
+          : this.internalValue[0]
+      }
+
+      const rawNodes = this.internalValue.map(this.getNode).map(node => node.raw)
+      return this.multiple ? rawNodes : rawNodes[0]
     },
 
     getNode(nodeId) {
@@ -727,19 +735,8 @@ export default {
       // we create a fallback node to keep the component working
       // when the real data is loaded, we'll override this fake node
 
-      const matchNode = node => node && node.id === id
-
-      let label
-      // try extracting the label from `value`
-      if (this.multiple) {
-        // TODO: `label` can be other customized key name
-        label = Array.isArray(this.value) && (find(this.value, matchNode) || {}).label
-      } else {
-        label = (find(this.value, matchNode) || {}).label
-      }
-      // can not get the label, create one by the node id
-      label = label || `${id} (unknown)`
-      const fallback = this.nodeMap[id] = {
+      const label = this.extractLabelFromValue(id) || `${id} (unknown)`
+      const fallbackNode = this.nodeMap[id] = {
         id,
         label,
         ancestors: [],
@@ -756,7 +753,33 @@ export default {
         },
       }
 
-      return fallback
+      return fallbackNode
+    },
+
+    extractNodeIdsFromValue() {
+      if (this.value == null) return []
+
+      if (this.valueFormat === 'id') {
+        return this.multiple
+          ? this.value.slice()
+          : [ this.value ]
+      }
+
+      return this.multiple
+        ? this.value.map(node => node.id)
+        : [ this.value.id ] // TODO
+    },
+
+    extractLabelFromValue(nodeId) {
+      if (this.valueFormat === 'id') return undefined
+
+      const valueArray = this.multiple
+        ? Array.isArray(this.value) ? this.value : []
+        : this.value ? [ this.value ] : []
+      const matched = find(valueArray, node => node && node.id === nodeId)
+
+      // TODO
+      return matched ? matched.label : undefined
     },
 
     isSelected(node) {

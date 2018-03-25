@@ -146,12 +146,12 @@ describe('Utils', () => {
     expect(arr).toEqual([ 1, 3 ])
   })
 
-  it('quickCompare', () => {
-    const { quickCompare } = utils
+  it('quickDiff', () => {
+    const { quickDiff } = utils
     const obj = {}
-    expect(quickCompare([], [])).toBe(true)
-    expect(quickCompare([ 1 ], [])).toBe(false)
-    expect(quickCompare([ {} ], [ {} ])).toBe(false)
-    expect(quickCompare([ obj ], [ obj ])).toBe(true)
+    expect(quickDiff([], [])).toBe(false)
+    expect(quickDiff([ 1 ], [])).toBe(true)
+    expect(quickDiff([ {} ], [ {} ])).toBe(true)
+    expect(quickDiff([ obj ], [ obj ])).toBe(false)
   })
 })

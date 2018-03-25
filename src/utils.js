@@ -92,12 +92,12 @@ export function removeFromArray(arr, elem) {
   if (idx !== -1) arr.splice(idx, 1)
 }
 
-export function quickCompare(arrA, arrB) {
-  if (arrA.length !== arrB.length) return false
+export function quickDiff(arrA, arrB) {
+  if (arrA.length !== arrB.length) return true
 
   for (let i = 0; i < arrA.length; i++) {
-    if (arrA[i] !== arrB[i]) return false
+    if (arrA[i] !== arrB[i]) return true
   }
 
-  return true
+  return false
 }
