@@ -583,8 +583,7 @@ describe('Basic', () => {
         index: [ -1 ],
         level: 0,
         raw: {
-          id: jasmine.any(String),
-          label: jasmine.any(String),
+          id: 'test',
         },
       })
     })
@@ -3429,6 +3428,66 @@ describe('Props', () => {
 
     it('should override fallback nodes', () => {
       // the same with `loadChildrenOptions`
+    })
+  })
+
+  describe('normalizer', () => {
+    it('customizing key names', () => {
+      const wrapper = mount(Treeselect, {
+        propsData: {
+          options: [ {
+            key: 'a',
+            name: 'a',
+          } ],
+          normalizer(node) {
+            return {
+              id: node.key,
+              label: node.name,
+            }
+          },
+        },
+      })
+      const { vm } = wrapper
+
+      expect(vm.nodeMap.a).toEqual(jasmine.objectContaining({
+        id: 'a',
+        label: 'a',
+        raw: {
+          key: 'a',
+          name: 'a',
+        },
+      }))
+    })
+
+    it('with fallback node', () => {
+      const wrapper = mount(Treeselect, {
+        propsData: {
+          value: {
+            key: 'a',
+            name: 'a',
+          },
+          options: [],
+          valueFormat: 'object',
+          normalizer(node) {
+            return {
+              id: node.key,
+              label: node.name,
+            }
+          },
+        },
+      })
+      const { vm } = wrapper
+
+      expect(vm.internalValue).toEqual([ 'a' ])
+      expect(vm.nodeMap.a).toEqual(jasmine.objectContaining({
+        id: 'a',
+        label: 'a',
+        isFallbackNode: true,
+        raw: {
+          key: 'a',
+          name: 'a',
+        },
+      }))
     })
   })
 

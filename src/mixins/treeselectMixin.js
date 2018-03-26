@@ -1,5 +1,6 @@
 import fuzzysearch from 'fuzzysearch'
 import debounce from 'lodash/debounce'
+import identity from 'lodash/identity'
 
 import {
   warning,
@@ -350,6 +351,16 @@ export default {
     noOptionsText: {
       type: String,
       default: 'No options available.',
+    },
+
+    /**
+     * Used for normalizing source data
+     * @default Identity
+     * @type {function}
+     */
+    normalizer: {
+      type: Function,
+      default: identity,
     },
 
     /**
@@ -735,7 +746,8 @@ export default {
       // we create a fallback node to keep the component working
       // when the real data is loaded, we'll override this fake node
 
-      const label = this.extractLabelFromValue(id) || `${id} (unknown)`
+      const raw = this.extractNodeFromValue(id)
+      const label = this.normalizer(raw).label || `${id} (unknown)`
       const fallbackNode = this.nodeMap[id] = {
         id,
         label,
@@ -747,10 +759,7 @@ export default {
         isDisabled: false,
         index: [ -1 ],
         level: 0,
-        raw: {
-          id,
-          label,
-        },
+        raw,
       }
 
       return fallbackNode
@@ -765,21 +774,27 @@ export default {
           : [ this.value ]
       }
 
-      return this.multiple
-        ? this.value.map(node => node.id)
-        : [ this.value.id ] // TODO
+      return (this.multiple ? this.value : [ this.value ])
+        .map(node => this.normalizer(node))
+        .map(node => node.id)
     },
 
-    extractLabelFromValue(nodeId) {
-      if (this.valueFormat === 'id') return undefined
+    extractNodeFromValue(id) {
+      const defaultNode = { id }
+
+      if (this.valueFormat === 'id') {
+        return defaultNode
+      }
 
       const valueArray = this.multiple
         ? Array.isArray(this.value) ? this.value : []
         : this.value ? [ this.value ] : []
-      const matched = find(valueArray, node => node && node.id === nodeId)
+      const matched = find(
+        valueArray,
+        node => node && this.normalizer(node).id === id
+      )
 
-      // TODO
-      return matched ? matched.label : undefined
+      return matched || defaultNode
     },
 
     isSelected(node) {
@@ -1032,86 +1047,88 @@ export default {
     },
 
     normalize(parentNode, nodes) {
-      let normalizedOptions = nodes.map((node, index) => {
-        this.checkDuplication(node)
-        this.verifyNodeShape(node)
+      let normalizedOptions = nodes
+        .map(node => [ this.normalizer(node), node ])
+        .map(([ node, raw ], index) => {
+          this.checkDuplication(node)
+          this.verifyNodeShape(node)
 
-        const isRootNode = parentNode === NO_PARENT_NODE
-        const { id, label, children, isDefaultExpanded } = node
-        const lowerCasedLabel = label.toLowerCase() // used for option filtering
-        const isDisabled = !!node.isDisabled || (!this.flat && !isRootNode && parentNode.isDisabled)
-        const isBranch = (
-          Array.isArray(children) ||
-          children === null ||
-          (children === undefined && !!node.isBranch)
-        )
-        const isLeaf = !isBranch
-        const level = isRootNode ? 0 : parentNode.level + 1
-        const isMatched = false
-        const ancestors = isRootNode ? [] : parentNode.ancestors.concat(parentNode)
-        const _index = (isRootNode ? [] : parentNode.index).concat(index)
-        const normalized = this.nodeMap[id] = {
-          id,
-          label,
-          level,
-          ancestors,
-          index: _index,
-          parentNode,
-          lowerCasedLabel,
-          isDisabled,
-          isMatched,
-          isLeaf,
-          isBranch,
-          isRootNode,
-          raw: node,
-        }
-
-        if (isBranch) {
-          const isLoaded = Array.isArray(children)
-          if (!isLoaded) {
-            warning(
-              () => typeof this.loadChildrenOptions === 'function',
-              () => 'Unloaded branch node detected. `loadChildrenOptions` prop is required to load its children.'
-            )
+          const isRootNode = parentNode === NO_PARENT_NODE
+          const { id, label, children, isDefaultExpanded } = node
+          const lowerCasedLabel = label.toLowerCase() // used for option filtering
+          const isDisabled = !!node.isDisabled || (!this.flat && !isRootNode && parentNode.isDisabled)
+          const isBranch = (
+            Array.isArray(children) ||
+            children === null ||
+            (children === undefined && !!node.isBranch)
+          )
+          const isLeaf = !isBranch
+          const level = isRootNode ? 0 : parentNode.level + 1
+          const isMatched = false
+          const ancestors = isRootNode ? [] : parentNode.ancestors.concat(parentNode)
+          const _index = (isRootNode ? [] : parentNode.index).concat(index)
+          const normalized = this.nodeMap[id] = {
+            id,
+            label,
+            level,
+            ancestors,
+            index: _index,
+            parentNode,
+            lowerCasedLabel,
+            isDisabled,
+            isMatched,
+            isLeaf,
+            isBranch,
+            isRootNode,
+            raw,
           }
 
-          normalized.isLoaded = isLoaded
-          normalized.isPending = false
-          normalized.isExpanded = typeof isDefaultExpanded === 'boolean'
-            ? isDefaultExpanded
-            : level < this.defaultExpandLevel
-          normalized.hasMatchedChild = false
-          normalized.hasDisabledDescendants = false
-          normalized.expandsOnSearch = false
-          normalized.loadingChildrenError = ''
-          normalized.count = {
-            [ALL_CHILDREN]: 0,
-            [ALL_DESCENDANTS]: 0,
-            [LEAF_CHILDREN]: 0,
-            [LEAF_DESCENDANTS]: 0,
+          if (isBranch) {
+            const isLoaded = Array.isArray(children)
+            if (!isLoaded) {
+              warning(
+                () => typeof this.loadChildrenOptions === 'function',
+                () => 'Unloaded branch node detected. `loadChildrenOptions` prop is required to load its children.'
+              )
+            }
+
+            normalized.isLoaded = isLoaded
+            normalized.isPending = false
+            normalized.isExpanded = typeof isDefaultExpanded === 'boolean'
+              ? isDefaultExpanded
+              : level < this.defaultExpandLevel
+            normalized.hasMatchedChild = false
+            normalized.hasDisabledDescendants = false
+            normalized.expandsOnSearch = false
+            normalized.loadingChildrenError = ''
+            normalized.count = {
+              [ALL_CHILDREN]: 0,
+              [ALL_DESCENDANTS]: 0,
+              [LEAF_CHILDREN]: 0,
+              [LEAF_DESCENDANTS]: 0,
+            }
+            normalized.children = isLoaded
+              ? this.normalize(normalized, children)
+              : []
+
+            if (normalized.isExpanded && !normalized.isLoaded) {
+              this.loadOptions(false, normalized)
+            }
           }
-          normalized.children = isLoaded
-            ? this.normalize(normalized, children)
-            : []
 
-          if (normalized.isExpanded && !normalized.isLoaded) {
-            this.loadOptions(false, normalized)
+          normalized.ancestors.forEach(ancestor => ancestor.count.ALL_DESCENDANTS++)
+          if (isLeaf) normalized.ancestors.forEach(ancestor => ancestor.count.LEAF_DESCENDANTS++)
+          if (parentNode !== NO_PARENT_NODE) {
+            parentNode.count.ALL_CHILDREN += 1
+            if (isLeaf) parentNode.count.LEAF_CHILDREN += 1
           }
-        }
 
-        normalized.ancestors.forEach(ancestor => ancestor.count.ALL_DESCENDANTS++)
-        if (isLeaf) normalized.ancestors.forEach(ancestor => ancestor.count.LEAF_DESCENDANTS++)
-        if (parentNode !== NO_PARENT_NODE) {
-          parentNode.count.ALL_CHILDREN += 1
-          if (isLeaf) parentNode.count.LEAF_CHILDREN += 1
-        }
+          if (isDisabled) {
+            normalized.ancestors.forEach(ancestor => ancestor.hasDisabledDescendants = true)
+          }
 
-        if (isDisabled) {
-          normalized.ancestors.forEach(ancestor => ancestor.hasDisabledDescendants = true)
-        }
-
-        return normalized
-      })
+          return normalized
+        })
 
       if (this.branchNodesFirst) {
         const branchNodes = normalizedOptions.filter(option => option.isBranch)

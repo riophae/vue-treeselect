@@ -76,8 +76,13 @@
 
 +guide('Disable Item Selection')
   :markdown-it
-      You can disable item selection by setting `isDisabled: true` on any leaf node or branch node. Setting on a branch node will disable all its descendants as well.
+    You can disable item selection by setting `isDisabled: true` on any leaf node or branch node. Setting on a branch node will disable all its descendants as well.
   +demo('DisableItemSelection')
+
++guide('Customize Key Names')
+  :markdown-it
+    If your data of options is loaded via AJAX and have a different data structure than what vue-treeselect asks, e.g. your data has `name` property but vue-treeselect needs `label`, you may want to customize the key names. In this case, you can provide a function prop called `normalizer` which will be passed every node in the tree during data initialization. Use this function to create and return the transformed object.
+  +demo('CustomizeKeyNames')
 
 +guide('Customize Option Label')
   :markdown-it

@@ -174,6 +174,11 @@
         defaultValue: v('"No options available."'),
         description: 'Text displayed when there are no available options.',
       }, {
+        name: 'normalizer',
+        type: 'Function',
+        defaultValue: v('node => node'),
+        description: `Used for normalizing source data. See ${link('#customize-key-names')} for detailed information.`,
+      }, {
         name: 'openDirection',
         type: 'String',
         defaultValue: v('"auto"'),
