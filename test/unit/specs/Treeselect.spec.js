@@ -4105,6 +4105,49 @@ describe('Props', () => {
 
         done()
       })
+
+      it('should return raw node object', async done => {
+        const vm = new Vue({
+          components: { Treeselect },
+          data: {
+            value: {
+              id: 'a',
+              label: 'a',
+            },
+            options: [ {
+              id: 'a',
+              label: 'a',
+              _extra: 'a',
+            }, {
+              id: 'b',
+              label: 'b',
+              _extra: 'b',
+            } ],
+          },
+          template: `
+            <div>
+              <treeselect
+                v-model="value"
+                :options="options"
+                value-format="object"
+              />
+            </div>
+          `,
+        }).$mount()
+        const comp = vm.$children[0]
+
+        expect(comp.internalValue).toEqual([ 'a' ])
+
+        comp.select(comp.nodeMap.b)
+        await comp.$nextTick()
+        expect(vm.value).toEqual({
+          id: 'b',
+          label: 'b',
+          _extra: 'b',
+        })
+
+        done()
+      })
     })
   })
 })
