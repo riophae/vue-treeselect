@@ -26,7 +26,8 @@
     "lint:js": "eslint --ext .js,.vue .",
     "lint:css": "stylelint '**/*.less'",
     "lint": "npm run lint:js && npm run lint:css",
-    "finish": "npm test && npm run bundle"
+    "size": "size-limit",
+    "finish": "npm test && npm run bundle && npm run size"
   },
   "dependencies": {
     "fuzzysearch": "^1.0.3"
@@ -92,6 +93,7 @@
     "selenium-server": "^3.11.0",
     "semver": "^5.5.0",
     "shelljs": "^0.8.1",
+    "size-limit": "^0.17.0",
     "stylelint": "^9.1.2",
     "stylelint-config-xo-space": "^0.7.0",
     "url-loader": "^1.0.1",
@@ -133,5 +135,9 @@
     "> 1%",
     "Last 2 versions",
     "IE >= 9"
+  ],
+  "size-limit": [
+    { "path": "dist/vue-treeselect.min.js", "limit": "9 KB" },
+    { "path": "dist/vue-treeselect.min.css", "limit": "5 KB" }
   ]
 }
