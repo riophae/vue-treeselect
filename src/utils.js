@@ -31,6 +31,34 @@ export function noop() {
   /* istanbul ignore next */
 }
 
+export function identity(x) {
+  return x
+}
+
+// a simplified version of debounce from underscore
+export function debounce(func, wait = 100) {
+  let timeout, args, context, timestamp
+
+  function later() {
+    const diff = Date.now() - timestamp
+
+    if (diff < wait && diff >= 0) {
+      timeout = setTimeout(later, wait - diff)
+    } else {
+      timeout = null
+      func.apply(context, args)
+      context = args = null
+    }
+  }
+
+  return function debounced(..._args) {
+    context = this // eslint-disable-line consistent-this
+    args = _args
+    timestamp = Date.now()
+    if (!timeout) timeout = setTimeout(later, wait)
+  }
+}
+
 function isPlainObject(value) {
   if (value == null || typeof value !== 'object') return false
   return Object.getPrototypeOf(value) === Object.prototype

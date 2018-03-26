@@ -37,28 +37,26 @@ exports.cssLoaders = function cssLoaders(options) {
     }
   }
 
+  const baseLoaders = [ 'css' ]
+  if (options.postcss) baseLoaders.push('postcss')
+
   // http://vuejs.github.io/vue-loader/en/configurations/extract-css.html
   return {
-    css: generateLoaders([ 'css' ]),
-    postcss: generateLoaders([ 'css' ]),
-    less: generateLoaders([ 'css', 'less' ]),
-    sass: generateLoaders([ 'css', 'sass?indentedSyntax' ]),
-    scss: generateLoaders([ 'css', 'sass' ]),
-    stylus: generateLoaders([ 'css', 'stylus' ]),
-    styl: generateLoaders([ 'css', 'stylus' ]),
+    css: generateLoaders(baseLoaders),
+    postcss: generateLoaders(baseLoaders),
+    less: generateLoaders(baseLoaders.concat('less')),
+    sass: generateLoaders(baseLoaders.concat('sass?indentedSyntax')),
+    scss: generateLoaders(baseLoaders.concat('sass')),
+    stylus: generateLoaders(baseLoaders.concat('stylus')),
+    styl: generateLoaders(baseLoaders.concat('stylus')),
   }
 }
 
 // Generate loaders for standalone style files (outside of .vue)
 exports.styleLoaders = function styleLoaders(options) {
-  const output = []
   const loaders = exports.cssLoaders(options)
-  Object.keys(loaders).forEach(extension => {
-    const loader = loaders[extension]
-    output.push({
-      test: new RegExp('\\.' + extension + '$'),
-      loader,
-    })
-  })
-  return output
+  return Object.keys(loaders).map(extension => ({
+    test: new RegExp('\\.' + extension + '$'),
+    loader: loaders[extension],
+  }))
 }

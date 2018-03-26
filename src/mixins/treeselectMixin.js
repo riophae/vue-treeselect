@@ -1,10 +1,9 @@
 import fuzzysearch from 'fuzzysearch'
-import debounce from 'lodash/debounce'
-import identity from 'lodash/identity'
 
 import {
   warning,
   quickDiff, onlyOnLeftClick,
+  debounce, identity,
   hasOwn, last, find, findIndex, removeFromArray,
 } from '../utils'
 
