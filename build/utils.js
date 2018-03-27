@@ -37,8 +37,7 @@ exports.cssLoaders = function cssLoaders(options) {
     }
   }
 
-  const baseLoaders = [ 'css' ]
-  if (options.postcss) baseLoaders.push('postcss')
+  const baseLoaders = [ 'css', 'postcss' ]
 
   // http://vuejs.github.io/vue-loader/en/configurations/extract-css.html
   return {
