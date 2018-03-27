@@ -13,7 +13,7 @@
 <script>
   export default {
     data: () => ({
-      value: null,
+      value: [],
       options: [ {
         id: 'fruits',
         label: 'Fruits',
