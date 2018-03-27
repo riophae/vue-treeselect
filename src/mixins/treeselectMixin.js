@@ -965,9 +965,7 @@ export default {
       if (!this.isOpen || (!this.disabled && this.alwaysOpen)) return
       this.isOpen = false
       /* istanbul ignore else */
-      if (this.retainScrollPosition && this.$refs.menu) {
-        this.lastScrollPosition = this.$refs.menu.scrollTop
-      }
+      if (this.retainScrollPosition) this.saveScrollPosition()
       this.toggleClickOutsideEvent(false)
       // reset search query after menu closes
       this.searchQuery = ''
@@ -1257,7 +1255,7 @@ export default {
 
       this.addValue(node)
 
-      if (this.multiple && !this.flat && !node.isRootNode) {
+      if (this.multiple && !node.isRootNode) {
         let curr = node
         do {
           curr = curr.parentNode
@@ -1265,21 +1263,21 @@ export default {
           if (siblings.every(this.isSelected)) {
             siblings.forEach(this.removeValue)
             this.addValue(curr)
+          } else {
+            break
           }
         } while (!curr.isRootNode)
       }
     },
 
     _deselectNode(node) {
-      if (node.isBranch && node.hasDisabledDescendants) {
-        if (this.isSelected(node)) {
-          const disabledChildren = node.children.filter(child => child.isDisabled)
-          if (node.children.length !== disabledChildren.length) {
-            this.removeValue(node)
-            disabledChildren.forEach(this.addValue)
-          }
-          return
+      if (node.isBranch && node.hasDisabledDescendants && this.isSelected(node)) {
+        const disabledChildren = node.children.filter(child => child.isDisabled)
+        if (node.children.length !== disabledChildren.length) {
+          this.removeValue(node)
+          disabledChildren.forEach(this.addValue)
         }
+        return
       }
 
       this.removeValue(node)
@@ -1334,12 +1332,15 @@ export default {
     },
 
     sortValue() {
-      if (this.single) return
       if (this.sortValueBy === LEVEL) {
         this.internalValue.sort((a, b) => sortValueByLevel(this.nodeMap[a], this.nodeMap[b]))
       } else if (this.sortValueBy === INDEX) {
         this.internalValue.sort((a, b) => sortValueByIndex(this.nodeMap[a], this.nodeMap[b]))
       }
+    },
+
+    saveScrollPosition() {
+      if (this.$refs.menu) this.lastScrollPosition = this.$refs.menu.scrollTop
     },
 
     restoreScrollPosition() {
