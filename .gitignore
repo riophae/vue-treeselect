@@ -3,6 +3,8 @@
 *debug.log*
 *error.log*
 
+.eslintcache
+
 node_modules/
 yarn.lock
 

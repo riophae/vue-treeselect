@@ -23,12 +23,13 @@
     "testonly": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
     "test": "npm run testonly",
     "pretest": "npm run lint",
-    "lint:js": "eslint --ext .js,.vue .",
+    "lint:js": "eslint --ext .js --ext .vue --cache .",
     "lint:css": "stylelint '**/*.less'",
     "lint": "npm run lint:js && npm run lint:css",
     "size": "size-limit",
     "finish": "npm test && npm run bundle && npm run size"
   },
+  "pre-commit": "lint",
   "dependencies": {
     "fuzzysearch": "^1.0.3"
   },
@@ -112,7 +113,6 @@
   "peerDependencies": {
     "vue": "^2.2.0"
   },
-  "pre-commit": "lint",
   "keywords": [
     "vue",
     "component",

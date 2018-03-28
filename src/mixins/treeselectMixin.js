@@ -844,10 +844,6 @@ export default {
       return this.selectedNodeMap[node.id] === true
     },
 
-    withoutDisabled(nodes) {
-      return nodes.filter(node => !node.isDisabled)
-    },
-
     checkIfBranchNode(node) {
       warning(
         () => node && node.isBranch,

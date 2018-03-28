@@ -6,9 +6,6 @@ import TreeselectOption from '@riophae/vue-treeselect/components/Option'
 import SearchInput from '@riophae/vue-treeselect/components/SearchInput'
 import { UNCHECKED, INDETERMINATE, CHECKED, INPUT_DEBOUNCE_DELAY } from '@riophae/vue-treeselect/constants'
 
-// disable the tip that suggests using devtools extension
-Vue.config.devtools = false
-
 const BUTTON_LEFT = { button: 0 }
 const KEY_BACKSPACE = { which: 8, keyCode: 8 }
 const KEY_DELETE = { which: 46, keyCode: 46 }
