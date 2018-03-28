@@ -24,7 +24,7 @@
   export default {
     data() {
       return {
-        value: null,
+        value: [ 'c', 'aaa', 'bb' ],
         options: generateOptions(3),
         sortValueBy: 'ORDER_SELECTED',
       }
