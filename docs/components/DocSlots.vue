@@ -2,9 +2,9 @@
   <table class="striped">
     <thead>
       <tr>
-        <th style="width: 6em">Name</th>
-        <th style="width: 250px">Props</th>
-        <th>Description</th>
+        <th class="name">Name</th>
+        <th>Props</th>
+        <th class="desc">Description</th>
       </tr>
     </thead>
     <tbody>

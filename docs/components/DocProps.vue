@@ -2,10 +2,10 @@
   <table class="striped">
     <thead>
       <tr>
-        <th>Name</th>
+        <th class="name">Name</th>
         <th>Type</th>
         <th>Default</th>
-        <th>Description</th>
+        <th class="desc">Description</th>
       </tr>
     </thead>
     <tbody>

@@ -4,9 +4,9 @@
     <table class="striped">
       <thead>
         <tr>
-          <th>Key</th>
+          <th class="name">Key</th>
           <th>Type</th>
-          <th>Description</th>
+          <th class="desc">Description</th>
         </tr>
       </thead>
       <tbody>
