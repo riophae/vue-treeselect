@@ -107,14 +107,6 @@ export function find(arr, predicate, ctx) {
   return undefined
 }
 
-export function findIndex(arr, predicate, ctx) {
-  for (let i = 0, len = arr.length; i < len; i++) {
-    if (predicate.call(ctx, arr[i], i, arr)) return i
-  }
-
-  return -1
-}
-
 export function removeFromArray(arr, elem) {
   const idx = arr.indexOf(elem)
   if (idx !== -1) arr.splice(idx, 1)

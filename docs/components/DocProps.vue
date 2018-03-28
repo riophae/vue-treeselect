@@ -252,12 +252,17 @@
         name: 'value',
         type: 'Array',
         defaultValue: NO_DEFAULT_VALUE,
-        description: `An array of node ids or nodes as the initial field value. The format depends on the ${v('valueFormat')} prop.`,
+        description: `An array of node ids or node objects as the initial field value. The format depends on the ${v('valueFormat')} prop.`,
+      }, {
+        name: 'valueConsistsOf',
+        type: 'String',
+        defaultValue: v('"BRANCH_PRIORITY"'),
+        description: `Which kind of nodes should be included in the value array in multi-select mode. Acceptable values: ${v('"ALL"')}, ${v('"BRANCH_PRIORITY"')} or ${v('"LEAF_PRIORITY"')}.`,
       }, {
         name: 'valueFormat',
         type: 'String',
         defaultValue: v('"id"'),
-        description: `Format of ${v('value')} prop. Acceptable values: ${v('"id"')} and ${v('"object"')}.`,
+        description: `Format of ${v('value')} prop. Acceptable values: ${v('"id"')} or ${v('"object"')}.`,
       } ],
     }),
   }

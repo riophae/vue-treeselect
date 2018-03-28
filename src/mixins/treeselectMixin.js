@@ -4,13 +4,14 @@ import {
   warning,
   quickDiff, onlyOnLeftClick,
   debounce, identity,
-  hasOwn, last, find, findIndex, removeFromArray,
+  hasOwn, last, find, removeFromArray,
 } from '../utils'
 
 import {
   UNCHECKED, INDETERMINATE, CHECKED,
   UNMATCHED, DESCENDANT_MATCHED, MATCHED,
   NO_PARENT_NODE,
+  ALL, BRANCH_PRIORITY, LEAF_PRIORITY,
   ALL_CHILDREN, ALL_DESCENDANTS, LEAF_CHILDREN, LEAF_DESCENDANTS,
   ORDER_SELECTED, LEVEL, INDEX,
   INPUT_DEBOUNCE_DELAY,
@@ -473,8 +474,8 @@ export default {
       type: String,
       default: ALL_CHILDREN,
       validator(value) {
-        const expectedValues = [ ALL_CHILDREN, ALL_DESCENDANTS, LEAF_CHILDREN, LEAF_DESCENDANTS ]
-        return expectedValues.indexOf(value) !== -1
+        const acceptableValues = [ ALL_CHILDREN, ALL_DESCENDANTS, LEAF_CHILDREN, LEAF_DESCENDANTS ]
+        return acceptableValues.indexOf(value) !== -1
       },
     },
 
@@ -518,10 +519,27 @@ export default {
     },
 
     /**
-     * An array of node ids as the initial field value
+     * An array of node ids or node objects as the initial field value.
+     * The format depends on the ${v('valueFormat')} prop.
      * @type {?Array}
      */
     value: null,
+
+    /**
+     * Which kind of nodes should be included in the value array in multi-select mode
+     * Acceptable values:
+     *   - "ALL" - Any node that is checked will be included in the value array
+     *   - "BRANCH_PRIORITY" (default) - If a branch node is checked, it's descendants will be excluded in the value array
+     *   - "LEAF_PRIORITY" - If a branch node is checked, it will be excluded from the value array but its leaf descendants will be included
+     */
+    valueConsistsOf: {
+      type: String,
+      default: BRANCH_PRIORITY,
+      validator(value) {
+        const acceptableValues = [ ALL, BRANCH_PRIORITY, LEAF_PRIORITY ]
+        return acceptableValues.indexOf(value) !== -1
+      },
+    },
 
     /**
      * Format of `value` prop
@@ -539,60 +557,80 @@ export default {
 
   data() {
     return {
-      internalValue: this.extractNodeIdsFromValue(),
-      isFocused: false, // whether the control has been focused
-      isOpen: false, // whether the menu is open
+      normalizedOptions: null, // normalized options tree
+      selectedNodeIds: this.extractCheckedNodeIdsFromValue(),
       nodeCheckedStateMap: Object.create(null), // used for multi-select mode
       nodeMap: Object.create(null), // map: nodeId -> node
-      normalizedOptions: null, // normalized options tree
-      noSearchResults: true, // whether there is any matching search result
-      optimizedHeight: 0,
-      prefferedOpenDirection: 'below',
+      selectedNodeMap: Object.create(null),
+      isFocused: false, // whether the control has been focused
+      isOpen: false, // whether the menu is open
       rootOptionsLoaded: false,
       loadingRootOptions: false,
       loadingRootOptionsError: '',
+      noSearchResults: true, // whether there is any matching search result
       searchingCount: Object.create(null),
       searching: false,
       searchQuery: '',
-      selectedNodeMap: Object.create(null),
       lastScrollPosition: 0,
+      optimizedHeight: 0,
+      prefferedOpenDirection: 'below',
     }
   },
 
   computed: {
     /* eslint-disable valid-jsdoc */
     /**
-     * How many options has been selected
-     * @type {number}
+     * Normalized options that has been selected
+     * @type {Object[]}
      */
-    selectedNodesNumber() {
-      return this.internalValue.length
+    selectedNodes() {
+      return this.selectedNodeIds.map(this.getNode)
     },
+    /**
+     * Id list of selected nodes with `sortValueBy` prop applied
+     * @type {nodeId[]}
+     */
+    internalValue() {
+      let internalValue
 
+      if (this.single || this.flat || this.valueConsistsOf === ALL) {
+        internalValue = this.selectedNodeIds.slice()
+      } else if (this.valueConsistsOf === BRANCH_PRIORITY) {
+        internalValue = this.selectedNodeIds.filter(id => {
+          const node = this.getNode(id)
+          if (node.isRootNode) return true
+          return !this.isSelected(node.parentNode)
+        })
+      } else if (this.valueConsistsOf === LEAF_PRIORITY) {
+        internalValue = this.selectedNodeIds.filter(id => {
+          const node = this.getNode(id)
+          if (node.isLeaf) return true
+          return node.children.length === 0
+        })
+      }
+
+      if (this.sortValueBy === LEVEL) {
+        internalValue.sort((a, b) => sortValueByLevel(this.getNode(a), this.getNode(b)))
+      } else if (this.sortValueBy === INDEX) {
+        internalValue.sort((a, b) => sortValueByIndex(this.getNode(a), this.getNode(b)))
+      }
+
+      return internalValue
+    },
     /**
      * Has any option been selected?
      * @type {boolean}
      */
     hasValue() {
-      return this.selectedNodesNumber > 0
+      return this.internalValue.length > 0
     },
-
     /**
      * Has any undisabled option been selected?
      * @type {boolean}
      */
     hasUndisabledValue() {
-      return this.hasValue && this.selectedNodes.some(node => !node.isDisabled)
+      return this.hasValue && this.internalValue.map(this.getNode).some(node => !node.isDisabled)
     },
-
-    /**
-     * Normalized options that has been selected
-     * @type {Object[]}
-     */
-    selectedNodes() {
-      return this.internalValue.map(this.getNode)
-    },
-
     /**
      * Whether is single-select mode or not
      * @type {boolean}
@@ -600,32 +638,28 @@ export default {
     single() {
       return !this.multiple
     },
-
     /**
      * Options displayed in the control, the upper limit of number of which is
      * equal to the value of `limit` prop
      * @type {Object[]}
      */
     visibleValue() {
-      return this.selectedNodes.slice(0, this.limit)
+      return this.internalValue.map(this.getNode).slice(0, this.limit)
     },
-
     /**
      * Whether has passed the defined limit or not
      * @type {boolean}
      */
     hasExceededLimit() {
-      return this.selectedNodesNumber > this.limit
+      return this.internalValue.length > this.limit
     },
-
     /**
      * Should the "×" icon be shown?
      * @type {boolean}
      */
-    shouldShowClearIcon() {
+    shouldShowX() {
       return this.clearable && !this.disabled && this.hasUndisabledValue
     },
-
     /**
      * Should show children count when searching?
      * @type {boolean}
@@ -665,21 +699,17 @@ export default {
       this.$emit('search-change', this.searchQuery, this.id)
     }, INPUT_DEBOUNCE_DELAY),
 
-    sortValueBy() {
-      // re-sort value when value of `sortValueBy` prop has changed
-      this.sortValue()
-    },
-
     internalValue() {
       this.$emit('input', this.getValue(), this.id)
     },
 
     value() {
-      const newInternalValue = this.extractNodeIdsFromValue()
+      const newInternalValue = this.extractCheckedNodeIdsFromValue()
       const hasChanged = quickDiff(newInternalValue, this.internalValue)
 
       if (hasChanged) {
-        this.internalValue = newInternalValue
+        this.selectedNodeIds = newInternalValue
+        this.completeSelectedNodeIdList()
         this.buildSelectedNodeMap()
         this.buildNodeCheckedStateMap()
       }
@@ -711,7 +741,7 @@ export default {
     initialize(rootOptions) {
       if (Array.isArray(rootOptions)) this.rootOptionsLoaded = true
       this.initializeRootOptions(rootOptions || [])
-      this.sortValue()
+      this.completeSelectedNodeIdList()
       this.buildSelectedNodeMap()
       this.buildNodeCheckedStateMap()
     },
@@ -723,7 +753,7 @@ export default {
           : this.internalValue[0]
       }
 
-      const rawNodes = this.internalValue.map(this.getNode).map(node => node.raw)
+      const rawNodes = this.internalValue.map(id => this.getNode(id).raw)
       return this.multiple ? rawNodes : rawNodes[0]
     },
 
@@ -753,6 +783,7 @@ export default {
         ancestors: [],
         parentNode: NO_PARENT_NODE,
         isFallbackNode: true,
+        isRootNode: true,
         isLeaf: true,
         isBranch: false,
         isDisabled: false,
@@ -764,7 +795,7 @@ export default {
       return fallbackNode
     },
 
-    extractNodeIdsFromValue() {
+    extractCheckedNodeIdsFromValue() {
       if (this.value == null) return []
 
       if (this.valueFormat === 'id') {
@@ -796,9 +827,21 @@ export default {
       return matched || defaultNode
     },
 
+    completeSelectedNodeIdList() {
+      const nodeIds = this.selectedNodeIds.slice()
+      this.selectedNodeIds = []
+      this.nodeCheckedStateMap = Object.create(null)
+      this.selectedNodeMap = Object.create(null)
+      nodeIds.forEach(id => {
+        if (this.selectedNodeIds.indexOf(id) === -1) {
+          this._selectNode(this.getNode(id), { ignoreDisabled: true })
+        }
+      })
+    },
+
     isSelected(node) {
       // whether a node is selected (single-select mode) or fully-checked (multi-select mode)
-      return node.id in this.selectedNodeMap
+      return this.selectedNodeMap[node.id] === true
     },
 
     withoutDisabled(nodes) {
@@ -811,6 +854,18 @@ export default {
         /* istanbul ignore next */
         () => `Expected a branch node, instead got: ${node}`
       )
+    },
+
+    traverseDescendantsBFS(parentNode, callback) {
+      this.checkIfBranchNode(parentNode)
+
+      const queue = parentNode.children.slice()
+      while (queue.length) {
+        const currNode = queue[0]
+        if (currNode.isBranch) queue.push(...currNode.children)
+        callback(currNode)
+        queue.shift()
+      }
     },
 
     traverseDescendants(parentNode, maxLevel, callback) {
@@ -1008,7 +1063,7 @@ export default {
     buildSelectedNodeMap() {
       const map = this.selectedNodeMap = Object.create(null)
 
-      this.internalValue.forEach(selectedNodeId => {
+      this.selectedNodeIds.forEach(selectedNodeId => {
         map[selectedNodeId] = true
       })
     },
@@ -1021,25 +1076,18 @@ export default {
         map[selectedNode.id] = CHECKED
 
         if (!this.flat) {
-          this.traverseDescendants(selectedNode, descendantNode => {
-            map[descendantNode.id] = CHECKED
-          })
           this.traverseAncestors(selectedNode, ancestorNode => {
-            map[ancestorNode.id] = INDETERMINATE
+            if (!this.isSelected(ancestorNode)) {
+              map[ancestorNode.id] = INDETERMINATE
+            }
           })
         }
       })
 
-      this.normalizedOptions.forEach(rootNode => {
-        if (!(rootNode.id in map)) {
-          map[rootNode.id] = UNCHECKED
+      this.traverseAllNodes(node => {
+        if (!(node.id in map)) {
+          map[node.id] = UNCHECKED
         }
-
-        this.traverseDescendants(rootNode, descendantNode => {
-          if (!(descendantNode.id in map)) {
-            map[descendantNode.id] = UNCHECKED
-          }
-        })
       })
     },
 
@@ -1215,7 +1263,6 @@ export default {
         this._deselectNode(node)
       }
 
-      this.sortValue()
       this.buildSelectedNodeMap()
       this.buildNodeCheckedStateMap()
 
@@ -1234,109 +1281,90 @@ export default {
 
     clear() {
       if (this.hasValue) {
-        this.internalValue = this.multiple
-          ? this.internalValue.filter(nodeId => this.getNode(nodeId).isDisabled)
+        this.selectedNodeIds = this.multiple
+          ? this.selectedNodeIds.filter(nodeId => this.getNode(nodeId).isDisabled)
           : []
         this.buildSelectedNodeMap()
         this.buildNodeCheckedStateMap()
       }
     },
 
-    _selectNode(node) {
-      if (this.flat || this.disableBranchNodes) {
+    _selectNode(node, { ignoreDisabled = false } = {}) {
+      if (this.single || this.flat || this.disableBranchNodes) {
         this.addValue(node)
         return
       }
 
-      if (this.multiple && node.isBranch && node.hasDisabledDescendants) {
-        this.withoutDisabled(node.children).forEach(this._selectNode)
-        return
+      if (node.isLeaf || (node.isBranch && (!node.hasDisabledDescendants || ignoreDisabled))) {
+        this.addValue(node)
       }
 
-      this.addValue(node)
+      if (node.isBranch) {
+        this.traverseDescendantsBFS(node, descendant => {
+          if (!descendant.isDisabled || ignoreDisabled) this.addValue(descendant)
+        })
+      }
 
-      if (this.multiple && !node.isRootNode) {
+      if (node.isLeaf || (node.isBranch && (!node.hasDisabledDescendants || ignoreDisabled))) {
         let curr = node
-        do {
+        while (!curr.isRootNode) {
           curr = curr.parentNode
           const siblings = curr.children
           if (siblings.every(this.isSelected)) {
-            siblings.forEach(this.removeValue)
             this.addValue(curr)
           } else {
             break
           }
-        } while (!curr.isRootNode)
+        }
       }
     },
 
     _deselectNode(node) {
-      if (node.isBranch && node.hasDisabledDescendants && this.isSelected(node)) {
-        const disabledChildren = node.children.filter(child => child.isDisabled)
-        if (node.children.length !== disabledChildren.length) {
-          this.removeValue(node)
-          disabledChildren.forEach(this.addValue)
-        }
+      if (this.single || this.flat || this.disableBranchNodes) {
+        this.removeValue(node)
         return
       }
 
-      this.removeValue(node)
-
-      if (this.multiple && !this.flat) {
-        this.withoutDisabled(this.selectedNodes).forEach(selectedNode => {
-          if (selectedNode.ancestors.indexOf(node) !== -1) {
-            this.removeValue(selectedNode)
+      let hasUncheckedSomeDescendants = false
+      if (node.isBranch) {
+        this.traverseDescendants(node, descendant => {
+          if (!descendant.isDisabled) {
+            this.removeValue(descendant)
+            hasUncheckedSomeDescendants = true
           }
         })
+      }
 
-        if (!node.isRootNode) {
-          const checkedAncestorNodeIndex = findIndex(node.ancestors, this.isSelected)
+      if (node.isLeaf || hasUncheckedSomeDescendants) {
+        this.removeValue(node)
 
-          if (checkedAncestorNodeIndex !== -1) {
-            const checkedAncestorNode = node.ancestors[checkedAncestorNodeIndex]
-            const nodesToBeExcluded = node.ancestors.concat(node)
-
-            this.removeValue(checkedAncestorNode)
-            this.traverseDescendants(
-              checkedAncestorNode,
-              node.level,
-              descendantNode => {
-                if (nodesToBeExcluded.indexOf(descendantNode) === -1) {
-                  this.addValue(descendantNode)
-                }
-              }
-            )
-          }
+        let curr = node
+        while (!curr.isRootNode) {
+          curr = curr.parentNode
+          if (!this.isSelected(curr)) break
+          this.removeValue(curr)
         }
       }
     },
 
     addValue(node) {
-      this.internalValue.push(node.id)
+      this.selectedNodeIds.push(node.id)
       this.selectedNodeMap[node.id] = true
     },
 
     removeValue(node) {
-      removeFromArray(this.internalValue, node.id)
+      removeFromArray(this.selectedNodeIds, node.id)
       delete this.selectedNodeMap[node.id]
     },
 
     maybeRemoveLastValue() {
       /* istanbul ignore next */
       if (!this.hasValue) return
-      const lastValue = last(this.internalValue)
+      const lastValue = last(this.selectedNodeIds)
       const lastSelectedNode = this.getNode(lastValue)
       this.removeValue(lastSelectedNode)
       this.buildSelectedNodeMap()
       this.buildNodeCheckedStateMap()
-    },
-
-    sortValue() {
-      if (this.sortValueBy === LEVEL) {
-        this.internalValue.sort((a, b) => sortValueByLevel(this.nodeMap[a], this.nodeMap[b]))
-      } else if (this.sortValueBy === INDEX) {
-        this.internalValue.sort((a, b) => sortValueByIndex(this.nodeMap[a], this.nodeMap[b]))
-      }
     },
 
     saveScrollPosition() {

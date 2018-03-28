@@ -360,8 +360,8 @@ describe('Basic', () => {
       })
       const { a, b } = wrapper.vm.nodeMap
 
-      expect(a).toEqual(jasmine.objectContaining({ isExpanded: true }))
-      expect(b).toEqual(jasmine.objectContaining({ isExpanded: false }))
+      expect(a.isExpanded).toBe(true)
+      expect(b.isExpanded).toBe(false)
     })
 
     it('isRootNode', () => {
@@ -577,6 +577,7 @@ describe('Basic', () => {
         ancestors: [],
         parentNode: null,
         isFallbackNode: true,
+        isRootNode: true,
         isLeaf: true,
         isBranch: false,
         isDisabled: false,
@@ -649,7 +650,7 @@ describe('Basic', () => {
         })
         const { vm } = wrapper
 
-        expect(vm.internalValue).toBeEmptyArray()
+        expect(vm.selectedNodeIds).toBeEmptyArray()
       })
     })
   })
@@ -813,15 +814,15 @@ describe('Single-select', () => {
     const { vm } = wrapper
     const { a, aa } = vm.nodeMap
 
-    expect(vm.internalValue).toBeEmptyArray()
+    expect(vm.selectedNodeIds).toBeEmptyArray()
     vm.select(a) // select one
-    expect(vm.internalValue).toEqual([ 'a' ])
+    expect(vm.selectedNodeIds).toEqual([ 'a' ])
     expect(vm.selectedNodeMap).toEqual({ a: true })
     vm.select(aa) // select another
-    expect(vm.internalValue).toEqual([ 'aa' ])
+    expect(vm.selectedNodeIds).toEqual([ 'aa' ])
     expect(vm.selectedNodeMap).toEqual({ aa: true })
     vm.select(aa) // select again
-    expect(vm.internalValue).toEqual([ 'aa' ])
+    expect(vm.selectedNodeIds).toEqual([ 'aa' ])
     expect(vm.selectedNodeMap).toEqual({ aa: true })
   })
 
@@ -845,7 +846,7 @@ describe('Single-select', () => {
 
     customTrigger(labelWrapper, 'mousedown', BUTTON_LEFT)
     expect(wrapper.data()).toEqual(jasmine.objectContaining({
-      internalValue: [ 'a' ],
+      selectedNodeIds: [ 'a' ],
       isFocused: false,
       isOpen: false,
     }))
@@ -902,8 +903,14 @@ describe('Multi-select', () => {
     //    |--[v] ab
     //   [ ] b
     vm.select(vm.nodeMap.a)
-    expect(vm.internalValue).toEqual([ 'a' ])
-    expect(vm.selectedNodeMap).toEqual({ a: true })
+    expect(vm.selectedNodeIds).toEqual([ 'a', 'aa', 'ab', 'aaa', 'aab' ])
+    expect(vm.selectedNodeMap).toEqual({
+      a: true,
+      aa: true,
+      ab: true,
+      aaa: true,
+      aab: true,
+    })
     expect(vm.nodeCheckedStateMap).toEqual({
       a: CHECKED,
       aa: CHECKED,
@@ -928,7 +935,7 @@ describe('Multi-select', () => {
     //    |--[v] ab
     //   [ ] b
     vm.select(vm.nodeMap.aa)
-    expect(vm.internalValue).toEqual([ 'ab' ])
+    expect(vm.selectedNodeIds).toEqual([ 'ab' ])
     expect(vm.selectedNodeMap).toEqual({ ab: true })
     expect(vm.nodeCheckedStateMap).toEqual({
       a: INDETERMINATE,
@@ -954,7 +961,7 @@ describe('Multi-select', () => {
     //    |--[v] ab
     //   [v] b
     vm.select(vm.nodeMap.b)
-    expect(vm.internalValue).toEqual([ 'ab', 'b' ])
+    expect(vm.selectedNodeIds).toEqual([ 'ab', 'b' ])
     expect(vm.selectedNodeMap).toEqual({ ab: true, b: true })
     expect(vm.nodeCheckedStateMap).toEqual({
       a: INDETERMINATE,
@@ -980,8 +987,15 @@ describe('Multi-select', () => {
     //    |--[v] ab
     //   [v] b
     vm.select(vm.nodeMap.aa)
-    expect(vm.internalValue).toEqual([ 'b', 'a' ]) // a should be after b
-    expect(vm.selectedNodeMap).toEqual({ a: true, b: true })
+    expect(vm.selectedNodeIds).toEqual([ 'ab', 'b', 'aa', 'aaa', 'aab', 'a' ]) // a should be after b
+    expect(vm.selectedNodeMap).toEqual({
+      a: true,
+      aa: true,
+      aaa: true,
+      aab: true,
+      ab: true,
+      b: true,
+    })
     expect(vm.nodeCheckedStateMap).toEqual({
       a: CHECKED,
       aa: CHECKED,
@@ -1006,7 +1020,7 @@ describe('Multi-select', () => {
     //    |--[ ] ab
     //   [v] b
     vm.select(vm.nodeMap.a)
-    expect(vm.internalValue).toEqual([ 'b' ])
+    expect(vm.selectedNodeIds).toEqual([ 'b' ])
     expect(vm.selectedNodeMap).toEqual({ b: true })
     expect(vm.nodeCheckedStateMap).toEqual({
       a: UNCHECKED,
@@ -1032,8 +1046,13 @@ describe('Multi-select', () => {
     //    |--[ ] ab
     //   [v] b
     vm.select(vm.nodeMap.aa)
-    expect(vm.internalValue).toEqual([ 'b', 'aa' ])
-    expect(vm.selectedNodeMap).toEqual({ aa: true, b: true })
+    expect(vm.selectedNodeIds).toEqual([ 'b', 'aa', 'aaa', 'aab' ])
+    expect(vm.selectedNodeMap).toEqual({
+      aa: true,
+      aaa: true,
+      aab: true,
+      b: true,
+    })
     expect(vm.nodeCheckedStateMap).toEqual({
       a: INDETERMINATE,
       aa: CHECKED,
@@ -1058,7 +1077,7 @@ describe('Multi-select', () => {
     //    |--[ ] ab
     //   [v] b
     vm.select(vm.nodeMap.aa)
-    expect(vm.internalValue).toEqual([ 'b' ])
+    expect(vm.selectedNodeIds).toEqual([ 'b' ])
     expect(vm.selectedNodeMap).toEqual({ b: true })
     expect(vm.nodeCheckedStateMap).toEqual({
       a: UNCHECKED,
@@ -1086,8 +1105,14 @@ describe('Multi-select', () => {
     //    |--[v] ab
     //   [ ] b
     vm.select(vm.nodeMap.a)
-    expect(vm.internalValue).toEqual([ 'a' ])
-    expect(vm.selectedNodeMap).toEqual({ a: true })
+    expect(vm.selectedNodeIds).toEqual([ 'a', 'aa', 'ab', 'aaa', 'aab' ])
+    expect(vm.selectedNodeMap).toEqual({
+      a: true,
+      aa: true,
+      ab: true,
+      aaa: true,
+      aab: true,
+    })
     expect(vm.nodeCheckedStateMap).toEqual({
       a: CHECKED,
       aa: CHECKED,
@@ -1112,8 +1137,15 @@ describe('Multi-select', () => {
     //    |--[v] ab
     //   [v] b
     vm.select(vm.nodeMap.b)
-    expect(vm.internalValue).toEqual([ 'a', 'b' ])
-    expect(vm.selectedNodeMap).toEqual({ a: true, b: true })
+    expect(vm.selectedNodeIds).toEqual([ 'a', 'aa', 'ab', 'aaa', 'aab', 'b' ])
+    expect(vm.selectedNodeMap).toEqual({
+      a: true,
+      aa: true,
+      ab: true,
+      aaa: true,
+      aab: true,
+      b: true,
+    })
     expect(vm.nodeCheckedStateMap).toEqual({
       a: CHECKED,
       aa: CHECKED,
@@ -1138,7 +1170,7 @@ describe('Multi-select', () => {
     //    |--[v] ab
     //   [v] b
     vm.select(vm.nodeMap.aaa)
-    expect(vm.internalValue).toEqual([ 'b', 'aab', 'ab' ]) // keep order
+    expect(vm.selectedNodeIds).toEqual([ 'ab', 'aab', 'b' ]) // keep order
     expect(vm.selectedNodeMap).toEqual({ aab: true, ab: true, b: true })
     expect(vm.nodeCheckedStateMap).toEqual({
       a: INDETERMINATE,
@@ -1164,8 +1196,15 @@ describe('Multi-select', () => {
     //    |--[v] ab
     //   [v] b
     vm.select(vm.nodeMap.aaa)
-    expect(vm.internalValue).toEqual([ 'b', 'a' ]) // keep order
-    expect(vm.selectedNodeMap).toEqual({ a: true, b: true })
+    expect(vm.selectedNodeIds).toEqual([ 'ab', 'aab', 'b', 'aaa', 'aa', 'a' ]) // keep order
+    expect(vm.selectedNodeMap).toEqual({
+      a: true,
+      aa: true,
+      ab: true,
+      aaa: true,
+      aab: true,
+      b: true,
+    })
     expect(vm.nodeCheckedStateMap).toEqual({
       a: CHECKED,
       aa: CHECKED,
@@ -1192,7 +1231,7 @@ describe('Multi-select', () => {
     //    |--[ ] ab
     //   [ ] b
     vm.select(vm.nodeMap.aaa)
-    expect(vm.internalValue).toEqual([ 'aaa' ])
+    expect(vm.selectedNodeIds).toEqual([ 'aaa' ])
     expect(vm.selectedNodeMap).toEqual({ aaa: true })
     expect(vm.nodeCheckedStateMap).toEqual({
       a: INDETERMINATE,
@@ -1218,7 +1257,7 @@ describe('Multi-select', () => {
     //    |--[v] ab
     //   [ ] b
     vm.select(vm.nodeMap.ab)
-    expect(vm.internalValue).toEqual([ 'aaa', 'ab' ])
+    expect(vm.selectedNodeIds).toEqual([ 'aaa', 'ab' ])
     expect(vm.selectedNodeMap).toEqual({ aaa: true, ab: true })
     expect(vm.nodeCheckedStateMap).toEqual({
       a: INDETERMINATE,
@@ -1244,8 +1283,14 @@ describe('Multi-select', () => {
     //    |--[v] ab
     //   [ ] b
     vm.select(vm.nodeMap.aab)
-    expect(vm.internalValue).toEqual([ 'a' ])
-    expect(vm.selectedNodeMap).toEqual({ a: true })
+    expect(vm.selectedNodeIds).toEqual([ 'aaa', 'ab', 'aab', 'aa', 'a' ])
+    expect(vm.selectedNodeMap).toEqual({
+      a: true,
+      aa: true,
+      ab: true,
+      aaa: true,
+      aab: true,
+    })
     expect(vm.nodeCheckedStateMap).toEqual({
       a: CHECKED,
       aa: CHECKED,
@@ -1272,7 +1317,7 @@ describe('Multi-select', () => {
     //    |--[v] ab
     //   [ ] b
     vm.select(vm.nodeMap.ab)
-    expect(vm.internalValue).toEqual([ 'ab' ])
+    expect(vm.selectedNodeIds).toEqual([ 'ab' ])
     expect(vm.selectedNodeMap).toEqual({ ab: true })
     expect(vm.nodeCheckedStateMap).toEqual({
       a: INDETERMINATE,
@@ -1298,7 +1343,7 @@ describe('Multi-select', () => {
     //    |--[v] ab
     //   [v] b
     vm.select(vm.nodeMap.b)
-    expect(vm.internalValue).toEqual([ 'ab', 'b' ])
+    expect(vm.selectedNodeIds).toEqual([ 'ab', 'b' ])
     expect(vm.selectedNodeMap).toEqual({ ab: true, b: true })
     expect(vm.nodeCheckedStateMap).toEqual({
       a: INDETERMINATE,
@@ -1324,7 +1369,7 @@ describe('Multi-select', () => {
     //    |--[v] ab
     //   [v] b
     vm.select(vm.nodeMap.aab)
-    expect(vm.internalValue).toEqual([ 'ab', 'b', 'aab' ])
+    expect(vm.selectedNodeIds).toEqual([ 'ab', 'b', 'aab' ])
     expect(vm.selectedNodeMap).toEqual({ aab: true, ab: true, b: true })
     expect(vm.nodeCheckedStateMap).toEqual({
       a: INDETERMINATE,
@@ -1350,8 +1395,15 @@ describe('Multi-select', () => {
     //    |--[v] ab
     //   [v] b
     vm.select(vm.nodeMap.aaa)
-    expect(vm.internalValue).toEqual([ 'b', 'a' ]) // keep order
-    expect(vm.selectedNodeMap).toEqual({ a: true, b: true })
+    expect(vm.selectedNodeIds).toEqual([ 'ab', 'b', 'aab', 'aaa', 'aa', 'a' ]) // keep order
+    expect(vm.selectedNodeMap).toEqual({
+      a: true,
+      aa: true,
+      ab: true,
+      aaa: true,
+      aab: true,
+      b: true,
+    })
     expect(vm.nodeCheckedStateMap).toEqual({
       a: CHECKED,
       aa: CHECKED,
@@ -1378,8 +1430,8 @@ describe('Multi-select', () => {
     //    |--[ ] ab
     //   [ ] b
     vm.select(vm.nodeMap.aa)
-    expect(vm.internalValue).toEqual([ 'aa' ])
-    expect(vm.selectedNodeMap).toEqual({ aa: true })
+    expect(vm.selectedNodeIds).toEqual([ 'aa', 'aaa', 'aab' ])
+    expect(vm.selectedNodeMap).toEqual({ aa: true, aaa: true, aab: true })
     expect(vm.nodeCheckedStateMap).toEqual({
       a: INDETERMINATE,
       aa: CHECKED,
@@ -1390,7 +1442,7 @@ describe('Multi-select', () => {
     })
 
     vm.select(vm.nodeMap.a)
-    expect(vm.internalValue).toEqual([])
+    expect(vm.selectedNodeIds).toEqual([])
     expect(vm.selectedNodeMap).toEqual({})
     expect(vm.nodeCheckedStateMap).toEqual({
       a: UNCHECKED,
@@ -1423,9 +1475,9 @@ describe('Disable Item Selection', () => {
       const { vm } = wrapper
 
       vm.select(vm.nodeMap.b)
-      expect(vm.internalValue).toEqual([ 'b' ])
+      expect(vm.selectedNodeIds).toEqual([ 'b' ])
       vm.select(vm.nodeMap.a)
-      expect(vm.internalValue).toEqual([ 'b' ])
+      expect(vm.selectedNodeIds).toEqual([ 'b' ])
     })
 
     it('nested', () => {
@@ -1476,25 +1528,25 @@ describe('Disable Item Selection', () => {
       const { vm } = wrapper
 
       vm.select(vm.nodeMap.a)
-      expect(vm.internalValue).toEqual([])
+      expect(vm.selectedNodeIds).toEqual([])
       vm.select(vm.nodeMap.aa)
-      expect(vm.internalValue).toEqual([])
+      expect(vm.selectedNodeIds).toEqual([])
       vm.select(vm.nodeMap.b)
-      expect(vm.internalValue).toEqual([ 'b' ])
+      expect(vm.selectedNodeIds).toEqual([ 'b' ])
       vm.select(vm.nodeMap.ba)
-      expect(vm.internalValue).toEqual([ 'b' ])
+      expect(vm.selectedNodeIds).toEqual([ 'b' ])
       vm.select(vm.nodeMap.bb)
-      expect(vm.internalValue).toEqual([ 'bb' ])
+      expect(vm.selectedNodeIds).toEqual([ 'bb' ])
       vm.select(vm.nodeMap.c)
-      expect(vm.internalValue).toEqual([ 'c' ])
+      expect(vm.selectedNodeIds).toEqual([ 'c' ])
       vm.select(vm.nodeMap.ca)
-      expect(vm.internalValue).toEqual([ 'c' ])
+      expect(vm.selectedNodeIds).toEqual([ 'c' ])
       vm.select(vm.nodeMap.cb)
-      expect(vm.internalValue).toEqual([ 'cb' ])
+      expect(vm.selectedNodeIds).toEqual([ 'cb' ])
       vm.select(vm.nodeMap.cba)
-      expect(vm.internalValue).toEqual([ 'cb' ])
+      expect(vm.selectedNodeIds).toEqual([ 'cb' ])
       vm.select(vm.nodeMap.cbb)
-      expect(vm.internalValue).toEqual([ 'cbb' ])
+      expect(vm.selectedNodeIds).toEqual([ 'cbb' ])
     })
   })
 
@@ -1522,11 +1574,11 @@ describe('Disable Item Selection', () => {
         const { vm } = wrapper
 
         vm.select(vm.nodeMap.a)
-        expect(vm.internalValue).toEqual([ 'a' ])
+        expect(vm.selectedNodeIds).toEqual([ 'a' ])
         vm.select(vm.nodeMap.b)
-        expect(vm.internalValue).toEqual([ 'a' ])
+        expect(vm.selectedNodeIds).toEqual([ 'a' ])
         vm.select(vm.nodeMap.c)
-        expect(vm.internalValue).toEqual([ 'a', 'c' ])
+        expect(vm.selectedNodeIds).toEqual([ 'a', 'c' ])
       })
 
       it('disabled parent node', () => {
@@ -1572,12 +1624,74 @@ describe('Disable Item Selection', () => {
         })
         const { vm } = wrapper
 
+        // current:
+        //   { } a <- select
+        //    |--{ } aa
+        //    |--{ } ab
+        //   {-} b
+        //    |--{v} ba
+        //    |--{ } bb
+        //   {v} c
+        //    |--{v} ca
+        //    |--{v} cb
+        // expected result:
+        //   { } a
+        //    |--{ } aa
+        //    |--{ } ab
+        //   {-} b
+        //    |--{v} ba
+        //    |--{ } bb
+        //   {v} c
+        //    |--{v} ca
+        //    |--{v} cb
         vm.select(vm.nodeMap.a)
-        expect(vm.internalValue).toEqual([ 'ba', 'c' ])
+        expect(vm.selectedNodeIds).toEqual([ 'ba', 'c', 'ca', 'cb' ])
+
+        // current:
+        //   { } a
+        //    |--{ } aa
+        //    |--{ } ab
+        //   {-} b <- deselect
+        //    |--{v} ba
+        //    |--{ } bb
+        //   {v} c
+        //    |--{v} ca
+        //    |--{v} cb
+        // expected result:
+        //   { } a
+        //    |--{ } aa
+        //    |--{ } ab
+        //   {-} b
+        //    |--{v} ba
+        //    |--{ } bb
+        //   {v} c
+        //    |--{v} ca
+        //    |--{v} cb
         vm.select(vm.nodeMap.b)
-        expect(vm.internalValue).toEqual([ 'ba', 'c' ])
+        expect(vm.selectedNodeIds).toEqual([ 'ba', 'c', 'ca', 'cb' ])
+
+        // current:
+        //   { } a
+        //    |--{ } aa
+        //    |--{ } ab
+        //   {-} b
+        //    |--{v} ba
+        //    |--{ } bb
+        //   {v} c <- deselect
+        //    |--{v} ca
+        //    |--{v} cb
+        // expected result:
+        //   { } a
+        //    |--{ } aa
+        //    |--{ } ab
+        //   {-} b
+        //    |--{v} ba
+        //    |--{ } bb
+        //   {v} c
+        //    |--{v} ca
+        //    |--{v} cb
         vm.select(vm.nodeMap.c)
-        expect(vm.internalValue).toEqual([ 'ba', 'c' ])
+        expect(vm.selectedNodeIds).toEqual([ 'ba', 'c', 'ca', 'cb' ])
       })
 
       it('disabled child node', () => {
@@ -1640,24 +1754,284 @@ describe('Disable Item Selection', () => {
         })
         const { vm } = wrapper
 
+        // current:
+        //   [-] a <- deselect
+        //    |--{v} aa
+        //    |--[ ] ab
+        //   [v] b
+        //    |--{v} ba
+        //    |--{v} bb
+        //   [ ] c
+        //    |--{ } ca
+        //    |--{ } cb
+        //   [-] d
+        //    |--{v} da
+        //    |--{ } db
+        //    |--[ ] dc
+        // expected result:
+        //   [-] a
+        //    |--{v} aa
+        //    |--[ ] ab
+        //   [v] b
+        //    |--{v} ba
+        //    |--{v} bb
+        //   [ ] c
+        //    |--{ } ca
+        //    |--{ } cb
+        //   [-] d
+        //    |--{v} da
+        //    |--{ } db
+        //    |--[ ] dc
         vm.select(vm.nodeMap.a)
-        expect(vm.internalValue).toEqual([ 'aa', 'b', 'da' ])
+        expect(vm.selectedNodeIds).toEqual([ 'aa', 'b', 'ba', 'bb', 'da' ])
+
+        // current:
+        //   [-] a
+        //    |--{v} aa
+        //    |--[ ] ab <- select
+        //   [v] b
+        //    |--{v} ba
+        //    |--{v} bb
+        //   [ ] c
+        //    |--{ } ca
+        //    |--{ } cb
+        //   [-] d
+        //    |--{v} da
+        //    |--{ } db
+        //    |--[ ] dc
+        // expected result:
+        //   [v] a
+        //    |--{v} aa
+        //    |--[v] ab
+        //   [v] b
+        //    |--{v} ba
+        //    |--{v} bb
+        //   [ ] c
+        //    |--{ } ca
+        //    |--{ } cb
+        //   [-] d
+        //    |--{v} da
+        //    |--{ } db
+        //    |--[ ] dc
         vm.select(vm.nodeMap.ab)
-        expect(vm.internalValue).toEqual([ 'b', 'da', 'a' ])
+        expect(vm.selectedNodeIds).toEqual([ 'aa', 'b', 'ba', 'bb', 'da', 'ab', 'a' ])
+
+        // current:
+        //   [v] a <- deselect
+        //    |--{v} aa
+        //    |--[v] ab
+        //   [v] b
+        //    |--{v} ba
+        //    |--{v} bb
+        //   [ ] c
+        //    |--{ } ca
+        //    |--{ } cb
+        //   [-] d
+        //    |--{v} da
+        //    |--{ } db
+        //    |--[ ] dc
+        // expected result:
+        //   [-] a
+        //    |--{v} aa
+        //    |--[ ] ab
+        //   [v] b
+        //    |--{v} ba
+        //    |--{v} bb
+        //   [ ] c
+        //    |--{ } ca
+        //    |--{ } cb
+        //   [-] d
+        //    |--{v} da
+        //    |--{ } db
+        //    |--[ ] dc
         vm.select(vm.nodeMap.a)
-        expect(vm.internalValue).toEqual([ 'b', 'da', 'aa' ])
+        expect(vm.selectedNodeIds).toEqual([ 'aa', 'b', 'ba', 'bb', 'da' ])
+
+        // current:
+        //   [-] a
+        //    |--{v} aa
+        //    |--[ ] ab <- select
+        //   [v] b
+        //    |--{v} ba
+        //    |--{v} bb
+        //   [ ] c
+        //    |--{ } ca
+        //    |--{ } cb
+        //   [-] d
+        //    |--{v} da
+        //    |--{ } db
+        //    |--[ ] dc
+        // expected result:
+        //   [-] a
+        //    |--{v} aa
+        //    |--[ ] ab
+        //   [v] b
+        //    |--{v} ba
+        //    |--{v} bb
+        //   [ ] c
+        //    |--{ } ca
+        //    |--{ } cb
+        //   [-] d
+        //    |--{v} da
+        //    |--{ } db
+        //    |--[ ] dc
         vm.select(vm.nodeMap.ab)
-        expect(vm.internalValue).toEqual([ 'b', 'da', 'a' ])
+        expect(vm.selectedNodeIds).toEqual([ 'aa', 'b', 'ba', 'bb', 'da', 'ab', 'a' ])
+
+        // current:
+        //   [-] a
+        //    |--{v} aa
+        //    |--[ ] ab
+        //   [v] b <- deselect
+        //    |--{v} ba
+        //    |--{v} bb
+        //   [ ] c
+        //    |--{ } ca
+        //    |--{ } cb
+        //   [-] d
+        //    |--{v} da
+        //    |--{ } db
+        //    |--[ ] dc
+        // expected result:
+        //   [-] a
+        //    |--{v} aa
+        //    |--[ ] ab
+        //   [v] b
+        //    |--{v} ba
+        //    |--{v} bb
+        //   [ ] c
+        //    |--{ } ca
+        //    |--{ } cb
+        //   [-] d
+        //    |--{v} da
+        //    |--{ } db
+        //    |--[ ] dc
         vm.select(vm.nodeMap.b)
-        expect(vm.internalValue).toEqual([ 'b', 'da', 'a' ])
+        expect(vm.selectedNodeIds).toEqual([ 'aa', 'b', 'ba', 'bb', 'da', 'ab', 'a' ])
+
+        // current:
+        //   [-] a
+        //    |--{v} aa
+        //    |--[ ] ab
+        //   [v] b
+        //    |--{v} ba
+        //    |--{v} bb
+        //   [ ] c <- select
+        //    |--{ } ca
+        //    |--{ } cb
+        //   [-] d
+        //    |--{v} da
+        //    |--{ } db
+        //    |--[ ] dc
+        // expected result:
+        //   [-] a
+        //    |--{v} aa
+        //    |--[ ] ab
+        //   [v] b
+        //    |--{v} ba
+        //    |--{v} bb
+        //   [ ] c
+        //    |--{ } ca
+        //    |--{ } cb
+        //   [-] d
+        //    |--{v} da
+        //    |--{ } db
+        //    |--[ ] dc
         vm.select(vm.nodeMap.c)
-        expect(vm.internalValue).toEqual([ 'b', 'da', 'a' ])
+        expect(vm.selectedNodeIds).toEqual([ 'aa', 'b', 'ba', 'bb', 'da', 'ab', 'a' ])
+
+        // current:
+        //   [-] a
+        //    |--{v} aa
+        //    |--[ ] ab
+        //   [v] b
+        //    |--{v} ba
+        //    |--{v} bb
+        //   [ ] c
+        //    |--{ } ca
+        //    |--{ } cb
+        //   [-] d <- deselect
+        //    |--{v} da
+        //    |--{ } db
+        //    |--[ ] dc
+        // expected result:
+        //   [-] a
+        //    |--{v} aa
+        //    |--[ ] ab
+        //   [v] b
+        //    |--{v} ba
+        //    |--{v} bb
+        //   [ ] c
+        //    |--{ } ca
+        //    |--{ } cb
+        //   [-] d
+        //    |--{v} da
+        //    |--{ } db
+        //    |--[ ] dc
         vm.select(vm.nodeMap.d)
-        expect(vm.internalValue).toEqual([ 'b', 'da', 'a' ])
+        expect(vm.selectedNodeIds).toEqual([ 'aa', 'b', 'ba', 'bb', 'da', 'ab', 'a' ])
+
+        // current:
+        //   [-] a
+        //    |--{v} aa
+        //    |--[ ] ab
+        //   [v] b
+        //    |--{v} ba
+        //    |--{v} bb
+        //   [ ] c
+        //    |--{ } ca
+        //    |--{ } cb
+        //   [-] d
+        //    |--{v} da
+        //    |--{ } db
+        //    |--[ ] dc <- select
+        // expected result:
+        //   [-] a
+        //    |--{v} aa
+        //    |--[ ] ab
+        //   [v] b
+        //    |--{v} ba
+        //    |--{v} bb
+        //   [ ] c
+        //    |--{ } ca
+        //    |--{ } cb
+        //   [-] d
+        //    |--{v} da
+        //    |--{ } db
+        //    |--[v] dc
         vm.select(vm.nodeMap.dc)
-        expect(vm.internalValue).toEqual([ 'b', 'da', 'a', 'dc' ])
+        expect(vm.selectedNodeIds).toEqual([ 'aa', 'b', 'ba', 'bb', 'da', 'ab', 'a', 'dc' ])
+
+        // current:
+        //   [-] a
+        //    |--{v} aa
+        //    |--[ ] ab
+        //   [v] b
+        //    |--{v} ba
+        //    |--{v} bb
+        //   [ ] c
+        //    |--{ } ca
+        //    |--{ } cb
+        //   [-] d <- deselect
+        //    |--{v} da
+        //    |--{ } db
+        //    |--[v] dc
+        // expected result:
+        //   [-] a
+        //    |--{v} aa
+        //    |--[ ] ab
+        //   [v] b
+        //    |--{v} ba
+        //    |--{v} bb
+        //   [ ] c
+        //    |--{ } ca
+        //    |--{ } cb
+        //   [-] d
+        //    |--{v} da
+        //    |--{ } db
+        //    |--[ ] dc
         vm.select(vm.nodeMap.d)
-        expect(vm.internalValue).toEqual([ 'b', 'da', 'a' ])
+        expect(vm.selectedNodeIds).toEqual([ 'aa', 'b', 'ba', 'bb', 'da', 'ab', 'a' ])
       })
 
       it('nested', () => {
@@ -1696,12 +2070,62 @@ describe('Disable Item Selection', () => {
         })
         const { vm } = wrapper
 
+        // current:
+        //   [-] a <- deselect
+        //    |--{v} aa
+        //    |   |--{v} aaa
+        //    |   |--{v} aab
+        //    |--[-] ab
+        //    |   |--{v} aba
+        //    |   |--[ ] abb
+        // expected result:
+        //   [-] a
+        //    |--{v} aa
+        //    |   |--{v} aaa
+        //    |   |--{v} aab
+        //    |--[-] ab
+        //    |   |--{v} aba
+        //    |   |--[ ] abb
         vm.select(vm.nodeMap.a)
-        expect(vm.internalValue).toEqual([ 'aa', 'aba' ])
+        expect(vm.selectedNodeIds).toEqual([ 'aa', 'aaa', 'aab', 'aba' ])
+
+        // current:
+        //   [-] a
+        //    |--{v} aa
+        //    |   |--{v} aaa
+        //    |   |--{v} aab
+        //    |--[-] ab <- deselect
+        //    |   |--{v} aba
+        //    |   |--[ ] abb
+        // expected result:
+        //   [-] a
+        //    |--{v} aa
+        //    |   |--{v} aaa
+        //    |   |--{v} aab
+        //    |--[-] ab
+        //    |   |--{v} aba
+        //    |   |--[ ] abb
         vm.select(vm.nodeMap.ab)
-        expect(vm.internalValue).toEqual([ 'aa', 'aba' ])
+        expect(vm.selectedNodeIds).toEqual([ 'aa', 'aaa', 'aab', 'aba' ])
+
+        // current:
+        //   [-] a
+        //    |--{v} aa
+        //    |   |--{v} aaa
+        //    |   |--{v} aab
+        //    |--[-] ab
+        //    |   |--{v} aba
+        //    |   |--[ ] abb <- select
+        // expected result:
+        //   [v] a
+        //    |--{v} aa
+        //    |   |--{v} aaa
+        //    |   |--{v} aab
+        //    |--[v] ab
+        //    |   |--{v} aba
+        //    |   |--[v] abb
         vm.select(vm.nodeMap.abb)
-        expect(vm.internalValue).toEqual([ 'a' ])
+        expect(vm.selectedNodeIds).toEqual([ 'aa', 'aaa', 'aab', 'aba', 'abb', 'ab', 'a' ])
       })
     })
 
@@ -1736,17 +2160,17 @@ describe('Disable Item Selection', () => {
         const { vm } = wrapper
 
         vm.select(vm.nodeMap.a)
-        expect(vm.internalValue).toEqual([])
+        expect(vm.selectedNodeIds).toEqual([])
         vm.select(vm.nodeMap.aa)
-        expect(vm.internalValue).toEqual([ 'aa' ])
+        expect(vm.selectedNodeIds).toEqual([ 'aa' ])
         vm.select(vm.nodeMap.aa)
-        expect(vm.internalValue).toEqual([])
+        expect(vm.selectedNodeIds).toEqual([])
         vm.select(vm.nodeMap.b)
-        expect(vm.internalValue).toEqual([ 'b' ])
+        expect(vm.selectedNodeIds).toEqual([ 'b' ])
         vm.select(vm.nodeMap.ba)
-        expect(vm.internalValue).toEqual([ 'b' ])
+        expect(vm.selectedNodeIds).toEqual([ 'b' ])
         vm.select(vm.nodeMap.bb)
-        expect(vm.internalValue).toEqual([ 'b', 'bb' ])
+        expect(vm.selectedNodeIds).toEqual([ 'b', 'bb' ])
       })
 
       it('nested', () => {
@@ -1776,13 +2200,13 @@ describe('Disable Item Selection', () => {
         const { vm } = wrapper
 
         vm.select(vm.nodeMap.a)
-        expect(vm.internalValue).toEqual([ 'a' ])
+        expect(vm.selectedNodeIds).toEqual([ 'a' ])
         vm.select(vm.nodeMap.aa)
-        expect(vm.internalValue).toEqual([ 'a' ])
+        expect(vm.selectedNodeIds).toEqual([ 'a' ])
         vm.select(vm.nodeMap.aaa)
-        expect(vm.internalValue).toEqual([ 'a' ])
+        expect(vm.selectedNodeIds).toEqual([ 'a' ])
         vm.select(vm.nodeMap.aab)
-        expect(vm.internalValue).toEqual([ 'a', 'aab' ])
+        expect(vm.selectedNodeIds).toEqual([ 'a', 'aab' ])
       })
     })
   })
@@ -1914,13 +2338,13 @@ describe('Menu', () => {
     customTrigger(firstRemove, 'mousedown', BUTTON_LEFT)
     expect(wrapper.data()).toEqual(jasmine.objectContaining({
       isOpen: true,
-      internalValue: [ 'b' ],
+      selectedNodeIds: [ 'b' ],
     }))
 
     customTrigger(secondRemove, 'mousedown', BUTTON_LEFT)
     expect(wrapper.data()).toEqual(jasmine.objectContaining({
       isOpen: true,
-      internalValue: [],
+      selectedNodeIds: [],
     }))
   })
 
@@ -1976,28 +2400,28 @@ describe('Keyboard Support', () => {
       input = queryInput(wrapper)
 
       expect(wrapper.vm.searchQuery).toBe('')
-      expect(wrapper.vm.internalValue).toEqual([ 'a', 'b' ])
+      expect(wrapper.vm.selectedNodeIds).toEqual([ 'a', 'b' ])
     })
 
     it('should remove the last value if search input is empty', () => {
       customTrigger(input, 'keydown', KEY_BACKSPACE)
-      expect(wrapper.vm.internalValue).toEqual([ 'a' ])
+      expect(wrapper.vm.selectedNodeIds).toEqual([ 'a' ])
       customTrigger(input, 'keydown', KEY_BACKSPACE)
-      expect(wrapper.vm.internalValue).toEqual([])
+      expect(wrapper.vm.selectedNodeIds).toEqual([])
     })
 
     it('should do nothing if search input has value', async done => {
       await typeSearchText(wrapper, 'test')
       expect(wrapper.vm.searchQuery).toBe('test')
       customTrigger(input, 'keydown', KEY_BACKSPACE)
-      expect(wrapper.vm.internalValue).toEqual([ 'a', 'b' ])
+      expect(wrapper.vm.selectedNodeIds).toEqual([ 'a', 'b' ])
       done()
     })
 
     it('should do nothing when backspaceRemoves=false', () => {
       wrapper.setProps({ backspaceRemoves: false })
       customTrigger(input, 'keydown', KEY_BACKSPACE)
-      expect(wrapper.vm.internalValue).toEqual([ 'a', 'b' ])
+      expect(wrapper.vm.selectedNodeIds).toEqual([ 'a', 'b' ])
     })
   })
 
@@ -2022,28 +2446,28 @@ describe('Keyboard Support', () => {
       input = queryInput(wrapper)
 
       expect(wrapper.vm.searchQuery).toBe('')
-      expect(wrapper.vm.internalValue).toEqual([ 'a', 'b' ])
+      expect(wrapper.vm.selectedNodeIds).toEqual([ 'a', 'b' ])
     })
 
     it('should remove the last value if search input is empty', () => {
       customTrigger(input, 'keydown', KEY_DELETE)
-      expect(wrapper.vm.internalValue).toEqual([ 'a' ])
+      expect(wrapper.vm.selectedNodeIds).toEqual([ 'a' ])
       customTrigger(input, 'keydown', KEY_DELETE)
-      expect(wrapper.vm.internalValue).toEqual([])
+      expect(wrapper.vm.selectedNodeIds).toEqual([])
     })
 
     it('should do nothing if search input has value', async done => {
       await typeSearchText(wrapper, 'test')
       expect(wrapper.vm.searchQuery).toBe('test')
       customTrigger(input, 'keydown', KEY_DELETE)
-      expect(wrapper.vm.internalValue).toEqual([ 'a', 'b' ])
+      expect(wrapper.vm.selectedNodeIds).toEqual([ 'a', 'b' ])
       done()
     })
 
     it('should do nothing when backspaceRemoves=false', () => {
       wrapper.setProps({ deleteRemoves: false })
       customTrigger(input, 'keydown', KEY_DELETE)
-      expect(wrapper.vm.internalValue).toEqual([ 'a', 'b' ])
+      expect(wrapper.vm.selectedNodeIds).toEqual([ 'a', 'b' ])
     })
   })
 
@@ -2073,7 +2497,7 @@ describe('Keyboard Support', () => {
       customTrigger(input, 'keydown', KEY_ESCAPE)
       expect(wrapper.data()).toEqual(jasmine.objectContaining({
         searchQuery: '',
-        internalValue: [ 'a', 'b' ],
+        selectedNodeIds: [ 'a', 'b' ],
       }))
       done()
     })
@@ -2082,12 +2506,12 @@ describe('Keyboard Support', () => {
       wrapper.vm.openMenu()
       expect(wrapper.data()).toEqual(jasmine.objectContaining({
         searchQuery: '',
-        internalValue: [ 'a', 'b' ],
+        selectedNodeIds: [ 'a', 'b' ],
       }))
       customTrigger(input, 'keydown', KEY_ESCAPE)
       expect(wrapper.data()).toEqual(jasmine.objectContaining({
         searchQuery: '',
-        internalValue: [ 'a', 'b' ],
+        selectedNodeIds: [ 'a', 'b' ],
         isOpen: false,
       }))
     })
@@ -2095,13 +2519,13 @@ describe('Keyboard Support', () => {
     it('should reset value if menu is closed', () => {
       expect(wrapper.data()).toEqual(jasmine.objectContaining({
         searchQuery: '',
-        internalValue: [ 'a', 'b' ],
+        selectedNodeIds: [ 'a', 'b' ],
         isOpen: false,
       }))
       customTrigger(input, 'keydown', KEY_ESCAPE)
       expect(wrapper.data()).toEqual(jasmine.objectContaining({
         searchQuery: '',
-        internalValue: [],
+        selectedNodeIds: [],
         isOpen: false,
       }))
     })
@@ -2111,7 +2535,7 @@ describe('Keyboard Support', () => {
       customTrigger(input, 'keydown', KEY_ESCAPE)
       expect(wrapper.data()).toEqual(jasmine.objectContaining({
         searchQuery: '',
-        internalValue: [ 'a', 'b' ],
+        selectedNodeIds: [ 'a', 'b' ],
         isOpen: false,
       }))
     })
@@ -2133,7 +2557,7 @@ describe('Keyboard Support', () => {
       const input = queryInput(wrapper)
 
       customTrigger(input, 'keydown', { ...KEY_ESCAPE, [modifierKey]: true })
-      expect(wrapper.vm.internalValue).toEqual([ 'a' ])
+      expect(wrapper.vm.selectedNodeIds).toEqual([ 'a' ])
     })
   })
 
@@ -2348,9 +2772,9 @@ describe('Props', () => {
     })
 
     it('should reset value on mousedown', () => {
-      expect(wrapper.vm.internalValue).toEqual([ 'a' ])
+      expect(wrapper.vm.selectedNodeIds).toEqual([ 'a' ])
       customTrigger(wrapper.first('.vue-treeselect__x'), 'mousedown', BUTTON_LEFT)
-      expect(wrapper.vm.internalValue).toEqual([])
+      expect(wrapper.vm.selectedNodeIds).toEqual([])
     })
 
     it('should hide when no options selected', () => {
@@ -2500,7 +2924,7 @@ describe('Props', () => {
 
       customTrigger(labelWrapper, 'mousedown', BUTTON_LEFT)
       expect(wrapper.data()).toEqual(jasmine.objectContaining({
-        internalValue: [ 'a' ],
+        selectedNodeIds: [ 'a' ],
         isOpen: false,
       }))
     })
@@ -2521,7 +2945,7 @@ describe('Props', () => {
 
       customTrigger(labelWrapper, 'mousedown', BUTTON_LEFT)
       expect(wrapper.data()).toEqual(jasmine.objectContaining({
-        internalValue: [ 'a' ],
+        selectedNodeIds: [ 'a' ],
         isOpen: true,
         isFocused: false, // auto blur
       }))
@@ -2946,7 +3370,7 @@ describe('Props', () => {
       const { vm } = wrapper
       const { a, b, c, d } = vm.nodeMap
 
-      expect(vm.internalValue).toEqual([ 'a', 'b', 'c', 'd' ])
+      expect(vm.selectedNodeIds).toEqual([ 'a', 'b', 'c', 'd' ])
       expect(vm.visibleValue).toEqual([ a, b, c, d ])
       expect(wrapper.find('.vue-treeselect__multi-value-item').length).toBe(4)
       expect(wrapper.contains('.vue-treeselect__limit-tip')).toBe(false)
@@ -2976,7 +3400,7 @@ describe('Props', () => {
       const { vm } = wrapper
       const { a } = vm.nodeMap
 
-      expect(vm.internalValue).toEqual([ 'a', 'b', 'c', 'd' ])
+      expect(vm.selectedNodeIds).toEqual([ 'a', 'b', 'c', 'd' ])
       expect(vm.visibleValue).toEqual([ a ])
       expect(wrapper.find('.vue-treeselect__multi-value-item').length).toBe(1)
       expect(wrapper.contains('.vue-treeselect__limit-tip')).toBe(true)
@@ -3478,7 +3902,7 @@ describe('Props', () => {
       })
       const { vm } = wrapper
 
-      expect(vm.internalValue).toEqual([ 'a' ])
+      expect(vm.selectedNodeIds).toEqual([ 'a' ])
       expect(vm.nodeMap.a).toEqual(jasmine.objectContaining({
         id: 'a',
         label: 'a',
@@ -3830,6 +4254,8 @@ describe('Props', () => {
   })
 
   describe('sortValueBy', () => {
+    let wrapper, vm
+
     function createArray(len, fn) {
       const arr = []
       let i = 0
@@ -3837,114 +4263,81 @@ describe('Props', () => {
       return arr
     }
 
-    function generateOptions(max) {
-      return (function generate(parent) {
-        return createArray(max, i => {
-          const id = parent + String.fromCharCode(97 + i)
-          const curr = { id, label: id }
-          if (id.length < max) curr.children = generate(id)
-          return curr
-        })
-      })('')
+    function generateOptions(maxLevel) {
+      const generate = (i, level) => {
+        const id = String.fromCharCode(97 + i).repeat(level)
+        const option = { id, label: id.toUpperCase() }
+        if (level < maxLevel) option.children = [ generate(i, level + 1) ]
+        return option
+      }
+
+      return createArray(maxLevel, i => generate(i, 1))
     }
 
-    it('when sortValueBy="ORDER_SELECTED"', () => {
-      const wrapper = mount(Treeselect, {
+    beforeEach(() => {
+      wrapper = mount(Treeselect, {
         propsData: {
-          multiple: true,
           options: generateOptions(4),
-          sortValueBy: 'ORDER_SELECTED',
+          multiple: true,
+          flat: true,
         },
       })
-      const { vm } = wrapper
-      const { a, bb, ccc, dddd } = vm.nodeMap
+      vm = wrapper.vm
+    })
 
-      expect(vm.internalValue).toEqual([])
-      vm.select(bb)
+    it('when sortValueBy="ORDER_SELECTED"', () => {
+      wrapper.setProps({ sortValueBy: 'ORDER_SELECTED' })
+
+      vm.select(vm.nodeMap.bb)
       expect(vm.internalValue).toEqual([ 'bb' ])
-      vm.select(a)
+      vm.select(vm.nodeMap.a)
       expect(vm.internalValue).toEqual([ 'bb', 'a' ])
-      vm.select(dddd)
+      vm.select(vm.nodeMap.dddd)
       expect(vm.internalValue).toEqual([ 'bb', 'a', 'dddd' ])
-      vm.select(ccc)
+      vm.select(vm.nodeMap.ccc)
       expect(vm.internalValue).toEqual([ 'bb', 'a', 'dddd', 'ccc' ])
     })
 
     it('when sortValueBy="LEVEL"', () => {
-      const wrapper = mount(Treeselect, {
-        propsData: {
-          multiple: true,
-          options: generateOptions(4),
-          sortValueBy: 'LEVEL',
-        },
-      })
-      const { vm } = wrapper
-      const { aaa, ab, bb, c, dddd } = vm.nodeMap
+      wrapper.setProps({ sortValueBy: 'LEVEL' })
 
-      expect(vm.internalValue).toEqual([])
-      vm.select(bb)
+      vm.select(vm.nodeMap.bb)
       expect(vm.internalValue).toEqual([ 'bb' ])
-      vm.select(aaa)
+      vm.select(vm.nodeMap.aaa)
       expect(vm.internalValue).toEqual([ 'bb', 'aaa' ])
-      vm.select(dddd)
+      vm.select(vm.nodeMap.dddd)
       expect(vm.internalValue).toEqual([ 'bb', 'aaa', 'dddd' ])
-      vm.select(c)
+      vm.select(vm.nodeMap.c)
       expect(vm.internalValue).toEqual([ 'c', 'bb', 'aaa', 'dddd' ])
-      vm.select(ab)
-      expect(vm.internalValue).toEqual([ 'c', 'ab', 'bb', 'aaa', 'dddd' ])
+      vm.select(vm.nodeMap.aa)
+      expect(vm.internalValue).toEqual([ 'c', 'aa', 'bb', 'aaa', 'dddd' ])
     })
 
     it('when sortValueBy="INDEX"', () => {
-      const wrapper = mount(Treeselect, {
-        propsData: {
-          multiple: true,
-          options: generateOptions(4),
-          sortValueBy: 'INDEX',
-        },
-      })
-      const { vm } = wrapper
-      const { aaaa, bbb, cc, d } = vm.nodeMap
+      wrapper.setProps({ sortValueBy: 'INDEX' })
 
-      expect(vm.internalValue).toEqual([])
-      vm.select(d)
+      vm.select(vm.nodeMap.d)
       expect(vm.internalValue).toEqual([ 'd' ])
-      vm.select(bbb)
+      vm.select(vm.nodeMap.bbb)
       expect(vm.internalValue).toEqual([ 'bbb', 'd' ])
-      vm.select(aaaa)
+      vm.select(vm.nodeMap.aaaa)
       expect(vm.internalValue).toEqual([ 'aaaa', 'bbb', 'd' ])
-      vm.select(cc)
+      vm.select(vm.nodeMap.cc)
       expect(vm.internalValue).toEqual([ 'aaaa', 'bbb', 'cc', 'd' ])
     })
 
-    it('should re-sort value immediately after component gets initialized', () => {
-      const wrapper = mount(Treeselect, {
-        propsData: {
-          multiple: true,
-          options: generateOptions(4),
-          sortValueBy: 'LEVEL',
-          value: [ 'aaa', 'bb', 'c' ],
-        },
-      })
-      const { vm } = wrapper
-
-      expect(vm.internalValue).toEqual([ 'c', 'bb', 'aaa' ])
-    })
-
     it('should re-sort value after prop value changes', () => {
-      const wrapper = mount(Treeselect, {
-        propsData: {
-          multiple: true,
-          options: generateOptions(4),
-          sortValueBy: 'LEVEL',
-          value: [ 'aaa', 'bb', 'c' ],
-        },
+      wrapper.setProps({
+        sortValueBy: 'ORDER_SELECTED',
+        value: [ 'bb', 'c', 'aaa' ],
       })
 
-      expect(wrapper.vm.internalValue).toEqual([ 'c', 'bb', 'aaa' ])
       wrapper.setProps({ sortValueBy: 'INDEX' })
-      expect(wrapper.vm.internalValue).toEqual([ 'aaa', 'bb', 'c' ])
+      expect(vm.internalValue).toEqual([ 'aaa', 'bb', 'c' ])
       wrapper.setProps({ sortValueBy: 'LEVEL' })
-      expect(wrapper.vm.internalValue).toEqual([ 'c', 'bb', 'aaa' ])
+      expect(vm.internalValue).toEqual([ 'c', 'bb', 'aaa' ])
+      wrapper.setProps({ sortValueBy: 'ORDER_SELECTED' })
+      expect(vm.internalValue).toEqual([ 'bb', 'c', 'aaa' ])
     })
   })
 
@@ -4031,11 +4424,11 @@ describe('Props', () => {
         }).$mount()
         const comp = vm.$children[0]
 
-        expect(comp.internalValue).toEqual([ 'a' ])
+        expect(comp.selectedNodeIds).toEqual([ 'a' ])
 
         comp.select(comp.nodeMap.b)
         await comp.$nextTick()
-        expect(comp.internalValue).toEqual([ 'b' ])
+        expect(comp.selectedNodeIds).toEqual([ 'b' ])
         expect(vm.value).toEqual('b')
 
         done()
@@ -4067,11 +4460,11 @@ describe('Props', () => {
         }).$mount()
         const comp = vm.$children[0]
 
-        expect(comp.internalValue).toEqual([ 'a' ])
+        expect(comp.selectedNodeIds).toEqual([ 'a' ])
 
         comp.select(comp.nodeMap.b)
         await comp.$nextTick()
-        expect(comp.internalValue).toEqual([ 'a', 'b' ])
+        expect(comp.selectedNodeIds).toEqual([ 'a', 'b' ])
         expect(vm.value).toEqual([ 'a', 'b' ])
 
         done()
@@ -4107,11 +4500,11 @@ describe('Props', () => {
         }).$mount()
         const comp = vm.$children[0]
 
-        expect(comp.internalValue).toEqual([ 'a' ])
+        expect(comp.selectedNodeIds).toEqual([ 'a' ])
 
         comp.select(comp.nodeMap.b)
         await comp.$nextTick()
-        expect(comp.internalValue).toEqual([ 'b' ])
+        expect(comp.selectedNodeIds).toEqual([ 'b' ])
         expect(vm.value).toEqual({
           id: 'b',
           label: 'b',
@@ -4149,11 +4542,11 @@ describe('Props', () => {
         }).$mount()
         const comp = vm.$children[0]
 
-        expect(comp.internalValue).toEqual([ 'a' ])
+        expect(comp.selectedNodeIds).toEqual([ 'a' ])
 
         comp.select(comp.nodeMap.b)
         await comp.$nextTick()
-        expect(comp.internalValue).toEqual([ 'a', 'b' ])
+        expect(comp.selectedNodeIds).toEqual([ 'a', 'b' ])
         expect(vm.value).toEqual([ {
           id: 'a',
           label: 'a',
@@ -4195,7 +4588,7 @@ describe('Props', () => {
         }).$mount()
         const comp = vm.$children[0]
 
-        expect(comp.internalValue).toEqual([ 'a' ])
+        expect(comp.selectedNodeIds).toEqual([ 'a' ])
 
         comp.select(comp.nodeMap.b)
         await comp.$nextTick()
