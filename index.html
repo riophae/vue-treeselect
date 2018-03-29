@@ -1,7 +1,7 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><title>Vue-Treeselect</title><meta name="description" content="A multi-select component with nested options for Vue.js"><meta property="og:title" content="Vue-Treeselect"><meta property="og:site_name" content="Vue-Treeselect"><meta property="og:url" content="https://vue-treeselect.js.org/"><meta property="og:description" content="A multi-select component with nested options for Vue.js"><meta property="og:image" content="https://vue-treeselect.js.org/static/vue-logo.png"><meta property="twitter:title" content="Vue-Treeselect"><meta property="twitter:description" content="A multi-select component with nested options for Vue.js"><meta property="twitter:image" content="https://vue-treeselect.js.org/static/vue-logo.png"><!-- Global site tag (gtag.js) - Google Analytics--><script async src="https://www.googletagmanager.com/gtag/js?id=UA-108169693-1"></script><script>window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
-gtag('config', 'UA-108169693-1');</script><link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600|Dosis:300,500"><link href="static/css/app.3d28bd5aa4b8abf44b27d5ae9eee280e.css" rel="stylesheet"></head><body><div id="app"><header class="site-header"><div class="container" id="header"><div class="site-header-logo"><a class="site-header-logo-link" href="/vue-treeselect">Vue<span class="site-header-logo-component-name">Treeselect</span></a></div><nav class="site-header-nav"><a class="site-header-nav-item" href="https://github.com/riophae/vue-treeselect/releases">v0.0.14</a><a class="site-header-nav-item" href="https://github.com/riophae/vue-treeselect"><img class="list-img" src="https://img.shields.io/github/stars/riophae/vue-treeselect.svg?style=social&amp;label=Star"></a></nav></div></header><div class="container"><section id="main"><div id="sidebar"><div class="sidebar-nav" :class="{ sticky: isNavSticky }"><section class="sidebar-nav-section"><h4 class="sidebar-nav-section-title">Introduction</h4><ul class="sidebar-nav-list"></ul></section><section class="sidebar-nav-section"><h4 class="sidebar-nav-section-title">Getting Started</h4><ul class="sidebar-nav-list"><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'installation' }"><a href="#installation">Installation</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'basic-usage' }"><a href="#basic-usage">Basic Usage</a></li></ul></section><section class="sidebar-nav-section"><h4 class="sidebar-nav-section-title">Guides</h4><ul class="sidebar-nav-list"><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'basic-features' }"><a href="#basic-features">Basic Features</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'more-features' }"><a href="#more-features">More Features</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'delayed-loading' }"><a href="#delayed-loading">Delayed Loading</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'flat-mode-and-sort-values' }"><a href="#flat-mode-and-sort-values">Flat Mode &amp; Sort Values</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'disable-branch-nodes' }"><a href="#disable-branch-nodes">Disable Branch Nodes</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'disable-item-selection' }"><a href="#disable-item-selection">Disable Item Selection</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'customize-key-names' }"><a href="#customize-key-names">Customize Key Names</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'customize-option-label' }"><a href="#customize-option-label">Customize Option Label</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'vuex-support' }"><a href="#vuex-support">Vuex Support</a></li></ul></section><section class="sidebar-nav-section"><h4 class="sidebar-nav-section-title">API</h4><ul class="sidebar-nav-list"><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'node' }"><a href="#node">Node</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'props' }"><a href="#props">Props</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'events' }"><a href="#events">Events</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'slots' }"><a href="#slots">Slots</a></li></ul></section></div></div><div id="content"><h1 id="introduction">Introduction<a class="anchor" href="#introduction"><anchor></anchor></a></h1><section><p><a href="https://github.com/riophae/vue-treeselect">vue-treeselect</a> is a multi-select component with nested options for <a href="https://www.vuejs.org">Vue.js 2</a>, featuring:</p>
+gtag('config', 'UA-108169693-1');</script><link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600|Dosis:300,500"><link href="static/css/app.3b80435b8fd31dc29bc30b00a3387317.css" rel="stylesheet"></head><body><div id="app"><header class="site-header"><div class="container" id="header"><div class="site-header-logo"><a class="site-header-logo-link" href="/vue-treeselect">Vue<span class="site-header-logo-component-name">Treeselect</span></a></div><nav class="site-header-nav"><a class="site-header-nav-item" href="https://github.com/riophae/vue-treeselect/releases">v0.0.15</a><a class="site-header-nav-item" href="https://github.com/riophae/vue-treeselect"><img class="list-img" src="https://img.shields.io/github/stars/riophae/vue-treeselect.svg?style=social&amp;label=Star"></a></nav></div></header><div class="container"><section id="main"><div id="sidebar"><div class="sidebar-nav" :class="{ sticky: isNavSticky }"><section class="sidebar-nav-section"><h4 class="sidebar-nav-section-title">Introduction</h4><ul class="sidebar-nav-list"></ul></section><section class="sidebar-nav-section"><h4 class="sidebar-nav-section-title">Getting Started</h4><ul class="sidebar-nav-list"><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'installation' }"><a href="#installation">Installation</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'basic-usage' }"><a href="#basic-usage">Basic Usage</a></li></ul></section><section class="sidebar-nav-section"><h4 class="sidebar-nav-section-title">Guides</h4><ul class="sidebar-nav-list"><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'basic-features' }"><a href="#basic-features">Basic Features</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'more-features' }"><a href="#more-features">More Features</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'delayed-loading' }"><a href="#delayed-loading">Delayed Loading</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'flat-mode-and-sort-values' }"><a href="#flat-mode-and-sort-values">Flat Mode &amp; Sort Values</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'prevent-value-combining' }"><a href="#prevent-value-combining">Prevent Value Combining</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'disable-branch-nodes' }"><a href="#disable-branch-nodes">Disable Branch Nodes</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'disable-item-selection' }"><a href="#disable-item-selection">Disable Item Selection</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'customize-key-names' }"><a href="#customize-key-names">Customize Key Names</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'customize-option-label' }"><a href="#customize-option-label">Customize Option Label</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'vuex-support' }"><a href="#vuex-support">Vuex Support</a></li></ul></section><section class="sidebar-nav-section"><h4 class="sidebar-nav-section-title">API</h4><ul class="sidebar-nav-list"><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'node' }"><a href="#node">Node</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'props' }"><a href="#props">Props</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'events' }"><a href="#events">Events</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'slots' }"><a href="#slots">Slots</a></li></ul></section></div></div><div id="content"><h1 id="introduction">Introduction<a class="anchor" href="#introduction"><anchor></anchor></a></h1><section><p><a href="https://github.com/riophae/vue-treeselect">vue-treeselect</a> is a multi-select component with nested options for <a href="https://www.vuejs.org">Vue.js 2</a>, featuring:</p>
 <ul>
 <li>Single select</li>
 <li>Multiple select</li>
@@ -78,7 +78,7 @@ gtag('config', 'UA-108169693-1');</script><link rel="stylesheet" type="text/css"
 &lt;/div&gt;
 </code></template><template slot="javascript"><code v-pre>export default {
   data: () =&gt; ({
-    value: null,
+    value: [],
     options: [ {
       id: 'fruits',
       label: 'Fruits',
@@ -296,7 +296,12 @@ export default {
 <li>Whenever a branch node has all children checked, the branch node itself will be checked too</li>
 </ol>
 <p>Sometimes we don't need that mechanism, and want branch nodes and leaf nodes don't affect each other. In this case, flat mode should be used, as demonstrated in the following.</p>
-<p>If you want to control the order in which selected options to be displayed, use the <code>sortValueBy</code> prop.</p>
+<p>If you want to control the order in which selected options to be displayed, use the <code>sortValueBy</code> prop. This prop has three options:</p>
+<ul>
+<li><code>&quot;ORDER_SELECTED&quot;</code> (default) - Order selected</li>
+<li><code>&quot;LEVEL&quot;</code> - Level of option: C &gt; BB &gt; AAA</li>
+<li><code>&quot;INDEX&quot;</code> - Index of option: AAA &gt; BB &gt; C</li>
+</ul>
 <demo><flat-mode-and-sort-values slot="demo"></flat-mode-and-sort-values><template slot="html"><code v-pre>&lt;div&gt;
   &lt;treeselect
     :multiple=&quot;true&quot;
@@ -307,11 +312,12 @@ export default {
     placeholder=&quot;Try selecting some options.&quot;
     v-model=&quot;value&quot;
     /&gt;
+  &lt;pre class=&quot;result&quot;&gt;{{ value }}&lt;/pre&gt;
   &lt;p&gt;&lt;strong&gt;Sort value by:&lt;/strong&gt;&lt;/p&gt;
-  &lt;p&gt;
-    &lt;label&gt;&lt;input type=&quot;radio&quot; value=&quot;ORDER_SELECTED&quot; v-model=&quot;sortValueBy&quot;&gt;&lt;code&gt;&quot;ORDER_SELECTED&quot;&lt;/code&gt; - Order selected (default)&lt;/label&gt;&lt;br&gt;
-    &lt;label&gt;&lt;input type=&quot;radio&quot; value=&quot;LEVEL&quot; v-model=&quot;sortValueBy&quot;&gt;&lt;code&gt;&quot;LEVEL&quot;&lt;/code&gt; - Level of option: C &gt; BB &gt; AAA&lt;/label&gt;&lt;br&gt;
-    &lt;label&gt;&lt;input type=&quot;radio&quot; value=&quot;INDEX&quot; v-model=&quot;sortValueBy&quot;&gt;&lt;code&gt;&quot;INDEX&quot;&lt;/code&gt; - Index of option: AAA &gt; BB &gt; C&lt;/label&gt;
+  &lt;p class=&quot;options&quot;&gt;
+    &lt;label&gt;&lt;input type=&quot;radio&quot; value=&quot;ORDER_SELECTED&quot; v-model=&quot;sortValueBy&quot;&gt;Order selected&lt;/label&gt;
+    &lt;label&gt;&lt;input type=&quot;radio&quot; value=&quot;LEVEL&quot; v-model=&quot;sortValueBy&quot;&gt;Level&lt;/label&gt;
+    &lt;label&gt;&lt;input type=&quot;radio&quot; value=&quot;INDEX&quot; v-model=&quot;sortValueBy&quot;&gt;Index&lt;/label&gt;
   &lt;/p&gt;
 &lt;/div&gt;
 </code></template><template slot="javascript"><code v-pre>import { generateOptions } from './utils'
@@ -319,11 +325,66 @@ export default {
 export default {
   data() {
     return {
-      value: null,
+      value: [ 'c', 'aaa', 'bb' ],
       options: generateOptions(3),
       sortValueBy: 'ORDER_SELECTED',
     }
   },
+}
+</code></template></demo></section><section><h2 id="prevent-value-combining" data-section>Prevent Value Combining<a class="anchor" href="#prevent-value-combining"><anchor></anchor></a></h2><p>For non-flat &amp; multi-select mode, if a branch node and its all descendants are checked, vue-treeselect will combine them into a single item in the value array, as demonstrated in the following example. By using <code>valueConsistsOf</code> prop you can change that behavior. This prop has three options:</p>
+<ul>
+<li><code>&quot;ALL&quot;</code> - Any node that is checked will be included in the <code>value</code> array</li>
+<li><code>&quot;BRANCH_PRIORITY&quot;</code> (default) - If a branch node is checked, all its descendants will be excluded in the <code>value</code> array</li>
+<li><code>&quot;LEAF_PRIORITY&quot;</code> - If a branch node is checked, this node itself and its branch descendants will be excluded from the <code>value</code> array but its leaf descendants will be included</li>
+</ul>
+<demo><prevent-value-combining slot="demo"></prevent-value-combining><template slot="html"><code v-pre>&lt;div&gt;
+  &lt;treeselect
+    :multiple=&quot;true&quot;
+    :options=&quot;options&quot;
+    :value-consists-of=&quot;valueConsistsOf&quot;
+    v-model=&quot;value&quot;
+    /&gt;
+  &lt;pre class=&quot;result&quot;&gt;{{ value }}&lt;/pre&gt;
+  &lt;p&gt;&lt;strong&gt;Value consists of:&lt;/strong&gt;&lt;/p&gt;
+  &lt;p class=&quot;options&quot;&gt;
+    &lt;label&gt;&lt;input type=&quot;radio&quot; value=&quot;ALL&quot; v-model=&quot;valueConsistsOf&quot;&gt;All&lt;/label&gt;
+    &lt;label&gt;&lt;input type=&quot;radio&quot; value=&quot;BRANCH_PRIORITY&quot; v-model=&quot;valueConsistsOf&quot;&gt;Branch priority&lt;/label&gt;
+    &lt;label&gt;&lt;input type=&quot;radio&quot; value=&quot;LEAF_PRIORITY&quot; v-model=&quot;valueConsistsOf&quot;&gt;Leaf priority&lt;/label&gt;
+  &lt;/p&gt;
+&lt;/div&gt;
+</code></template><template slot="javascript"><code v-pre>export default {
+  data: () =&gt; ({
+    value: [],
+    valueConsistsOf: 'BRANCH_PRIORITY',
+    options: [ {
+      id: 'company',
+      label: 'Company 🏢',
+      children: [ {
+        id: 'group-i',
+        label: 'Group I 👥',
+        children: [ {
+          id: 'person-a',
+          label: 'Person A 👱',
+        }, {
+          id: 'person-b',
+          label: 'Person B 🧔',
+        } ],
+      }, {
+        id: 'group-ii',
+        label: 'Group II 👥',
+        children: [ {
+          id: 'person-c',
+          label: 'Person C 👳',
+        }, {
+          id: 'person-d',
+          label: 'Person D 👧',
+        } ],
+      }, {
+        id: 'person-e',
+        label: 'Person E 👩',
+      } ],
+    } ],
+  }),
 }
 </code></template></demo></section><section><h2 id="disable-branch-nodes" data-section>Disable Branch Nodes<a class="anchor" href="#disable-branch-nodes"><anchor></anchor></a></h2><p>Set <code>disableBranchNodes: true</code> to make branch nodes uncheckable and treat them as collapsible folders only. You may also want to show a count next to the label of each branch node by setting <code>showCount: true</code>.</p>
 <demo><disable-branch-nodes slot="demo"></disable-branch-nodes><template slot="html"><code v-pre>&lt;treeselect
@@ -472,4 +533,4 @@ export default {
     ...mapMutations([ 'updateValue' ]),
   },
 }
-</code></template></demo></section><h1 id="api">API<a class="anchor" href="#api"><anchor></anchor></a></h1><section><h2 id="node" data-section>Node<a class="anchor" href="#node"><anchor></anchor></a></h2><doc-node></doc-node></section><section><h2 id="props" data-section>Props<a class="anchor" href="#props"><anchor></anchor></a></h2><doc-props></doc-props></section><section><h2 id="events" data-section>Events<a class="anchor" href="#events"><anchor></anchor></a></h2><doc-events></doc-events></section><section><h2 id="slots" data-section>Slots<a class="anchor" href="#slots"><anchor></anchor></a></h2><doc-slots></doc-slots></section></div></section></div><footer class="site-footer"><div class="container">Copyright &copy; 2017-2018 <a href="https://github.com/riophae">Riophae Lee</a>. MIT Licensed.</div></footer></div><script src="static/prism.min.js"></script><script type="text/javascript" src="static/js/manifest.37a2ecbb1d1b7e6c9ada.js"></script><script type="text/javascript" src="static/js/vendor.e257220c7157b08b6173.js"></script><script type="text/javascript" src="static/js/app.85f8e1cbb0ebe52d19ad.js"></script></body></html>
+</code></template></demo></section><h1 id="api">API<a class="anchor" href="#api"><anchor></anchor></a></h1><section><h2 id="node" data-section>Node<a class="anchor" href="#node"><anchor></anchor></a></h2><doc-node></doc-node></section><section><h2 id="props" data-section>Props<a class="anchor" href="#props"><anchor></anchor></a></h2><doc-props></doc-props></section><section><h2 id="events" data-section>Events<a class="anchor" href="#events"><anchor></anchor></a></h2><doc-events></doc-events></section><section><h2 id="slots" data-section>Slots<a class="anchor" href="#slots"><anchor></anchor></a></h2><doc-slots></doc-slots></section></div></section></div><footer class="site-footer"><div class="container">Copyright &copy; 2017-2018 <a href="https://github.com/riophae">Riophae Lee</a>. MIT Licensed.</div></footer></div><script src="static/prism.min.js"></script><script type="text/javascript" src="static/js/manifest.37a2ecbb1d1b7e6c9ada.js"></script><script type="text/javascript" src="static/js/vendor.86a2af96e7610c4db28b.js"></script><script type="text/javascript" src="static/js/app.ece2098901f9cf079ea4.js"></script></body></html>
