@@ -69,6 +69,15 @@
     If you want to control the order in which selected options to be displayed, use the `sortValueBy` prop.
   +demo('FlatModeAndSortValues')
 
++guide('Prevent Value Combining')
+  :markdown-it
+    For non-flat & multi-select mode, if a branch node and its all descendants are checked, vue-treeselect will combine them into a single item in the value array, as demonstrated in the following example. By using `valueConsistsOf` prop you can change that behavior. This prop has three options:
+
+      - `"ALL"` - Any node that is checked will be included in the `value` array
+      - `"BRANCH_PRIORITY"` (default) - If a branch node is checked, all its descendants will be excluded in the `value` array
+      - `"LEAF_PRIORITY"` - If a branch node is checked, this node itself and its branch descendants will be excluded from the `value` array but its leaf descendants will be included
+  +demo('PreventValueCombining')
+
 +guide('Disable Branch Nodes')
   :markdown-it
     Set `disableBranchNodes: true` to make branch nodes uncheckable and treat them as collapsible folders only. You may also want to show a count next to the label of each branch node by setting `showCount: true`.

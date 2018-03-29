@@ -528,9 +528,9 @@ export default {
     /**
      * Which kind of nodes should be included in the value array in multi-select mode
      * Acceptable values:
-     *   - "ALL" - Any node that is checked will be included in the value array
-     *   - "BRANCH_PRIORITY" (default) - If a branch node is checked, it's descendants will be excluded in the value array
-     *   - "LEAF_PRIORITY" - If a branch node is checked, it will be excluded from the value array but its leaf descendants will be included
+     *   - "ALL" - Any node that is checked will be included in the `value` array
+     *   - "BRANCH_PRIORITY" (default) - If a branch node is checked, all its descendants will be excluded in the `value` array
+     *   - "LEAF_PRIORITY" - If a branch node is checked, this node itself and its branch descendants will be excluded from the `value` array but its leaf descendants will be included
      */
     valueConsistsOf: {
       type: String,
