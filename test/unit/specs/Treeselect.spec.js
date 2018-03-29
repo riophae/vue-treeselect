@@ -4394,6 +4394,78 @@ describe('Props', () => {
     })
   })
 
+  describe('valueConsistsOf', () => {
+    let wrapper, vm
+
+    beforeEach(() => {
+      wrapper = mount(Treeselect, {
+        propsData: {
+          multiple: true,
+          options: [ {
+            id: 'a',
+            label: 'a',
+            children: [ {
+              id: 'aa',
+              label: 'aa',
+              children: [ {
+                id: 'aaa',
+                label: 'aaa',
+              }, {
+                id: 'aab',
+                label: 'aab',
+              } ],
+            }, {
+              id: 'ab',
+              label: 'ab',
+              children: [ {
+                id: 'aba',
+                label: 'aba',
+              }, {
+                id: 'abb',
+                label: 'abb',
+              } ],
+            }, {
+              id: 'ac',
+              label: 'ac',
+            } ],
+          } ],
+          value: [ 'aa' ],
+        },
+      })
+      vm = wrapper.vm
+    })
+
+    it('when valueConsistsOf=ALL', () => {
+      wrapper.setProps({ valueConsistsOf: 'ALL' })
+
+      expect(vm.internalValue).toEqual([ 'aa', 'aaa', 'aab' ])
+      vm.select(vm.nodeMap.ab)
+      expect(vm.internalValue).toEqual([ 'aa', 'aaa', 'aab', 'ab', 'aba', 'abb' ])
+      vm.select(vm.nodeMap.ac)
+      expect(vm.internalValue).toEqual([ 'aa', 'aaa', 'aab', 'ab', 'aba', 'abb', 'ac', 'a' ])
+    })
+
+    it('when valueConsistsOf=BRANCH_PRIORITY', () => {
+      wrapper.setProps({ valueConsistsOf: 'BRANCH_PRIORITY' })
+
+      expect(vm.internalValue).toEqual([ 'aa' ])
+      vm.select(vm.nodeMap.ab)
+      expect(vm.internalValue).toEqual([ 'aa', 'ab' ])
+      vm.select(vm.nodeMap.ac)
+      expect(vm.internalValue).toEqual([ 'a' ])
+    })
+
+    it('when valueConsistsOf=LEAF_PRIORITY', () => {
+      wrapper.setProps({ valueConsistsOf: 'LEAF_PRIORITY' })
+
+      expect(vm.internalValue).toEqual([ 'aaa', 'aab' ])
+      vm.select(vm.nodeMap.ab)
+      expect(vm.internalValue).toEqual([ 'aaa', 'aab', 'aba', 'abb' ])
+      vm.select(vm.nodeMap.ac)
+      expect(vm.internalValue).toEqual([ 'aaa', 'aab', 'aba', 'abb', 'ac' ])
+    })
+  })
+
   describe('valueFormat', () => {
     describe('when valueFormat=id', () => {
       it('single-select', async done => {
