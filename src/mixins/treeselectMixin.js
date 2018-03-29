@@ -61,8 +61,6 @@ export default {
   props: {
     /**
      * Autofocus the component on mount?
-     * @default false
-     * @type {boolean}
      */
     autofocus: {
       type: Boolean,
@@ -71,8 +69,6 @@ export default {
 
     /**
      * Automatically load root options on mount?
-     * @default true
-     * @type {boolean}
      */
     autoLoadRootOptions: {
       type: Boolean,
@@ -81,8 +77,6 @@ export default {
 
     /**
      * Whether the menu should be always open
-     * @default false
-     * @type {boolean}
      */
     alwaysOpen: {
       type: Boolean,
@@ -91,8 +85,6 @@ export default {
 
     /**
      * Whether pressing backspace removes the last item if there is no text input
-     * @default true
-     * @type {boolean}
      */
     backspaceRemoves: {
       type: Boolean,
@@ -101,8 +93,6 @@ export default {
 
     /**
      * Show branch nodes before leaf nodes?
-     * @default false
-     * @type {boolean}
      */
     branchNodesFirst: {
       type: Boolean,
@@ -111,8 +101,6 @@ export default {
 
     /**
      * Show an "×" icon that resets value?
-     * @default true
-     * @type {boolean}
      */
     clearable: {
       type: Boolean,
@@ -121,8 +109,6 @@ export default {
 
     /**
      * Title for the "×" icon when multiple: true
-     * @default "Clear all"
-     * @type {string}
      */
     clearAllText: {
       type: String,
@@ -133,8 +119,6 @@ export default {
      * Whether to clear the search input after selecting.
      * Use only when `multiple` is `true`.
      * For single-select mode, it **always** clears the input after selecting an option regardless of the prop value.
-     * @default false
-     * @type {boolean}
      */
     clearOnSelect: {
       type: Boolean,
@@ -143,8 +127,6 @@ export default {
 
     /**
      * Title for the "×" icon
-     * @default "Clear value"
-     * @type {string}
      */
     clearValueText: {
       type: String,
@@ -154,8 +136,6 @@ export default {
     /**
      * Whether to close the menu after selecting an option?
      * Use only when `multiple` is `true`.
-     * @default true
-     * @type {boolean}
      */
     closeOnSelect: {
       type: Boolean,
@@ -164,8 +144,6 @@ export default {
 
     /**
      * Whether pressing delete key removes the last item if there is no text input
-     * @default true
-     * @type {boolean}
      */
     deleteRemoves: {
       type: Boolean,
@@ -174,8 +152,6 @@ export default {
 
     /**
      * Prevent branch nodes from being selected?
-     * @default false
-     * @type {boolean}
      */
     disableBranchNodes: {
       type: Boolean,
@@ -184,8 +160,6 @@ export default {
 
     /**
      * Disable the control?
-     * @default false
-     * @type {boolean}
      */
     disabled: {
       type: Boolean,
@@ -194,8 +168,6 @@ export default {
 
     /**
      * Disable the fuzzy matching functionality?
-     * @default false
-     * @type {boolean}
      */
     disableFuzzyMatching: {
       type: Boolean,
@@ -205,8 +177,6 @@ export default {
     /**
      * How many levels of branch nodes should be automatically expanded when loaded.
      * Set `Infinity` to make all branch nodes expanded by default.
-     * @default 0
-     * @type {number}
      */
     defaultExpandLevel: {
       type: Number,
@@ -215,8 +185,6 @@ export default {
 
     /**
      * Whether escape clears the value when the menu is closed
-     * @default true
-     * @type {boolean}
      */
     escapeClearsValue: {
       type: Boolean,
@@ -228,8 +196,6 @@ export default {
      *   - Whenever a branch node gets checked, all its children will be checked too
      *   - Whenever a branch node has all children checked, the branch node itself will be checked too
      * Set `true` to disable this mechanism
-     * @default false
-     * @type {boolean}
      */
     flat: {
       type: Boolean,
@@ -239,7 +205,6 @@ export default {
     /**
      * Will be passed with all events as second param.
      * Useful for identifying events origin.
-     * @default null
      * @type {string|number}
     */
     id: {
@@ -249,8 +214,6 @@ export default {
     /**
      * Limit the display of selected options.
      * The rest will be hidden within the limitText string.
-     * @default Infinity
-     * @type {number}
      */
     limit: {
       type: Number,
@@ -259,7 +222,6 @@ export default {
 
     /**
      * Function that processes the message shown when selected elements pass the defined limit
-     * @default count => `and ${count} more`
      * @type {function(number): string}
      */
     limitText: {
@@ -269,7 +231,6 @@ export default {
 
     /**
      * Function that processes error message shown when loading children options failed
-     * @default error => `Failed to load children options: ${error.message || String(error)}.`
      * @type {function(Error): string}
      */
     loadChildrenErrorText: {
@@ -279,7 +240,6 @@ export default {
 
     /**
      * Function used for dynamic loading options
-     * @type {function}
      */
     loadChildrenOptions: {
       type: Function,
@@ -287,8 +247,6 @@ export default {
 
     /**
      * Text displayed when a branch node is loading its children options
-     * @default "Loading..."
-     * @type {string}
      */
     loadingText: {
       type: String,
@@ -297,7 +255,6 @@ export default {
 
     /**
      * Function used for dynamic loading root options
-     * @type {function}
      */
     loadRootOptions: {
       type: Function,
@@ -305,8 +262,6 @@ export default {
 
     /**
      * Sets `maxHeight` style value of the menu
-     * @default 300
-     * @type {number}
      */
     maxHeight: {
       type: Number,
@@ -315,8 +270,6 @@ export default {
 
     /**
      * Set `true` to allow selecting multiple options (a.k.a., multi-select mode)
-     * @default false
-     * @type {boolean}
      */
     multiple: {
       type: Boolean,
@@ -325,8 +278,6 @@ export default {
 
     /**
      * Text displayed when a branch node has no children options
-     * @default "No children available..."
-     * @type {string}
      */
     noChildrenText: {
       type: String,
@@ -335,8 +286,6 @@ export default {
 
     /**
      * Text displayed when there are no matching search results
-     * @default "No results found..."
-     * @type {string}
      */
     noResultsText: {
       type: String,
@@ -345,8 +294,6 @@ export default {
 
     /**
      * Text displayed when there are no available options
-     * @default "No options available."
-     * @type {string}
      */
     noOptionsText: {
       type: String,
@@ -355,8 +302,6 @@ export default {
 
     /**
      * Used for normalizing source data
-     * @default Identity
-     * @type {function}
      */
     normalizer: {
       type: Function,
@@ -365,8 +310,6 @@ export default {
 
     /**
      * Fixed opening direction
-     * @default "auto"
-     * @type {string}
      */
     openDirection: {
       type: String,
@@ -375,8 +318,6 @@ export default {
 
     /**
      * Whether to automatically open the menu when the control is clicked
-     * @default true
-     * @type {boolean}
      */
     openOnClick: {
       type: Boolean,
@@ -385,8 +326,6 @@ export default {
 
     /**
      * Whether to automatically open the menu when the control is focused
-     * @default false
-     * @type {boolean}
      */
     openOnFocus: {
       type: Boolean,
@@ -403,8 +342,6 @@ export default {
 
     /**
      * Field placeholder, displayed when there's no value.
-     * @default "Selecting..."
-     * @type {string}
      */
     placeholder: {
       type: String,
@@ -413,7 +350,6 @@ export default {
 
     /**
      * Whether to retain the scroll position on menu reopen
-     * @type {boolean}
      */
     retainScrollPosition: {
       type: Boolean,
@@ -422,8 +358,6 @@ export default {
 
     /**
      * Text displayed asking user whether to retry loading children options
-     * @default "Retry?"
-     * @type {string}
      */
     retryText: {
       type: String,
@@ -432,8 +366,6 @@ export default {
 
     /**
      * Title for the retry button
-     * @default "Click to retry"
-     * @type {string}
      */
     retryTitle: {
       type: String,
@@ -442,8 +374,6 @@ export default {
 
     /**
      * Enable searching feature?
-     * @default true
-     * @type {boolean}
      */
     searchable: {
       type: Boolean,
@@ -452,8 +382,6 @@ export default {
 
     /**
      * Whether to show a children count next to the label of each branch node
-     * @default false
-     * @type {boolean}
      */
     showCount: {
       type: Boolean,
@@ -467,8 +395,6 @@ export default {
      *   - "ALL_DESCENDANTS"
      *   - "LEAF_CHILDREN"
      *   - "LEAF_DESCENDANTS"
-     * @default "ALL_CHILDREN"
-     * @type {string}
      */
     showCountOf: {
       type: String,
@@ -492,8 +418,6 @@ export default {
      *   - "ORDER_SELECTED"
      *   - "LEVEL"
      *   - "INDEX"
-     * @default "ORDER_SELECTED"
-     * @type {string}
      */
     sortValueBy: {
       type: String,
@@ -510,8 +434,6 @@ export default {
 
     /**
      * Tab index of the control
-     * @default 0
-     * @type {number}
      */
     tabIndex: {
       type: Number,
@@ -546,8 +468,6 @@ export default {
      * Acceptable values:
      *   - "id"
      *   - "object"
-     * @default "id"
-     * @type {string}
      */
     valueFormat: {
       type: String,
