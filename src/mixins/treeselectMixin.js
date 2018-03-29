@@ -422,14 +422,10 @@ export default {
     sortValueBy: {
       type: String,
       default: ORDER_SELECTED,
-    },
-
-    /**
-     * TODO
-     */
-    subItemsLimit: {
-      type: Number,
-      default: Infinity,
+      validator(value) {
+        const acceptableValues = [ ORDER_SELECTED, LEVEL, INDEX ]
+        return acceptableValues.indexOf(value) !== -1
+      },
     },
 
     /**
