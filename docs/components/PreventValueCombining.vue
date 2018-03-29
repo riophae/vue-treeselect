@@ -8,10 +8,10 @@
       />
     <pre class="result">{{ value }}</pre>
     <p><strong>Value consists of:</strong></p>
-    <p>
-      <label><input type="radio" value="ALL" v-model="valueConsistsOf"><code>"ALL"</code></label>
-      <label><input type="radio" value="BRANCH_PRIORITY" v-model="valueConsistsOf"><code>"BRANCH_PRIORITY"</code></label>
-      <label><input type="radio" value="LEAF_PRIORITY" v-model="valueConsistsOf"><code>"LEAF_PRIORITY"</code></label>
+    <p class="options">
+      <label><input type="radio" value="ALL" v-model="valueConsistsOf">All</label>
+      <label><input type="radio" value="BRANCH_PRIORITY" v-model="valueConsistsOf">Branch priority</label>
+      <label><input type="radio" value="LEAF_PRIORITY" v-model="valueConsistsOf">Leaf priority</label>
     </p>
   </div>
 </template>
