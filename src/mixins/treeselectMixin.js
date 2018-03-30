@@ -890,12 +890,12 @@ export default {
           if (node.isBranch) {
             node.expandsOnSearch = false
             node.hasMatchedChild = false
-            this.searchingCount[node.id] = {
+            this.$set(this.searchingCount, node.id, {
               [ALL_CHILDREN]: 0,
               [ALL_DESCENDANTS]: 0,
               [LEAF_CHILDREN]: 0,
               [LEAF_DESCENDANTS]: 0,
-            }
+            })
           }
         })
         const lowerCasedSearchQuery = this.searchQuery.toLowerCase()

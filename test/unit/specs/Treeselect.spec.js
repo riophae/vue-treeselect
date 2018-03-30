@@ -4250,6 +4250,89 @@ describe('Props', () => {
     })
   })
 
+  it('showCount', () => {
+    // TODO
+  })
+
+  describe('showCountOnSearch', () => {
+    let wrapper
+
+    beforeEach(() => {
+      wrapper = mount(Treeselect, {
+        propsData: {
+          options: [ {
+            id: 'a',
+            label: 'a',
+            children: [ {
+              id: 'aa',
+              label: 'aa',
+            }, {
+              id: 'ab',
+              label: 'ab',
+            } ],
+          }, {
+            id: 'b',
+            label: 'b',
+            children: [ {
+              id: 'ba',
+              label: 'ba',
+            }, {
+              id: 'bb',
+              label: 'bb',
+            } ],
+          } ],
+          showCount: true,
+        },
+        data: {
+          isOpen: true,
+        },
+      })
+    })
+
+    it('when showCountOnSearch=false', async done => {
+      wrapper.setProps({ showCountOnSearch: false })
+
+      await typeSearchText(wrapper, 'a')
+      expect(wrapper.contains('.vue-treeselect__count')).toBe(false)
+
+      done()
+    })
+
+    it('when showCountOnSearch=true', async done => {
+      wrapper.setProps({ showCountOnSearch: true })
+
+      await typeSearchText(wrapper, 'a')
+      expect(wrapper.contains('.vue-treeselect__count')).toBe(true)
+
+      done()
+    })
+
+    it('when showCountOnSearch not specified', async done => {
+      await typeSearchText(wrapper, 'a')
+      expect(wrapper.contains('.vue-treeselect__count')).toBe(true)
+
+      done()
+    })
+
+    it('should refresh count number after search changes', async done => {
+      wrapper.setProps({ showCountOnSearch: true })
+
+      const options = wrapper.find(TreeselectOption)
+      expect(options[0].vm.node.id).toBe('a')
+      expect(options[1].vm.node.id).toBe('b')
+
+      await typeSearchText(wrapper, 'a')
+      expect(options[0].first('.vue-treeselect__count').text()).toEqual('(2)')
+      expect(options[1].first('.vue-treeselect__count').text()).toEqual('(1)')
+
+      await typeSearchText(wrapper, 'b')
+      expect(options[0].first('.vue-treeselect__count').text()).toEqual('(1)')
+      expect(options[1].first('.vue-treeselect__count').text()).toEqual('(2)')
+
+      done()
+    })
+  })
+
   describe('sortValueBy', () => {
     let wrapper, vm
 
