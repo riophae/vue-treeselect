@@ -25,8 +25,8 @@
         id: 'company',
         label: 'Company 🏢',
         children: [ {
-          id: 'group-i',
-          label: 'Group I 👥',
+          id: 'team-i',
+          label: 'Team I 👥',
           children: [ {
             id: 'person-a',
             label: 'Person A 👱',
@@ -35,8 +35,8 @@
             label: 'Person B 🧔',
           } ],
         }, {
-          id: 'group-ii',
-          label: 'Group II 👥',
+          id: 'team-ii',
+          label: 'Team II 👥',
           children: [ {
             id: 'person-c',
             label: 'Person C 👳',
