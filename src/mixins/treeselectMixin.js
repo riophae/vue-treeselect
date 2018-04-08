@@ -655,8 +655,13 @@ export default {
     },
 
     initialize(rootOptions) {
-      if (Array.isArray(rootOptions)) this.rootOptionsLoaded = true
-      this.initializeRootOptions(rootOptions || [])
+      if (Array.isArray(rootOptions)) {
+        this.rootOptionsLoaded = true
+        this.initializeRootOptions(rootOptions)
+      } else {
+        this.initializeRootOptions([])
+      }
+
       this.completeSelectedNodeIdList()
       this.buildSelectedNodeMap()
       this.buildNodeCheckedStateMap()
