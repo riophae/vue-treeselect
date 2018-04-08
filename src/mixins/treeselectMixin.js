@@ -658,13 +658,12 @@ export default {
       if (Array.isArray(rootOptions)) {
         this.rootOptionsLoaded = true
         this.initializeRootOptions(rootOptions)
+        this.completeSelectedNodeIdList()
+        this.buildSelectedNodeMap()
+        this.buildNodeCheckedStateMap()
       } else {
         this.initializeRootOptions([])
       }
-
-      this.completeSelectedNodeIdList()
-      this.buildSelectedNodeMap()
-      this.buildNodeCheckedStateMap()
     },
 
     getValue() {
@@ -1143,6 +1142,8 @@ export default {
           } else {
             parentNode.children = this.normalize(parentNode, children)
             parentNode.isLoaded = true
+            this.completeSelectedNodeIdList()
+            this.buildSelectedNodeMap()
             this.buildNodeCheckedStateMap()
           }
         }

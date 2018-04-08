@@ -3733,6 +3733,79 @@ describe('Props', () => {
       jasmine.clock().uninstall()
       done()
     })
+
+    it('after loading children options of a checked node, should also check these children options', async done => {
+      const wrapper = mount(Treeselect, {
+        propsData: {
+          options: [ {
+            id: 'a',
+            label: 'a',
+            children: null,
+          } ],
+          multiple: true,
+          flat: false,
+          valueFormat: 'id',
+          valueConsistsOf: 'BRANCH_PRIORITY',
+          loadChildrenOptions(parentNode, callback) {
+            if (parentNode.id === 'a') {
+              callback(null, [ {
+                id: 'aa',
+                label: 'aa',
+                children: null,
+              }, {
+                id: 'ab',
+                label: 'ab',
+              } ])
+            }
+
+            if (parentNode.id === 'aa') {
+              callback(null, [ {
+                id: 'aaa',
+                label: 'aaa',
+              }, {
+                id: 'aab',
+                label: 'aab',
+              } ])
+            }
+          },
+        },
+        data: {
+          isOpen: true,
+        },
+      })
+      const { vm } = wrapper
+
+      vm.select(vm.nodeMap.a)
+      expect(vm.internalValue).toEqual([ 'a' ])
+      expect(vm.selectedNodeIds).toEqual([ 'a' ])
+      expect(vm.nodeCheckedStateMap).toEqual({
+        a: CHECKED,
+      })
+
+      vm.toggleExpanded(vm.nodeMap.a)
+      await vm.$nextTick()
+      expect(vm.internalValue).toEqual([ 'a' ])
+      expect(vm.selectedNodeIds).toEqual([ 'a', 'aa', 'ab' ])
+      expect(vm.nodeCheckedStateMap).toEqual({
+        a: CHECKED,
+        aa: CHECKED,
+        ab: CHECKED,
+      })
+
+      vm.toggleExpanded(vm.nodeMap.aa)
+      await vm.$nextTick()
+      expect(vm.internalValue).toEqual([ 'a' ])
+      expect(vm.selectedNodeIds).toEqual([ 'a', 'aa', 'ab', 'aaa', 'aab' ])
+      expect(vm.nodeCheckedStateMap).toEqual({
+        a: CHECKED,
+        aa: CHECKED,
+        ab: CHECKED,
+        aaa: CHECKED,
+        aab: CHECKED,
+      })
+
+      done()
+    })
   })
 
   describe('loadRootOptions', () => {
