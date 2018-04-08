@@ -60,7 +60,7 @@ export default {
 
   props: {
     /**
-     * Autofocus the component on mount?
+     * Automatically focus the component on mount?
      */
     autofocus: {
       type: Boolean,
@@ -68,7 +68,7 @@ export default {
     },
 
     /**
-     * Automatically load root options on mount?
+     * Automatically load root options on mount. When set to `false`, root options will be loaded when the menu is opened.
      */
     autoLoadRootOptions: {
       type: Boolean,
@@ -84,7 +84,7 @@ export default {
     },
 
     /**
-     * Whether pressing backspace removes the last item if there is no text input
+     * Whether pressing backspace key removes the last item if there is no text input
      */
     backspaceRemoves: {
       type: Boolean,

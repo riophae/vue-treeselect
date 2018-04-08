@@ -37,17 +37,17 @@
         name: 'autofocus',
         type: 'Boolean',
         defaultValue: v('false'),
-        description: 'Autofocus the component on mount.',
+        description: 'Automatically focus the component on mount.',
       }, {
         name: 'autoLoadRootOptions',
         type: 'Boolean',
         defaultValue: v('true'),
-        description: 'Automatically load root options on mount.',
+        description: `Automatically load root options on mount. When set to ${v('false')}, root options will be loaded when the menu is opened.`,
       }, {
         name: 'backspaceRemoves',
         type: 'Boolean',
         defaultValue: v('true'),
-        description: 'Whether pressing backspace removes the last item if there is no text input.',
+        description: 'Whether pressing backspace key removes the last item if there is no text input.',
       }, {
         name: 'branchNodesFirst',
         type: 'Boolean',
@@ -87,7 +87,7 @@
         name: 'disableBranchNodes',
         type: 'Boolean',
         defaultValue: v('false'),
-        description: 'Whether to prevent branch nodes from being selected.',
+        description: `Whether to prevent branch nodes from being selected. See ${link('#disable-branch-nodes')} for example.`,
       }, {
         name: 'disabled',
         type: 'Boolean',
