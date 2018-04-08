@@ -698,7 +698,7 @@ export default {
 
       const raw = this.extractNodeFromValue(id)
       const label = this.normalizer(raw).label || `${id} (unknown)`
-      const fallbackNode = this.nodeMap[id] = {
+      const fallbackNode = {
         id,
         label,
         ancestors: [],
@@ -713,6 +713,7 @@ export default {
         raw,
       }
 
+      this.$set(this.nodeMap, id, fallbackNode)
       return fallbackNode
     },
 
@@ -1029,7 +1030,7 @@ export default {
           const isMatched = false
           const ancestors = isRootNode ? [] : parentNode.ancestors.concat(parentNode)
           const _index = (isRootNode ? [] : parentNode.index).concat(index)
-          const normalized = this.nodeMap[id] = {
+          const normalized = {
             id,
             label,
             level,
@@ -1089,6 +1090,7 @@ export default {
             normalized.ancestors.forEach(ancestor => ancestor.hasDisabledDescendants = true)
           }
 
+          this.$set(this.nodeMap, id, normalized)
           return normalized
         })
 

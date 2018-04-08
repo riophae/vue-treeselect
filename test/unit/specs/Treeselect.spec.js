@@ -3706,12 +3706,15 @@ describe('Props', () => {
         },
       })
       const { vm } = wrapper
+      // eslint-disable-next-line newline-per-chained-call
+      const getValueText = () => wrapper.first('.vue-treeselect__single-value').text().trim()
 
       expect(vm.nodeMap.aa).toEqual(jasmine.objectContaining({
         id: 'aa',
         label: 'aa (unknown)',
         isFallbackNode: true,
       }))
+      expect(getValueText()).toBe('aa (unknown)')
 
       expect(vm.nodeMap.a.isLoaded).toBe(false)
       vm.toggleExpanded(vm.nodeMap.a)
@@ -3719,11 +3722,13 @@ describe('Props', () => {
       expect(vm.nodeMap.a.isPending).toBe(true)
 
       jasmine.clock().tick(DELAY + 1)
+      await vm.$nextTick()
       expect(vm.nodeMap.a.isLoaded).toBe(true)
       expect(vm.nodeMap.aa).toEqual(jasmine.objectContaining({
         id: 'aa',
         label: 'aa',
       }))
+      expect(getValueText()).toBe('aa')
 
       jasmine.clock().uninstall()
       done()
