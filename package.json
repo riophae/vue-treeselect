@@ -96,6 +96,7 @@
     "size-limit": "^0.17.0",
     "stylelint": "^9.1.2",
     "stylelint-config-xo-space": "^0.7.0",
+    "uglifyjs-webpack-plugin": "^1.2.4",
     "url-loader": "^1.0.1",
     "vue": "^2.2.0",
     "vue-loader": "^14.2.1",
@@ -136,7 +137,13 @@
     "IE >= 9"
   ],
   "size-limit": [
-    { "path": "dist/vue-treeselect.min.js", "limit": "9 KB" },
-    { "path": "dist/vue-treeselect.min.css", "limit": "5 KB" }
+    {
+      "path": "dist/vue-treeselect.min.js",
+      "limit": "9 KB"
+    },
+    {
+      "path": "dist/vue-treeselect.min.css",
+      "limit": "5 KB"
+    }
   ]
 }

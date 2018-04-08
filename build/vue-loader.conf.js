@@ -9,5 +9,6 @@ module.exports = {
       ? config.docs.productionSourceMap
       : config.dev.cssSourceMap,
     extract: isProduction,
+    usePostCSS: true,
   }),
 }
