@@ -1,6 +1,3 @@
-// https://github.com/shelljs/shelljs
-require('./check-versions')()
-
 process.env.NODE_ENV = 'production'
 
 const path = require('path')
