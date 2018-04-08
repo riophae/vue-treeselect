@@ -1303,11 +1303,19 @@ export default {
       const spaceAbove = rect.top
       const spaceBelow = window.innerHeight - rect.bottom
       const hasEnoughSpaceBelow = spaceBelow > this.maxHeight
+      const isInViewport = spaceBelow > -40
 
-      if (hasEnoughSpaceBelow || spaceBelow > spaceAbove || this.openDirection === 'below' || this.openDirection === 'bottom') {
+      switch (true) {
+      case hasEnoughSpaceBelow:
+      case spaceBelow > spaceAbove:
+      case !isInViewport:
+      case this.openDirection === 'below':
+      case this.openDirection === 'bottom':
         this.prefferedOpenDirection = 'below'
-        this.optimizedHeight = Math.min(spaceBelow - 40, this.maxHeight)
-      } else {
+        this.optimizedHeight = Math.max(Math.min(spaceBelow - 40, this.maxHeight), this.maxHeight)
+        break
+
+      default:
         this.prefferedOpenDirection = 'above'
         this.optimizedHeight = Math.min(spaceAbove - 40, this.maxHeight)
       }
