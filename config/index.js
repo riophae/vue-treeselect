@@ -27,6 +27,16 @@ module.exports = {
     productionGzipExtensions: [ 'js', 'css' ],
     bundleAnalyzerReport: process.env.npm_config_report,
   },
+  lib: {
+    env: require('./dev.env'),
+    assetsRoot: path.resolve(__dirname, '../lib'),
+    assetsPublicPath: '/',
+    assetsSubDirectory: '/',
+    productionSourceMap: true,
+    productionGzip: false,
+    productionGzipExtensions: [ 'js', 'css' ],
+    bundleAnalyzerReport: process.env.npm_config_report,
+  },
   docs: {
     env: require('./prod.env'),
     index: path.resolve(__dirname, '../gh-pages/index.html'),
