@@ -3835,7 +3835,7 @@ describe('Props', () => {
       })
     })
 
-    it('should avoid calling `loadingRootOptions` when an in-flight request is unfinished', () => {
+    it('should avoid calling `loadingRootOptions` when an in-flight request is incomplete', () => {
       const loadRootOptions = jasmine.createSpy('loadRootOptions')
       const wrapper = mount(Treeselect, {
         propsData: {
