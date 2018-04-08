@@ -7,7 +7,7 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const config = require('../config')
 const base = require('./webpack.base.conf')
 const utils = require('./utils')
-const version = require('../package').version
+const banner = require('./banner')
 
 const env = process.env.NODE_ENV === 'testing'
   ? require('../config/test.env')
@@ -16,12 +16,6 @@ const env = process.env.NODE_ENV === 'testing'
 base.entry = {
   VueTreeselect: './src/index.js',
 }
-
-const banner = `
-vue-treeselect v${version} | (c) 2017-2018 Riophae Lee
-Released under the MIT License.
-https://vue-treeselect.js.org/
-`.trim()
 
 const webpackConfig = merge(base, {
   output: {

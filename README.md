@@ -127,6 +127,6 @@ Some icons used in this project:
 
 ### License
 
-Copyright (c) 2017-2018 [Riophae Lee](https://github.com/riophae).
+Copyright (c) 2017-present [Riophae Lee](https://github.com/riophae).
 
 Released under the [MIT License](https://github.com/riophae/vue-treeselect/blob/master/LICENSE.md).
