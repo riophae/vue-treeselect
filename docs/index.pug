@@ -34,8 +34,9 @@ html(lang="en")
           nav.site-header-nav
             a.site-header-nav-item(href="https://github.com/riophae/vue-treeselect/releases")
               =`v${require('../package.json').version}`
-            a.site-header-nav-item(href="https://github.com/riophae/vue-treeselect")
-              img.list-img(src="https://img.shields.io/github/stars/riophae/vue-treeselect.svg?style=social&label=Star")
+            span.site-header-nav-item
+              a.github-button(href="https://github.com/riophae/vue-treeselect" data-show-count="true" aria-label="Star riophae/vue-treeselect on GitHub")
+                | Star
       div.container
         section#main
           div#sidebar
@@ -48,6 +49,7 @@ html(lang="en")
       footer.site-footer
         div.container
           | Copyright &copy; 2017-#{new Date().getFullYear()} <a href="https://github.com/riophae">Riophae Lee</a>. MIT Licensed.
+    script(src="https://buttons.github.io/buttons.js" async defer)
     script(src="static/prism.min.js")
 
 +renderToc()
