@@ -53,6 +53,7 @@
     "cross-env": "^5.1.4",
     "cross-spawn": "^6.0.5",
     "css-loader": "^0.28.0",
+    "entities": "^1.1.1",
     "eslint": "^4.18.2",
     "eslint-config-riophae": "0.0.3",
     "eslint-friendly-formatter": "^3.0.0",

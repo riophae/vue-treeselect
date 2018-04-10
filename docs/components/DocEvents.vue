@@ -10,7 +10,7 @@
     <tbody>
       <tr v-for="event in events" :key="event.name">
         <td><strong>{{ event.name }}</strong></td>
-        <td>{{ event.attributes }}</td>
+        <td v-html="event.attributes" />
         <td>{{ event.description }}</td>
       </tr>
     </tbody>
@@ -18,23 +18,25 @@
 </template>
 
 <script>
+  import { makeArgNameList } from './utils'
+
   export default {
     data: () => ({
       events: [ {
         name: 'open',
-        attributes: '(id)',
+        attributes: makeArgNameList([ 'id' ]),
         description: 'Emitted when the menu opens.',
       }, {
         name: 'close',
-        attributes: '(value, id)',
+        attributes: makeArgNameList([ 'value', 'id' ]),
         description: 'Emitted when the menu closes.',
       }, {
         name: 'input',
-        attributes: '(value, id)',
+        attributes: makeArgNameList([ 'value', 'id' ]),
         description: 'Emitted after value changes.',
       }, {
         name: 'search-change',
-        attributes: '(searchQuery, id)',
+        attributes: makeArgNameList([ 'searchQuery', 'id' ]),
         description: 'Emitted after the search query changes.',
       } ],
     }),

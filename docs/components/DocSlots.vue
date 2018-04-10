@@ -18,14 +18,13 @@
 </template>
 
 <script>
-  const v = code => `<code>${code}</code>`
-  const link = (target, text = 'here') => `<a href="${target}">${text}</a>`
+  import { link, makePropList } from './utils'
 
   export default {
     data: () => ({
       slots: [ {
         name: 'option-label',
-        props: [ 'node', 'shouldShowCount', 'count', 'labelClassName', 'countClassName' ].map(v).join(', '),
+        props: makePropList([ 'node', 'shouldShowCount', 'count', 'labelClassName', 'countClassName' ]),
         description: `Slot for custom option label template. See ${link('#customize-option-label')} for detailed information.`,
       } ],
     }),
