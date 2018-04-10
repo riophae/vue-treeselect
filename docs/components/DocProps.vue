@@ -79,6 +79,11 @@
         defaultValue: v('true'),
         description: `Whether to close the menu after selecting an option. Use only when ${v(':multiple="true"')}.`,
       }, {
+        name: 'defaultExpandLevel',
+        type: 'Number',
+        defaultValue: v('0'),
+        description: `How many levels of branch nodes should be automatically expanded when loaded. Set ${v(Infinity)} to make all branch nodes expanded by default.`,
+      }, {
         name: 'deleteRemoves',
         type: 'Boolean',
         defaultValue: v('true'),
@@ -103,11 +108,6 @@
         type: 'Boolean',
         defaultValue: v('false'),
         description: `The fuzzy matching functionality is enabled by default. Set to ${v('true')} to disable it.`,
-      }, {
-        name: 'defaultExpandLevel',
-        type: 'Number',
-        defaultValue: v('0'),
-        description: `How many levels of branch nodes should be automatically expanded when loaded. Set ${v(Infinity)} to make all branch nodes expanded by default.`,
       }, {
         name: 'escapeClearsValue',
         type: 'Boolean',
@@ -149,15 +149,15 @@
         defaultValue: NO_DEFAULT_VALUE,
         description: `As the name suggests, it's used for dynamic loading options. See ${link('#delayed-loading')} for detailed information.`,
       }, {
-        name: 'loadRootOptions',
-        type: 'Function',
-        defaultValue: NO_DEFAULT_VALUE,
-        description: `Used for delayed loading root options. See ${link('#delayed-loading')} for detailed information.`,
-      }, {
         name: 'loadingText',
         type: 'String',
         defaultValue: v('"Loading..."'),
         description: 'Text displayed when a branch node is loading its children options.',
+      }, {
+        name: 'loadRootOptions',
+        type: 'Function',
+        defaultValue: NO_DEFAULT_VALUE,
+        description: `Used for delayed loading root options. See ${link('#delayed-loading')} for detailed information.`,
       }, {
         name: 'maxHeight',
         type: 'Number',
@@ -179,15 +179,15 @@
         defaultValue: v('"No children available..."'),
         description: 'Text displayed when a branch node has no children options.',
       }, {
-        name: 'noResultsText',
-        type: 'String',
-        defaultValue: v('"No results found..."'),
-        description: 'Text displayed when there are no matching search results.',
-      }, {
         name: 'noOptionsText',
         type: 'String',
         defaultValue: v('"No options available."'),
         description: 'Text displayed when there are no available options.',
+      }, {
+        name: 'noResultsText',
+        type: 'String',
+        defaultValue: v('"No results found..."'),
+        description: 'Text displayed when there are no matching search results.',
       }, {
         name: 'normalizer',
         type: 'Function',

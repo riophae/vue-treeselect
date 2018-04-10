@@ -60,6 +60,14 @@ export default {
 
   props: {
     /**
+     * Whether the menu should be always open
+     */
+    alwaysOpen: {
+      type: Boolean,
+      default: false,
+    },
+
+    /**
      * Deprecated. Use `autoFocus` instead.
      */
     autofocus: {
@@ -81,14 +89,6 @@ export default {
     autoLoadRootOptions: {
       type: Boolean,
       default: true,
-    },
-
-    /**
-     * Whether the menu should be always open
-     */
-    alwaysOpen: {
-      type: Boolean,
-      default: false,
     },
 
     /**
@@ -151,6 +151,15 @@ export default {
     },
 
     /**
+     * How many levels of branch nodes should be automatically expanded when loaded.
+     * Set `Infinity` to make all branch nodes expanded by default.
+     */
+    defaultExpandLevel: {
+      type: Number,
+      default: 0,
+    },
+
+    /**
      * Whether pressing delete key removes the last item if there is no text input
      */
     deleteRemoves: {
@@ -188,15 +197,6 @@ export default {
     disableFuzzyMatching: {
       type: Boolean,
       default: false,
-    },
-
-    /**
-     * How many levels of branch nodes should be automatically expanded when loaded.
-     * Set `Infinity` to make all branch nodes expanded by default.
-     */
-    defaultExpandLevel: {
-      type: Number,
-      default: 0,
     },
 
     /**
@@ -316,19 +316,19 @@ export default {
     },
 
     /**
-     * Text displayed when there are no matching search results
-     */
-    noResultsText: {
-      type: String,
-      default: 'No results found...',
-    },
-
-    /**
      * Text displayed when there are no available options
      */
     noOptionsText: {
       type: String,
       default: 'No options available.',
+    },
+
+    /**
+     * Text displayed when there are no matching search results
+     */
+    noResultsText: {
+      type: String,
+      default: 'No results found...',
     },
 
     /**
