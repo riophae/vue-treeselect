@@ -159,6 +159,14 @@ export default {
     },
 
     /**
+     * Delimiter to use to join multiple values for the hidden field value
+     */
+    delimiter: {
+      type: String,
+      default: ',',
+    },
+
+    /**
      * Prevent branch nodes from being selected?
      */
     disableBranchNodes: {
@@ -217,6 +225,14 @@ export default {
     */
     id: {
       default: null,
+    },
+
+    /**
+     * Joins multiple values into a single form field with the delimiter (legacy mode)
+    */
+    joinValues: {
+      type: Boolean,
+      default: false,
     },
 
     /**
@@ -282,6 +298,13 @@ export default {
     multiple: {
       type: Boolean,
       default: false,
+    },
+
+    /**
+     * Generates a hidden <input /> tag with this field name for html forms
+     */
+    name: {
+      type: String,
     },
 
     /**
@@ -784,6 +807,12 @@ export default {
         /* istanbul ignore next */
         () => `Expected a branch node, instead got: ${node}`
       )
+    },
+
+    stringifyValue(value) {
+      return typeof value === 'string'
+        ? value
+        : (value !== null && JSON.stringify(value)) || ''
     },
 
     traverseDescendantsBFS(parentNode, callback) {

@@ -84,6 +84,11 @@
         defaultValue: v('true'),
         description: 'Whether pressing delete key removes the last item if there is no text input.',
       }, {
+        name: 'delimiter',
+        type: 'String',
+        defaultValue: v('","'),
+        description: `Delimiter to use to join multiple values for the hidden field value.`,
+      }, {
         name: 'disableBranchNodes',
         type: 'Boolean',
         defaultValue: v('false'),
@@ -119,10 +124,10 @@
         defaultValue: v('null'),
         description: 'Will be passed with all events as second param. Useful for identifying events origin.',
       }, {
-        name: 'loadingText',
-        type: 'String',
-        defaultValue: v('"Loading..."'),
-        description: 'Text displayed when a branch node is loading its children options.',
+        name: 'joinValues',
+        type: 'Boolean',
+        defaultValue: v('false'),
+        description: 'Joins multiple values into a single form field with the delimiter (legacy mode).',
       }, {
         name: 'limit',
         type: 'Number',
@@ -149,6 +154,11 @@
         defaultValue: NO_DEFAULT_VALUE,
         description: `Used for delayed loading root options. See ${link('#delayed-loading')} for detailed information.`,
       }, {
+        name: 'loadingText',
+        type: 'String',
+        defaultValue: v('"Loading..."'),
+        description: 'Text displayed when a branch node is loading its children options.',
+      }, {
         name: 'maxHeight',
         type: 'Number',
         defaultValue: v('300'),
@@ -158,6 +168,11 @@
         type: 'Boolean',
         defaultValue: v('false'),
         description: `Set ${v(true)} to allow selecting multiple options (a.k.a., multi-select mode).`,
+      }, {
+        name: 'name',
+        type: 'String',
+        defaultValue: NO_DEFAULT_VALUE,
+        description: `Generates a hidden <input /> tag with this field name for html forms.`,
       }, {
         name: 'noChildrenText',
         type: 'String',

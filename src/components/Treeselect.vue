@@ -14,8 +14,16 @@
     } ]"
     @mousedown="handleMouseDown"
     ref="wrapper">
+    <template v-if="name && hasValue">
+      <HiddenField v-if="single" :stringified-value="stringifyValue(internalValue[0])" />
+      <HiddenField v-else-if="joinValues" :stringified-value="internalValue.map(stringifyValue).join(delimiter)" />
+      <template v-else>
+        <HiddenField v-for="(v, i) in internalValue" :stringified-value="stringifyValue(v)" :key="i" />
+      </template>
+    </template>
     <div class="vue-treeselect__control">
-      <component :is="ValueComponent" ref="value" />
+      <single-value v-if="single" ref="value" />
+      <multi-value v-else ref="value" />
       <div v-if="shouldShowX" class="vue-treeselect__x" :title="multiple ? clearAllText : clearValueText" @mousedown="handleMouseDownOnClear">&times;</div>
       <div v-if="!isOpen || !alwaysOpen" class="vue-treeselect__arrow-wrapper" @mousedown="handleMouseDownOnArrow">
         <span :class="[ 'vue-treeselect__arrow', { 'vue-treeselect__arrow--rotated': isOpen } ]" />
@@ -70,18 +78,14 @@
 
 <script>
   import treeselectMixin from '../mixins/treeselectMixin'
+  import HiddenField from './HiddenField'
   import MultiValue from './MultiValue'
   import SingleValue from './SingleValue'
   import TreeselectOption from './Option'
 
   export default {
     name: 'vue-treeselect',
-    components: { TreeselectOption },
+    components: { HiddenField, MultiValue, SingleValue, TreeselectOption },
     mixins: [ treeselectMixin ],
-    computed: {
-      ValueComponent() {
-        return this.multiple ? MultiValue : SingleValue
-      },
-    },
   }
 </script>

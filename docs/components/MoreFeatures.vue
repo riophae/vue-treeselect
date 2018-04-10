@@ -1,6 +1,7 @@
 <template>
   <div>
     <treeselect
+      name="demo"
       :multiple="multiple"
       :clearable="clearable"
       :searchable="searchable"
