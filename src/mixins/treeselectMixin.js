@@ -200,6 +200,14 @@ export default {
     },
 
     /**
+     * Search in parent nodes too.
+     */
+    searchNested: {
+      type: Boolean,
+      default: false,
+    },
+
+    /**
      * Whether escape clears the value when the menu is closed
      */
     escapeClearsValue: {
@@ -947,10 +955,15 @@ export default {
         })
         const lowerCasedSearchQuery = this.searchQuery.toLowerCase()
         this.traverseAllNodes(node => {
-          const isMatched = node.isMatched = this.disableFuzzyMatching
-            ? node.lowerCasedLabel.indexOf(lowerCasedSearchQuery) !== -1
-            : fuzzysearch(lowerCasedSearchQuery, node.lowerCasedLabel)
-
+          let isMatched
+          if (this.searchNested) {
+            const filterValues = this.searchQuery.split(' ').map(v => v.trim().toLocaleLowerCase())
+            isMatched = node.isMatched = filterValues.reduce((val, filterValue) => val && node.deepSearchLabel.includes(filterValue), true)
+          } else {
+            isMatched = node.isMatched = this.disableFuzzyMatching
+              ? node.lowerCasedLabel.indexOf(lowerCasedSearchQuery) !== -1
+              : fuzzysearch(lowerCasedSearchQuery, node.lowerCasedLabel)
+          }
           if (isMatched) {
             this.noSearchResults = false
             node.ancestors.forEach(ancestor => this.searchingCount[ancestor.id].ALL_DESCENDANTS++)
@@ -1060,6 +1073,9 @@ export default {
           const isRootNode = parentNode === NO_PARENT_NODE
           const { id, label, children, isDefaultExpanded } = node
           const lowerCasedLabel = label.toLowerCase() // used for option filtering
+          const deepSearchLabel = isRootNode
+            ? label.toLowerCase()
+            : parentNode.deepSearchLabel + ' ' + label.toLowerCase()
           const isDisabled = !!node.isDisabled || (!this.flat && !isRootNode && parentNode.isDisabled)
           const isBranch = (
             Array.isArray(children) ||
@@ -1079,6 +1095,7 @@ export default {
             index: _index,
             parentNode,
             lowerCasedLabel,
+            deepSearchLabel,
             isDisabled,
             isMatched,
             isLeaf,
