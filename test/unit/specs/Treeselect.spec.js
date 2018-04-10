@@ -2224,7 +2224,7 @@ describe('SearchInput', () => {
     const wrapper = mount(Treeselect, {
       propsData: {
         options: [],
-        autofocus: false,
+        autoFocus: false,
         searchable: true,
         disabled: true,
       },
@@ -2704,6 +2704,37 @@ describe('Props', () => {
         propsData: {
           options: [],
           autofocus: true,
+          searchable: true,
+        },
+      })
+      const input = wrapper.first('.vue-treeselect__input').element
+      expect(document.activeElement).toBe(input)
+    })
+
+    it('deprecated', () => {
+      spyOn(console, 'error')
+
+      mount(Treeselect, {
+        propsData: {
+          options: [],
+          autofocus: true,
+        },
+      })
+
+      expect(console.error).toHaveBeenCalledWith(
+        '[Vue-Treeselect Warning]',
+        '`autofocus` prop is deprecated. Use `autoFocus` instead.',
+      )
+    })
+  })
+
+  describe('autoFocus', () => {
+    it('should focus the search input on mount', () => {
+      const wrapper = mount(Treeselect, {
+        attachToDocument: true,
+        propsData: {
+          options: [],
+          autoFocus: true,
           searchable: true,
         },
       })
@@ -4092,13 +4123,13 @@ describe('Props', () => {
       }))
     })
 
-    describe('combined with autofocus', () => {
+    describe('combined with autoFocus', () => {
       it('when openOnFocus=false', () => {
         const wrapper = mount(Treeselect, {
           attachToDocument: true,
           propsData: {
             options: [],
-            autofocus: true,
+            autoFocus: true,
             openOnFocus: false,
           },
         })
@@ -4114,7 +4145,7 @@ describe('Props', () => {
           attachToDocument: true,
           propsData: {
             options: [],
-            autofocus: true,
+            autoFocus: true,
             openOnFocus: true,
           },
         })
@@ -4865,7 +4896,7 @@ describe('Methods', () => {
         options: [],
         disabled: false,
         searchable: true,
-        autofocus: false,
+        autoFocus: false,
       },
     })
 

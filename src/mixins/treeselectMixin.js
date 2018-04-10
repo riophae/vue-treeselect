@@ -60,9 +60,17 @@ export default {
 
   props: {
     /**
-     * Automatically focus the component on mount?
+     * Deprecated. Use `autoFocus` instead.
      */
     autofocus: {
+      type: Boolean,
+      default: false,
+    },
+
+    /**
+     * Automatically focus the component on mount?
+     */
+    autoFocus: {
       type: Boolean,
       default: false,
     },
@@ -634,6 +642,11 @@ export default {
 
   methods: {
     verifyProps() {
+      warning(
+        () => this.autofocus === false,
+        () => '`autofocus` prop is deprecated. Use `autoFocus` instead.'
+      )
+
       if (!this.loadRootOptions) {
         if (!this.options) {
           warning(
@@ -1329,7 +1342,7 @@ export default {
   },
 
   mounted() {
-    if (this.autofocus) this.$refs.value.focusInput()
+    if (this.autoFocus || this.autofocus) this.$refs.value.focusInput()
     if (!this.rootOptionsLoaded && this.autoLoadRootOptions) this.loadOptions(true)
     if (this.alwaysOpen) this.openMenu()
   },

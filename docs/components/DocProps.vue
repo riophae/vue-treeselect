@@ -34,7 +34,7 @@
         defaultValue: v('false'),
         description: 'Whether the menu should be always open.',
       }, {
-        name: 'autofocus',
+        name: 'autoFocus',
         type: 'Boolean',
         defaultValue: v('false'),
         description: 'Automatically focus the component on mount.',
