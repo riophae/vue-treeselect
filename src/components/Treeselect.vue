@@ -1,7 +1,7 @@
 <template>
   <div
     :class="[ 'vue-treeselect', {
-      'vue-treeselect--single': !multiple,
+      'vue-treeselect--single': single,
       'vue-treeselect--multi': multiple,
       'vue-treeselect--searchable': searchable,
       'vue-treeselect--disabled': disabled,
