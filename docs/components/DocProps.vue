@@ -111,7 +111,7 @@
         name: 'searchNested',
         type: 'Boolean',
         defaultValue: code('false'),
-        description: `Set true if the searchquery should search in all parent nodes to. For example Children->Mike will match "ch ke"`,
+        description: `Set true if the searchquery should search in all parent nodes too. See ${link('#nested-search')} for detailed information.`,
       }, {
         name: 'escapeClearsValue',
         type: 'Boolean',
