@@ -108,6 +108,11 @@
         defaultValue: code('false'),
         description: `The fuzzy matching functionality is enabled by default. Set to ${code('true')} to disable it.`,
       }, {
+        name: 'searchNested',
+        type: 'Boolean',
+        defaultValue: code('false'),
+        description: `Set true if the searchquery should search in all parent nodes too. See ${link('#nested-search')} for detailed information.`,
+      }, {
         name: 'escapeClearsValue',
         type: 'Boolean',
         defaultValue: code('true'),
