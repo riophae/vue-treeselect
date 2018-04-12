@@ -181,7 +181,7 @@
         this.inputWidth = Math.max(
           MIN_INPUT_WIDTH,
           this.$refs.sizer
-            ? this.$refs.sizer.scrollWidth + 5
+            ? this.$refs.sizer.scrollWidth + 8
             : /* istanbul ignore next */ 0,
         )
       },
