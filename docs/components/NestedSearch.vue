@@ -5,7 +5,7 @@
       :options="options"
       placeholder="Search nested..."
       v-model="value"
-      searchNested
+      search-nested
       />
     <pre class="result">{{ value }}</pre>
   </div>
