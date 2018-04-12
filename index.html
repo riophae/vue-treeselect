@@ -1,7 +1,7 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><title>Vue-Treeselect</title><meta name="description" content="A multi-select component with nested options for Vue.js"><meta property="og:title" content="Vue-Treeselect"><meta property="og:site_name" content="Vue-Treeselect"><meta property="og:url" content="https://vue-treeselect.js.org/"><meta property="og:description" content="A multi-select component with nested options for Vue.js"><meta property="og:image" content="https://vue-treeselect.js.org/static/vue-logo.png"><meta property="twitter:title" content="Vue-Treeselect"><meta property="twitter:description" content="A multi-select component with nested options for Vue.js"><meta property="twitter:image" content="https://vue-treeselect.js.org/static/vue-logo.png"><!-- Global site tag (gtag.js) - Google Analytics--><script async src="https://www.googletagmanager.com/gtag/js?id=UA-108169693-1"></script><script>window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
-gtag('config', 'UA-108169693-1');</script><link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600|Dosis:300,500"><link href="static/css/app.3ac91005fbb44ad6a524812be7ffb663.css" rel="stylesheet"></head><body><div id="app"><header class="site-header"><div class="container" id="header"><div class="site-header-logo"><a class="site-header-logo-link" href="/vue-treeselect">Vue<span class="site-header-logo-component-name">Treeselect</span></a></div><nav class="site-header-nav"><a class="site-header-nav-item" href="https://github.com/riophae/vue-treeselect/releases">v0.0.17</a><span class="site-header-nav-item"><a class="github-button" href="https://github.com/riophae/vue-treeselect" data-show-count="true" aria-label="Star riophae/vue-treeselect on GitHub">Star</a></span></nav></div></header><div class="container"><section id="main"><div id="sidebar"><div class="sidebar-nav" :class="{ sticky: isNavSticky }"><section class="sidebar-nav-section"><h4 class="sidebar-nav-section-title">Introduction</h4><ul class="sidebar-nav-list"></ul></section><section class="sidebar-nav-section"><h4 class="sidebar-nav-section-title">Getting Started</h4><ul class="sidebar-nav-list"><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'installation' }"><a href="#installation">Installation</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'basic-usage' }"><a href="#basic-usage">Basic Usage</a></li></ul></section><section class="sidebar-nav-section"><h4 class="sidebar-nav-section-title">Guides</h4><ul class="sidebar-nav-list"><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'basic-features' }"><a href="#basic-features">Basic Features</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'more-features' }"><a href="#more-features">More Features</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'delayed-loading' }"><a href="#delayed-loading">Delayed Loading</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'flat-mode-and-sort-values' }"><a href="#flat-mode-and-sort-values">Flat Mode &amp; Sort Values</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'prevent-value-combining' }"><a href="#prevent-value-combining">Prevent Value Combining</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'disable-branch-nodes' }"><a href="#disable-branch-nodes">Disable Branch Nodes</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'disable-item-selection' }"><a href="#disable-item-selection">Disable Item Selection</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'customize-key-names' }"><a href="#customize-key-names">Customize Key Names</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'customize-option-label' }"><a href="#customize-option-label">Customize Option Label</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'vuex-support' }"><a href="#vuex-support">Vuex Support</a></li></ul></section><section class="sidebar-nav-section"><h4 class="sidebar-nav-section-title">API</h4><ul class="sidebar-nav-list"><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'node' }"><a href="#node">Node</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'props' }"><a href="#props">Props</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'events' }"><a href="#events">Events</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'slots' }"><a href="#slots">Slots</a></li></ul></section></div></div><div id="content"><h1 id="introduction">Introduction<a class="anchor" href="#introduction"><anchor></anchor></a></h1><section><p><a href="https://github.com/riophae/vue-treeselect">vue-treeselect</a> is a multi-select component with nested options for <a href="https://www.vuejs.org">Vue.js 2</a>, featuring:</p>
+gtag('config', 'UA-108169693-1');</script><link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600|Dosis:300,500"><link href="static/css/app.3ac91005fbb44ad6a524812be7ffb663.css" rel="stylesheet"></head><body><div id="app"><header class="site-header"><div class="container" id="header"><div class="site-header-logo"><a class="site-header-logo-link" href="/vue-treeselect">Vue<span class="site-header-logo-component-name">Treeselect</span></a></div><nav class="site-header-nav"><a class="site-header-nav-item" href="https://github.com/riophae/vue-treeselect/releases">v0.0.18</a><span class="site-header-nav-item"><a class="github-button" href="https://github.com/riophae/vue-treeselect" data-show-count="true" aria-label="Star riophae/vue-treeselect on GitHub">Star</a></span></nav></div></header><div class="container"><section id="main"><div id="sidebar"><div class="sidebar-nav" :class="{ sticky: isNavSticky }"><section class="sidebar-nav-section"><h4 class="sidebar-nav-section-title">Introduction</h4><ul class="sidebar-nav-list"></ul></section><section class="sidebar-nav-section"><h4 class="sidebar-nav-section-title">Getting Started</h4><ul class="sidebar-nav-list"><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'installation' }"><a href="#installation">Installation</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'basic-usage' }"><a href="#basic-usage">Basic Usage</a></li></ul></section><section class="sidebar-nav-section"><h4 class="sidebar-nav-section-title">Guides</h4><ul class="sidebar-nav-list"><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'basic-features' }"><a href="#basic-features">Basic Features</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'more-features' }"><a href="#more-features">More Features</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'delayed-loading' }"><a href="#delayed-loading">Delayed Loading</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'flat-mode-and-sort-values' }"><a href="#flat-mode-and-sort-values">Flat Mode &amp; Sort Values</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'prevent-value-combining' }"><a href="#prevent-value-combining">Prevent Value Combining</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'disable-branch-nodes' }"><a href="#disable-branch-nodes">Disable Branch Nodes</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'disable-item-selection' }"><a href="#disable-item-selection">Disable Item Selection</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'nested-search' }"><a href="#nested-search">Nested Search</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'customize-key-names' }"><a href="#customize-key-names">Customize Key Names</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'customize-option-label' }"><a href="#customize-option-label">Customize Option Label</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'vuex-support' }"><a href="#vuex-support">Vuex Support</a></li></ul></section><section class="sidebar-nav-section"><h4 class="sidebar-nav-section-title">API</h4><ul class="sidebar-nav-list"><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'node' }"><a href="#node">Node</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'props' }"><a href="#props">Props</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'events' }"><a href="#events">Events</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'slots' }"><a href="#slots">Slots</a></li></ul></section></div></div><div id="content"><h1 id="introduction">Introduction<a class="anchor" href="#introduction"><anchor></anchor></a></h1><section><p><a href="https://github.com/riophae/vue-treeselect">vue-treeselect</a> is a multi-select component with nested options for <a href="https://www.vuejs.org">Vue.js 2</a>, featuring:</p>
 <ul>
 <li>Single select</li>
 <li>Multiple select</li>
@@ -439,7 +439,86 @@ export default {
     value: [ 'disabled-checked' ],
   }),
 }
-</code></template></demo></section><section><h2 id="customize-key-names" data-section>Customize Key Names<a class="anchor" href="#customize-key-names"><anchor></anchor></a></h2><p>If your data of options is loaded via AJAX and have a different data structure than what vue-treeselect asks, e.g. your data has <code>name</code> property but vue-treeselect needs <code>label</code>, you may want to customize the key names. In this case, you can provide a function prop called <code>normalizer</code> which will be passed every node in the tree during data initialization. Use this function to create and return the transformed object.</p>
+</code></template></demo></section><section><h2 id="nested-search" data-section>Nested Search<a class="anchor" href="#nested-search"><anchor></anchor></a></h2><p>Sometimes we need the possibility to search options within a specific branch. For example your branches are different restaurants and the leafs are the foods they order. To search for the salad order of &quot;McDonals&quot; restaurant, just search for <strong>&quot;mc salad&quot;</strong>. You can also try searching <strong>&quot;salad&quot;</strong> to feel the difference.</p>
+<p>Concretely speaking, your search query gets split on spaces. If each splitted string is found within the path to the node, then we have a match.</p>
+<demo><nested-search slot="demo"></nested-search><template slot="html"><code v-pre>&lt;treeselect
+  :multiple=&quot;true&quot;
+  :options=&quot;options&quot;
+  :disable-branch-nodes=&quot;true&quot;
+  v-model=&quot;value&quot;
+  search-nested
+  /&gt;
+</code></template><template slot="javascript"><code v-pre>export default {
+  data: () =&gt; ({
+    value: [],
+    options: [ {
+      id: 'm',
+      label: 'McDonalds',
+      children: [ {
+        id: 'm-fries',
+        label: 'French Fries',
+      }, {
+        id: 'm-cheeseburger',
+        label: 'Cheeseburger',
+      }, {
+        id: 'm-white-cheedar-burger',
+        label: 'White Cheddar Burger',
+      }, {
+        id: 'm-southwest-buttermilk-crispy-chicken-salad',
+        label: 'Southwest Buttermilk Crispy Chicken Salad',
+      }, {
+        id: 'm-cola',
+        label: 'Coca-Cola®',
+      }, {
+        id: 'm-chocolate-shake',
+        label: 'Chocolate Shake',
+      } ],
+    }, {
+      id: 'kfc',
+      label: 'KFC',
+      children: [ {
+        id: 'kfc-fries',
+        label: 'French Fries',
+      }, {
+        id: 'kfc-chicken-litties-sandwiches',
+        label: 'Chicken Litties Sandwiches',
+      }, {
+        id: 'kfc-grilled-chicken',
+        label: 'Grilled Chicken',
+      }, {
+        id: 'kfc-cola',
+        label: 'Pepsi® Cola',
+      } ],
+    }, {
+      id: 'bk',
+      label: 'Burger King',
+      children: [ {
+        id: 'bk-chicken-fries',
+        label: 'Chicken Fries',
+      }, {
+        id: 'bk-chicken-nuggets',
+        label: 'Chicken Nuggets',
+      }, {
+        id: 'bk-garden-side-salad',
+        label: 'Garden Side Salad',
+      }, {
+        id: 'bk-cheeseburger',
+        label: 'Cheeseburger',
+      }, {
+        id: 'bk-bacon-king-jr-sandwich',
+        label: 'BACON KING™ Jr. Sandwich',
+      }, {
+        id: 'bk-cola',
+        label: 'Coca-Cola®',
+      }, {
+        id: 'm-oreo-chocolate-shake',
+        label: 'OREO® Chocolate Shake',
+      } ],
+    } ],
+  }),
+}
+</code></template></demo><p class="tip">Note that, fuzzy search feature is disabled for this mode to avoid mismatching.
+</p></section><section><h2 id="customize-key-names" data-section>Customize Key Names<a class="anchor" href="#customize-key-names"><anchor></anchor></a></h2><p>If your data of options is loaded via AJAX and have a different data structure than what vue-treeselect asks, e.g. your data has <code>name</code> property but vue-treeselect needs <code>label</code>, you may want to customize the key names. In this case, you can provide a function prop called <code>normalizer</code> which will be passed every node in the tree during data initialization. Use this function to create and return the transformed object.</p>
 <demo><customize-key-names slot="demo"></customize-key-names><template slot="html"><code v-pre>&lt;treeselect
   :options=&quot;options&quot;
   :value=&quot;value&quot;
@@ -534,4 +613,4 @@ export default {
     ...mapMutations([ 'updateValue' ]),
   },
 }
-</code></template></demo></section><h1 id="api">API<a class="anchor" href="#api"><anchor></anchor></a></h1><section><h2 id="node" data-section>Node<a class="anchor" href="#node"><anchor></anchor></a></h2><doc-node></doc-node></section><section><h2 id="props" data-section>Props<a class="anchor" href="#props"><anchor></anchor></a></h2><doc-props></doc-props></section><section><h2 id="events" data-section>Events<a class="anchor" href="#events"><anchor></anchor></a></h2><doc-events></doc-events></section><section><h2 id="slots" data-section>Slots<a class="anchor" href="#slots"><anchor></anchor></a></h2><doc-slots></doc-slots></section></div></section></div><footer class="site-footer"><div class="container">Copyright &copy; 2017-2018 <a href="https://github.com/riophae">Riophae Lee</a>. MIT Licensed.</div></footer></div><script src="https://buttons.github.io/buttons.js" async defer="defer"></script><script src="static/prism.min.js"></script><script type="text/javascript" src="static/js/manifest.37a2ecbb1d1b7e6c9ada.js"></script><script type="text/javascript" src="static/js/vendor.5c153c7f75820faa91da.js"></script><script type="text/javascript" src="static/js/app.381b8608ac5557de7d86.js"></script></body></html>
+</code></template></demo></section><h1 id="api">API<a class="anchor" href="#api"><anchor></anchor></a></h1><section><h2 id="node" data-section>Node<a class="anchor" href="#node"><anchor></anchor></a></h2><doc-node></doc-node></section><section><h2 id="props" data-section>Props<a class="anchor" href="#props"><anchor></anchor></a></h2><doc-props></doc-props></section><section><h2 id="events" data-section>Events<a class="anchor" href="#events"><anchor></anchor></a></h2><doc-events></doc-events></section><section><h2 id="slots" data-section>Slots<a class="anchor" href="#slots"><anchor></anchor></a></h2><doc-slots></doc-slots></section></div></section></div><footer class="site-footer"><div class="container">Copyright &copy; 2017-2018 <a href="https://github.com/riophae">Riophae Lee</a>. MIT Licensed.</div></footer></div><script src="https://buttons.github.io/buttons.js" async defer="defer"></script><script src="static/prism.min.js"></script><script type="text/javascript" src="static/js/manifest.37a2ecbb1d1b7e6c9ada.js"></script><script type="text/javascript" src="static/js/vendor.ad98ada0444350872e07.js"></script><script type="text/javascript" src="static/js/app.e72a837d68a8f9ec5cb9.js"></script></body></html>
