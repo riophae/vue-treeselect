@@ -200,7 +200,7 @@ export default {
     },
 
     /**
-     * Search in parent nodes too.
+     * Search in ancestor nodes too.
      */
     searchNested: {
       type: Boolean,

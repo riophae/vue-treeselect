@@ -108,11 +108,6 @@
         defaultValue: code('false'),
         description: `The fuzzy matching functionality is enabled by default. Set to ${code('true')} to disable it.`,
       }, {
-        name: 'searchNested',
-        type: 'Boolean',
-        defaultValue: code('false'),
-        description: `Set true if the searchquery should search in all parent nodes too. See ${link('#nested-search')} for detailed information.`,
-      }, {
         name: 'escapeClearsValue',
         type: 'Boolean',
         defaultValue: code('true'),
@@ -242,6 +237,11 @@
         type: 'Boolean',
         defaultValue: code('true'),
         description: 'Whether to enable searching feature or not.',
+      }, {
+        name: 'searchNested',
+        type: 'Boolean',
+        defaultValue: code('false'),
+        description: `Set ${code('true')} if the search query should search in all ancestor nodes too. See ${link('#nested-search')} for example.`,
       }, {
         name: 'showCount',
         type: 'Boolean',

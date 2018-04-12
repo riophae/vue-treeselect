@@ -1,14 +1,11 @@
 <template>
-  <div>
-    <treeselect
-      :multiple="true"
-      :options="options"
-      placeholder="Search nested..."
-      v-model="value"
-      search-nested
-      />
-    <pre class="result">{{ value }}</pre>
-  </div>
+  <treeselect
+    :multiple="true"
+    :options="options"
+    placeholder="Search nested..."
+    v-model="value"
+    search-nested
+    />
 </template>
 
 <script>

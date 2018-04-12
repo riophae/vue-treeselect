@@ -92,6 +92,16 @@
     You can disable item selection by setting `isDisabled: true` on any leaf node or branch node. Setting on a branch node will disable all its descendants as well.
   +demo('DisableItemSelection')
 
++guide('Nested Search')
+  :markdown-it
+    Sometimes we need the possibility to search options within a specific branch. For example your branches are different restaurants and the leafs are the fruits they order. To search for the apple order of "McDonals" restaurant, just search for **"mc apple"**.
+
+    Concretely speaking, your search query gets split on spaces. If each splitted string is found within the path to the node, then we have a match.
+  +demo('NestedSearch')
+  p.tip
+    :markdown-it(inline=true)
+      Note that, fuzzy search feature is disabled for this mode to avoid mismatching.
+
 +guide('Customize Key Names')
   :markdown-it
     If your data of options is loaded via AJAX and have a different data structure than what vue-treeselect asks, e.g. your data has `name` property but vue-treeselect needs `label`, you may want to customize the key names. In this case, you can provide a function prop called `normalizer` which will be passed every node in the tree during data initialization. Use this function to create and return the transformed object.
@@ -112,10 +122,3 @@
 
       Concretely speaking, we can bind `getter` to `:value` to make vue-treeselect reflect any changes in your Vuex state, and bind `action` or `mutation` to `@input` to update your Vuex state whenever the value changes.
   +demo('VuexSupport')
-
-+guide('Nested search')
-  :markdown-it
-    Sometimes we need the possibility to search options within a specific branch. For example your branches are different restaurants and the leafs are the fruits they order. To search for the apple order of "McDonals" restaurant just search for "mc apple".
-
-    Concretely speaking, your searchstring gets split on spaces and if each splitted string is found within the path to the node we have a match.
-  +demo('NestedSearch')
