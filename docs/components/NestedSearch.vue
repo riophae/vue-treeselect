@@ -2,7 +2,7 @@
   <treeselect
     :multiple="true"
     :options="options"
-    placeholder="Search nested..."
+    :disable-branch-nodes="true"
     v-model="value"
     search-nested
     />
