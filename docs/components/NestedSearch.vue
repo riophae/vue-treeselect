@@ -13,61 +13,67 @@
     data: () => ({
       value: [],
       options: [ {
-        id: 'restaurant1',
+        id: 'm',
         label: 'McDonalds',
         children: [ {
-          id: 'apple1',
-          label: 'Apple 🍎',
+          id: 'm-fries',
+          label: 'French Fries',
         }, {
-          id: 'grapes1',
-          label: 'Grapes 🍇',
+          id: 'm-cheeseburger',
+          label: 'Cheeseburger',
         }, {
-          id: 'pear1',
-          label: 'Pear 🍐',
+          id: 'm-white-cheedar-burger',
+          label: 'White Cheddar Burger',
         }, {
-          id: 'strawberry1',
-          label: 'Strawberry 🍓',
+          id: 'm-southwest-buttermilk-crispy-chicken-salad',
+          label: 'Southwest Buttermilk Crispy Chicken Salad',
         }, {
-          id: 'watermelon1',
-          label: 'Watermelon 🍉',
+          id: 'm-cola',
+          label: 'Coca-Cola®',
+        }, {
+          id: 'm-chocolate-shake',
+          label: 'Chocolate Shake',
         } ],
       }, {
-        id: 'restaurant2',
-        label: 'Pizza Hut',
+        id: 'kfc',
+        label: 'KFC',
         children: [ {
-          id: 'apple2',
-          label: 'Apple 🍎',
+          id: 'kfc-fries',
+          label: 'French Fries',
         }, {
-          id: 'grapes2',
-          label: 'Grapes 🍇',
+          id: 'kfc-chicken-litties-sandwiches',
+          label: 'Chicken Litties Sandwiches',
         }, {
-          id: 'pear2',
-          label: 'Pear 🍐',
+          id: 'kfc-grilled-chicken',
+          label: 'Grilled Chicken',
         }, {
-          id: 'strawberry2',
-          label: 'Strawberry 🍓',
-        }, {
-          id: 'watermelon2',
-          label: 'Watermelon 🍉',
+          id: 'kfc-cola',
+          label: 'Pepsi® Cola',
         } ],
       }, {
-        id: 'restaurant3',
+        id: 'bk',
         label: 'Burger King',
         children: [ {
-          id: 'apple3',
-          label: 'Apple 🍎',
+          id: 'bk-chicken-fries',
+          label: 'Chicken Fries',
         }, {
-          id: 'grapes3',
-          label: 'Grapes 🍇',
+          id: 'bk-chicken-nuggets',
+          label: 'Chicken Nuggets',
         }, {
-          id: 'pear3',
-          label: 'Pear 🍐',
+          id: 'bk-garden-side-salad',
+          label: 'Garden Side Salad',
         }, {
-          id: 'strawberry3',
-          label: 'Strawberry 🍓',
+          id: 'bk-cheeseburger',
+          label: 'Cheeseburger',
         }, {
-          id: 'watermelon3',
-          label: 'Watermelon 🍉',
+          id: 'bk-bacon-king-jr-sandwich',
+          label: 'BACON KING™ Jr. Sandwich',
+        }, {
+          id: 'bk-cola',
+          label: 'Coca-Cola®',
+        }, {
+          id: 'm-oreo-chocolate-shake',
+          label: 'OREO® Chocolate Shake',
         } ],
       } ],
     }),
