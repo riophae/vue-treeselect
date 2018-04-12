@@ -953,12 +953,14 @@ export default {
             })
           }
         })
-        const lowerCasedSearchQuery = this.searchQuery.toLowerCase()
+        const lowerCasedSearchQuery = this.searchQuery.trim().toLocaleLowerCase()
+        const splitSearchQuery = lowerCasedSearchQuery.replace(/\s+/g, ' ').split(' ')
         this.traverseAllNodes(node => {
           let isMatched
-          if (this.searchNested) {
-            const filterValues = this.searchQuery.split(' ').map(v => v.trim().toLocaleLowerCase())
-            isMatched = node.isMatched = filterValues.reduce((val, filterValue) => val && node.deepSearchLabel.includes(filterValue), true)
+          if (this.searchNested && splitSearchQuery.length > 1) {
+            isMatched = node.isMatched = splitSearchQuery.every(
+              filterValue => node.nestedSearchLabel.indexOf(filterValue) !== -1,
+            )
           } else {
             isMatched = node.isMatched = this.disableFuzzyMatching
               ? node.lowerCasedLabel.indexOf(lowerCasedSearchQuery) !== -1
@@ -1072,10 +1074,10 @@ export default {
 
           const isRootNode = parentNode === NO_PARENT_NODE
           const { id, label, children, isDefaultExpanded } = node
-          const lowerCasedLabel = label.toLowerCase() // used for option filtering
-          const deepSearchLabel = isRootNode
-            ? label.toLowerCase()
-            : parentNode.deepSearchLabel + ' ' + label.toLowerCase()
+          const lowerCasedLabel = label.toLocaleLowerCase() // used for option filtering
+          const nestedSearchLabel = isRootNode
+            ? lowerCasedLabel
+            : parentNode.nestedSearchLabel + ' ' + lowerCasedLabel
           const isDisabled = !!node.isDisabled || (!this.flat && !isRootNode && parentNode.isDisabled)
           const isBranch = (
             Array.isArray(children) ||
@@ -1095,7 +1097,7 @@ export default {
             index: _index,
             parentNode,
             lowerCasedLabel,
-            deepSearchLabel,
+            nestedSearchLabel,
             isDisabled,
             isMatched,
             isLeaf,
