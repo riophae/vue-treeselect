@@ -1189,7 +1189,7 @@ export default {
 
         this.loadingRootOptions = true
         this.loadingRootOptionsError = ''
-        this.loadRootOptions(callback)
+        this.loadRootOptions(callback, this.id)
       } else {
         if (parentNode.isPending) return
 
