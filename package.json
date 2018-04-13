@@ -35,6 +35,7 @@
     "fuzzysearch": "^1.0.3"
   },
   "devDependencies": {
+    "@vue/test-utils": "^1.0.0-beta.13",
     "autoprefixer": "^8.1.0",
     "avoriaz": "^6.3.0",
     "babel-core": "^6.22.1",

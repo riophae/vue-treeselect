@@ -1035,34 +1035,39 @@ export default {
     },
 
     buildSelectedNodeMap() {
-      const map = this.selectedNodeMap = Object.create(null)
+      const map = Object.create(null)
 
       this.selectedNodeIds.forEach(selectedNodeId => {
         map[selectedNodeId] = true
       })
+
+      this.selectedNodeMap = map
     },
 
     buildNodeCheckedStateMap() {
-      const map = this.nodeCheckedStateMap = Object.create(null)
-      if (this.single) return
+      const map = Object.create(null)
 
-      this.selectedNodes.forEach(selectedNode => {
-        map[selectedNode.id] = CHECKED
+      if (this.multiple) {
+        this.selectedNodes.forEach(selectedNode => {
+          map[selectedNode.id] = CHECKED
 
-        if (!this.flat) {
-          this.traverseAncestors(selectedNode, ancestorNode => {
-            if (!this.isSelected(ancestorNode)) {
-              map[ancestorNode.id] = INDETERMINATE
-            }
-          })
-        }
-      })
+          if (!this.flat) {
+            this.traverseAncestors(selectedNode, ancestorNode => {
+              if (!this.isSelected(ancestorNode)) {
+                map[ancestorNode.id] = INDETERMINATE
+              }
+            })
+          }
+        })
 
-      this.traverseAllNodes(node => {
-        if (!(node.id in map)) {
-          map[node.id] = UNCHECKED
-        }
-      })
+        this.traverseAllNodes(node => {
+          if (!(node.id in map)) {
+            map[node.id] = UNCHECKED
+          }
+        })
+      }
+
+      this.nodeCheckedStateMap = map
     },
 
     normalize(parentNode, nodes) {
@@ -1165,7 +1170,7 @@ export default {
 
     loadOptions(isRootLevel, parentNode) {
       if (isRootLevel) {
-        if (this.loadingRootOptions) return
+        if (this.loadingRootOptions || typeof this.loadRootOptions !== 'function') return
 
         const callback = (err, data) => {
           this.loadingRootOptions = false
