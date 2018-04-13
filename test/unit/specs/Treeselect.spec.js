@@ -861,7 +861,7 @@ describe('Single-select', () => {
     const { vm } = wrapper
     const labelWrapper = findOptionByNodeId(wrapper, 'a').find('.vue-treeselect__label-wrapper')
 
-    customTrigger(labelWrapper, 'mousedown', BUTTON_LEFT)
+    leftClick(labelWrapper)
     expect(vm.selectedNodeIds).toEqual([ 'a' ])
     expect(vm.isFocused).toEqual(false)
     expect(vm.isOpen).toEqual(false)
@@ -2330,9 +2330,9 @@ describe('Control', () => {
     })
     const arrow = wrapper.find('.vue-treeselect__arrow-wrapper')
 
-    customTrigger(arrow, 'mousedown', BUTTON_LEFT)
+    leftClick(arrow)
     expect(wrapper.vm.isOpen).toBe(true)
-    customTrigger(arrow, 'mousedown', BUTTON_LEFT)
+    leftClick(arrow)
     expect(wrapper.vm.isOpen).toBe(false)
   })
 })
@@ -2367,7 +2367,7 @@ describe('Menu', () => {
     })
     const valueWrapper = wrapper.find('.vue-treeselect__value-wrapper')
 
-    customTrigger(valueWrapper, 'mousedown', BUTTON_LEFT)
+    leftClick(valueWrapper)
     expect(wrapper.vm.isOpen).toBe(true)
   })
 
@@ -2416,11 +2416,11 @@ describe('Menu', () => {
 
     const [ firstRemove, secondRemove ] = wrapper.findAll('.vue-treeselect__value-remove').wrappers
 
-    customTrigger(firstRemove, 'mousedown', BUTTON_LEFT)
+    leftClick(firstRemove)
     expect(vm.isOpen).toBe(true)
     expect(vm.selectedNodeIds).toEqual([ 'b' ])
 
-    customTrigger(secondRemove, 'mousedown', BUTTON_LEFT)
+    leftClick(secondRemove)
     expect(vm.isOpen).toBe(true)
     expect(vm.selectedNodeIds).toEqual([])
   })
@@ -2443,9 +2443,9 @@ describe('Menu', () => {
 
     expect(a.isExpanded).toBe(false)
     const optionArrow = findOptionByNodeId(wrapper, 'a').find('.vue-treeselect__option-arrow-wrapper')
-    customTrigger(optionArrow, 'mousedown', BUTTON_LEFT)
+    leftClick(optionArrow)
     expect(a.isExpanded).toBe(true)
-    customTrigger(optionArrow, 'mousedown', BUTTON_LEFT)
+    leftClick(optionArrow)
     expect(a.isExpanded).toBe(false)
   })
 })
@@ -2950,7 +2950,7 @@ describe('Props', () => {
 
     it('should reset value on mousedown', () => {
       expect(vm.selectedNodeIds).toEqual([ 'a' ])
-      customTrigger(wrapper.find('.vue-treeselect__x'), 'mousedown', BUTTON_LEFT)
+      leftClick(wrapper.find('.vue-treeselect__x'))
       expect(vm.selectedNodeIds).toEqual([])
     })
 
@@ -3103,7 +3103,7 @@ describe('Props', () => {
       const { vm } = wrapper
       const labelWrapper = wrapper.find('.vue-treeselect__label-wrapper')
 
-      customTrigger(labelWrapper, 'mousedown', BUTTON_LEFT)
+      leftClick(labelWrapper)
       expect(vm.selectedNodeIds).toEqual([ 'a' ])
       expect(vm.isOpen).toBe(false)
     })
@@ -3123,7 +3123,7 @@ describe('Props', () => {
       const { vm } = wrapper
       const labelWrapper = wrapper.find('.vue-treeselect__label-wrapper')
 
-      customTrigger(labelWrapper, 'mousedown', BUTTON_LEFT)
+      leftClick(labelWrapper)
       expect(vm.selectedNodeIds).toEqual([ 'a' ])
       expect(vm.isOpen).toBe(true)
       expect(vm.isFocused).toBe(false) // auto blur
@@ -3291,7 +3291,7 @@ describe('Props', () => {
 
     const clickOnLabelOfBranchNode = () => {
       const labelWrapperOfBranchNode = getLabelWrapperOfBranchNode()
-      customTrigger(labelWrapperOfBranchNode, 'mousedown', BUTTON_LEFT)
+      leftClick(labelWrapperOfBranchNode)
     }
 
     describe('when disableBranchNodes=false', () => {
@@ -3450,7 +3450,7 @@ describe('Props', () => {
         const { vm } = wrapper
         const valueWrapper = wrapper.find('.vue-treeselect__value-wrapper')
 
-        customTrigger(valueWrapper, 'mousedown', BUTTON_LEFT)
+        leftClick(valueWrapper)
         expect(vm.isFocused).toBe(false)
         expect(vm.isOpen).toBe(false)
       })
@@ -4164,11 +4164,11 @@ describe('Props', () => {
       expect(vm.isFocused).toBe(false)
       expect(vm.isOpen).toBe(false)
 
-      customTrigger(valueWrapper, 'mousedown', BUTTON_LEFT)
+      leftClick(valueWrapper)
       expect(vm.isFocused).toBe(true)
       expect(vm.isOpen).toBe(false)
 
-      customTrigger(valueWrapper, 'mousedown', BUTTON_LEFT)
+      leftClick(valueWrapper)
       expect(vm.isFocused).toBe(true)
       expect(vm.isOpen).toBe(true)
     })
@@ -4187,7 +4187,7 @@ describe('Props', () => {
       expect(vm.isFocused).toBe(false)
       expect(vm.isOpen).toBe(false)
 
-      customTrigger(valueWrapper, 'mousedown', BUTTON_LEFT)
+      leftClick(valueWrapper)
       expect(vm.isFocused).toBe(true)
       expect(vm.isOpen).toBe(true)
     })
@@ -4212,7 +4212,7 @@ describe('Props', () => {
       expect(vm.isFocused).toBe(true)
       expect(vm.isOpen).toBe(false)
 
-      customTrigger(valueWrapper, 'mousedown', BUTTON_LEFT)
+      leftClick(valueWrapper)
       expect(vm.isFocused).toBe(true)
       expect(vm.isOpen).toBe(true)
     })

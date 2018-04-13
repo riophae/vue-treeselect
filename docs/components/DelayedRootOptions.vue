@@ -2,6 +2,7 @@
   <treeselect
     :load-root-options="loadRootOptions"
     :auto-load-root-options="false"
+    :multiple="true"
     />
 </template>
 
@@ -15,6 +16,7 @@
           const rootOptions = [ {
             id: 'a',
             label: 'a',
+            children: [],
           }, {
             id: 'b',
             label: 'b',
