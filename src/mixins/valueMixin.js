@@ -20,5 +20,9 @@ export default {
     handleMouseDownOnValue: onlyOnLeftClick(function handleMouseDownOnValue() {
       this.instance._wasClickedOnValueItem = true
     }),
+
+    handleMouseDownOnValueRemove: onlyOnLeftClick(function handleMouseDownOnValueRemove(evt, node) {
+      this.instance.select(node)
+    }),
   },
 }

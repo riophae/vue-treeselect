@@ -33,9 +33,20 @@ async function typeSearchText(wrapper, text) {
 }
 
 function findOptionByNodeId(wrapper, nodeId) {
-  return wrapper.findAll(TreeselectOption)
-    .wrappers
+  return wrapper.findAll(TreeselectOption).wrappers
     .find(optionWrapper => optionWrapper.vm.node.id === nodeId)
+}
+
+function findLabelWrapperByNodeId(wrapper, nodeId) {
+  return findOptionByNodeId(wrapper, nodeId).find('.vue-treeselect__label-wrapper')
+}
+
+function findCheckboxByNodeId(wrapper, nodeId) {
+  return findOptionByNodeId(wrapper, nodeId).find('.vue-treeselect__checkbox')
+}
+
+function leftClick(wrapper) {
+  customTrigger(wrapper, 'mousedown', BUTTON_LEFT)
 }
 
 describe('Basic', () => {
@@ -5050,5 +5061,66 @@ describe('Methods', () => {
 })
 
 describe('Events', () => {
+  describe('select & deselect', () => {
+    let wrapper
+
+    const aa = {
+      id: 'aa',
+      label: 'aa',
+    }
+    const ab = {
+      id: 'ab',
+      label: 'ab',
+      isDisabled: true,
+    }
+    const a = {
+      id: 'a',
+      label: 'a',
+      isDefaultExpanded: true,
+      children: [ aa, ab ],
+    }
+
+    beforeEach(() => {
+      wrapper = mount(Treeselect, {
+        propsData: {
+          options: [ a ],
+          id: 'test',
+          multiple: true,
+          value: [ 'ab' ],
+        },
+        data: {
+          isOpen: true,
+        },
+      })
+    })
+
+    it('click on option label or checkbox', () => {
+      leftClick(findLabelWrapperByNodeId(wrapper, 'aa'))
+      expect(wrapper.emitted().select).toEqual([
+        [ aa, 'test' ],
+      ])
+
+      leftClick(findCheckboxByNodeId(wrapper, 'aa'))
+      expect(wrapper.emitted().deselect).toEqual([
+        [ aa, 'test' ],
+      ])
+    })
+
+    it('click on disabled option', () => {
+      leftClick(findLabelWrapperByNodeId(wrapper, 'ab'))
+      expect(wrapper.emitted().deselect).toBeUndefined()
+    })
+
+    it('click on value remove icon', () => {
+      wrapper.setProps({ value: [ 'a' ] })
+
+      // click on "×" of a
+      leftClick(wrapper.find('.vue-treeselect__value-remove'))
+      expect(wrapper.emitted().deselect).toEqual([
+        [ a, 'test' ],
+      ])
+    })
+  })
+
   // TODO
 })

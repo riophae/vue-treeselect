@@ -1239,11 +1239,11 @@ export default {
         this.clear()
       }
 
-      const toggleFlag = this.multiple && !this.flat
+      const state = this.multiple && !this.flat
         ? this.nodeCheckedStateMap[node.id] === UNCHECKED
         : !this.isSelected(node)
 
-      if (toggleFlag) {
+      if (state) {
         this._selectNode(node)
       } else {
         this._deselectNode(node)
@@ -1252,7 +1252,13 @@ export default {
       this.buildSelectedNodeMap()
       this.buildNodeCheckedStateMap()
 
-      if (this.searching && toggleFlag && (this.single || this.clearOnSelect)) {
+      if (state) {
+        this.$emit('select', node.raw, this.id)
+      } else {
+        this.$emit('deselect', node.raw, this.id)
+      }
+
+      if (this.searching && state && (this.single || this.clearOnSelect)) {
         this.searchQuery = ''
       }
 

@@ -20,9 +20,9 @@ export const unreachable = process.env.NODE_ENV === 'production'
   }
 
 export function onlyOnLeftClick(mouseDownHandler) {
-  return function onMouseDown(evt) {
+  return function onMouseDown(evt, ...args) {
     if (evt.type === 'mousedown' && evt.button === 0) {
-      mouseDownHandler.call(this, evt)
+      mouseDownHandler.call(this, evt, ...args)
     }
   }
 }

@@ -61,6 +61,16 @@ describe('Utils', () => {
       onlyOnLeftClick(spy)(eventObj)
       expect(spy).not.toHaveBeenCalled()
     })
+
+    it('should pass extra args', () => {
+      const eventObj = {
+        type: 'mousedown',
+        button: 0,
+      }
+      const extraArg = {}
+      onlyOnLeftClick(spy)(eventObj, extraArg)
+      expect(spy).toHaveBeenCalledWith(eventObj, extraArg)
+    })
   })
 
   it('hasOwn', () => {

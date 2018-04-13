@@ -35,6 +35,14 @@
         attributes: makeArgNameList([ 'value', 'id' ]),
         description: 'Emitted after value changes.',
       }, {
+        name: 'select',
+        attributes: makeArgNameList([ 'node', 'id' ]),
+        description: 'Emitted after selecting an option.',
+      }, {
+        name: 'deselect',
+        attributes: makeArgNameList([ 'node', 'id' ]),
+        description: 'Emitted after deselecting an option.',
+      }, {
         name: 'search-change',
         attributes: makeArgNameList([ 'searchQuery', 'id' ]),
         description: 'Emitted after the search query changes.',
