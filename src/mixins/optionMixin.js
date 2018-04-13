@@ -50,6 +50,7 @@ export default {
         this.instance.toggleExpanded(this.node)
       } else {
         this.instance.select(this.node)
+        this.instance.$emit('node-select', this.node)
       }
     }),
 

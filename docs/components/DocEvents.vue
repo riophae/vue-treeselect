@@ -46,6 +46,10 @@
         name: 'search-change',
         attributes: makeArgNameList([ 'searchQuery', 'id' ]),
         description: 'Emitted after the search query changes.',
+      }, {
+        name: 'node-select',
+        attributes: makeArgNameList([ 'node' ]),
+        description: 'Emitted after a node is selected',
       } ],
     }),
   }
