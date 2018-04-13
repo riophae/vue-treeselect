@@ -11,7 +11,11 @@
 
   export default {
     methods: {
-      loadRootOptions(callback) {
+      loadRootOptions(callback/*, id */) {
+        // If you have multiple instances of vue-treeselect that
+        // shares the same `loadRootOptions` function,
+        // you can use the `id` argument (which is the `id` prop you passed)
+        // to identify the origin.
         if (called) {
           const rootOptions = [ {
             id: 'a',

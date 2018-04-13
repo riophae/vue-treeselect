@@ -30,7 +30,7 @@
     }),
 
     methods: {
-      loadChildrenOptions(parent, callback) {
+      loadChildrenOptions(parent, callback/*, id */) {
         // Typically, do the AJAX stuff here.
         // Once the server has responded, call the callback with received data.
         // We just use `setTimeout()` here to simulate an async operation

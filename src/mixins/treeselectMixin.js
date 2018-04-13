@@ -1216,7 +1216,7 @@ export default {
 
         parentNode.isPending = true
         parentNode.loadingChildrenError = ''
-        this.loadChildrenOptions(rawData, callback)
+        this.loadChildrenOptions(rawData, callback, this.id)
       }
     },
 

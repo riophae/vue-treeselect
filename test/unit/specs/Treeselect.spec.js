@@ -3230,6 +3230,7 @@ describe('Props', () => {
       const loadChildrenOptions = jasmine.createSpy('loadChildrenOptions')
       const wrapper = mount(Treeselect, {
         propsData: {
+          id: 'test',
           options: [ {
             id: 'a',
             label: 'a',
@@ -3251,7 +3252,7 @@ describe('Props', () => {
       const { a } = vm.nodeMap
 
       expect(loadChildrenOptions.calls.count()).toBe(1)
-      expect(loadChildrenOptions).toHaveBeenCalledWith(a.raw, jasmine.any(Function))
+      expect(loadChildrenOptions).toHaveBeenCalledWith(a.raw, jasmine.any(Function), 'test')
     })
   })
 
@@ -3840,6 +3841,47 @@ describe('Props', () => {
       jasmine.clock().uninstall()
     })
 
+    it('multiple instances share the same `loadChildrenOptions` function', async () => {
+      const loadChildrenOptions = jasmine.createSpy('loadRootOptions')
+      const { vm: vm1 } = mount(Treeselect, {
+        propsData: {
+          id: 1,
+          loadChildrenOptions,
+          options: [ {
+            id: 'branch',
+            label: 'branch',
+            children: null,
+          } ],
+        },
+        data: {
+          isOpen: true,
+        },
+      })
+      const { vm: vm2 } = mount(Treeselect, {
+        propsData: {
+          id: 2,
+          loadChildrenOptions,
+          options: [ {
+            id: 'branch',
+            label: 'branch',
+            children: null,
+          } ],
+        },
+        data: {
+          isOpen: true,
+        },
+      })
+
+      vm1.toggleExpanded(vm1.nodeMap.branch)
+      await vm1.$nextTick()
+      expect(loadChildrenOptions.calls.argsFor(0)).toEqual([ jasmine.any(Object), jasmine.any(Function), 1 ])
+
+      vm2.toggleExpanded(vm2.nodeMap.branch)
+      await vm2.$nextTick()
+      expect(loadChildrenOptions.calls.argsFor(1)).toEqual([ jasmine.any(Object), jasmine.any(Function), 2 ])
+    })
+
+
     it('should override fallback nodes', async () => {
       jasmine.clock().install()
 
@@ -4082,6 +4124,28 @@ describe('Props', () => {
       vm.closeMenu()
       vm.openMenu()
       expect(loadRootOptions.calls.count()).toBe(1)
+    })
+
+    it('multiple instances share the same `loadRootOptions` function', () => {
+      const loadRootOptions = jasmine.createSpy('loadRootOptions')
+      const { vm: vm1 } = mount(Treeselect, {
+        propsData: {
+          id: 1,
+          loadRootOptions,
+        },
+      })
+      const { vm: vm2 } = mount(Treeselect, {
+        propsData: {
+          id: 2,
+          loadRootOptions,
+        },
+      })
+
+      vm1.openMenu()
+      expect(loadRootOptions.calls.argsFor(0)).toEqual([ jasmine.any(Function), 1 ])
+
+      vm2.openMenu()
+      expect(loadRootOptions.calls.argsFor(1)).toEqual([ jasmine.any(Function), 2 ])
     })
 
     it('should override fallback nodes', () => {
