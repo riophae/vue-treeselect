@@ -1,6 +1,7 @@
 <template>
   <div>
     <treeselect
+      name="demo"
       :multiple="multiple"
       :clearable="clearable"
       :searchable="searchable"
@@ -9,11 +10,12 @@
       :open-on-focus="openOnFocus"
       :clear-on-select="clearOnSelect"
       :close-on-select="closeOnSelect"
+      :always-open="alwaysOpen"
       :options="options"
       :limit="3"
       :max-height="200"
       v-model="value"
-    />
+      />
     <pre class="result">{{ value }}</pre>
     <p>
       <label><input type="checkbox" v-model="multiple">Multi-select</label>
@@ -28,6 +30,9 @@
     <p>
       <label><input type="checkbox" v-model="clearOnSelect">Clear on select</label>
       <label><input type="checkbox" v-model="closeOnSelect">Close on select</label>
+    </p>
+    <p>
+      <label><input type="checkbox" v-model="alwaysOpen">Always open</label>
     </p>
   </div>
 </template>
@@ -45,8 +50,9 @@
       openOnFocus: false,
       clearOnSelect: true,
       closeOnSelect: false,
+      alwaysOpen: false,
       value: [ 'a' ],
-      options: generateOptions(2),
+      options: generateOptions(2, 3),
     }),
 
     watch: {

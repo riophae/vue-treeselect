@@ -20,15 +20,43 @@ export const unreachable = process.env.NODE_ENV === 'production'
   }
 
 export function onlyOnLeftClick(mouseDownHandler) {
-  return function onMouseDown(evt) {
+  return function onMouseDown(evt, ...args) {
     if (evt.type === 'mousedown' && evt.button === 0) {
-      mouseDownHandler.call(this, evt)
+      mouseDownHandler.call(this, evt, ...args)
     }
   }
 }
 
 export function noop() {
   /* istanbul ignore next */
+}
+
+export function identity(x) {
+  return x
+}
+
+// a simplified version of debounce from underscore
+export function debounce(func, wait = 100) {
+  let timeout, args, context, timestamp
+
+  function later() {
+    const diff = Date.now() - timestamp
+
+    if (diff < wait && diff >= 0) {
+      timeout = setTimeout(later, wait - diff)
+    } else {
+      timeout = null
+      func.apply(context, args)
+      context = args = null
+    }
+  }
+
+  return function debounced(..._args) {
+    context = this // eslint-disable-line consistent-this
+    args = _args
+    timestamp = Date.now()
+    if (!timeout) timeout = setTimeout(later, wait)
+  }
 }
 
 function isPlainObject(value) {
@@ -72,18 +100,11 @@ export function last(arr) {
   return arr[arr.length - 1]
 }
 
-export function findIndexFallback(arr, predicate, ctx) {
+export function find(arr, predicate, ctx) {
   for (let i = 0, len = arr.length; i < len; i++) {
-    if (predicate.call(ctx, arr[i], i, arr)) return i
+    if (predicate.call(ctx, arr[i], i, arr)) return arr[i]
   }
-
-  return -1
-}
-
-export function findIndex(arr, predicate, ctx) {
-  return typeof Array.prototype.findIndex === 'function'
-    ? arr.findIndex(predicate, ctx)
-    : findIndexFallback(arr, predicate, ctx)
+  return undefined
 }
 
 export function removeFromArray(arr, elem) {
@@ -91,12 +112,12 @@ export function removeFromArray(arr, elem) {
   if (idx !== -1) arr.splice(idx, 1)
 }
 
-export function quickCompare(arrA, arrB) {
-  if (arrA.length !== arrB.length) return false
+export function quickDiff(arrA, arrB) {
+  if (arrA.length !== arrB.length) return true
 
   for (let i = 0; i < arrA.length; i++) {
-    if (arrA[i] !== arrB[i]) return false
+    if (arrA[i] !== arrB[i]) return true
   }
 
-  return true
+  return false
 }

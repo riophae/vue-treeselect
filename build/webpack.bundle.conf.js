@@ -3,10 +3,11 @@ const merge = require('webpack-merge')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const OptimizeJsPlugin = require('optimize-js-plugin')
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const config = require('../config')
 const base = require('./webpack.base.conf')
 const utils = require('./utils')
-const version = require('../package').version
+const banner = require('./banner')
 
 const env = process.env.NODE_ENV === 'testing'
   ? require('../config/test.env')
@@ -15,12 +16,6 @@ const env = process.env.NODE_ENV === 'testing'
 base.entry = {
   VueTreeselect: './src/index.js',
 }
-
-const banner = `
-vue-treeselect v${version} | (c) 2017 Riophae Lee
-Released under the MIT License.
-https://github.com/riophae/vue-treeselect
-`.trim()
 
 const webpackConfig = merge(base, {
   output: {
@@ -34,6 +29,7 @@ const webpackConfig = merge(base, {
     rules: utils.styleLoaders({
       sourceMap: config.bundle.productionSourceMap,
       extract: true,
+      usePostCSS: true,
     }),
   },
   devtool: config.bundle.productionSourceMap ? '#source-map' : false,
@@ -41,8 +37,12 @@ const webpackConfig = merge(base, {
     new webpack.DefinePlugin({
       'process.env': env,
     }),
-    new webpack.optimize.UglifyJsPlugin({
-      compress: { warnings: false },
+    new UglifyJsPlugin({
+      uglifyOptions: {
+        compress: { warnings: false },
+      },
+      sourceMap: config.bundle.productionSourceMap,
+      parallel: true,
     }),
     new OptimizeJsPlugin({ sourceMap: false }),
     new ExtractTextPlugin({
@@ -51,10 +51,16 @@ const webpackConfig = merge(base, {
     new OptimizeCSSPlugin({
       cssProcessorOptions: {
         reduceIdents: false,
+        safe: true,
       },
     }),
     new webpack.BannerPlugin(banner),
   ],
 })
+
+if (config.bundle.bundleAnalyzerReport) {
+  const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
+  webpackConfig.plugins.push(new BundleAnalyzerPlugin())
+}
 
 module.exports = webpackConfig

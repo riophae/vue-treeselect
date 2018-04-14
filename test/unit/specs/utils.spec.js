@@ -61,6 +61,16 @@ describe('Utils', () => {
       onlyOnLeftClick(spy)(eventObj)
       expect(spy).not.toHaveBeenCalled()
     })
+
+    it('should pass extra args', () => {
+      const eventObj = {
+        type: 'mousedown',
+        button: 0,
+      }
+      const extraArg = {}
+      onlyOnLeftClick(spy)(eventObj, extraArg)
+      expect(spy).toHaveBeenCalledWith(eventObj, extraArg)
+    })
   })
 
   it('hasOwn', () => {
@@ -113,20 +123,15 @@ describe('Utils', () => {
     })
   })
 
-  describe('findIndex', () => {
-    const { findIndex } = utils
+  describe('find', () => {
+    const { find } = utils
 
-    it('should return the index of element in the array', () => {
-      expect(findIndex([ 1, 2, 3 ], n => n % 2 === 0)).toBe(1)
-      expect(findIndex([ 1 ], n => n < 0)).toBe(-1)
+    it('should return the element if matched', () => {
+      expect(find([ 1, 2, 3 ], n => n % 2 === 0)).toBe(2)
     })
 
-    it('should be able to polyfill', () => {
-      const origin = Array.prototype.findIndex
-      Array.prototype.findIndex = null // eslint-disable-line no-extend-native
-      expect(findIndex([ 1, 2, 3 ], n => n % 2 === 0)).toBe(1)
-      expect(findIndex([ 1 ], n => n < 0)).toBe(-1)
-      Array.prototype.findIndex = origin // eslint-disable-line no-extend-native
+    it('should return undefined if not matched', () => {
+      expect(find([ 1 ], n => n < 0)).toBe(undefined)
     })
   })
 
@@ -139,12 +144,12 @@ describe('Utils', () => {
     expect(arr).toEqual([ 1, 3 ])
   })
 
-  it('quickCompare', () => {
-    const { quickCompare } = utils
+  it('quickDiff', () => {
+    const { quickDiff } = utils
     const obj = {}
-    expect(quickCompare([], [])).toBe(true)
-    expect(quickCompare([ 1 ], [])).toBe(false)
-    expect(quickCompare([ {} ], [ {} ])).toBe(false)
-    expect(quickCompare([ obj ], [ obj ])).toBe(true)
+    expect(quickDiff([], [])).toBe(false)
+    expect(quickDiff([ 1 ], [])).toBe(true)
+    expect(quickDiff([ {} ], [ {} ])).toBe(true)
+    expect(quickDiff([ obj ], [ obj ])).toBe(false)
   })
 })

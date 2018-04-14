@@ -8,12 +8,13 @@
       :default-expand-level="1"
       placeholder="Try selecting some options."
       v-model="value"
-    />
+      />
+    <pre class="result">{{ value }}</pre>
     <p><strong>Sort value by:</strong></p>
-    <p>
-      <label><input type="radio" value="ORDER_SELECTED" v-model="sortValueBy"><code>"ORDER_SELECTED"</code> - Order selected (default)</label><br>
-      <label><input type="radio" value="LEVEL" v-model="sortValueBy"><code>"LEVEL"</code> - Level of option: C > BB > AAA</label><br>
-      <label><input type="radio" value="INDEX" v-model="sortValueBy"><code>"INDEX"</code> - Index of option: AAA > BB > C</label>
+    <p class="options">
+      <label><input type="radio" value="ORDER_SELECTED" v-model="sortValueBy">Order selected</label>
+      <label><input type="radio" value="LEVEL" v-model="sortValueBy">Level</label>
+      <label><input type="radio" value="INDEX" v-model="sortValueBy">Index</label>
     </p>
   </div>
 </template>
@@ -24,7 +25,7 @@
   export default {
     data() {
       return {
-        value: null,
+        value: [ 'c', 'aaa', 'bb' ],
         options: generateOptions(3),
         sortValueBy: 'ORDER_SELECTED',
       }

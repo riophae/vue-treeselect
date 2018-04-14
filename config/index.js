@@ -15,6 +15,7 @@ module.exports = {
     // In our experience, they generally work as expected,
     // just be aware of this issue when enabling this option.
     cssSourceMap: false,
+    showEslintErrorsInOverlay: false,
   },
   bundle: {
     env: require('./prod.env'),
@@ -22,6 +23,16 @@ module.exports = {
     assetsPublicPath: '/',
     assetsSubDirectory: '/',
     productionSourceMap: false,
+    productionGzip: false,
+    productionGzipExtensions: [ 'js', 'css' ],
+    bundleAnalyzerReport: process.env.npm_config_report,
+  },
+  lib: {
+    env: require('./dev.env'),
+    assetsRoot: path.resolve(__dirname, '../lib'),
+    assetsPublicPath: '/',
+    assetsSubDirectory: '/',
+    productionSourceMap: true,
     productionGzip: false,
     productionGzipExtensions: [ 'js', 'css' ],
     bundleAnalyzerReport: process.env.npm_config_report,

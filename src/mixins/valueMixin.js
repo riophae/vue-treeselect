@@ -3,7 +3,7 @@ import { onlyOnLeftClick } from '../utils'
 export default {
   computed: {
     limitText() {
-      const count = this.instance.selectedNodesNumber - this.instance.limit
+      const count = this.instance.internalValue.length - this.instance.limit
       return this.instance.limitText(count)
     },
   },
@@ -19,6 +19,10 @@ export default {
 
     handleMouseDownOnValue: onlyOnLeftClick(function handleMouseDownOnValue() {
       this.instance._wasClickedOnValueItem = true
+    }),
+
+    handleMouseDownOnValueRemove: onlyOnLeftClick(function handleMouseDownOnValueRemove(evt, node) {
+      this.instance.select(node)
     }),
   },
 }

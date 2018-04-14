@@ -5,7 +5,7 @@
       :options="options"
       placeholder="Select your favourite(s)..."
       v-model="value"
-    />
+      />
     <pre class="result">{{ value }}</pre>
   </div>
 </template>
@@ -13,7 +13,7 @@
 <script>
   export default {
     data: () => ({
-      value: null,
+      value: [],
       options: [ {
         id: 'fruits',
         label: 'Fruits',

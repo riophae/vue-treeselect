@@ -4,6 +4,9 @@ module.exports = config => {
   config.set({
     browsers: [ 'ChromeHeadless' ],
     frameworks: [ 'jasmine', 'jasmine-matchers' ],
+    client: {
+      jasmine: { random: false },
+    },
     reporters: [ 'spec', 'coverage' ],
     files: [ './index.js' ],
     preprocessors: {

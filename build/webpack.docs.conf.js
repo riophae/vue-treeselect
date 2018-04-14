@@ -4,6 +4,7 @@ const merge = require('webpack-merge')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const config = require('../config')
 const utils = require('./utils')
@@ -18,6 +19,7 @@ const webpackConfig = merge(baseWebpackConfig, {
     rules: utils.styleLoaders({
       sourceMap: false,
       extract: true,
+      usePostCSS: true,
     }),
   },
   devtool: config.docs.productionSourceMap ? '#source-map' : false,
@@ -31,11 +33,12 @@ const webpackConfig = merge(baseWebpackConfig, {
     new webpack.DefinePlugin({
       'process.env': env,
     }),
-    new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        warnings: false,
+    new UglifyJsPlugin({
+      uglifyOptions: {
+        compress: { warnings: false },
       },
-      sourceMap: false,
+      sourceMap: config.docs.productionSourceMap,
+      parallel: true,
     }),
     // extract css into its own file
     new ExtractTextPlugin({
@@ -88,6 +91,9 @@ const webpackConfig = merge(baseWebpackConfig, {
       from: path.join(__dirname, '../static'),
       to: path.join(__dirname, '../gh-pages/static'),
     }, {
+      from: path.join(__dirname, '../docs/CNAME'),
+      to: path.join(__dirname, '../gh-pages'),
+    }, {
       from: path.join(__dirname, '../.circleci'),
       to: path.join(__dirname, '../gh-pages/.circleci'),
     } ]),
@@ -95,7 +101,7 @@ const webpackConfig = merge(baseWebpackConfig, {
 })
 
 if (config.docs.bundleAnalyzerReport) {
-  const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+  const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
   webpackConfig.plugins.push(new BundleAnalyzerPlugin())
 }
 

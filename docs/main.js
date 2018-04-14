@@ -11,9 +11,9 @@ Vue.component('treeselect', Treeselect)
 let sections
 function calculateNavPositions() {
   sections = [].map.call(document.querySelectorAll('[data-section]'), section => ({
-      id: section.id,
-      offset: section.getBoundingClientRect().top + window.pageYOffset - 50,
-    }))
+    id: section.id,
+    offset: section.getBoundingClientRect().top + window.pageYOffset - 50,
+  }))
 }
 
 function loadComponents() {
@@ -27,9 +27,9 @@ function loadComponents() {
 }
 
 new Vue({
-  components: loadComponents(),
-
   el: '#app',
+
+  components: loadComponents(),
 
   data: () => ({
     currentPosition: '',

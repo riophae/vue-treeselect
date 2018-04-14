@@ -2,30 +2,30 @@
   <table class="striped">
     <thead>
       <tr>
-        <th>Name</th>
+        <th class="name">Name</th>
         <th>Props</th>
-        <th>Description</th>
+        <th class="desc">Description</th>
       </tr>
     </thead>
     <tbody>
       <tr v-for="slot in slots" :key="slot.name">
         <td><strong>{{ slot.name }}</strong></td>
-        <td v-html="slot.props"></td>
-        <td>{{ slot.description }}</td>
+        <td v-html="slot.props" />
+        <td v-html="slot.description" />
       </tr>
     </tbody>
   </table>
 </template>
 
 <script>
-  const v = text => `<code>${text}</code>`
+  import { link, makePropList } from './utils'
 
   export default {
     data: () => ({
       slots: [ {
-        name: 'option',
-        props: [ 'option', 'instance' ].map(v).join(', '),
-        description: 'Slot for custom option template.',
+        name: 'option-label',
+        props: makePropList([ 'node', 'shouldShowCount', 'count', 'labelClassName', 'countClassName' ]),
+        description: `Slot for custom option label template. See ${link('#customize-option-label')} for detailed information.`,
       } ],
     }),
   }

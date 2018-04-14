@@ -87,9 +87,9 @@ The library will be exposed as `window.VueTreeselect.Treeselect`. Note that, Vue
 <style src="@riophae/vue-treeselect/dist/vue-treeselect.min.css"></style>
 ```
 
-### Documentation & Examples
+### Documentation & Live Demo
 
-[Visit the website](https://riophae.github.io/vue-treeselect)
+[Visit the website](https://vue-treeselect.js.org/)
 
 Note: please use a desktop browser since the website hasn't been optimized for mobile devices.
 
@@ -98,23 +98,23 @@ Note: please use a desktop browser since the website hasn't been optimized for m
 - Chrome
 - Edge
 - Firefox
-- IE9+
+- IE ≥ 9
 - Safari
 
-It should function well on IE9, but the style can be slightly broken due to the lack of support of some relatively newer CSS features, such as `transition` and `animation`. Nevertheless it should look 90% same as on modern browsers.
+It should function well on IE9, but the style can be slightly broken due to the lack of support of some relatively new CSS features, such as `transition` and `animation`. Nevertheless it should look 90% same as on modern browsers.
 
 ### Bugs
 
-You can use this [pen](https://codepen.io/riophae/pen/MExgzP) to reproduce bugs and then open an issue.
+You can use this [pen](https://codepen.io/riophae/pen/MExgzP) to reproduce bugs and then [open an issue](https://github.com/riophae/vue-treeselect/issues/new).
 
 ### Contributing
 
 1. Fork & clone the repo
 2. Install dependencies by `yarn` or `npm install`
-3. Check out a new branch
+3. Check out a new branch **from `dev`**
 4. `npm run dev` & hack
 5. Make sure `npm test` passes
-6. Push your changes & create a pull request
+6. Push your changes & file a pull request to `dev` branch
 
 ### Credits
 
@@ -127,6 +127,6 @@ Some icons used in this project:
 
 ### License
 
-Copyright (c) 2017 [Riophae Lee](https://github.com/riophae).
+Copyright (c) 2017-present [Riophae Lee](https://github.com/riophae).
 
 Released under the [MIT License](https://github.com/riophae/vue-treeselect/blob/master/LICENSE.md).

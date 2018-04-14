@@ -4,7 +4,7 @@
     :disable-branch-nodes="true"
     :show-count="true"
     placeholder="Where are you from?"
-  />
+    />
 </template>
 
 <script>

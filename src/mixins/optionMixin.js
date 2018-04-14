@@ -19,6 +19,20 @@ export default {
         ? this.node.expandsOnSearch
         : this.node.isExpanded
     },
+
+    shouldShowCount() {
+      if (!this.node.isBranch) return false
+      return this.instance.searching
+        ? this.instance.showCountOnSearchComputed
+        : this.instance.showCount
+    },
+
+    count() {
+      if (!this.shouldShowCount) return NaN
+      return this.instance.searching
+        ? this.instance.searchingCount[this.node.id][this.instance.showCountOf]
+        : this.node.count[this.instance.showCountOf]
+    },
   },
 
   watch: {

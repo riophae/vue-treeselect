@@ -39,13 +39,20 @@
 
       onFocus() {
         this.instance.isFocused = true
-        /* istanbul ignore else */
+        // istanbul ignore else
         if (!this.instance.isOpen && this.instance.openOnFocus) {
           this.instance.openMenu()
         }
       },
 
       onBlur() {
+        // #15
+        // istanbul ignore next
+        if (document.activeElement === this.instance.$refs.menu) {
+          this.focus()
+          return
+        }
+
         this.instance.isFocused = false
         this.instance.closeMenu()
       },
@@ -62,39 +69,39 @@
         // https://css-tricks.com/snippets/javascript/javascript-keycodes/
         // https://stackoverflow.com/questions/4471582/javascript-keycode-vs-which
         switch (/* istanbul ignore next */ 'which' in evt ? evt.which : evt.keyCode) {
-          case KEY_CODES.BACKSPACE: {
-            if (this.instance.backspaceRemoves && !this.instance.searchQuery.length) {
-              this.instance.maybeRemoveLastValue()
-            }
-            break
+        case KEY_CODES.BACKSPACE: {
+          if (this.instance.backspaceRemoves && !this.instance.searchQuery.length) {
+            this.instance.maybeRemoveLastValue()
           }
-          case KEY_CODES.DELETE: {
-            if (this.instance.deleteRemoves && !this.instance.searchQuery.length) {
-              this.instance.maybeRemoveLastValue()
-            }
-            break
+          break
+        }
+        case KEY_CODES.DELETE: {
+          if (this.instance.deleteRemoves && !this.instance.searchQuery.length) {
+            this.instance.maybeRemoveLastValue()
           }
-          case KEY_CODES.ESCAPE: {
-            if (this.instance.searchQuery.length) {
-              this.instance.searchQuery = ''
-            } else if (this.instance.isOpen) {
-              this.instance.closeMenu()
-            } else if (this.instance.escapeClearsValue) {
-              this.instance.clear()
-            }
-            break
+          break
+        }
+        case KEY_CODES.ESCAPE: {
+          if (this.instance.searchQuery.length) {
+            this.instance.searchQuery = ''
+          } else if (this.instance.isOpen) {
+            this.instance.closeMenu()
+          } else if (this.instance.escapeClearsValue) {
+            this.instance.clear()
           }
-          default: {
-            /* istanbul ignore else */
-            if (!this.instance.isOpen) {
-              this.instance.openMenu()
-            }
+          break
+        }
+        default: {
+          // istanbul ignore else
+          if (!this.instance.isOpen) {
+            this.instance.openMenu()
           }
+        }
         }
       },
 
       onMouseDown(evt) {
-        /* istanbul ignore next */
+        // istanbul ignore next
         if (this.instance.searchQuery.length) {
           // Prevent it from bubbling to the top level and triggering `preventDefault()`
           // to make the textbox unselectable
@@ -174,7 +181,7 @@
         this.inputWidth = Math.max(
           MIN_INPUT_WIDTH,
           this.$refs.sizer
-            ? this.$refs.sizer.scrollWidth + 5
+            ? this.$refs.sizer.scrollWidth + 8
             : /* istanbul ignore next */ 0,
         )
       },
