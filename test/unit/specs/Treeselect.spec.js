@@ -4211,6 +4211,38 @@ describe('Props', () => {
         },
       }))
     })
+
+    it('multiple instances share the same `normalizerOptions` function', () => {
+      const normalizer = jasmine.createSpy('normalizer', node => {
+        return {
+          id: node.key,
+          label: node.name,
+        }
+      }).and.callThrough()
+      mount(Treeselect, {
+        propsData: {
+          id: 1,
+          options: [ {
+            key: 'a',
+            name: 'a',
+          } ],
+          normalizer,
+        },
+      })
+      mount(Treeselect, {
+        propsData: {
+          id: 2,
+          options: [ {
+            key: 'b',
+            name: 'b',
+          } ],
+          normalizer,
+        },
+      })
+
+      expect(normalizer.calls.argsFor(0)).toEqual([ jasmine.any(Object), 1 ])
+      expect(normalizer.calls.argsFor(1)).toEqual([ jasmine.any(Object), 2 ])
+    })
   })
 
   describe('openOnClick', () => {
