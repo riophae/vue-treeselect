@@ -3,7 +3,7 @@ import fuzzysearch from 'fuzzysearch'
 import {
   warning,
   quickDiff, onlyOnLeftClick,
-  debounce, identity,
+  debounce, identity, createEmptyObjectWithoutPrototype,
   hasOwn, last, find, removeFromArray,
 } from '../utils'
 
@@ -514,16 +514,16 @@ export default {
     return {
       normalizedOptions: null, // normalized options tree
       selectedNodeIds: this.extractCheckedNodeIdsFromValue(),
-      nodeCheckedStateMap: Object.create(null), // used for multi-select mode
-      nodeMap: Object.create(null), // map: nodeId -> node
-      selectedNodeMap: Object.create(null),
+      nodeCheckedStateMap: createEmptyObjectWithoutPrototype(), // used for multi-select mode
+      nodeMap: createEmptyObjectWithoutPrototype(), // map: nodeId -> node
+      selectedNodeMap: createEmptyObjectWithoutPrototype(),
       isFocused: false, // whether the control has been focused
       isOpen: false, // whether the menu is open
       rootOptionsLoaded: false,
       loadingRootOptions: false,
       loadingRootOptionsError: '',
       noSearchResults: true, // whether there is any matching search result
-      searchingCount: Object.create(null),
+      searchingCount: createEmptyObjectWithoutPrototype(),
       searching: false,
       searchQuery: '',
       lastScrollPosition: 0,
@@ -795,8 +795,8 @@ export default {
     completeSelectedNodeIdList() {
       const nodeIds = this.selectedNodeIds.slice()
       this.selectedNodeIds = []
-      this.nodeCheckedStateMap = Object.create(null)
-      this.selectedNodeMap = Object.create(null)
+      this.nodeCheckedStateMap = createEmptyObjectWithoutPrototype()
+      this.selectedNodeMap = createEmptyObjectWithoutPrototype()
       nodeIds.forEach(id => {
         if (this.selectedNodeIds.indexOf(id) === -1) {
           this._selectNode(this.getNode(id), { ignoreDisabled: true })
@@ -1035,7 +1035,7 @@ export default {
     },
 
     buildSelectedNodeMap() {
-      const map = Object.create(null)
+      const map = createEmptyObjectWithoutPrototype()
 
       this.selectedNodeIds.forEach(selectedNodeId => {
         map[selectedNodeId] = true
@@ -1045,7 +1045,7 @@ export default {
     },
 
     buildNodeCheckedStateMap() {
-      const map = Object.create(null)
+      const map = createEmptyObjectWithoutPrototype()
 
       if (this.multiple) {
         this.selectedNodes.forEach(selectedNode => {

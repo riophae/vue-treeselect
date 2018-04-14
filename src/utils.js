@@ -35,6 +35,10 @@ export function identity(x) {
   return x
 }
 
+export function createEmptyObjectWithoutPrototype() {
+  return Object.create(null)
+}
+
 // a simplified version of debounce from underscore
 export function debounce(func, wait = 100) {
   let timeout, args, context, timestamp
