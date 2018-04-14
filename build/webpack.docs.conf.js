@@ -94,6 +94,9 @@ const webpackConfig = merge(baseWebpackConfig, {
       from: path.join(__dirname, '../docs/CNAME'),
       to: path.join(__dirname, '../gh-pages'),
     }, {
+      from: path.join(__dirname, '../docs/browserconfig.xml'),
+      to: path.join(__dirname, '../gh-pages'),
+    }, {
       from: path.join(__dirname, '../.circleci'),
       to: path.join(__dirname, '../gh-pages/.circleci'),
     } ]),
