@@ -4389,6 +4389,104 @@ describe('Props', () => {
       const noOptionsTip = menu.find('.vue-treeselect__no-options-tip')
       expect(noOptionsTip.text().trim()).toBe('No options available.')
     })
+
+    describe('should be reactive', () => {
+      it('should override fallback node', () => {
+        const wrapper = mount(Treeselect, {
+          propsData: {
+            options: [],
+            value: 'a', // this creates a fallback node
+          },
+        })
+        const { vm } = wrapper
+
+        expect(vm.nodeMap.a).toEqual(jasmine.objectContaining({
+          isFallbackNode: true,
+          label: 'a (unknown)',
+        }))
+
+        wrapper.setProps({
+          options: [ {
+            id: 'a',
+            label: 'a',
+          } ],
+        })
+        expect(vm.nodeMap.a.label).toBe('a')
+      })
+
+      it('directly modify `options` prop should trigger reinitializing', async () => {
+        const vm = new Vue({
+          components: { Treeselect },
+          data: {
+            options: [ {
+              id: 'a',
+              label: 'a',
+            } ],
+          },
+          template: `<div><treeselect :options="options" /></div>`,
+        }).$mount()
+        const comp = vm.$children[0]
+
+        // note that, this is directly modifying the original `options` array,
+        // not creating a new `options` array.
+        vm.options[0].label = 'xxx'
+        await vm.$nextTick()
+        expect(comp.nodeMap.a.label).toBe('xxx')
+      })
+
+      it('should keep state', () => {
+        const wrapper = mount(Treeselect, {
+          propsData: {
+            multiple: true,
+            options: [ {
+              id: 'a',
+              label: 'a',
+              children: [ {
+                id: 'aa',
+                label: 'aa',
+              } ],
+            } ],
+            value: [ 'a' ],
+          },
+        })
+        const { vm } = wrapper
+
+        vm.toggleExpanded(vm.nodeMap.a)
+        expect(vm.isSelected(vm.nodeMap.a)).toBe(true)
+        expect(vm.nodeMap.a.isExpanded).toBe(true)
+        expect(vm.nodeCheckedStateMap).toEqual({
+          a: CHECKED,
+          aa: CHECKED,
+        })
+
+        wrapper.setProps({
+          options: [ {
+            id: 'a',
+            label: 'a',
+            children: [ {
+              id: 'aa',
+              label: 'aa',
+            }, {
+              // add new option
+              id: 'ab',
+              label: 'ab',
+            } ],
+          }, {
+            // add new option
+            id: 'b',
+            label: 'b',
+          } ],
+        })
+        expect(vm.isSelected(vm.nodeMap.a)).toBe(true)
+        expect(vm.nodeMap.a.isExpanded).toBe(true)
+        expect(vm.nodeCheckedStateMap).toEqual({
+          a: CHECKED,
+          aa: CHECKED,
+          ab: CHECKED,
+          b: UNCHECKED,
+        })
+      })
+    })
   })
 
   describe('searchable', () => {

@@ -278,6 +278,15 @@ export default {
     },
 
     /**
+     * Whether is externally loading options or not.
+     * Set `true` to show a spinner.
+     */
+    loading: {
+      type: Boolean,
+      default: false,
+    },
+
+    /**
      * Text displayed when a branch node is loading its children options
      */
     loadingText: {
@@ -516,6 +525,7 @@ export default {
       selectedNodeIds: this.extractCheckedNodeIdsFromValue(),
       nodeCheckedStateMap: createEmptyObjectWithoutPrototype(), // used for multi-select mode
       nodeMap: createEmptyObjectWithoutPrototype(), // map: nodeId -> node
+      prevNodeMap: null, // used for keepping state when reinitializing options
       selectedNodeMap: createEmptyObjectWithoutPrototype(),
       isFocused: false, // whether the control has been focused
       isOpen: false, // whether the menu is open
@@ -641,6 +651,10 @@ export default {
       if (!newValue && !this.isOpen && this.alwaysOpen) this.openMenu()
     },
 
+    internalValue() {
+      this.$emit('input', this.getValue(), this.id)
+    },
+
     multiple(newValue) {
       if (newValue) {
         // needs to rebuild the state tree when switching from
@@ -653,10 +667,6 @@ export default {
       this.handleSearch()
       this.$emit('search-change', this.searchQuery, this.id)
     }, INPUT_DEBOUNCE_DELAY),
-
-    internalValue() {
-      this.$emit('input', this.getValue(), this.id)
-    },
 
     value() {
       const newInternalValue = this.extractCheckedNodeIdsFromValue()
@@ -700,11 +710,16 @@ export default {
 
     initialize(rootOptions) {
       if (Array.isArray(rootOptions)) {
-        this.rootOptionsLoaded = true
+        // in case we are reinitializing options,
+        // keep the old state tree temporarily.
+        this.prevNodeMap = this.nodeMap
+        this.nodeMap = createEmptyObjectWithoutPrototype()
         this.initializeRootOptions(rootOptions)
         this.completeSelectedNodeIdList()
         this.buildSelectedNodeMap()
         this.buildNodeCheckedStateMap()
+        this.prevNodeMap = null
+        this.rootOptionsLoaded = true
       } else {
         this.initializeRootOptions([])
       }
@@ -1155,6 +1170,19 @@ export default {
             normalized.ancestors.forEach(ancestor => ancestor.hasDisabledDescendants = true)
           }
 
+          if (this.prevNodeMap && this.prevNodeMap[id]) {
+            const prev = this.prevNodeMap[id]
+            if (prev.isBranch && normalized.isBranch) {
+              const keysToPreserve = [
+                'isExpanded',
+                'expandsOnSearch',
+                'isPending',
+                'loadingChildrenError',
+              ]
+              keysToPreserve.forEach(key => normalized[key] = prev[key])
+            }
+          }
+
           this.$set(this.nodeMap, id, normalized)
           return normalized
         })
@@ -1398,6 +1426,7 @@ export default {
     this.verifyProps()
     this.resetFlags()
     this.initialize(this.options)
+    this.$watch('options', () => this.initialize(this.options), { deep: true })
   },
 
   mounted() {

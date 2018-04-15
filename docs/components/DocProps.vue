@@ -148,6 +148,11 @@
         defaultValue: NO_DEFAULT_VALUE,
         description: `As the name suggests, it's used for dynamic loading options. See ${link('#delayed-loading')} for detailed information.`,
       }, {
+        name: 'loading',
+        type: 'Boolean',
+        defaultValue: code('false'),
+        description: `Whether is externally loading options or not. Set ${code('true')} to show a spinner.`,
+      }, {
         name: 'loadingText',
         type: 'String',
         defaultValue: code('"Loading..."'),

@@ -58,7 +58,7 @@
         </div>
       </template>
       <template v-else>
-        <div v-if="loadingRootOptions" class="vue-treeselect__loading-tip">
+        <div v-if="loading || loadingRootOptions" class="vue-treeselect__loading-tip">
           <div class="vue-treeselect__icon-wrapper"><span class="vue-treeselect__icon-loader" /></div>
           <span class="vue-treeselect__loading-tip-text">{{ loadingText }}</span>
         </div>
