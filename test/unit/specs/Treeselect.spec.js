@@ -2755,7 +2755,6 @@ describe('Props', () => {
       const { vm } = wrapper
 
       vm.closeMenu()
-      await vm.$nextTick()
       expect(vm.isOpen).toBe(true)
     })
 
