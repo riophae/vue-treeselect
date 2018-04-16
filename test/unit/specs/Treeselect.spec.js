@@ -2745,7 +2745,7 @@ describe('Props', () => {
       expect(wrapper.contains('.vue-treeselect__arrow-wrapper')).toBe(false)
     })
 
-    it('the menu should be unclosable', async () => {
+    it('the menu should be unclosable', () => {
       const wrapper = mount(Treeselect, {
         propsData: {
           options: [],
