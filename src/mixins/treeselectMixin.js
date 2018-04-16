@@ -1333,8 +1333,11 @@ export default {
         let curr = node
         while (!curr.isRootNode) {
           curr = curr.parentNode
-          if (!this.isSelected(curr)) break
-          this.removeValue(curr)
+          if (this.isSelected(curr)) {
+            this.removeValue(curr)
+          } else {
+            break
+          }
         }
       }
     },
