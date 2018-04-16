@@ -4203,14 +4203,12 @@ describe('Props', () => {
       }))
     })
 
-    it('multiple instances share the same `normalizerOptions` function', () => {
-      const normalizer = jasmine.createSpy('normalizer', node => {
-        return {
-          id: node.key,
-          label: node.name,
-        }
-      }).and.callThrough()
-      mount(Treeselect, {
+    it('multiple instances share the same `normalizer` function', () => {
+      const normalizer = (node, id) => ({
+        id: id + '-' + node.key,
+        label: node.name,
+      })
+      const { vm: vm1 } = mount(Treeselect, {
         propsData: {
           id: 1,
           options: [ {
@@ -4220,19 +4218,19 @@ describe('Props', () => {
           normalizer,
         },
       })
-      mount(Treeselect, {
+      const { vm: vm2 } = mount(Treeselect, {
         propsData: {
           id: 2,
           options: [ {
-            key: 'b',
-            name: 'b',
+            key: 'a',
+            name: 'a',
           } ],
           normalizer,
         },
       })
 
-      expect(normalizer.calls.argsFor(0)).toEqual([ jasmine.any(Object), 1 ])
-      expect(normalizer.calls.argsFor(1)).toEqual([ jasmine.any(Object), 2 ])
+      expect(Object.keys(vm1.nodeMap)).toEqual([ '1-a' ])
+      expect(Object.keys(vm2.nodeMap)).toEqual([ '2-a' ])
     })
   })
 

@@ -18,7 +18,10 @@
           name: 'aa',
         } ],
       } ],
-      normalizer(node) {
+      normalizer(node/*, id */) {
+        // there is an extra `id` argument,
+        // which could be useful if you have multiple instances
+        // of vue-treeselect that share the same `normalizer` function
         return {
           id: node.key,
           label: node.name,
