@@ -2954,23 +2954,15 @@ describe('Props', () => {
       expect(vm.selectedNodeIds).toEqual([])
     })
 
-    // The following two test cases are really strange that
-    // it was passing when using avoriaz
-    // but after migrating to vue-test-utils,
-    // they just don't work as expected
-    // leave them commented temporarily
+    it('should hide when no options selected', () => {
+      vm.clear()
+      expect(wrapper.contains('.vue-treeselect__x')).toBe(false)
+    })
 
-    // TODO
-    // it('should hide when no options selected', () => {
-    //   vm.clear()
-    //   expect(wrapper.contains('.vue-treeselect__x')).toBe(false)
-    // })
-
-    // TODO
-    // it('should hide when disabled=true', () => {
-    //   wrapper.setProps({ disabled: true })
-    //   expect(wrapper.contains('.vue-treeselect__x')).toBe(false)
-    // })
+    it('should hide when disabled=true', () => {
+      wrapper.setProps({ disabled: true })
+      expect(wrapper.contains('.vue-treeselect__x')).toBe(false)
+    })
 
     it('should hide when clearable=false', () => {
       wrapper.setProps({ clearable: false })
