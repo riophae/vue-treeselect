@@ -116,6 +116,15 @@ export default {
     },
 
     /**
+     * Function that processes before clearing all input fields
+     * @type {function(): boolean}
+     */
+    beforeClearAll: {
+      type: Function,
+      default: () => true,
+    },
+
+    /**
      * Title for the "×" icon when multiple: true
      */
     clearAllText: {
@@ -755,7 +764,7 @@ export default {
       // when the real data is loaded, we'll override this fake node
 
       const raw = this.extractNodeFromValue(id)
-      const label = this.normalizer(raw).label || `${id} (unknown)`
+      const label = this.normalizer(raw, this.id).label || `${id} (unknown)`
       const fallbackNode = {
         id,
         label,
@@ -785,7 +794,7 @@ export default {
       }
 
       return (this.multiple ? this.value : [ this.value ])
-        .map(node => this.normalizer(node))
+        .map(node => this.normalizer(node, this.id))
         .map(node => node.id)
     },
 
@@ -801,7 +810,7 @@ export default {
         : this.value ? [ this.value ] : []
       const matched = find(
         valueArray,
-        node => node && this.normalizer(node).id === id
+        node => node && this.normalizer(node, this.id).id === id
       )
 
       return matched || defaultNode
@@ -929,7 +938,10 @@ export default {
       evt.stopPropagation()
       evt.preventDefault()
 
-      this.clear()
+      if (this.beforeClearAll()) {
+        this.clear()
+      }
+
       this.focusInput()
     }),
 
@@ -1087,7 +1099,7 @@ export default {
 
     normalize(parentNode, nodes) {
       let normalizedOptions = nodes
-        .map(node => [ this.normalizer(node), node ])
+        .map(node => [ this.normalizer(node, this.id), node ])
         .map(([ node, raw ], index) => {
           this.checkDuplication(node)
           this.verifyNodeShape(node)
@@ -1361,8 +1373,11 @@ export default {
         let curr = node
         while (!curr.isRootNode) {
           curr = curr.parentNode
-          if (!this.isSelected(curr)) break
-          this.removeValue(curr)
+          if (this.isSelected(curr)) {
+            this.removeValue(curr)
+          } else {
+            break
+          }
         }
       }
     },

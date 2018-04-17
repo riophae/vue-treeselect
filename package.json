@@ -1,6 +1,6 @@
 {
   "name": "@riophae/vue-treeselect",
-  "version": "0.0.19",
+  "version": "0.0.20",
   "description": "A multi-select component with nested options for Vue.js",
   "author": "Riophae Lee <riophaelee@gmail.com>",
   "license": "MIT",
@@ -35,7 +35,7 @@
     "fuzzysearch": "^1.0.3"
   },
   "devDependencies": {
-    "@vue/test-utils": "^1.0.0-beta.13",
+    "@vue/test-utils": "^1.0.0-beta.14",
     "autoprefixer": "^8.1.0",
     "avoriaz": "^6.3.0",
     "babel-core": "^6.22.1",

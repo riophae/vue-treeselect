@@ -3,16 +3,18 @@
     <thead>
       <tr>
         <th class="name">Name</th>
-        <th>Type</th>
-        <th>Default</th>
+        <th>Type / Default</th>
         <th class="desc">Description</th>
       </tr>
     </thead>
     <tbody>
       <tr v-for="prop in props" :key="prop[0]">
         <td><strong>{{ prop.name }}</strong></td>
-        <td class="nowrap" v-html="prop.type" />
-        <td v-html="prop.defaultValue" />
+        <td class="type">
+          <strong>Type:</strong> <span v-html="prop.type" />
+          <br>
+          <strong>Default:</strong> <span v-html="prop.defaultValue" />
+        </td>
         <td v-html="prop.description" />
       </tr>
     </tbody>
@@ -21,7 +23,7 @@
 
 <script>
   /* eslint-disable no-template-curly-in-string */
-  import { code, strong, link } from './utils'
+  import { code, strong, link, makeArgNameList } from './utils'
 
   const NO_DEFAULT_VALUE = '–'
 
@@ -134,17 +136,17 @@
         description: `Limit the display of selected options. The rest will be hidden within the ${code('limitText')} string.`,
       }, {
         name: 'limitText',
-        type: 'Function',
+        type: `Fn${makeArgNameList([ 'count' ])}`,
         defaultValue: code('count => `and ${count} more`'),
         description: 'Function that processes the message shown when selected elements pass the defined limit.',
       }, {
         name: 'loadChildrenErrorText',
-        type: 'Function',
+        type: `Fn${makeArgNameList([ 'error' ])}`,
         defaultValue: code('error => `Failed to load children options: ${error.message || String(error)}.`'),
         description: 'Function that processes error message shown when loading children options failed.',
       }, {
         name: 'loadChildrenOptions',
-        type: 'Function',
+        type: `Fn${makeArgNameList([ 'node', 'callback', 'id' ])}`,
         defaultValue: NO_DEFAULT_VALUE,
         description: `As the name suggests, it's used for dynamic loading options. See ${link('#delayed-loading')} for detailed information.`,
       }, {
@@ -159,7 +161,7 @@
         description: 'Text displayed when a branch node is loading its children options.',
       }, {
         name: 'loadRootOptions',
-        type: 'Function',
+        type: `Fn${makeArgNameList([ 'callback', 'id' ])}`,
         defaultValue: NO_DEFAULT_VALUE,
         description: `Used for delayed loading root options. See ${link('#delayed-loading')} for detailed information.`,
       }, {
@@ -194,7 +196,7 @@
         description: 'Text displayed when there are no matching search results.',
       }, {
         name: 'normalizer',
-        type: 'Function',
+        type: `Fn${makeArgNameList([ 'node', 'id' ])}`,
         defaultValue: code('node => node'),
         description: `Used for normalizing source data. See ${link('#customize-key-names')} for detailed information.`,
       }, {

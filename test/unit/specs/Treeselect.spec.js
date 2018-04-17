@@ -2745,7 +2745,7 @@ describe('Props', () => {
       expect(wrapper.contains('.vue-treeselect__arrow-wrapper')).toBe(false)
     })
 
-    it('the menu should be unclosable', async () => {
+    it('the menu should be unclosable', () => {
       const wrapper = mount(Treeselect, {
         propsData: {
           options: [],
@@ -2755,7 +2755,6 @@ describe('Props', () => {
       const { vm } = wrapper
 
       vm.closeMenu()
-      await vm.$nextTick()
       expect(vm.isOpen).toBe(true)
     })
 
@@ -2954,23 +2953,15 @@ describe('Props', () => {
       expect(vm.selectedNodeIds).toEqual([])
     })
 
-    // The following two test cases are really strange that
-    // it was passing when using avoriaz
-    // but after migrating to vue-test-utils,
-    // they just don't work as expected
-    // leave them commented temporarily
+    it('should hide when no options selected', () => {
+      vm.clear()
+      expect(wrapper.contains('.vue-treeselect__x')).toBe(false)
+    })
 
-    // TODO
-    // it('should hide when no options selected', () => {
-    //   vm.clear()
-    //   expect(wrapper.contains('.vue-treeselect__x')).toBe(false)
-    // })
-
-    // TODO
-    // it('should hide when disabled=true', () => {
-    //   wrapper.setProps({ disabled: true })
-    //   expect(wrapper.contains('.vue-treeselect__x')).toBe(false)
-    // })
+    it('should hide when disabled=true', () => {
+      wrapper.setProps({ disabled: true })
+      expect(wrapper.contains('.vue-treeselect__x')).toBe(false)
+    })
 
     it('should hide when clearable=false', () => {
       wrapper.setProps({ clearable: false })
@@ -4210,6 +4201,36 @@ describe('Props', () => {
           name: 'a',
         },
       }))
+    })
+
+    it('multiple instances share the same `normalizer` function', () => {
+      const normalizer = (node, id) => ({
+        id: id + '-' + node.key,
+        label: node.name,
+      })
+      const { vm: vm1 } = mount(Treeselect, {
+        propsData: {
+          id: 1,
+          options: [ {
+            key: 'a',
+            name: 'a',
+          } ],
+          normalizer,
+        },
+      })
+      const { vm: vm2 } = mount(Treeselect, {
+        propsData: {
+          id: 2,
+          options: [ {
+            key: 'a',
+            name: 'a',
+          } ],
+          normalizer,
+        },
+      })
+
+      expect(Object.keys(vm1.nodeMap)).toEqual([ '1-a' ])
+      expect(Object.keys(vm2.nodeMap)).toEqual([ '2-a' ])
     })
   })
 
