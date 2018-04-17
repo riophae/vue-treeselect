@@ -116,6 +116,15 @@ export default {
     },
 
     /**
+     * Function that processes before clearing all input fields
+     * @type {function(): boolean}
+     */
+    beforeClearAll: {
+      type: Function,
+      default: () => true,
+    },
+
+    /**
      * Title for the "×" icon when multiple: true
      */
     clearAllText: {
@@ -914,7 +923,10 @@ export default {
       evt.stopPropagation()
       evt.preventDefault()
 
-      this.clear()
+      if (this.beforeClearAll()) {
+        this.clear()
+      }
+
       this.focusInput()
     }),
 
