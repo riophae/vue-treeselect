@@ -35,6 +35,10 @@ export function identity(x) {
   return x
 }
 
+export function constant(x) {
+  return () => x
+}
+
 export function createEmptyObjectWithoutPrototype() {
   return Object.create(null)
 }

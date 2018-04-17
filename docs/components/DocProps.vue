@@ -45,6 +45,11 @@
         defaultValue: code('true'),
         description: `Automatically load root options on mount. When set to ${code('false')}, root options will be loaded when the menu is opened.`,
       }, {
+        name: 'beforeClearAll',
+        type: `Fn${makeArgNameList([])} 🡒 Boolean`,
+        defaultValue: code('() => true'),
+        description: `Function that processes before clearing all input fields. Return ${code('false')} to prevent value from being cleared.`,
+      }, {
         name: 'backspaceRemoves',
         type: 'Boolean',
         defaultValue: code('true'),

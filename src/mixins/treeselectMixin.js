@@ -3,7 +3,7 @@ import fuzzysearch from 'fuzzysearch'
 import {
   warning,
   quickDiff, onlyOnLeftClick,
-  debounce, identity, createEmptyObjectWithoutPrototype,
+  debounce, identity, constant, createEmptyObjectWithoutPrototype,
   hasOwn, last, find, removeFromArray,
 } from '../utils'
 
@@ -100,6 +100,16 @@ export default {
     },
 
     /**
+     * Function that processes before clearing all input fields.
+     * Return `false` to prevent value from being cleared.
+     * @type {function(): boolean}
+     */
+    beforeClearAll: {
+      type: Function,
+      default: constant(true),
+    },
+
+    /**
      * Show branch nodes before leaf nodes?
      */
     branchNodesFirst: {
@@ -113,15 +123,6 @@ export default {
     clearable: {
       type: Boolean,
       default: true,
-    },
-
-    /**
-     * Function that processes before clearing all input fields
-     * @type {function(): boolean}
-     */
-    beforeClearAll: {
-      type: Function,
-      default: () => true,
     },
 
     /**
@@ -281,6 +282,7 @@ export default {
 
     /**
      * Function used for dynamic loading options
+     * @type {function(node, (function(Error, Array<node>): void):callback, (string|number):id): void}
      */
     loadChildrenOptions: {
       type: Function,
@@ -305,6 +307,7 @@ export default {
 
     /**
      * Function used for dynamic loading root options
+     * @type {function((function(Error, Array<node>): void):callback, (string|number):id): void}
      */
     loadRootOptions: {
       type: Function,
@@ -359,6 +362,7 @@ export default {
 
     /**
      * Used for normalizing source data
+     * @type {function(node): node}
      */
     normalizer: {
       type: Function,
