@@ -136,17 +136,17 @@
         description: `Limit the display of selected options. The rest will be hidden within the ${code('limitText')} string.`,
       }, {
         name: 'limitText',
-        type: `Fn${makeArgNameList([ 'count' ])}`,
+        type: `Fn${makeArgNameList([ 'count' ])} 🡒 String`,
         defaultValue: code('count => `and ${count} more`'),
         description: 'Function that processes the message shown when selected elements pass the defined limit.',
       }, {
         name: 'loadChildrenErrorText',
-        type: `Fn${makeArgNameList([ 'error' ])}`,
+        type: `Fn${makeArgNameList([ 'error' ])} 🡒 String`,
         defaultValue: code('error => `Failed to load children options: ${error.message || String(error)}.`'),
         description: 'Function that processes error message shown when loading children options failed.',
       }, {
         name: 'loadChildrenOptions',
-        type: `Fn${makeArgNameList([ 'node', 'callback', 'id' ])}`,
+        type: `Fn${makeArgNameList([ 'node', 'callback', 'id' ])} 🡒 ${code('void')}`,
         defaultValue: NO_DEFAULT_VALUE,
         description: `As the name suggests, it's used for dynamic loading options. See ${link('#delayed-loading')} for detailed information.`,
       }, {
@@ -161,7 +161,7 @@
         description: 'Text displayed when a branch node is loading its children options.',
       }, {
         name: 'loadRootOptions',
-        type: `Fn${makeArgNameList([ 'callback', 'id' ])}`,
+        type: `Fn${makeArgNameList([ 'callback', 'id' ])} 🡒 ${code('void')}`,
         defaultValue: NO_DEFAULT_VALUE,
         description: `Used for delayed loading root options. See ${link('#delayed-loading')} for detailed information.`,
       }, {
@@ -196,7 +196,7 @@
         description: 'Text displayed when there are no matching search results.',
       }, {
         name: 'normalizer',
-        type: `Fn${makeArgNameList([ 'node', 'id' ])}`,
+        type: `Fn${makeArgNameList([ 'node', 'id' ])} 🡒 ${code('node')}`,
         defaultValue: code('node => node'),
         description: `Used for normalizing source data. See ${link('#customize-key-names')} for detailed information.`,
       }, {
