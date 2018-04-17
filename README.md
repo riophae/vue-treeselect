@@ -41,7 +41,7 @@ $ yarn add @riophae/vue-treeselect
 <link rel="stylesheet" href="https://unpkg.com/@riophae/vue-treeselect@^0.1.0?main=css">
 ```
 
-The library will be exposed as `window.VueTreeselect.Treeselect`. Note that, Vue as a dependency should be included before vue-treeselect.
+The component will be exposed as `window.VueTreeselect.Treeselect`. Note that, Vue as a dependency should be included before vue-treeselect.
 
 ### Basic Usage
 
