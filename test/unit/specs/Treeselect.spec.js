@@ -2890,6 +2890,62 @@ describe('Props', () => {
     })
   })
 
+  describe('beforeClearAll', () => {
+    async function clickOnX(wrapper) {
+      const x = wrapper.find('.vue-treeselect__x')
+      leftClick(x)
+      // the `beforeClearAll` callback is always called async
+      // we have to wait here
+      await sleep(0)
+    }
+
+    it('the returned value determines whether to clear values', async () => {
+      let shouldClear
+      const wrapper = mount(Treeselect, {
+        propsData: {
+          options: [ {
+            id: 'a',
+            label: 'a',
+          } ],
+          value: 'a',
+          beforeClearAll: () => shouldClear,
+        },
+      })
+      const { vm } = wrapper
+
+      shouldClear = false
+      await clickOnX(wrapper)
+      expect(vm.internalValue).toEqual([ 'a' ])
+
+      shouldClear = true
+      await clickOnX(wrapper)
+      expect(vm.internalValue).toBeEmptyArray()
+    })
+
+    it('should support the callback returning a promise', async () => {
+      let shouldClear
+      const wrapper = mount(Treeselect, {
+        propsData: {
+          options: [ {
+            id: 'a',
+            label: 'a',
+          } ],
+          value: 'a',
+          beforeClearAll: () => Promise.resolve(shouldClear),
+        },
+      })
+      const { vm } = wrapper
+
+      shouldClear = false
+      await clickOnX(wrapper)
+      expect(vm.internalValue).toEqual([ 'a' ])
+
+      shouldClear = true
+      await clickOnX(wrapper)
+      expect(vm.internalValue).toBeEmptyArray()
+    })
+  })
+
   describe('branchNodesFirst', () => {
     it('should place branch nodes ahead of leaf nodes when branchNodesFirst=true', () => {
       const wrapper = mount(Treeselect, {
@@ -2947,9 +3003,10 @@ describe('Props', () => {
       expect(wrapper.contains('.vue-treeselect__x')).toBe(true)
     })
 
-    it('should reset value on mousedown', () => {
+    it('should reset value on mousedown', async () => {
       expect(vm.selectedNodeIds).toEqual([ 'a' ])
       leftClick(wrapper.find('.vue-treeselect__x'))
+      await sleep(1)
       expect(vm.selectedNodeIds).toEqual([])
     })
 
