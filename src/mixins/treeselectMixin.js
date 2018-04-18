@@ -3,7 +3,7 @@ import fuzzysearch from 'fuzzysearch'
 import {
   warning,
   quickDiff, onlyOnLeftClick,
-  debounce, identity, constant, createEmptyObjectWithoutPrototype,
+  debounce, identity, promise, createEmptyObjectWithoutPrototype,
   hasOwn, last, find, removeFromArray,
 } from '../utils'
 
@@ -102,11 +102,11 @@ export default {
     /**
      * Function that processes before clearing all input fields.
      * Return `false` to prevent value from being cleared.
-     * @type {function(): boolean}
+     * @type {function(): Promise}
      */
     beforeClearAll: {
       type: Function,
-      default: constant(true),
+      default: promise(true),
     },
 
     /**
@@ -938,11 +938,13 @@ export default {
       this.resetFlags()
     }),
 
-    handleMouseDownOnClear: onlyOnLeftClick(function handleMouseDownOnClear(evt) {
+    handleMouseDownOnClear: onlyOnLeftClick(async function handleMouseDownOnClear(evt) {
       evt.stopPropagation()
       evt.preventDefault()
 
-      if (this.beforeClearAll()) {
+      const shouldClear = await this.beforeClearAll()
+
+      if (shouldClear) {
         this.clear()
       }
 

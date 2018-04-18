@@ -39,6 +39,10 @@ export function constant(x) {
   return () => x
 }
 
+export function promise(x) {
+  return () => Promise.resolve(x)
+}
+
 export function createEmptyObjectWithoutPrototype() {
   return Object.create(null)
 }
