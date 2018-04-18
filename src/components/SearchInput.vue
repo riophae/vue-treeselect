@@ -149,6 +149,7 @@
             type: 'text',
             autocomplete: 'off',
             tabIndex: this.instance.tabIndex,
+            required: this.instance.required && !this.instance.hasValue,
           },
           domProps: {
             value: this.instance.searchQuery,
