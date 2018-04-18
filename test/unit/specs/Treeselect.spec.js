@@ -2949,7 +2949,8 @@ describe('Props', () => {
 
     it('should reset value on mousedown', async () => {
       expect(vm.selectedNodeIds).toEqual([ 'a' ])
-      await leftClick(wrapper.find('.vue-treeselect__x'))
+      leftClick(wrapper.find('.vue-treeselect__x'))
+      await sleep(1)
       expect(vm.selectedNodeIds).toEqual([])
     })
 

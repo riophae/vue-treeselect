@@ -3,7 +3,7 @@ import fuzzysearch from 'fuzzysearch'
 import {
   warning,
   quickDiff, onlyOnLeftClick,
-  debounce, identity, promise, createEmptyObjectWithoutPrototype,
+  debounce, identity, constant, isPromise, createEmptyObjectWithoutPrototype,
   hasOwn, last, find, removeFromArray,
 } from '../utils'
 
@@ -106,7 +106,7 @@ export default {
      */
     beforeClearAll: {
       type: Function,
-      default: promise(true),
+      default: constant(true),
     },
 
     /**
@@ -946,17 +946,32 @@ export default {
       this.resetFlags()
     }),
 
-    handleMouseDownOnClear: onlyOnLeftClick(async function handleMouseDownOnClear(evt) {
+    handleMouseDownOnClear: onlyOnLeftClick(function handleMouseDownOnClear(evt) {
+      // We don't use async/await here because we don't want
+      // to rely on Babel polyfill or regenerator runtime.
+      // See: https://babeljs.io/docs/plugins/transform-regenerator/
+      // We also don't want to assume there is a global `Promise` class,
+      // since we are targeting to support IE9 without the need of any polyfill.
+
       evt.stopPropagation()
       evt.preventDefault()
 
-      const shouldClear = await this.beforeClearAll()
+      const result = this.beforeClearAll()
+      const handler = shouldClear => {
+        if (shouldClear) {
+          this.clear()
+        }
 
-      if (shouldClear) {
-        this.clear()
+        this.focusInput()
       }
 
-      this.focusInput()
+      if (isPromise(result)) {
+        // the handler will be called async
+        result.then(handler)
+      } else {
+        // keep the same behavior here
+        setTimeout(handler, 0, result)
+      }
     }),
 
     handleMouseDownOnArrow: onlyOnLeftClick(function handleMouseDownOnArrow(evt) {

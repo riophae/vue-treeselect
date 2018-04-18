@@ -39,8 +39,13 @@ export function constant(x) {
   return () => x
 }
 
-export function promise(x) {
-  return () => Promise.resolve(x)
+export function isPromise(x) {
+  // https://github.com/then/is-promise/blob/master/index.js
+  return (
+    x != null &&
+    (typeof x === 'object' || typeof x === 'function') &&
+    typeof x.then === 'function'
+  )
 }
 
 export function createEmptyObjectWithoutPrototype() {
