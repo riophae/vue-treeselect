@@ -102,7 +102,7 @@ export default {
     /**
      * Function that processes before clearing all input fields.
      * Return `false` to prevent value from being cleared.
-     * @type {function(): Promise}
+     * @type {function(): (boolean|Promise<boolean>)}
      */
     beforeClearAll: {
       type: Function,
