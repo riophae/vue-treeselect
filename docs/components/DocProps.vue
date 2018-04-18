@@ -230,6 +230,11 @@
         defaultValue: code('"Select..."'),
         description: "Field placeholder, displayed when there's no value.",
       }, {
+        name: 'required',
+        type: 'Boolean',
+        defaultValue: code('false'),
+        description: `Applies HTML5 ${code('required')} attribute when needed.`,
+      }, {
         name: 'retainScrollPosition',
         type: 'Boolean',
         defaultValue: code('true'),

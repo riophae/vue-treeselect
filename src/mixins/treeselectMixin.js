@@ -410,6 +410,14 @@ export default {
     },
 
     /**
+     * Applies HTML5 required attribute when needed
+     */
+    required: {
+      type: Boolean,
+      default: false,
+    },
+
+    /**
      * Whether to retain the scroll position on menu reopen
      */
     retainScrollPosition: {

@@ -4510,6 +4510,42 @@ describe('Props', () => {
     })
   })
 
+  describe('required', () => {
+    let wrapper, inputNode
+
+    beforeEach(() => {
+      wrapper = mount(Treeselect, {
+        propsData: {
+          options: [ {
+            id: 'a',
+            label: 'a',
+          } ],
+          searchable: true,
+        },
+      })
+      inputNode = wrapper.find('.vue-treeselect__input')
+    })
+
+    describe('when required=true', () => {
+      it('the input should have `required` attribute if having no value', () => {
+        wrapper.setProps({ required: true })
+        expect(inputNode.attributes().required).toBe('required')
+      })
+
+      it('the input should not have `required` attribute if value is present', () => {
+        wrapper.setProps({ value: 'a', required: true })
+        expect(inputNode.attributes()).not.toHaveMember('required')
+      })
+    })
+
+    describe('when required=false', () => {
+      it('the input should not have `required` attribute even if value is present', () => {
+        wrapper.setProps({ value: 'a', required: false })
+        expect(inputNode.attributes()).not.toHaveMember('required')
+      })
+    })
+  })
+
   describe('searchable', () => {
     describe('when searchable=true', () => {
       describe('when multiple=true', () => {
