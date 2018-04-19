@@ -103,12 +103,6 @@ describe('Utils', () => {
       expect(last([ 1 ])).toBe(1)
       expect(last([ 1, 2, 3 ])).toBe(3)
     })
-
-    it('throws an error if non-array argument passed', () => {
-      spyOn(console, 'error')
-      last({})
-      expect(console.error).toHaveBeenCalledWith('[Vue-Treeselect Warning]', 'unexpected type')
-    })
   })
 
   describe('find', () => {

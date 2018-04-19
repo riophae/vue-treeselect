@@ -106,10 +106,6 @@ export function deepExtend(target, source) {
 }
 
 export function last(arr) {
-  warning(
-    () => Array.isArray(arr),
-    () => 'unexpected type',
-  )
   return arr[arr.length - 1]
 }
 
