@@ -14,7 +14,7 @@ import {
   ALL, BRANCH_PRIORITY, LEAF_PRIORITY,
   ALL_CHILDREN, ALL_DESCENDANTS, LEAF_CHILDREN, LEAF_DESCENDANTS,
   ORDER_SELECTED, LEVEL, INDEX,
-  INPUT_DEBOUNCE_DELAY,
+  INPUT_DEBOUNCE_DELAY, KEEP_REMAINING_HEIGHT,
 } from '../constants'
 
 function sortValueByIndex(a, b) {
@@ -1440,7 +1440,7 @@ export default {
       const spaceAbove = rect.top
       const spaceBelow = window.innerHeight - rect.bottom
       const hasEnoughSpaceBelow = spaceBelow > this.maxHeight
-      const isInViewport = spaceBelow > -40
+      const isInViewport = rect.top > 0 && (window.innerHeight - rect.top) > KEEP_REMAINING_HEIGHT
 
       switch (true) {
       case hasEnoughSpaceBelow:
@@ -1449,12 +1449,12 @@ export default {
       case this.openDirection === 'below':
       case this.openDirection === 'bottom':
         this.prefferedOpenDirection = 'below'
-        this.optimizedHeight = Math.max(Math.min(spaceBelow - 40, this.maxHeight), this.maxHeight)
+        this.optimizedHeight = Math.max(Math.min(spaceBelow - KEEP_REMAINING_HEIGHT, this.maxHeight), this.maxHeight)
         break
 
       default:
         this.prefferedOpenDirection = 'above'
-        this.optimizedHeight = Math.min(spaceAbove - 40, this.maxHeight)
+        this.optimizedHeight = Math.min(spaceAbove - KEEP_REMAINING_HEIGHT, this.maxHeight)
       }
     },
   },

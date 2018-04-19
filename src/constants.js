@@ -22,3 +22,4 @@ export const LEVEL = 'LEVEL'
 export const INDEX = 'INDEX'
 
 export const INPUT_DEBOUNCE_DELAY = 200
+export const KEEP_REMAINING_HEIGHT = 40
