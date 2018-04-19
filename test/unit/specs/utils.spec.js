@@ -73,18 +73,6 @@ describe('Utils', () => {
     })
   })
 
-  it('hasOwn', () => {
-    const { hasOwn } = utils
-    const objectWithoutPrototypes = Object.create(null)
-    const normalObject = {}
-    expect(hasOwn(objectWithoutPrototypes, 'key')).toBe(false)
-    expect(hasOwn(normalObject, 'key')).toBe(false)
-    objectWithoutPrototypes.key = true
-    normalObject.key = true
-    expect(hasOwn(objectWithoutPrototypes, 'key')).toBe(true)
-    expect(hasOwn(normalObject, 'key')).toBe(true)
-  })
-
   describe('deepExtend', () => {
     const { deepExtend } = utils
 

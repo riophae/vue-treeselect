@@ -90,10 +90,6 @@ function copy(obj, key, value) {
   }
 }
 
-export function hasOwn(obj, key) {
-  return Object.prototype.hasOwnProperty.call(obj, key)
-}
-
 export function deepExtend(target, source) {
   if (source == null) {
     // empty

@@ -4,7 +4,7 @@ import {
   warning,
   quickDiff, onlyOnLeftClick,
   debounce, identity, constant, isPromise, createEmptyObjectWithoutPrototype,
-  hasOwn, last, find, removeFromArray,
+  last, find, removeFromArray,
 } from '../utils'
 
 import {
@@ -1284,7 +1284,7 @@ export default {
 
     checkDuplication(node) {
       warning(
-        () => !(hasOwn(this.nodeMap, node.id) && !this.nodeMap[node.id].isFallbackNode),
+        () => !((node.id in this.nodeMap) && !this.nodeMap[node.id].isFallbackNode),
         () => `Detected duplicate presence of node id ${JSON.stringify(node.id)}. ` +
           `Their labels are "${this.nodeMap[node.id].label}" and "${node.label}" respectively.`
       )
