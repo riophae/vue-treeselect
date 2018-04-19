@@ -1389,7 +1389,10 @@ export default {
         })
       }
 
-      if (node.isLeaf || hasUncheckedSomeDescendants) {
+      switch (true) {
+      case node.isLeaf:
+      case /* node.isBranch && */hasUncheckedSomeDescendants:
+      case /* node.isBranch && */node.children.length === 0: {
         this.removeValue(node)
 
         let curr = node
@@ -1401,6 +1404,10 @@ export default {
             break
           }
         }
+        break
+      }
+
+      default:
       }
     },
 

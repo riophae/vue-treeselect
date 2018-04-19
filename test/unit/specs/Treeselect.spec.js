@@ -1468,6 +1468,38 @@ describe('Multi-select', () => {
       b: UNCHECKED,
     })
   })
+
+  it('case #6', () => {
+    wrapper.setProps({
+      options: [ {
+        id: 'a',
+        label: 'a',
+        children: [],
+      } ],
+    })
+
+    // current:
+    //   [ ] a <- select
+    //    |-- (no children options)
+    // expected result:
+    //   [v] a
+    //    |-- (no children options)
+    vm.select(vm.nodeMap.a)
+    expect(vm.selectedNodeIds).toEqual([ 'a' ])
+    expect(vm.selectedNodeMap).toEqual({ a: true })
+    expect(vm.nodeCheckedStateMap).toEqual({ a: CHECKED })
+
+    // current:
+    //   [v] a <- deselect
+    //    |-- (no children options)
+    // expected result:
+    //   [ ] a
+    //    |-- (no children options)
+    vm.select(vm.nodeMap.a)
+    expect(vm.selectedNodeIds).toEqual([])
+    expect(vm.selectedNodeMap).toEqual({})
+    expect(vm.nodeCheckedStateMap).toEqual({ a: UNCHECKED })
+  })
 })
 
 describe('Disable Item Selection', () => {
