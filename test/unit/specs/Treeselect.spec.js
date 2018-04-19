@@ -5014,6 +5014,10 @@ describe('Props', () => {
               id: 'ac',
               label: 'ac',
             } ],
+          }, {
+            id: 'b',
+            label: 'b',
+            children: [],
           } ],
           value: [ 'aa' ],
         },
@@ -5027,8 +5031,10 @@ describe('Props', () => {
       expect(vm.internalValue).toEqual([ 'aa', 'aaa', 'aab' ])
       vm.select(vm.nodeMap.ab)
       expect(vm.internalValue).toEqual([ 'aa', 'aaa', 'aab', 'ab', 'aba', 'abb' ])
+      vm.select(vm.nodeMap.b)
+      expect(vm.internalValue).toEqual([ 'aa', 'aaa', 'aab', 'ab', 'aba', 'abb', 'b' ])
       vm.select(vm.nodeMap.ac)
-      expect(vm.internalValue).toEqual([ 'aa', 'aaa', 'aab', 'ab', 'aba', 'abb', 'ac', 'a' ])
+      expect(vm.internalValue).toEqual([ 'aa', 'aaa', 'aab', 'ab', 'aba', 'abb', 'b', 'ac', 'a' ])
     })
 
     it('when valueConsistsOf=BRANCH_PRIORITY', () => {
@@ -5037,8 +5043,10 @@ describe('Props', () => {
       expect(vm.internalValue).toEqual([ 'aa' ])
       vm.select(vm.nodeMap.ab)
       expect(vm.internalValue).toEqual([ 'aa', 'ab' ])
+      vm.select(vm.nodeMap.b)
+      expect(vm.internalValue).toEqual([ 'aa', 'ab', 'b' ])
       vm.select(vm.nodeMap.ac)
-      expect(vm.internalValue).toEqual([ 'a' ])
+      expect(vm.internalValue).toEqual([ 'b', 'a' ])
     })
 
     it('when valueConsistsOf=LEAF_PRIORITY', () => {
@@ -5047,8 +5055,10 @@ describe('Props', () => {
       expect(vm.internalValue).toEqual([ 'aaa', 'aab' ])
       vm.select(vm.nodeMap.ab)
       expect(vm.internalValue).toEqual([ 'aaa', 'aab', 'aba', 'abb' ])
+      vm.select(vm.nodeMap.b)
+      expect(vm.internalValue).toEqual([ 'aaa', 'aab', 'aba', 'abb', 'b' ])
       vm.select(vm.nodeMap.ac)
-      expect(vm.internalValue).toEqual([ 'aaa', 'aab', 'aba', 'abb', 'ac' ])
+      expect(vm.internalValue).toEqual([ 'aaa', 'aab', 'aba', 'abb', 'b', 'ac' ])
     })
   })
 
