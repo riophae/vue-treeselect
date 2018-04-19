@@ -860,8 +860,7 @@ export default {
     },
 
     traverseDescendantsBFS(parentNode, callback) {
-      this.checkIfBranchNode(parentNode)
-
+      if (!parentNode.isBranch) return
       const queue = parentNode.children.slice()
       while (queue.length) {
         const currNode = queue[0]
@@ -871,19 +870,13 @@ export default {
       }
     },
 
-    traverseDescendants(parentNode, maxLevel, callback) {
-      if (typeof maxLevel === 'function') {
-        callback = maxLevel
-        maxLevel = Infinity
-      }
-
-      if (parentNode.isBranch && parentNode.level < maxLevel) {
-        parentNode.children.forEach(child => {
-          // DFS + post-order traversal
-          this.traverseDescendants(child, maxLevel, callback)
-          callback(child)
-        })
-      }
+    traverseDescendantsDFS(parentNode, callback) {
+      if (!parentNode.isBranch) return
+      parentNode.children.forEach(child => {
+        // post-order traversal
+        this.traverseDescendantsDFS(child, callback)
+        callback(child)
+      })
     },
 
     traverseAncestors(childNode, callback) {
@@ -899,7 +892,7 @@ export default {
     traverseAllNodes(callback) {
       this.normalizedOptions.forEach(rootNode => {
         // post-order traversal
-        this.traverseDescendants(rootNode, callback)
+        this.traverseDescendantsDFS(rootNode, callback)
         callback(rootNode)
       })
     },
@@ -1388,7 +1381,7 @@ export default {
 
       let hasUncheckedSomeDescendants = false
       if (node.isBranch) {
-        this.traverseDescendants(node, descendant => {
+        this.traverseDescendantsDFS(node, descendant => {
           if (!descendant.isDisabled) {
             this.removeValue(descendant)
             hasUncheckedSomeDescendants = true
