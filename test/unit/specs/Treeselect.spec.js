@@ -4321,6 +4321,33 @@ describe('Props', () => {
       expect(Object.keys(vm1.nodeMap)).toEqual([ '1-a' ])
       expect(Object.keys(vm2.nodeMap)).toEqual([ '2-a' ])
     })
+
+    it('provide only the keys that need to be customized', () => {
+      const normalizer = node => ({ id: node.key })
+      const wrapper = mount(Treeselect, {
+        propsData: {
+          normalizer,
+          options: [ {
+            key: 'a',
+            label: 'a',
+            children: [ {
+              key: 'aa',
+              label: 'aa',
+            } ],
+          } ],
+        },
+      })
+      const { vm } = wrapper
+
+      expect(vm.nodeMap.a).toEqual(jasmine.objectContaining({
+        id: 'a',
+        label: 'a',
+      }))
+      expect(vm.nodeMap.aa).toEqual(jasmine.objectContaining({
+        id: 'aa',
+        label: 'aa',
+      }))
+    })
   })
 
   describe('openOnClick', () => {

@@ -4,7 +4,7 @@ import {
   warning,
   quickDiff, onlyOnLeftClick,
   debounce, identity, constant, isPromise, createEmptyObjectWithoutPrototype,
-  last, find, removeFromArray,
+  assign, last, find, removeFromArray,
 } from '../utils'
 
 import {
@@ -776,7 +776,7 @@ export default {
       // when the real data is loaded, we'll override this fake node
 
       const raw = this.extractNodeFromValue(id)
-      const label = this.normalizer(raw, this.id).label || `${id} (unknown)`
+      const label = this.enhancedNormalizer(raw).label || `${id} (unknown)`
       const fallbackNode = {
         id,
         label,
@@ -806,7 +806,7 @@ export default {
       }
 
       return (this.multiple ? this.value : [ this.value ])
-        .map(node => this.normalizer(node, this.id))
+        .map(node => this.enhancedNormalizer(node))
         .map(node => node.id)
     },
 
@@ -822,7 +822,7 @@ export default {
         : this.value ? [ this.value ] : []
       const matched = find(
         valueArray,
-        node => node && this.normalizer(node, this.id).id === id
+        node => node && this.enhancedNormalizer(node).id === id
       )
 
       return matched || defaultNode
@@ -1119,9 +1119,13 @@ export default {
       this.nodeCheckedStateMap = map
     },
 
+    enhancedNormalizer(raw) {
+      return assign({}, raw, this.normalizer(raw, this.id))
+    },
+
     normalize(parentNode, nodes) {
       let normalizedOptions = nodes
-        .map(node => [ this.normalizer(node, this.id), node ])
+        .map(node => [ this.enhancedNormalizer(node), node ])
         .map(([ node, raw ], index) => {
           this.checkDuplication(node)
           this.verifyNodeShape(node)
