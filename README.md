@@ -9,7 +9,6 @@
 
 - Single select
 - Multiple select
-- Autocomplete
 - Fuzzy searching
 - Delayed loading (load data of deep level options only when needed)
 - Keyboard support
