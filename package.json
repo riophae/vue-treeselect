@@ -148,5 +148,6 @@
       "path": "dist/vue-treeselect.min.css",
       "limit": "5 KB"
     }
-  ]
+  ],
+  "sideEffects": false
 }
