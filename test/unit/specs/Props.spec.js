@@ -2279,6 +2279,32 @@ describe('Props', () => {
       wrapper.setProps({ sortValueBy: 'ORDER_SELECTED' })
       expect(vm.internalValue).toEqual([ 'bb', 'c', 'aaa' ])
     })
+
+    it('more cases', () => {
+      wrapper.setProps({
+        sortValueBy: 'INDEX',
+        value: [ 'aa', 'aaa' ],
+      })
+      expect(vm.internalValue).toEqual([ 'aa', 'aaa' ])
+
+      wrapper.setProps({
+        sortValueBy: 'INDEX',
+        value: [ 'aaa', 'aa' ],
+      })
+      expect(vm.internalValue).toEqual([ 'aa', 'aaa' ])
+
+      wrapper.setProps({
+        sortValueBy: 'INDEX',
+        value: [ 'aa', 'bb' ],
+      })
+      expect(vm.internalValue).toEqual([ 'aa', 'bb' ])
+
+      wrapper.setProps({
+        sortValueBy: 'INDEX',
+        value: [ 'bb', 'aa' ],
+      })
+      expect(vm.internalValue).toEqual([ 'aa', 'bb' ])
+    })
   })
 
   describe('tabIndex', () => {
