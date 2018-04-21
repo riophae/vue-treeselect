@@ -656,6 +656,9 @@ export default {
         ? this.showCountOnSearch
         : this.showCount
     },
+    hasBranchNodes() {
+      return this.normalizedOptions.some(rootNode => rootNode.isBranch)
+    },
     /* eslint-enable valid-jsdoc */
   },
 

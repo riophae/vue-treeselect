@@ -8,8 +8,8 @@
       'vue-treeselect__option--matched': instance.searching && node.isMatched,
       'vue-treeselect__option--hide': instance.searching && !(node.isMatched || node.hasMatchedChild),
     } ]">
-      <div v-if="node.isLeaf" class="vue-treeselect__option-arrow-placeholder">&nbsp;</div>
-      <div v-else class="vue-treeselect__option-arrow-wrapper" @mousedown="handleMouseDownOnOptionArrow">
+      <div v-if="shouldShowArrorPlaceholder" class="vue-treeselect__option-arrow-placeholder">&nbsp;</div>
+      <div v-else-if="node.isBranch" class="vue-treeselect__option-arrow-wrapper" @mousedown="handleMouseDownOnOptionArrow">
         <transition name="vue-treeselect__option-arrow--prepare" appear>
           <span :class="[ 'vue-treeselect__option-arrow', {
             'vue-treeselect__option-arrow--rotated': shouldExpand,
