@@ -4,7 +4,7 @@ import sleep from 'yaku/lib/sleep'
 import Treeselect from '@riophae/vue-treeselect/components/Treeselect'
 import TreeselectOption from '@riophae/vue-treeselect/components/Option'
 import { UNCHECKED, CHECKED } from '@riophae/vue-treeselect/constants'
-import { leftClick, typeSearchText, findOptionByNodeId } from './shared'
+import { leftClick, typeSearchText, findInput, findOptionByNodeId } from './shared'
 
 describe('Props', () => {
   describe('alwaysOpen', () => {
@@ -142,8 +142,8 @@ describe('Props', () => {
           searchable: true,
         },
       })
-      const input = wrapper.find('.vue-treeselect__input').element
-      expect(document.activeElement).toBe(input)
+      const inputWrapper = findInput(wrapper)
+      expect(document.activeElement).toBe(inputWrapper.element)
     })
 
     it('deprecated', () => {
@@ -173,8 +173,8 @@ describe('Props', () => {
           searchable: true,
         },
       })
-      const input = wrapper.find('.vue-treeselect__input').element
-      expect(document.activeElement).toBe(input)
+      const inputWrapper = findInput(wrapper)
+      expect(document.activeElement).toBe(inputWrapper.element)
     })
   })
 
@@ -1909,7 +1909,7 @@ describe('Props', () => {
   })
 
   describe('required', () => {
-    let wrapper, inputNode
+    let wrapper, inputWrapper
 
     beforeEach(() => {
       wrapper = mount(Treeselect, {
@@ -1921,25 +1921,25 @@ describe('Props', () => {
           searchable: true,
         },
       })
-      inputNode = wrapper.find('.vue-treeselect__input')
+      inputWrapper = findInput(wrapper)
     })
 
     describe('when required=true', () => {
       it('the input should have `required` attribute if having no value', () => {
         wrapper.setProps({ required: true })
-        expect(inputNode.attributes().required).toBe('required')
+        expect(inputWrapper.attributes().required).toBe('required')
       })
 
       it('the input should not have `required` attribute if value is present', () => {
         wrapper.setProps({ value: 'a', required: true })
-        expect(inputNode.attributes()).not.toHaveMember('required')
+        expect(inputWrapper.attributes()).not.toHaveMember('required')
       })
     })
 
     describe('when required=false', () => {
       it('the input should not have `required` attribute even if value is present', () => {
         wrapper.setProps({ value: 'a', required: false })
-        expect(inputNode.attributes()).not.toHaveMember('required')
+        expect(inputWrapper.attributes()).not.toHaveMember('required')
       })
     })
   })
@@ -2283,9 +2283,9 @@ describe('Props', () => {
           tabIndex: 1,
         },
       })
+      const inputWrapper = findInput(wrapper)
 
-      const input = wrapper.find('.vue-treeselect__input')
-      expect(input.attributes().tabindex).toBe('1')
+      expect(inputWrapper.attributes().tabindex).toBe('1')
     })
   })
 

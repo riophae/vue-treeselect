@@ -3,7 +3,6 @@ import Treeselect from '@riophae/vue-treeselect/components/Treeselect'
 import { UNCHECKED, INDETERMINATE, CHECKED } from '@riophae/vue-treeselect/constants'
 import { leftClick, findOptionByNodeId } from './shared'
 
-
 describe('Single-select', () => {
   it('basic', () => {
     const wrapper = mount(Treeselect, {

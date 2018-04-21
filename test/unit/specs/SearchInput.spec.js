@@ -1,5 +1,6 @@
 import { mount } from '@vue/test-utils'
 import Treeselect from '@riophae/vue-treeselect/components/Treeselect'
+import { findInput } from './shared'
 
 describe('Search Input', () => {
   it('should disable auto complete', () => {
@@ -8,7 +9,7 @@ describe('Search Input', () => {
         options: [],
       },
     })
-    const input = wrapper.find('.vue-treeselect__input')
+    const input = findInput(wrapper)
     expect(input.element.getAttribute('autocomplete')).toBe('off')
   })
 

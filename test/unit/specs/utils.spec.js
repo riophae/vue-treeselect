@@ -1,4 +1,4 @@
-import * as utils from '../../../src/utils'
+import * as utils from '@riophae/vue-treeselect/utils'
 
 describe('Utils', () => {
   describe('warning', () => {

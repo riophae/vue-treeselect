@@ -721,7 +721,7 @@ describe('Basic', () => {
   })
 
   it('v-model support', async () => {
-    // avoriaz doesn't support testing v-model
+    // vue-test-utils doesn't support testing v-model
     // so here we write vanila vue code
     const vm = new Vue({
       components: { Treeselect },

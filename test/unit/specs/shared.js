@@ -9,39 +9,30 @@ const KEY_DELETE = { which: 46, keyCode: 46 }
 const KEY_ESCAPE = { which: 27, keyCode: 27 }
 const KEY_A = { which: 65, keyCode: 65 }
 
-// currently avoriaz has a bad support for keyboard event testing
-// so here we implement it ourself
-export function customTrigger(wrapper, eventType, eventData) {
-  const event = document.createEvent('Event')
-  event.initEvent(eventType, true, true)
-  Object.assign(event, eventData)
-  wrapper.element.dispatchEvent(event)
-}
-
 export function leftClick(wrapper) {
-  customTrigger(wrapper, 'mousedown', MOUSE_BUTTON_LEFT)
+  wrapper.trigger('mousedown', MOUSE_BUTTON_LEFT)
 }
 
 export function pressBackspaceKey(wrapper) {
   const inputWrapper = findInput(wrapper)
-  customTrigger(inputWrapper, 'keydown', KEY_BACKSPACE)
+  inputWrapper.trigger('keydown', KEY_BACKSPACE)
 }
 
 export function pressDeleteKey(wrapper) {
   const inputWrapper = findInput(wrapper)
-  customTrigger(inputWrapper, 'keydown', KEY_DELETE)
+  inputWrapper.trigger('keydown', KEY_DELETE)
 }
 
 export function pressEscapeKey(wrapper, modifierKey) {
   const inputWrapper = findInput(wrapper)
-  const eventData = { ...KEY_ESCAPE }
-  if (modifierKey) eventData[modifierKey] = true
-  customTrigger(inputWrapper, 'keydown', eventData)
+  let eventData = KEY_ESCAPE
+  if (modifierKey) eventData = { ...KEY_ESCAPE, [modifierKey]: true }
+  inputWrapper.trigger('keydown', eventData)
 }
 
 export function pressAKey(wrapper) {
   const inputWrapper = findInput(wrapper)
-  customTrigger(inputWrapper, 'keydown', KEY_A)
+  inputWrapper.trigger('keydown', KEY_A)
 }
 
 export async function typeSearchText(wrapper, text) {
