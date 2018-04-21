@@ -4,7 +4,14 @@ import sleep from 'yaku/lib/sleep'
 import Treeselect from '@riophae/vue-treeselect/components/Treeselect'
 import TreeselectOption from '@riophae/vue-treeselect/components/Option'
 import { UNCHECKED, CHECKED } from '@riophae/vue-treeselect/constants'
-import { leftClick, typeSearchText, findInput, findMenu, findOptionByNodeId } from './shared'
+import {
+  leftClick,
+  typeSearchText,
+  findInput,
+  findMenu,
+  findOptionByNodeId,
+  findLabelWrapperByNodeId,
+} from './shared'
 
 function createArray(len, fn) {
   const arr = []
@@ -455,7 +462,7 @@ describe('Props', () => {
         },
       })
       const { vm } = wrapper
-      const labelWrapper = wrapper.find('.vue-treeselect__label-wrapper')
+      const labelWrapper = findLabelWrapperByNodeId(wrapper, 'a')
 
       leftClick(labelWrapper)
       expect(vm.selectedNodeIds).toEqual([ 'a' ])
@@ -475,7 +482,7 @@ describe('Props', () => {
         },
       })
       const { vm } = wrapper
-      const labelWrapper = wrapper.find('.vue-treeselect__label-wrapper')
+      const labelWrapper = findLabelWrapperByNodeId(wrapper, 'a')
 
       leftClick(labelWrapper)
       expect(vm.selectedNodeIds).toEqual([ 'a' ])
@@ -634,14 +641,12 @@ describe('Props', () => {
 
     const getLabelWrapperOfBranchNode = () => {
       vm.openMenu() // ensure the menu is opened otherwise the options won't be displayed
-      const branchNode = findOptionByNodeId(wrapper, 'branch')
-      return branchNode.find('.vue-treeselect__label-wrapper')
+      return findLabelWrapperByNodeId(wrapper, 'branch')
     }
 
     const getLabelWrapperOfLeafNode = () => {
       vm.openMenu() // ensure the menu is opened otherwise the options won't be displayed
-      const leafNode = findOptionByNodeId(wrapper, 'leaf')
-      return leafNode.find('.vue-treeselect__label-wrapper')
+      return findLabelWrapperByNodeId(wrapper, 'leaf')
     }
 
     const clickOnLabelOfBranchNode = () => {
