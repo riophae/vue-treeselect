@@ -546,7 +546,6 @@ export default {
       selectedNodeIds: this.extractCheckedNodeIdsFromValue(),
       nodeCheckedStateMap: createEmptyObjectWithoutPrototype(), // used for multi-select mode
       nodeMap: createEmptyObjectWithoutPrototype(), // map: nodeId -> node
-      prevNodeMap: null, // used for keepping state when reinitializing options
       selectedNodeMap: createEmptyObjectWithoutPrototype(),
       isFocused: false, // whether the control has been focused
       isOpen: false, // whether the menu is open
@@ -733,16 +732,15 @@ export default {
       if (Array.isArray(rootOptions)) {
         // in case we are reinitializing options,
         // keep the old state tree temporarily.
-        this.prevNodeMap = this.nodeMap
+        const prevNodeMap = this.nodeMap
         this.nodeMap = createEmptyObjectWithoutPrototype()
-        this.initializeRootOptions(rootOptions)
+        this.normalizedOptions = this.normalize(NO_PARENT_NODE, rootOptions, prevNodeMap)
         this.completeSelectedNodeIdList()
         this.buildSelectedNodeMap()
         this.buildNodeCheckedStateMap()
-        this.prevNodeMap = null
         this.rootOptionsLoaded = true
       } else {
-        this.initializeRootOptions([])
+        this.normalizedOptions = []
       }
     },
 
@@ -1079,10 +1077,6 @@ export default {
       }
     },
 
-    initializeRootOptions(rootOptions) {
-      this.normalizedOptions = this.normalize(NO_PARENT_NODE, rootOptions)
-    },
-
     buildSelectedNodeMap() {
       const map = createEmptyObjectWithoutPrototype()
 
@@ -1123,7 +1117,7 @@ export default {
       return assign({}, raw, this.normalizer(raw, this.id))
     },
 
-    normalize(parentNode, nodes) {
+    normalize(parentNode, nodes, prevNodeMap) {
       let normalizedOptions = nodes
         .map(node => [ this.enhancedNormalizer(node), node ])
         .map(([ node, raw ], index) => {
@@ -1189,7 +1183,7 @@ export default {
               [LEAF_DESCENDANTS]: 0,
             }
             normalized.children = isLoaded
-              ? this.normalize(normalized, children)
+              ? this.normalize(normalized, children, prevNodeMap)
               : []
 
             if (normalized.isExpanded && !normalized.isLoaded) {
@@ -1208,8 +1202,8 @@ export default {
             normalized.ancestors.forEach(ancestor => ancestor.hasDisabledDescendants = true)
           }
 
-          if (this.prevNodeMap && this.prevNodeMap[id]) {
-            const prev = this.prevNodeMap[id]
+          if (prevNodeMap && prevNodeMap[id]) {
+            const prev = prevNodeMap[id]
             if (prev.isBranch && normalized.isBranch) {
               const keysToPreserve = [
                 'isExpanded',
