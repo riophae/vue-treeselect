@@ -50,6 +50,10 @@ export function findInput(wrapper) {
   return wrapper.find('.vue-treeselect__input')
 }
 
+export function findMenu(wrapper) {
+  return wrapper.find('.vue-treeselect__menu')
+}
+
 export function findOptionByNodeId(wrapper, nodeId) {
   return wrapper.findAll(TreeselectOption).wrappers
     .find(optionWrapper => optionWrapper.vm.node.id === nodeId)

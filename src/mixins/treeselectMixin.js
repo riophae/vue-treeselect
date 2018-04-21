@@ -1055,9 +1055,9 @@ export default {
 
     closeMenu() {
       if (!this.isOpen || (!this.disabled && this.alwaysOpen)) return
-      this.isOpen = false
       /* istanbul ignore else */
       if (this.retainScrollPosition) this.saveScrollPosition()
+      this.isOpen = false
       this.toggleClickOutsideEvent(false)
       // reset search query after menu closes
       this.searchQuery = ''
