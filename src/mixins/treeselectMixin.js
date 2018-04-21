@@ -1049,7 +1049,6 @@ export default {
         })
       } else {
         this.searching = false
-        // TODO: need resetting state?
       }
     },
 

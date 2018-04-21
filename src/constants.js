@@ -22,4 +22,11 @@ export const LEVEL = 'LEVEL'
 export const INDEX = 'INDEX'
 
 export const INPUT_DEBOUNCE_DELAY = process.env.NODE_ENV === 'testing' ? 10 : 200
+export const MIN_INPUT_WIDTH = 5
 export const KEEP_REMAINING_HEIGHT = 40
+
+export const KEY_CODES = {
+  BACKSPACE: 8,
+  ESCAPE: 27,
+  DELETE: 46,
+}

@@ -1,5 +1,4 @@
 import sleep from 'yaku/lib/sleep'
-import SearchInput from '@riophae/vue-treeselect/components/SearchInput'
 import TreeselectOption from '@riophae/vue-treeselect/components/Option'
 import { INPUT_DEBOUNCE_DELAY } from '@riophae/vue-treeselect/constants'
 
@@ -36,12 +35,9 @@ export function pressAKey(wrapper) {
 }
 
 export async function typeSearchText(wrapper, text) {
-  // eslint-disable-next-line newline-per-chained-call
-  wrapper.find(SearchInput).vm.onInput({
-    target: {
-      value: text,
-    },
-  })
+  const $input = findInput(wrapper)
+  $input.element.value = text
+  $input.trigger('input')
   await sleep(INPUT_DEBOUNCE_DELAY + 10)
   expect(wrapper.vm.searchQuery).toBe(text)
 }
