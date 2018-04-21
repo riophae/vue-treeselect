@@ -734,6 +734,7 @@ export default {
         // keep the old state tree temporarily.
         const prevNodeMap = this.nodeMap
         this.nodeMap = createEmptyObjectWithoutPrototype()
+        this.keepDataOfSelectedNodes(prevNodeMap)
         this.normalizedOptions = this.normalize(NO_PARENT_NODE, rootOptions, prevNodeMap)
         this.completeSelectedNodeIdList()
         this.buildSelectedNodeMap()
@@ -835,6 +836,18 @@ export default {
         if (this.selectedNodeIds.indexOf(id) === -1) {
           this._selectNode(this.getNode(id), { ignoreDisabled: true })
         }
+      })
+    },
+
+    keepDataOfSelectedNodes(prevNodeMap) {
+      // in case there is any selected node that is not present in the new `options` array
+      // which could be useful for async search mode
+      this.selectedNodeIds.forEach(id => {
+        if (!prevNodeMap[id]) return
+        const fallbackNode = assign({}, prevNodeMap[id], {
+          isFallbackNode: true,
+        })
+        this.$set(this.nodeMap, id, fallbackNode)
       })
     },
 

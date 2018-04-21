@@ -4623,6 +4623,32 @@ describe('Props', () => {
           b: UNCHECKED,
         })
       })
+
+      it('should keep the state of selected nodes even if they are not present in `nodeMap`', () => {
+        const wrapper = mount(Treeselect, {
+          propsData: {
+            options: [ {
+              id: 'a',
+              label: 'a',
+            } ],
+            value: 'a',
+          },
+        })
+        const { vm } = wrapper
+
+        expect(vm.nodeMap.a.label).toBe('a')
+
+        wrapper.setProps({
+          options: [ {
+            id: 'b',
+            label: 'b',
+            children: [],
+          } ],
+        })
+
+        expect(vm.nodeMap.a.label).toBe('a')
+        expect(vm.nodeMap.a.isFallbackNode).toBe(true)
+      })
     })
   })
 
