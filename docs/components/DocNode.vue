@@ -42,5 +42,6 @@
         </tr>
       </tbody>
     </table>
+    <p class="tip">You can add more properties than the listed ones.</p>
   </div>
 </template>
