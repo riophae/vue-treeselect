@@ -1173,6 +1173,9 @@ export default {
             raw,
           }
 
+          // register the node into the tree
+          this.nodeMap[id] = normalized
+
           if (isBranch) {
             const isLoaded = Array.isArray(children)
             if (!isLoaded) {
@@ -1230,6 +1233,8 @@ export default {
             }
           }
 
+          // make sure the `normalized` object is completely reactive
+          // https://vuejs.org/v2/api/#Vue-set
           this.$set(this.nodeMap, id, normalized)
           return normalized
         })

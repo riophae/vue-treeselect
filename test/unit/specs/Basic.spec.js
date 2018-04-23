@@ -623,26 +623,51 @@ describe('Basic', () => {
     })
   })
 
-  it('should warn about duplicate node ids', () => {
-    spyOn(console, 'error')
+  describe('should warn about duplicate node ids', () => {
+    it('case #1', () => {
+      spyOn(console, 'error')
 
-    mount(Treeselect, {
-      propsData: {
-        options: [ {
-          id: 'same_id',
-          label: 'a',
-        }, {
-          id: 'same_id',
-          label: 'b',
-        } ],
-      },
+      mount(Treeselect, {
+        propsData: {
+          options: [ {
+            id: 'same_id',
+            label: 'a',
+          }, {
+            id: 'same_id',
+            label: 'b',
+          } ],
+        },
+      })
+
+      expect(console.error).toHaveBeenCalledWith(
+        '[Vue-Treeselect Warning]',
+        'Detected duplicate presence of node id "same_id". ' +
+          'Their labels are "a" and "b" respectively.'
+      )
     })
 
-    expect(console.error).toHaveBeenCalledWith(
-      '[Vue-Treeselect Warning]',
-      'Detected duplicate presence of node id "same_id". ' +
-        'Their labels are "a" and "b" respectively.'
-    )
+    it('case #2', () => {
+      spyOn(console, 'error')
+
+      mount(Treeselect, {
+        propsData: {
+          options: [ {
+            id: 'same_id',
+            label: 'a',
+            children: [ {
+              id: 'same_id',
+              label: 'b',
+            } ],
+          } ],
+        },
+      })
+
+      expect(console.error).toHaveBeenCalledWith(
+        '[Vue-Treeselect Warning]',
+        'Detected duplicate presence of node id "same_id". ' +
+          'Their labels are "a" and "b" respectively.'
+      )
+    })
   })
 
   it('fallback nodes should not be considered duplicate', () => {
