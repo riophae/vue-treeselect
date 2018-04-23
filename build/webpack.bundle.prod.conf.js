@@ -9,10 +9,6 @@ const base = require('./webpack.base.conf')
 const utils = require('./utils')
 const banner = require('./banner')
 
-const env = process.env.NODE_ENV === 'testing'
-  ? require('../config/test.env')
-  : config.bundle.env
-
 base.entry = {
   VueTreeselect: './src/index.js',
 }
@@ -21,32 +17,34 @@ const webpackConfig = merge(base, {
   output: {
     path: config.bundle.assetsRoot,
     publicPath: config.bundle.assetsPublicPath,
-    filename: 'vue-treeselect.min.js',
-    library: 'VueTreeselect',
-    libraryTarget: 'umd',
+    filename: config.bundle.prod.jsFilename,
+    library: config.bundle.library,
+    libraryTarget: config.bundle.prod.libraryTarget,
   },
   module: {
     rules: utils.styleLoaders({
-      sourceMap: config.bundle.productionSourceMap,
-      extract: true,
+      sourceMap: config.bundle.prod.productionSourceMap,
       usePostCSS: true,
+      extract: true,
     }),
   },
-  devtool: config.bundle.productionSourceMap ? '#source-map' : false,
+  devtool: config.bundle.prod.productionSourceMap ? '#source-map' : false,
   plugins: [
     new webpack.DefinePlugin({
-      'process.env': env,
+      'process.env': config.bundle.prod.env,
     }),
     new UglifyJsPlugin({
       uglifyOptions: {
         compress: { warnings: false },
       },
-      sourceMap: config.bundle.productionSourceMap,
+      sourceMap: config.bundle.prod.productionSourceMap,
       parallel: true,
     }),
-    new OptimizeJsPlugin({ sourceMap: false }),
+    new OptimizeJsPlugin({
+      sourceMap: config.bundle.prod.productionSourceMap,
+    }),
     new ExtractTextPlugin({
-      filename: 'vue-treeselect.min.css',
+      filename: config.bundle.prod.cssFilename,
     }),
     new OptimizeCSSPlugin({
       cssProcessorOptions: {

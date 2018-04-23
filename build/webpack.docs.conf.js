@@ -10,16 +10,12 @@ const config = require('../config')
 const utils = require('./utils')
 const baseWebpackConfig = require('./webpack.base.conf')
 
-const env = process.env.NODE_ENV === 'testing'
-  ? require('../config/test.env')
-  : config.docs.env
-
 const webpackConfig = merge(baseWebpackConfig, {
   module: {
     rules: utils.styleLoaders({
-      sourceMap: false,
-      extract: true,
+      sourceMap: config.docs.productionSourceMap,
       usePostCSS: true,
+      extract: true,
     }),
   },
   devtool: config.docs.productionSourceMap ? '#source-map' : false,
@@ -31,7 +27,7 @@ const webpackConfig = merge(baseWebpackConfig, {
   plugins: [
     // http://vuejs.github.io/vue-loader/en/workflow/production.html
     new webpack.DefinePlugin({
-      'process.env': env,
+      'process.env': config.docs.env,
     }),
     new UglifyJsPlugin({
       uglifyOptions: {
@@ -51,9 +47,7 @@ const webpackConfig = merge(baseWebpackConfig, {
     // you can customize output by editing /index.html
     // see https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
-      filename: process.env.NODE_ENV === 'testing'
-        ? 'index.html'
-        : config.docs.index,
+      filename: config.docs.index,
       template: 'docs/index.pug',
       inject: true,
       minify: {

@@ -6,10 +6,9 @@
   "license": "MIT",
   "homepage": "https://vue-treeselect.js.org/",
   "repository": "riophae/vue-treeselect",
-  "main": "dist/vue-treeselect.min.js",
+  "main": "dist/vue-treeselect.js",
   "unpkg": "dist/vue-treeselect.min.js",
   "css": "dist/vue-treeselect.min.css",
-  "jsnext:main": "dist/vue-treeselect.min.js",
   "files": [
     "src",
     "dist"
@@ -17,7 +16,6 @@
   "scripts": {
     "dev": "node build/dev-server.js",
     "bundle": "node build/bundle.js",
-    "lib": "node build/lib.js",
     "docs": "rimraf gh-pages && mkdir gh-pages && node build/build.js",
     "unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --watch",
     "gh-pages": "npm run docs && gh-pages --dist gh-pages --branch gh-pages --dotfiles",
@@ -111,6 +109,7 @@
     "webpack-dev-middleware": "^1.10.0",
     "webpack-hot-middleware": "^2.18.0",
     "webpack-merge": "^4.1.0",
+    "webpack-node-externals": "^1.7.2",
     "yaku": "^0.18.5"
   },
   "peerDependencies": {
@@ -130,10 +129,6 @@
     "input",
     "ui"
   ],
-  "engines": {
-    "node": ">= 6.9.0 || >= 8.9.0",
-    "npm": ">= 3.0.0"
-  },
   "browserslist": [
     "> 1%",
     "Last 2 versions",
@@ -148,6 +143,5 @@
       "path": "dist/vue-treeselect.min.css",
       "limit": "5 KB"
     }
-  ],
-  "sideEffects": false
+  ]
 }
