@@ -1139,72 +1139,65 @@ export default {
           this.checkDuplication(node)
           this.verifyNodeShape(node)
 
-          const isRootNode = parentNode === NO_PARENT_NODE
           const { id, label, children, isDefaultExpanded } = node
-          const lowerCasedLabel = label.toLocaleLowerCase() // used for option filtering
-          const nestedSearchLabel = isRootNode
-            ? lowerCasedLabel
-            : parentNode.nestedSearchLabel + ' ' + lowerCasedLabel
-          const isDisabled = !!node.isDisabled || (!this.flat && !isRootNode && parentNode.isDisabled)
+          const isRootNode = parentNode === NO_PARENT_NODE
+          const level = isRootNode ? 0 : parentNode.level + 1
           const isBranch = (
             Array.isArray(children) ||
             children === null ||
             (children === undefined && !!node.isBranch)
           )
           const isLeaf = !isBranch
-          const level = isRootNode ? 0 : parentNode.level + 1
-          const isMatched = false
-          const ancestors = isRootNode ? [] : parentNode.ancestors.concat(parentNode)
-          const _index = (isRootNode ? [] : parentNode.index).concat(index)
-          const normalized = {
-            id,
-            label,
-            level,
-            ancestors,
-            index: _index,
-            parentNode,
-            lowerCasedLabel,
-            nestedSearchLabel,
-            isDisabled,
-            isMatched,
-            isLeaf,
-            isBranch,
-            isRootNode,
-            raw,
-          }
+          const isDisabled = !!node.isDisabled || (!this.flat && !isRootNode && parentNode.isDisabled)
+          const lowerCasedLabel = label.toLocaleLowerCase()
+          const nestedSearchLabel = isRootNode
+            ? lowerCasedLabel
+            : parentNode.nestedSearchLabel + ' ' + lowerCasedLabel
 
-          // register the node into the tree
-          this.nodeMap[id] = normalized
+          const normalized = this.$set(this.nodeMap, id, createEmptyObjectWithoutPrototype())
+          this.$set(normalized, 'id', id)
+          this.$set(normalized, 'label', label)
+          this.$set(normalized, 'level', level)
+          this.$set(normalized, 'ancestors', isRootNode ? [] : parentNode.ancestors.concat(parentNode))
+          this.$set(normalized, 'index', (isRootNode ? [] : parentNode.index).concat(index))
+          this.$set(normalized, 'parentNode', parentNode)
+          this.$set(normalized, 'lowerCasedLabel', lowerCasedLabel)
+          this.$set(normalized, 'nestedSearchLabel', nestedSearchLabel)
+          this.$set(normalized, 'isDisabled', isDisabled)
+          this.$set(normalized, 'isMatched', false)
+          this.$set(normalized, 'isBranch', isBranch)
+          this.$set(normalized, 'isLeaf', isLeaf)
+          this.$set(normalized, 'isRootNode', isRootNode)
+          this.$set(normalized, 'raw', raw)
 
           if (isBranch) {
             const isLoaded = Array.isArray(children)
-            if (!isLoaded) {
-              warning(
-                () => typeof this.loadChildrenOptions === 'function',
-                () => 'Unloaded branch node detected. `loadChildrenOptions` prop is required to load its children.'
-              )
-            }
 
-            normalized.isLoaded = isLoaded
-            normalized.isPending = false
-            normalized.isExpanded = typeof isDefaultExpanded === 'boolean'
+            this.$set(normalized, 'isLoaded', isLoaded)
+            this.$set(normalized, 'isPending', false)
+            this.$set(normalized, 'isExpanded', typeof isDefaultExpanded === 'boolean'
               ? isDefaultExpanded
-              : level < this.defaultExpandLevel
-            normalized.hasMatchedChild = false
-            normalized.hasDisabledDescendants = false
-            normalized.expandsOnSearch = false
-            normalized.loadingChildrenError = ''
-            normalized.count = {
+              : level < this.defaultExpandLevel)
+            this.$set(normalized, 'hasMatchedChild', false)
+            this.$set(normalized, 'hasDisabledDescendants', false)
+            this.$set(normalized, 'expandsOnSearch', false)
+            this.$set(normalized, 'loadingChildrenError', '')
+            this.$set(normalized, 'count', {
               [ALL_CHILDREN]: 0,
               [ALL_DESCENDANTS]: 0,
               [LEAF_CHILDREN]: 0,
               [LEAF_DESCENDANTS]: 0,
-            }
-            normalized.children = isLoaded
+            })
+            this.$set(normalized, 'children', isLoaded
               ? this.normalize(normalized, children, prevNodeMap)
-              : []
+              : [])
 
-            if (normalized.isExpanded && !normalized.isLoaded) {
+            if (!isLoaded && typeof this.loadChildrenOptions !== 'function') {
+              warning(
+                () => false,
+                () => 'Unloaded branch node detected. `loadChildrenOptions` prop is required to load its children.'
+              )
+            } else if (!isLoaded && normalized.isExpanded) {
               this.loadOptions(false, normalized)
             }
           }
@@ -1233,9 +1226,6 @@ export default {
             }
           }
 
-          // make sure the `normalized` object is completely reactive
-          // https://vuejs.org/v2/api/#Vue-set
-          this.$set(this.nodeMap, id, normalized)
           return normalized
         })
 
