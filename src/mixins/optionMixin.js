@@ -41,7 +41,7 @@ export default {
   },
 
   watch: {
-    'node.isExpanded'(newValue) {
+    'shouldExpand'(newValue) {
       if (newValue === true && !this.node.isLoaded) {
         // load children when expanded
         this.instance.loadOptions(false, this.node)
