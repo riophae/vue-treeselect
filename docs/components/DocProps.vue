@@ -24,7 +24,7 @@
 <script>
   /* eslint-disable no-template-curly-in-string */
   import entities from 'entities'
-  import { code, strong, link, makeArgNameList } from './utils'
+  import { code, strong, link, makeArgNameList, makePropList } from './utils'
 
   const NO_DEFAULT_VALUE = '–'
 
@@ -146,16 +146,6 @@
         defaultValue: code('count => `and ${count} more`'),
         description: 'Function that processes the message shown when selected elements pass the defined limit.',
       }, {
-        name: 'loadChildrenErrorText',
-        type: `Fn${makeArgNameList([ 'error' ])} 🡒 String`,
-        defaultValue: code('error => `Failed to load children options: ${error.message || String(error)}.`'),
-        description: 'Function that processes error message shown when loading children options failed.',
-      }, {
-        name: 'loadChildrenOptions',
-        type: `Fn${makeArgNameList([ 'node', 'callback', 'id' ])} 🡒 ${code('void')}`,
-        defaultValue: NO_DEFAULT_VALUE,
-        description: `As the name suggests, it's used for dynamic loading options. See ${link('#delayed-loading')} for detailed information.`,
-      }, {
         name: 'loading',
         type: 'Boolean',
         defaultValue: code('false'),
@@ -166,10 +156,16 @@
         defaultValue: code('"Loading..."'),
         description: 'Text displayed when a branch node is loading its children options.',
       }, {
-        name: 'loadRootOptions',
-        type: `Fn${makeArgNameList([ 'callback', 'id' ])} 🡒 ${code('void')}`,
+        name: 'loadOptions',
+        type: `Fn(${makePropList([ 'action', 'callback', 'parentNode?', 'id' ])}) 🡒 ${code('void')}`,
         defaultValue: NO_DEFAULT_VALUE,
-        description: `Used for delayed loading root options. See ${link('#delayed-loading')} for detailed information.`,
+        description: [
+          `Used for dynamically loading options. See ${link('#delayed-loading')} for detailed information.`,
+          `Possible values of ${code('action')}: ${code('"LOAD_ROOT_OPTIONS"')} or ${code('"LOAD_CHILDREN_OPTIONS"')}.`,
+          `${code('callback')} - a function that accepts an optional ${code('error')} argument`,
+          `${code('parentNode')} - only presents when loading children options`,
+          `${code('id')} - eqauls to the value of ${code('id')} prop you passed to vue-treeselect`,
+        ].join('<br>'),
       }, {
         name: 'maxHeight',
         type: 'Number',
@@ -188,7 +184,7 @@
       }, {
         name: 'noChildrenText',
         type: 'String',
-        defaultValue: code('"No children available..."'),
+        defaultValue: code('"No sub-options."'),
         description: 'Text displayed when a branch node has no children options.',
       }, {
         name: 'noOptionsText',
@@ -269,7 +265,7 @@
         name: 'showCountOf',
         type: 'String',
         defaultValue: code('"ALL_CHILDREN"'),
-        description: `Used in pairs with ${code('showCount')} specifying what count should be displayed. Acceptable values: ${code('"ALL_CHILDREN"')}, ${code('"ALL_DESCENDANTS"')}, ${code('"LEAF_CHILDREN"')} or ${code('"LEAF_DESCENDANTS"')}.`,
+        description: `Used in pairs with ${code('showCount')} specifying which count number should be displayed. Acceptable values: ${code('"ALL_CHILDREN"')}, ${code('"ALL_DESCENDANTS"')}, ${code('"LEAF_CHILDREN"')} or ${code('"LEAF_DESCENDANTS"')}.`,
       }, {
         name: 'showCountOnSearch',
         type: 'Boolean',

@@ -10,6 +10,7 @@ import {
 import {
   UNCHECKED, INDETERMINATE, CHECKED,
   UNMATCHED, DESCENDANT_MATCHED, MATCHED,
+  LOAD_ROOT_OPTIONS, LOAD_CHILDREN_OPTIONS, /* ASYNC_SEARCH, */
   NO_PARENT_NODE,
   ALL, BRANCH_PRIORITY, LEAF_PRIORITY,
   ALL_CHILDREN, ALL_DESCENDANTS, LEAF_CHILDREN, LEAF_DESCENDANTS,
@@ -35,11 +36,6 @@ function sortValueByLevel(a, b) {
 
 function limitTextDefault(count) {
   return `and ${count} more`
-}
-
-function loadChildrenErrorTextDefault(error) {
-  const reason = error.message || /* istanbul ignore next */ String(error)
-  return `Failed to load children options: ${reason}.`
 }
 
 export default {
@@ -272,23 +268,6 @@ export default {
     },
 
     /**
-     * Function that processes error message shown when loading children options failed
-     * @type {function(Error): string}
-     */
-    loadChildrenErrorText: {
-      type: Function,
-      default: loadChildrenErrorTextDefault,
-    },
-
-    /**
-     * Function used for dynamic loading options
-     * @type {function(node, (function(Error, Array<node>): void):callback, (string|number):id): void}
-     */
-    loadChildrenOptions: {
-      type: Function,
-    },
-
-    /**
      * Whether is externally loading options or not.
      * Set `true` to show a spinner.
      */
@@ -306,10 +285,10 @@ export default {
     },
 
     /**
-     * Function used for dynamic loading root options
-     * @type {function((function(Error, Array<node>): void):callback, (string|number):id): void}
+     * Used for dynamically loading options.
+     * @type {function({action: string, callback: (function((Error|string)=): void), parentNode: node=, id}): void}
      */
-    loadRootOptions: {
+    loadOptions: {
       type: Function,
     },
 
@@ -341,7 +320,7 @@ export default {
      */
     noChildrenText: {
       type: String,
-      default: 'No children options...',
+      default: 'No sub-options.',
     },
 
     /**
@@ -711,18 +690,11 @@ export default {
         () => '`autofocus` prop is deprecated. Use `autoFocus` instead.'
       )
 
-      if (!this.loadRootOptions) {
-        if (!this.options) {
-          warning(
-            () => false,
-            () => 'Required prop `options` is not provided.'
-          )
-        } else if (!Array.isArray(this.options)) {
-          warning(
-            () => false,
-            () => `Expected prop \`options\` to be an array, instead got: ${this.options}.`
-          )
-        }
+      if (this.options == null && !this.loadOptions) {
+        warning(
+          () => false,
+          () => 'Are you meant to dynamically loading options? You have to use `loadOptions` prop.'
+        )
       }
     },
 
@@ -1069,7 +1041,7 @@ export default {
       this.$nextTick(this.adjustPosition)
       /* istanbul ignore else */
       if (this.retainScrollPosition) this.$nextTick(this.restoreScrollPosition)
-      if (!this.rootOptionsLoaded) this.loadOptions(true)
+      if (!this.rootOptionsLoaded) this.loadRootOptions()
       this.toggleClickOutsideEvent(true)
       this.$emit('open', this.id)
     },
@@ -1192,13 +1164,13 @@ export default {
               ? this.normalize(normalized, children, prevNodeMap)
               : [])
 
-            if (!isLoaded && typeof this.loadChildrenOptions !== 'function') {
+            if (!isLoaded && typeof this.loadOptions !== 'function') {
               warning(
                 () => false,
-                () => 'Unloaded branch node detected. `loadChildrenOptions` prop is required to load its children.'
+                () => 'Unloaded branch node detected. `loadOptions` prop is required to load its children.'
               )
             } else if (!isLoaded && normalized.isExpanded) {
-              this.loadOptions(false, normalized)
+              this.loadChildrenOptions(normalized)
             }
           }
 
@@ -1216,13 +1188,10 @@ export default {
           if (prevNodeMap && prevNodeMap[id]) {
             const prev = prevNodeMap[id]
             if (prev.isBranch && normalized.isBranch) {
-              const keysToPreserve = [
-                'isExpanded',
-                'expandsOnSearch',
-                'isPending',
-                'loadingChildrenError',
-              ]
-              keysToPreserve.forEach(key => normalized[key] = prev[key])
+              normalized.isExpanded = prev.isExpanded
+              normalized.expandsOnSearch = prev.expandsOnSearch
+              normalized.isPending = prev.isPending
+              normalized.loadingChildrenError = prev.loadingChildrenError
             }
           }
 
@@ -1238,56 +1207,81 @@ export default {
       return normalizedOptions
     },
 
-    loadOptions(isRootLevel, parentNode) {
-      if (isRootLevel) {
-        if (this.loadingRootOptions || typeof this.loadRootOptions !== 'function') return
-
-        const callback = (err, data) => {
+    loadRootOptions() {
+      this.callLoadOptionsProp({
+        action: LOAD_ROOT_OPTIONS,
+        isPending: () => {
+          return this.loadingRootOptions
+        },
+        start: () => {
+          this.loadingRootOptions = true
+          this.loadingRootOptionsError = ''
+        },
+        succeed: () => {
+          this.rootOptionsLoaded = true
+        },
+        fail: err => {
+          this.loadingRootOptionsError = err.message || String(err)
+        },
+        end: () => {
           this.loadingRootOptions = false
+        },
+      })
+    },
 
-          if (err) {
-            this.loadingRootOptionsError = err.message || /* istanbul ignore next */ String(err)
-          } else if (!data) {
-            this.loadingRootOptionsError = 'no data received'
-          } else if (!Array.isArray(data)) {
-            this.loadingRootOptionsError = 'received unrecognizable data'
-          } else {
-            this.initialize(data)
-            this.rootOptionsLoaded = true
-          }
-        }
+    loadChildrenOptions(parentNode) {
+      const { id, raw } = parentNode
+      // the options may be reinitialized anytime during the loading process
+      // so `parentNode` can be expired and we use `getNode()` to avoid that
 
-        this.loadingRootOptions = true
-        this.loadingRootOptionsError = ''
-        this.loadRootOptions(callback, this.id)
-      } else {
-        if (parentNode.isPending) return
+      this.callLoadOptionsProp({
+        action: LOAD_CHILDREN_OPTIONS,
+        args: {
+          parentNode: raw,
+        },
+        isPending: () => {
+          return this.getNode(id).isPending
+        },
+        start: () => {
+          this.getNode(id).isPending = true
+          this.getNode(id).loadingChildrenError = ''
+        },
+        succeed: () => {
+          this.getNode(id).isLoaded = true
+        },
+        fail: err => {
+          this.getNode(id).loadingChildrenError = err.message || String(err)
+        },
+        end: () => {
+          this.getNode(id).isPending = false
+        },
+      })
+    },
 
-        const rawData = parentNode.raw
-        const callback = (err, children) => {
-          parentNode.isPending = false
-
-          if (err) {
-            parentNode.loadingChildrenError = this.loadChildrenErrorText(err)
-          } else if (!Array.isArray(children)) {
-            parentNode.loadingChildrenError = 'Received unrecognizable data'
-            warning(
-              () => false,
-              () => `Received unrecognizable data ${children} while loading children options of node ${parentNode.id}`
-            )
-          } else {
-            parentNode.children = this.normalize(parentNode, children)
-            parentNode.isLoaded = true
-            this.completeSelectedNodeIdList()
-            this.buildSelectedNodeMap()
-            this.buildNodeCheckedStateMap()
-          }
-        }
-
-        parentNode.isPending = true
-        parentNode.loadingChildrenError = ''
-        this.loadChildrenOptions(rawData, callback, this.id)
+    callLoadOptionsProp({ action, args, isPending, start, succeed, fail, end }) {
+      if (!this.loadOptions) {
+        return
       }
+
+      if (isPending()) {
+        return
+      }
+
+      start()
+
+      this.loadOptions({
+        id: this.id,
+        action,
+        ...args,
+        callback(err) {
+          if (err) {
+            fail(err)
+          } else {
+            succeed()
+          }
+          end()
+        },
+      })
     },
 
     checkDuplication(node) {
@@ -1303,7 +1297,9 @@ export default {
     },
 
     select(node) {
-      if (node.isDisabled) return
+      if (node.isDisabled) {
+        return
+      }
 
       if (this.single) {
         this.clear()
@@ -1483,7 +1479,7 @@ export default {
 
   mounted() {
     if (this.autoFocus || this.autofocus) this.$refs.value.focusInput()
-    if (!this.rootOptionsLoaded && this.autoLoadRootOptions) this.loadOptions(true)
+    if (!this.rootOptionsLoaded && this.autoLoadRootOptions) this.loadRootOptions()
     if (this.alwaysOpen) this.openMenu()
   },
 

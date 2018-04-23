@@ -65,8 +65,8 @@
         <div v-else-if="loadingRootOptionsError" class="vue-treeselect__error-tip">
           <div class="vue-treeselect__icon-wrapper"><span class="vue-treeselect__icon-error" /></div>
           <span class="vue-treeselect__error-tip-text">
-            Failed to load options: {{ loadingRootOptionsError }}.
-            <a class="vue-treeselect__retry" @click="loadOptions(true)" :title="retryTitle">
+            {{ loadingRootOptionsError }}
+            <a class="vue-treeselect__retry" @click="loadRootOptions" :title="retryTitle">
               {{ retryText }}
             </a>
           </span>

@@ -2,13 +2,15 @@
   <treeselect
     :multiple="true"
     :options="options"
-    :load-children-options="loadChildrenOptions"
+    :load-options="loadOptions"
     placeholder="Try expanding any folder option..."
     v-model="value"
     />
 </template>
 
 <script>
+  import { LOAD_CHILDREN_OPTIONS } from '@riophae/vue-treeselect'
+
   export default {
     data: () => ({
       value: null,
@@ -30,29 +32,40 @@
     }),
 
     methods: {
-      loadChildrenOptions(parent, callback/*, id */) {
+      loadOptions({ action, parentNode, callback/*, id */ }) {
         // Typically, do the AJAX stuff here.
-        // Once the server has responded, call the callback with received data.
+        // Once the server has responded,
+        // assign children options to the parent node & call the callback.
         // We just use `setTimeout()` here to simulate an async operation
         // instead of requesting a real API server for demo purpose.
-        switch (parent.id) {
-        case 'success': {
-          const children = [ {
-            id: 'child',
-            label: 'Child option',
-          } ]
-          setTimeout(() => callback(null, children), 2000)
-          break
-        }
-        case 'no-children': {
-          setTimeout(() => callback(null, []), 2000)
-          break
-        }
-        case 'failure': {
-          setTimeout(() => callback(new Error('Network error')), 2000)
-          break
-        }
-        default: /* Empty */
+
+        if (action === LOAD_CHILDREN_OPTIONS) {
+          switch (parentNode.id) {
+          case 'success': {
+            setTimeout(() => {
+              parentNode.children = [ {
+                id: 'child',
+                label: 'Child option',
+              } ]
+              callback()
+            }, 2000)
+            break
+          }
+          case 'no-children': {
+            setTimeout(() => {
+              parentNode.children = []
+              callback()
+            }, 2000)
+            break
+          }
+          case 'failure': {
+            setTimeout(() => {
+              callback(new Error('Failed to load options: network error.'))
+            }, 2000)
+            break
+          }
+          default: /* empty */
+          }
         }
       },
     },

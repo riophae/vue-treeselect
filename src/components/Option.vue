@@ -58,7 +58,7 @@
         <div class="vue-treeselect__icon-wrapper"><span class="vue-treeselect__icon-error" /></div>
         <span class="vue-treeselect__error-tip-text">
           {{ node.loadingChildrenError }}
-          <a class="vue-treeselect__retry" @click="instance.loadOptions(false, node)" :title="instance.retryTitle">
+          <a class="vue-treeselect__retry" @click="instance.loadChildrenOptions(node)" :title="instance.retryTitle">
             {{ instance.retryText }}
           </a>
         </span>

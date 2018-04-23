@@ -41,14 +41,14 @@
 
 +guide('Delayed Loading')
   :markdown-it
-    If you have a large number of deeply nested options, you might want to load options only of the most top levels on initial load and load the rest only when needed. You can achieve that by following these steps:
+    If you have a large number of deeply nested options, you might want to load options only of the most top levels on initial load, and load the rest only when needed. You can achieve that by following these steps:
 
       1. Declare an *unloaded* branch node by setting `children: null` or `isBranch: true`
-      2. Provide a `loadChildrenOptions` prop
-      3. Whenever an unloaded branch node gets expanded, `loadChildrenOptions(parentNode, callback, id)` will be called within which you can perform the job requesting data from a remote server
+      2. Add `loadOptions` prop
+      3. Whenever an unloaded branch node gets expanded, `loadOptions({ action, parentNode, callback, id })` will be called, then you can perform the job requesting data from a remote server
   +demo('DelayedLoading')
   :markdown-it
-    If you want the root level options to be delayed loaded as well, omit the `options` prop and provide an extra `loadRootOptions` prop. By default, vue-treeselect will try loading root options by calling `loadRootOptions(callback, id)` after the component is mounted. In this example I have disabled that feature, and root options will be loaded when the menu is opened.
+    It's also possible to have root level options to be delayed loaded. If no options have been initially registered (`options: null`), vue-treeselect will attempt to load root options by calling `loadOptions({ action, callback, id })` after the component is mounted. In this example I have disabled the auto loading feature by setting `autoLoadRootOptions: false`, and root options will be loaded when the menu is opened.
   +demo('DelayedRootOptions')
 
 +guide('Flat Mode & Sort Values')
