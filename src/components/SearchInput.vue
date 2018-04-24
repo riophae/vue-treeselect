@@ -17,6 +17,7 @@
     },
 
     updated() {
+      // istanbul ignore else
       if (this.needsAutoSize) this.updateInputWidth()
     },
 

@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils'
 import Treeselect from '@riophae/vue-treeselect/components/Treeselect'
-import { findInput } from './shared'
+import { findInput, typeSearchText } from './shared'
 
 describe('Search Input', () => {
   it('should disable auto complete', () => {
@@ -26,5 +26,37 @@ describe('Search Input', () => {
     expect(wrapper.vm.isFocused).toBe(false)
     wrapper.vm.focusInput()
     expect(wrapper.vm.isFocused).toBe(false)
+  })
+
+  it('when multiple=true, input should fit the width of user-input text', async () => {
+    const wrapper = mount(Treeselect, {
+      propsData: {
+        options: [],
+        multiple: true,
+        searchable: true,
+      },
+      attachToDocument: true,
+      sync: false,
+    })
+    const input = findInput(wrapper)
+    const fullText = 'hello world'
+    let i = 0
+    let prevWidth = input.element.offsetWidth
+
+    expect(prevWidth).toBeGreaterThan(0)
+
+    while (i < fullText.length) {
+      await typeSearchText(wrapper, fullText.slice(0, i += 3))
+      const width = input.element.offsetWidth
+      expect(width).toBeGreaterThan(prevWidth)
+      prevWidth = width
+    }
+
+    while (i > 0) {
+      await typeSearchText(wrapper, fullText.slice(0, i -= 3))
+      const width = input.element.offsetWidth
+      expect(width).toBeLessThan(prevWidth)
+      prevWidth = width
+    }
   })
 })

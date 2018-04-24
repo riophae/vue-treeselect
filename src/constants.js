@@ -21,7 +21,9 @@ export const ORDER_SELECTED = 'ORDER_SELECTED'
 export const LEVEL = 'LEVEL'
 export const INDEX = 'INDEX'
 
-export const INPUT_DEBOUNCE_DELAY = process.env.NODE_ENV === 'testing' ? 10 : 200
+export const INPUT_DEBOUNCE_DELAY = process.env.NODE_ENV === 'testing'
+  ? 10
+  : /* istanbul ignore next */ 200
 export const MIN_INPUT_WIDTH = 5
 export const KEEP_REMAINING_HEIGHT = 40
 

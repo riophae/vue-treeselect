@@ -73,6 +73,14 @@ describe('Utils', () => {
     })
   })
 
+  describe('noop', () => {
+    const { noop } = utils
+
+    it('does nothing', () => {
+      noop()
+    })
+  })
+
   describe('deepExtend', () => {
     const { deepExtend } = utils
 

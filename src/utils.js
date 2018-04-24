@@ -28,7 +28,7 @@ export function onlyOnLeftClick(mouseDownHandler) {
 }
 
 export function noop() {
-  /* istanbul ignore next */
+  // empty
 }
 
 export function identity(x) {
@@ -97,8 +97,11 @@ function hasOwn(obj, key) {
 export function assign(target, ...sources) {
   for (let i = 0; i < sources.length; i++) {
     const source = sources[i]
-    for (const key in source) if (hasOwn(source, key)) {
-      target[key] = source[key]
+    for (const key in source) {
+      // istanbul ignore else
+      if (hasOwn(source, key)) {
+        target[key] = source[key]
+      }
     }
   }
   return target

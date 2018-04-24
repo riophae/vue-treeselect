@@ -578,6 +578,7 @@ export default {
     internalValue() {
       let internalValue
 
+      // istanbul ignore else
       if (this.single || this.flat || this.valueConsistsOf === ALL) {
         internalValue = this.selectedNodeIds.slice()
       } else if (this.valueConsistsOf === BRANCH_PRIORITY) {
@@ -679,6 +680,7 @@ export default {
     },
 
     multiple(newValue) {
+      // istanbul ignore else
       if (newValue) {
         // needs to rebuild the state tree when switching from
         // single-select mode to multi-select mode
@@ -862,7 +864,7 @@ export default {
     checkIfBranchNode(node) {
       warning(
         () => node && node.isBranch,
-        /* istanbul ignore next */
+        // istanbul ignore next
         () => `Expected a branch node, instead got: ${node}`
       )
     },
@@ -874,6 +876,7 @@ export default {
     },
 
     traverseDescendantsBFS(parentNode, callback) {
+      // istanbul ignore if
       if (!parentNode.isBranch) return
       const queue = parentNode.children.slice()
       while (queue.length) {
@@ -1035,6 +1038,7 @@ export default {
             if (node.isLeaf) node.ancestors.forEach(ancestor => this.searchingCount[ancestor.id].LEAF_DESCENDANTS++)
             if (node.parentNode !== NO_PARENT_NODE) {
               this.searchingCount[node.parentNode.id].ALL_CHILDREN += 1
+              // istanbul ignore else
               if (node.isLeaf) this.searchingCount[node.parentNode.id].LEAF_CHILDREN += 1
             }
           }
@@ -1335,6 +1339,7 @@ export default {
       if (this.single && this.closeOnSelect) {
         this.closeMenu()
 
+        // istanbul ignore else
         if (this.searchable) {
           this._blurOnSelect = true
         }
@@ -1430,7 +1435,7 @@ export default {
     },
 
     maybeRemoveLastValue() {
-      /* istanbul ignore next */
+      // istanbul ignore next
       if (!this.hasValue) return
       const lastValue = last(this.selectedNodeIds)
       const lastSelectedNode = this.getNode(lastValue)
@@ -1488,7 +1493,7 @@ export default {
   },
 
   destroyed() {
-    /* istanbul ignore next */
+    // istanbul ignore next
     this.toggleClickOutsideEvent(false)
   },
 }
