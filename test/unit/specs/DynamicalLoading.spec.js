@@ -55,7 +55,7 @@ describe('Dynamical Loading', () => {
           options: [ {
             id: 'a',
             label: 'a',
-            isBranch: true, // declares an unloaded branch node
+            children: null,
           } ],
           loadOptions,
         },
@@ -76,13 +76,10 @@ describe('Dynamical Loading', () => {
         expect(action).toBe('LOAD_CHILDREN_OPTIONS')
 
         setTimeout(() => {
-          // We can't use `parentNode.children = [...]`
-          // because Vue can't detect property addition
-          // and therefore won't react to state changes
-          vm.$set(parentNode, 'children', [ {
+          parentNode.children = [ {
             id: 'aa',
             label: 'aa',
-          } ])
+          } ]
           callback()
         }, DELAY)
       }
@@ -92,8 +89,7 @@ describe('Dynamical Loading', () => {
           options: [ {
             id: 'a',
             label: 'a',
-            isBranch: true, // declares an unloaded branch node
-            // also note that there is no `children` property
+            children: null,
           } ],
           loadOptions: spyForLoadOptions,
         },

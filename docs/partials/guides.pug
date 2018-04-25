@@ -43,7 +43,7 @@
   :markdown-it
     If you have a large number of deeply nested options, you might want to load options only of the most top levels on initial load, and load the rest only when needed. You can achieve that by following these steps:
 
-      1. Declare an *unloaded* branch node by setting `children: null` or `isBranch: true`
+      1. Declare an *unloaded* branch node by setting `children: null`
       2. Add `loadOptions` prop
       3. Whenever an unloaded branch node gets expanded, `loadOptions({ action, parentNode, callback, id })` will be called, then you can perform the job requesting data from a remote server
   +demo('DelayedLoading')

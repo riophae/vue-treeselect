@@ -272,17 +272,12 @@ describe('Basic', () => {
             id: 'c',
             label: 'c',
             children: null,
-          }, {
-            // unloaded branch node
-            id: 'd',
-            label: 'd',
-            isBranch: true,
           } ],
           loadOptions() { /* empty */ },
         },
       })
       const { vm } = wrapper
-      const { a, b, c, d } = vm.nodeMap
+      const { a, b, c } = vm.nodeMap
 
       expect(a).toEqual(jasmine.objectContaining({
         isLeaf: true,
@@ -297,13 +292,6 @@ describe('Basic', () => {
       }))
 
       expect(c).toEqual(jasmine.objectContaining({
-        isLeaf: false,
-        isBranch: true,
-        children: [],
-        isLoaded: false,
-      }))
-
-      expect(d).toEqual(jasmine.objectContaining({
         isLeaf: false,
         isBranch: true,
         children: [],
@@ -622,6 +610,26 @@ describe('Basic', () => {
         expect(vm.selectedNodeIds).toBeEmptyArray()
       })
     })
+  })
+
+  it('declaring branch nodes by `isBranch: true` should raise a warning', () => {
+    spyOn(console, 'error')
+
+    mount(Treeselect, {
+      propsData: {
+        options: [ {
+          id: 'branch',
+          label: 'branch',
+          isBranch: true,
+        } ],
+      },
+    })
+
+    expect(console.error).toHaveBeenCalledWith(
+      '[Vue-Treeselect Warning]',
+      'Are you meant to declares an unloaded branch node? ' +
+        '`isBranch: true` is no longer supported, please use `children: null` instead.'
+    )
   })
 
   describe('should warn about duplicate node ids', () => {

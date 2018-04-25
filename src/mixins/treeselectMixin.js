@@ -1118,11 +1118,7 @@ export default {
           const { id, label, children, isDefaultExpanded } = node
           const isRootNode = parentNode === NO_PARENT_NODE
           const level = isRootNode ? 0 : parentNode.level + 1
-          const isBranch = (
-            Array.isArray(children) ||
-            children === null ||
-            (children === undefined && !!node.isBranch)
-          )
+          const isBranch = Array.isArray(children) || children === null
           const isLeaf = !isBranch
           const isDisabled = !!node.isDisabled || (!this.flat && !isRootNode && parentNode.isDisabled)
           const lowerCasedLabel = label.toLocaleLowerCase()
@@ -1296,8 +1292,12 @@ export default {
       )
     },
 
-    verifyNodeShape(/* node */) {
-      // TODO
+    verifyNodeShape(node) {
+      warning(
+        () => !(node.children === undefined && node.isBranch === true),
+        () => 'Are you meant to declares an unloaded branch node? ' +
+          '`isBranch: true` is no longer supported, please use `children: null` instead.'
+      )
     },
 
     select(node) {

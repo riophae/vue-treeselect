@@ -22,8 +22,7 @@
       }, {
         id: 'no-children',
         label: 'With no children',
-        // alternative approach
-        isBranch: true,
+        children: null,
       }, {
         id: 'failure',
         label: 'Demonstrates error handling',

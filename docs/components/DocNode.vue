@@ -26,11 +26,6 @@
           <td>Declares a branch node. Set to empty array for no children options. Set to <code>null</code> for <a href="#delayed-loading">delayed loading</a>.</td>
         </tr>
         <tr>
-          <td><strong>isBranch</strong></td>
-          <td class="type">Boolean</td>
-          <td>Useful for declaring an <a href="#delayed-loading">unloaded branch node</a>. For other cases, just use <code>children</code> instead.</td>
-        </tr>
-        <tr>
           <td><strong>isDisabled</strong></td>
           <td class="type">Boolean</td>
           <td>Used for disabling item selection. See <a href="#disable-item-selection">here</a> for detailed information.</td>
