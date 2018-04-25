@@ -59,10 +59,14 @@ export function findOptionArrowByNodeId(wrapper, nodeId) {
   return findOptionByNodeId(wrapper, nodeId).find('.vue-treeselect__option-arrow')
 }
 
+export function findCheckboxByNodeId(wrapper, nodeId) {
+  return findOptionByNodeId(wrapper, nodeId).find('.vue-treeselect__checkbox')
+}
+
 export function findLabelWrapperByNodeId(wrapper, nodeId) {
   return findOptionByNodeId(wrapper, nodeId).find('.vue-treeselect__label-wrapper')
 }
 
-export function findCheckboxByNodeId(wrapper, nodeId) {
-  return findOptionByNodeId(wrapper, nodeId).find('.vue-treeselect__checkbox')
+export function findChildrenOptionListByNodeId(wrapper, nodeId) {
+  return findOptionByNodeId(wrapper, nodeId).find('.vue-treeselect__list')
 }

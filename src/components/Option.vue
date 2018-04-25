@@ -45,34 +45,27 @@
             </template>
           </vue-treeselect--option>
         </template>
-        <div v-else class="vue-treeselect__no-children-tip">
-          <div class="vue-treeselect__icon-wrapper"><span class="vue-treeselect__icon-warning" /></div>
-          <span class="vue-treeselect__no-children-tip-text">{{ instance.noChildrenText }}</span>
-        </div>
+        <tip v-else type="no-children" icon="warning">{{ instance.noChildrenText }}</tip>
       </template>
-      <div v-else-if="node.isPending" class="vue-treeselect__loading-tip">
-        <div class="vue-treeselect__icon-wrapper"><span class="vue-treeselect__icon-loader" /></div>
-        <span class="vue-treeselect__loading-tip-text">{{ instance.loadingText }}</span>
-      </div>
-      <div v-else-if="node.loadingChildrenError" class="vue-treeselect__error-tip">
-        <div class="vue-treeselect__icon-wrapper"><span class="vue-treeselect__icon-error" /></div>
-        <span class="vue-treeselect__error-tip-text">
-          {{ node.loadingChildrenError }}
-          <a class="vue-treeselect__retry" @click="instance.loadOptions(false, node)" :title="instance.retryTitle">
-            {{ instance.retryText }}
-          </a>
-        </span>
-      </div>
+      <tip v-else-if="node.isPending" type="loading" icon="loader">{{ instance.loadingText }}</tip>
+      <tip v-else-if="node.loadingChildrenError" type="error" icon="error">
+        {{ node.loadingChildrenError }}
+        <a class="vue-treeselect__retry" @click="instance.loadChildrenOptions(node)" :title="instance.retryTitle">
+          {{ instance.retryText }}
+        </a>
+      </tip>
     </div>
   </div>
 </template>
 
 <script>
   import optionMixin from '../mixins/optionMixin'
+  import Tip from './Tip'
 
   export default {
     name: 'vue-treeselect--option',
     inject: [ 'instance', 'UNCHECKED', 'INDETERMINATE', 'CHECKED' ],
+    components: { Tip },
     mixins: [ optionMixin ],
   }
 </script>

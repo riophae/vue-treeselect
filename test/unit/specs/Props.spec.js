@@ -588,7 +588,7 @@ describe('Props', () => {
 
     it('should request children options loading when expanded', () => {
       // TODO: 需要考虑服务端渲染的情况
-      const loadChildrenOptions = jasmine.createSpy('loadChildrenOptions')
+      const loadOptions = jasmine.createSpy('loadOptions')
       const wrapper = mount(Treeselect, {
         propsData: {
           id: 'test',
@@ -606,14 +606,19 @@ describe('Props', () => {
             } ],
           } ],
           defaultExpandLevel: 1,
-          loadChildrenOptions,
+          loadOptions,
         },
       })
       const { vm } = wrapper
       const { a } = vm.nodeMap
 
-      expect(loadChildrenOptions.calls.count()).toBe(1)
-      expect(loadChildrenOptions).toHaveBeenCalledWith(a.raw, jasmine.any(Function), 'test')
+      expect(loadOptions.calls.count()).toBe(1)
+      expect(loadOptions).toHaveBeenCalledWith({
+        id: 'test',
+        action: 'LOAD_CHILDREN_OPTIONS',
+        parentNode: a.raw,
+        callback: jasmine.any(Function),
+      })
     })
   })
 
@@ -935,583 +940,6 @@ describe('Props', () => {
     })
   })
 
-  describe('loadChildrenOptions', () => {
-    it('should call loadChildrenOptions() to load children options when expanding an unloaded branch node', async () => {
-      const loadChildrenOptions = jasmine.createSpy('loadChildrenOptions').and.callFake((parentNode, callback) => {
-        expect(parentNode).toBe(a.raw)
-        expect(callback).toBeFunction()
-        expect(a.isPending).toBe(true)
-        expect(a.isLoaded).toBe(false)
-        const children = [ {
-          id: 'aa',
-          label: 'aa',
-        } ]
-        callback(null, children)
-        expect(a.isPending).toBe(false)
-        expect(a.isLoaded).toBe(true)
-        expect(a.children.map(child => child.raw)).toEqual(children)
-      })
-      const wrapper = mount(Treeselect, {
-        propsData: {
-          options: [ {
-            id: 'a',
-            label: 'a',
-            children: null, // declare an unloaded branch node
-          } ],
-          loadChildrenOptions,
-        },
-        data: {
-          // it only auto loads children options when the option has been rendered to the DOM
-          // so the menu must be open
-          isOpen: true,
-        },
-      })
-      const { vm } = wrapper
-      const { a } = vm.nodeMap
-
-      vm.toggleExpanded(a)
-      await vm.$nextTick()
-      expect(loadChildrenOptions).toHaveBeenCalled()
-    })
-
-    it('should accept empty results', async () => {
-      const loadChildrenOptions = jasmine.createSpy('loadChildrenOptions').and.callFake((parentNode, callback) => {
-        expect(a.isPending).toBe(true)
-        expect(a.isLoaded).toBe(false)
-        callback(null, [])
-        expect(a.isPending).toBe(false)
-        expect(a.isLoaded).toBe(true)
-      })
-      const wrapper = mount(Treeselect, {
-        propsData: {
-          options: [ {
-            id: 'a',
-            label: 'a',
-            children: null,
-          } ],
-          loadChildrenOptions,
-        },
-        data: {
-          isOpen: true,
-        },
-      })
-      const { vm } = wrapper
-      const { a } = vm.nodeMap
-
-      vm.toggleExpanded(a)
-      await vm.$nextTick()
-      expect(loadChildrenOptions).toHaveBeenCalled()
-    })
-
-    it('should be able to handle loading error', async () => {
-      const loadChildrenOptions = jasmine.createSpy('loadChildrenOptions').and.callFake((parentNode, callback) => {
-        expect(a.isPending).toBe(true)
-        expect(a.isLoaded).toBe(false)
-        const error = new Error('$ERROR$')
-        callback(error)
-        expect(a.isPending).toBe(false)
-        expect(a.isLoaded).toBe(false)
-        expect(a.loadingChildrenError).toBe(`Failed to load children options: ${error.message}.`)
-      })
-      const wrapper = mount(Treeselect, {
-        propsData: {
-          options: [ {
-            id: 'a',
-            label: 'a',
-            children: null,
-          } ],
-          loadChildrenOptions,
-        },
-        data: {
-          isOpen: true,
-        },
-      })
-      const { vm } = wrapper
-      const { a } = vm.nodeMap
-
-      vm.toggleExpanded(a)
-      await vm.$nextTick()
-      expect(loadChildrenOptions).toHaveBeenCalled()
-    })
-
-    it('should be able to recover from loading error', async () => {
-      let c = 0
-      const loadChildrenOptions = jasmine.createSpy('loadChildrenOptions').and.callFake((parentNode, callback) => {
-        if (c === 0) {
-          const error = new Error('$ERROR$')
-          callback(error)
-          expect(a.loadingChildrenError).toBe(`Failed to load children options: ${error.message}.`)
-        } else if (c === 1) {
-          expect(a.isPending).toBe(true)
-          expect(a.isLoaded).toBe(false)
-          callback(null, [ {
-            id: 'aa',
-            label: 'aa',
-          } ])
-          expect(a.isPending).toBe(false)
-          expect(a.isLoaded).toBe(true)
-          expect(a.children).toBeNonEmptyArray()
-          expect(a.loadingChildrenError).toBe('')
-        } else {
-          throw new Error('unknown error')
-        }
-
-        c++
-      })
-      const wrapper = mount(Treeselect, {
-        propsData: {
-          options: [ {
-            id: 'a',
-            label: 'a',
-            children: null,
-          } ],
-          loadChildrenOptions,
-        },
-        data: {
-          isOpen: true,
-        },
-      })
-      const { vm } = wrapper
-      const { a } = vm.nodeMap
-
-      // expand
-      vm.toggleExpanded(a)
-      await vm.$nextTick()
-      expect(loadChildrenOptions.calls.count()).toBe(1)
-
-      // collapse
-      vm.toggleExpanded(a)
-      await vm.$nextTick()
-
-      // expand again
-      vm.toggleExpanded(a)
-      await vm.$nextTick()
-      expect(loadChildrenOptions.calls.count()).toBe(2)
-    })
-
-    it('should warn about the absent of `loadChildrenOptions` prop when unloaded branch nodes detected', () => {
-      spyOn(console, 'error')
-
-      mount(Treeselect, {
-        propsData: {
-          options: [ {
-            id: 'id',
-            label: 'label',
-            children: null,
-          } ],
-        },
-      })
-
-      expect(console.error).toHaveBeenCalledWith(
-        '[Vue-Treeselect Warning]',
-        'Unloaded branch node detected. `loadChildrenOptions` prop is required to load its children.',
-      )
-    })
-
-    it('shoud error if received data is not an array', async () => {
-      spyOn(console, 'error')
-
-      const wrapper = mount(Treeselect, {
-        propsData: {
-          options: [ {
-            id: 'a',
-            label: 'a',
-            children: null,
-          } ],
-          loadChildrenOptions(parentNode, callback) {
-            callback(null, /* non-arry */ null)
-          },
-        },
-        data: {
-          isOpen: true,
-        },
-      })
-      const { vm } = wrapper
-
-      vm.toggleExpanded(vm.nodeMap.a)
-      await vm.$nextTick()
-      expect(vm.nodeMap.a.loadingChildrenError).toBe('Received unrecognizable data')
-      expect(console.error).toHaveBeenCalledWith(
-        '[Vue-Treeselect Warning]',
-        'Received unrecognizable data null while loading children options of node a'
-      )
-    })
-
-    it('should avoid of calling `loadChildrenOptions()` when an in-flight request is unfinished', async () => {
-      jasmine.clock().install()
-
-      const DELAY = 200
-      const ERROR_MSG = '$ERROR_MSG$'
-      const loadChildrenOptions = jasmine.createSpy('loadChildrenOptions', (parentNode, callback) => {
-        setTimeout(() => callback(new Error(ERROR_MSG)), DELAY)
-      }).and.callThrough()
-      const wrapper = mount(Treeselect, {
-        propsData: {
-          options: [ {
-            id: 'a',
-            label: 'a',
-            children: null,
-          } ],
-          loadChildrenOptions,
-        },
-      })
-      const { vm } = wrapper
-
-      vm.openMenu()
-      await vm.$nextTick()
-
-      expect(loadChildrenOptions).not.toHaveBeenCalled()
-      vm.toggleExpanded(vm.nodeMap.a)
-      await vm.$nextTick()
-      expect(vm.nodeMap.a).toEqual(jasmine.objectContaining({
-        isExpanded: true,
-        isPending: true,
-      }))
-      expect(loadChildrenOptions.calls.count()).toBe(1)
-
-      vm.toggleExpanded(vm.nodeMap.a)
-      await vm.$nextTick()
-      expect(vm.nodeMap.a.isExpanded).toBe(false)
-
-      vm.toggleExpanded(vm.nodeMap.a)
-      await vm.$nextTick()
-      expect(vm.nodeMap.a.isExpanded).toBe(true)
-      expect(loadChildrenOptions.calls.count()).toBe(1)
-
-      jasmine.clock().tick(DELAY + 1)
-      expect(vm.nodeMap.a).toEqual(jasmine.objectContaining({
-        isExpanded: true,
-        isPending: false,
-        loadingChildrenError: `Failed to load children options: ${ERROR_MSG}.`,
-      }))
-
-      vm.toggleExpanded(vm.nodeMap.a)
-      await vm.$nextTick()
-      expect(vm.nodeMap.a.isExpanded).toBe(false)
-
-      vm.toggleExpanded(vm.nodeMap.a)
-      await vm.$nextTick()
-      expect(loadChildrenOptions.calls.count()).toBe(2)
-      expect(vm.nodeMap.a).toEqual(jasmine.objectContaining({
-        isExpanded: true,
-        isPending: true,
-      }))
-
-      jasmine.clock().uninstall()
-    })
-
-    it('multiple instances share the same `loadChildrenOptions` function', async () => {
-      const loadChildrenOptions = jasmine.createSpy('loadRootOptions')
-      const { vm: vm1 } = mount(Treeselect, {
-        propsData: {
-          id: 1,
-          loadChildrenOptions,
-          options: [ {
-            id: 'branch',
-            label: 'branch',
-            children: null,
-          } ],
-        },
-        data: {
-          isOpen: true,
-        },
-      })
-      const { vm: vm2 } = mount(Treeselect, {
-        propsData: {
-          id: 2,
-          loadChildrenOptions,
-          options: [ {
-            id: 'branch',
-            label: 'branch',
-            children: null,
-          } ],
-        },
-        data: {
-          isOpen: true,
-        },
-      })
-
-      vm1.toggleExpanded(vm1.nodeMap.branch)
-      await vm1.$nextTick()
-      expect(loadChildrenOptions.calls.argsFor(0)).toEqual([ jasmine.any(Object), jasmine.any(Function), 1 ])
-
-      vm2.toggleExpanded(vm2.nodeMap.branch)
-      await vm2.$nextTick()
-      expect(loadChildrenOptions.calls.argsFor(1)).toEqual([ jasmine.any(Object), jasmine.any(Function), 2 ])
-    })
-
-
-    it('should override fallback nodes', async () => {
-      jasmine.clock().install()
-
-      const DELAY = 200
-      const wrapper = mount(Treeselect, {
-        propsData: {
-          options: [ {
-            id: 'a',
-            label: 'a',
-            children: null,
-          } ],
-          value: 'aa',
-          loadChildrenOptions(parentNode, callback) {
-            setTimeout(() => {
-              callback(null, [ {
-                id: 'aa',
-                label: 'aa',
-              }, {
-                id: 'ab',
-                label: 'ab',
-              } ])
-            }, DELAY)
-          },
-        },
-        data: {
-          isOpen: true,
-        },
-      })
-      const { vm } = wrapper
-      // eslint-disable-next-line newline-per-chained-call
-      const getValueText = () => wrapper.find('.vue-treeselect__single-value').text().trim()
-
-      expect(vm.nodeMap.aa).toEqual(jasmine.objectContaining({
-        id: 'aa',
-        label: 'aa (unknown)',
-        isFallbackNode: true,
-      }))
-      expect(getValueText()).toBe('aa (unknown)')
-
-      expect(vm.nodeMap.a.isLoaded).toBe(false)
-      vm.toggleExpanded(vm.nodeMap.a)
-      await vm.$nextTick()
-      expect(vm.nodeMap.a.isPending).toBe(true)
-
-      jasmine.clock().tick(DELAY + 1)
-      await vm.$nextTick()
-      expect(vm.nodeMap.a.isLoaded).toBe(true)
-      expect(vm.nodeMap.aa).toEqual(jasmine.objectContaining({
-        id: 'aa',
-        label: 'aa',
-      }))
-      expect(getValueText()).toBe('aa')
-
-      jasmine.clock().uninstall()
-    })
-
-    it('after loading children options of a checked node, should also check these children options', async () => {
-      const wrapper = mount(Treeselect, {
-        propsData: {
-          options: [ {
-            id: 'a',
-            label: 'a',
-            children: null,
-          } ],
-          multiple: true,
-          flat: false,
-          valueFormat: 'id',
-          valueConsistsOf: 'BRANCH_PRIORITY',
-          loadChildrenOptions(parentNode, callback) {
-            if (parentNode.id === 'a') {
-              callback(null, [ {
-                id: 'aa',
-                label: 'aa',
-                children: null,
-              }, {
-                id: 'ab',
-                label: 'ab',
-              } ])
-            }
-
-            if (parentNode.id === 'aa') {
-              callback(null, [ {
-                id: 'aaa',
-                label: 'aaa',
-              }, {
-                id: 'aab',
-                label: 'aab',
-              } ])
-            }
-          },
-        },
-        data: {
-          isOpen: true,
-        },
-      })
-      const { vm } = wrapper
-
-      vm.select(vm.nodeMap.a)
-      expect(vm.internalValue).toEqual([ 'a' ])
-      expect(vm.selectedNodeIds).toEqual([ 'a' ])
-      expect(vm.nodeCheckedStateMap).toEqual({
-        a: CHECKED,
-      })
-
-      vm.toggleExpanded(vm.nodeMap.a)
-      await vm.$nextTick()
-      expect(vm.internalValue).toEqual([ 'a' ])
-      expect(vm.selectedNodeIds).toEqual([ 'a', 'aa', 'ab' ])
-      expect(vm.nodeCheckedStateMap).toEqual({
-        a: CHECKED,
-        aa: CHECKED,
-        ab: CHECKED,
-      })
-
-      vm.toggleExpanded(vm.nodeMap.aa)
-      await vm.$nextTick()
-      expect(vm.internalValue).toEqual([ 'a' ])
-      expect(vm.selectedNodeIds).toEqual([ 'a', 'aa', 'ab', 'aaa', 'aab' ])
-      expect(vm.nodeCheckedStateMap).toEqual({
-        a: CHECKED,
-        aa: CHECKED,
-        ab: CHECKED,
-        aaa: CHECKED,
-        aab: CHECKED,
-      })
-    })
-  })
-
-  describe('loadRootOptions', () => {
-    it('should call loadRootOptions() to load root options when opening the menu', () => {
-      jasmine.clock().install()
-
-      const DELAY = 100
-      const loadRootOptions = jasmine.createSpy('loadRootOptions', callback => {
-        const rootOptions = [ {
-          id: 'a',
-          label: 'a',
-        } ]
-        setTimeout(() => callback(null, rootOptions), DELAY)
-      }).and.callThrough()
-      const wrapper = mount(Treeselect, {
-        propsData: {
-          loadRootOptions,
-        },
-      })
-      const { vm } = wrapper
-
-      expect(vm.rootOptionsLoaded).toBe(false)
-      vm.openMenu()
-      expect(loadRootOptions).toHaveBeenCalled()
-      expect(vm.loadingRootOptions).toBe(true)
-
-      jasmine.clock().tick(DELAY + 1)
-      expect(vm.rootOptionsLoaded).toBe(true)
-      expect(vm.loadingRootOptions).toBe(false)
-      expect(vm.normalizedOptions.length).toBe(1)
-      expect(vm.nodeMap.a).toBeObject()
-
-      jasmine.clock().uninstall()
-    })
-
-    it('should accept empty array & be able to handle loading error', () => {
-      jasmine.clock().install()
-
-      const DELAY = 100
-      const ERROR_MSG = '$ERROR_MSG$'
-      let called = false
-      const loadRootOptions = jasmine.createSpy('loadRootOptions', callback => {
-        if (called) {
-          setTimeout(() => callback(null, []), DELAY)
-        } else {
-          called = true
-          setTimeout(() => callback(new Error(ERROR_MSG)), DELAY)
-        }
-      }).and.callThrough()
-      const wrapper = mount(Treeselect, {
-        propsData: {
-          loadRootOptions,
-        },
-      })
-      const { vm } = wrapper
-
-      vm.openMenu()
-      jasmine.clock().tick(DELAY + 1)
-      expect(vm.loadingRootOptionsError).toBe(ERROR_MSG)
-
-      vm.closeMenu()
-      vm.openMenu()
-      jasmine.clock().tick(DELAY + 1)
-      expect(vm.loadingRootOptionsError).toBe('')
-      expect(vm.rootOptionsLoaded).toBe(true)
-
-      jasmine.clock().uninstall()
-    })
-
-    describe('should be able to handle invalid data', () => {
-      let wrapper, vm, value, expectedError
-
-      beforeEach(() => {
-        wrapper = mount(Treeselect, {
-          propsData: {
-            loadRootOptions(callback) {
-              callback(null, value)
-            },
-          },
-        })
-        vm = wrapper.vm
-      })
-
-      afterEach(() => {
-        wrapper.vm.openMenu()
-        expect(vm.loadingRootOptions).toBe(false)
-        expect(vm.loadingRootOptionsError).toBe(expectedError)
-        expect(vm.rootOptionsLoaded).toBe(false)
-      })
-
-      it('falsy value', () => {
-        value = null
-        expectedError = 'no data received'
-      })
-
-      it('non-array value', () => {
-        value = {}
-        expectedError = 'received unrecognizable data'
-      })
-    })
-
-    it('should avoid calling `loadingRootOptions` when an in-flight request is incomplete', () => {
-      const loadRootOptions = jasmine.createSpy('loadRootOptions')
-      const wrapper = mount(Treeselect, {
-        propsData: {
-          loadRootOptions,
-        },
-      })
-      const { vm } = wrapper
-
-      vm.openMenu()
-      expect(loadRootOptions.calls.count()).toBe(1)
-
-      vm.closeMenu()
-      vm.openMenu()
-      expect(loadRootOptions.calls.count()).toBe(1)
-    })
-
-    it('multiple instances share the same `loadRootOptions` function', () => {
-      const loadRootOptions = jasmine.createSpy('loadRootOptions')
-      const { vm: vm1 } = mount(Treeselect, {
-        propsData: {
-          id: 1,
-          loadRootOptions,
-        },
-      })
-      const { vm: vm2 } = mount(Treeselect, {
-        propsData: {
-          id: 2,
-          loadRootOptions,
-        },
-      })
-
-      vm1.openMenu()
-      expect(loadRootOptions.calls.argsFor(0)).toEqual([ jasmine.any(Function), 1 ])
-
-      vm2.openMenu()
-      expect(loadRootOptions.calls.argsFor(1)).toEqual([ jasmine.any(Function), 2 ])
-    })
-
-    it('should override fallback nodes', () => {
-      // the same with `loadChildrenOptions`
-    })
-  })
-
   describe('normalizer', () => {
     it('customizing key names', () => {
       const wrapper = mount(Treeselect, {
@@ -1626,6 +1054,42 @@ describe('Props', () => {
         id: 'aa',
         label: 'aa',
       }))
+    })
+
+    it('with `loadOptions` prop', () => {
+      const wrapper = mount(Treeselect, {
+        propsData: {
+          options: [ {
+            key: 'a', // customized key
+            label: 'a',
+            subitems: null, // customized key
+          } ],
+          normalizer(node) {
+            return {
+              id: node.key,
+              children: node.subitems,
+            }
+          },
+          loadOptions({ action, parentNode, callback }) {
+            expect(action).toBe('LOAD_CHILDREN_OPTIONS')
+            expect(parentNode).toHaveMember('key')
+            expect(parentNode).toHaveMember('subitems')
+
+            parentNode.subitems = [ {
+              key: 'aa', // customized key
+              label: 'aa',
+            } ]
+            callback()
+          },
+        },
+        data: {
+          isOpen: true,
+        },
+      })
+      const { vm } = wrapper
+
+      vm.toggleExpanded(vm.nodeMap.a)
+      expect(vm.nodeMap.a.children).toBeNonEmptyArray()
     })
   })
 
@@ -1749,48 +1213,6 @@ describe('Props', () => {
   })
 
   describe('options', () => {
-    it('should warn about being absent', () => {
-      spyOn(console, 'error')
-
-      mount(Treeselect, {
-        propsData: {
-          options: null,
-        },
-      })
-
-      expect(console.error).toHaveBeenCalledWith(
-        '[Vue-Treeselect Warning]',
-        'Required prop `options` is not provided.'
-      )
-    })
-
-    it('should warn about non-array prop value', () => {
-      spyOn(console, 'error')
-
-      mount(Treeselect, {
-        propsData: {
-          options: {},
-        },
-      })
-
-      expect(console.error).toHaveBeenCalledWith(
-        '[Vue-Treeselect Warning]',
-        'Expected prop `options` to be an array, instead got: [object Object].'
-      )
-    })
-
-    it('can be omitted when `loadRootOptions` prop provided', () => {
-      spyOn(console, 'error')
-
-      mount(Treeselect, {
-        propsData: {
-          loadRootOptions() { /* empty */ },
-        },
-      })
-
-      expect(console.error).not.toHaveBeenCalled()
-    })
-
     it('show tip when `options` is an empty array', () => {
       const wrapper = mount(Treeselect, {
         propsData: {

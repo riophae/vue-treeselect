@@ -8,6 +8,10 @@ export const UNMATCHED = 0
 export const DESCENDANT_MATCHED = 1
 export const MATCHED = 2
 
+export const LOAD_ROOT_OPTIONS = 'LOAD_ROOT_OPTIONS'
+export const LOAD_CHILDREN_OPTIONS = 'LOAD_CHILDREN_OPTIONS'
+export const ASYNC_SEARCH = 'ASYNC_SEARCH'
+
 export const ALL = 'ALL'
 export const BRANCH_PRIORITY = 'BRANCH_PRIORITY'
 export const LEAF_PRIORITY = 'LEAF_PRIORITY'

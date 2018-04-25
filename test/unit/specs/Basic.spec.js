@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import { mount } from '@vue/test-utils'
+import sleep from 'yaku/lib/sleep'
 import Treeselect from '@riophae/vue-treeselect/components/Treeselect'
 
 describe('Basic', () => {
@@ -277,7 +278,7 @@ describe('Basic', () => {
             label: 'd',
             isBranch: true,
           } ],
-          loadChildrenOptions() { /* empty */ },
+          loadOptions() { /* empty */ },
         },
       })
       const { vm } = wrapper
@@ -670,29 +671,42 @@ describe('Basic', () => {
     })
   })
 
-  it('fallback nodes should not be considered duplicate', () => {
-    jasmine.clock().install()
+  it('fallback nodes should not be considered duplicate', async () => {
     spyOn(console, 'error')
 
-    const DELAY = 200
-    mount(Treeselect, {
-      propsData: {
-        value: 'a',
-        loadRootOptions(callback) {
+    const DELAY = 10
+    const vm = new Vue({
+      components: { Treeselect },
+      data: {
+        value: 'a', // <- this creates a fallback node
+        options: null,
+        loadOptions({ callback }) {
           setTimeout(() => {
-            callback(null, [ {
+            vm.options = [ {
               id: 'a',
               label: 'a',
-            } ])
+            } ]
+            callback()
           }, DELAY)
         },
       },
-    })
+      template: `
+        <div>
+          <treeselect
+            v-model="value"
+            :options="options"
+            :load-options="loadOptions"
+          />
+        </div>
+      `,
+    }).$mount()
+    const comp = vm.$children[0]
 
-    jasmine.clock().tick(DELAY + 1)
+    expect(comp.nodeMap.a.isFallbackNode).toBe(true)
+
+    await sleep(DELAY + 1)
     expect(console.error).not.toHaveBeenCalled()
-
-    jasmine.clock().uninstall()
+    expect(comp.nodeMap.a).not.toHaveMember('isFallbackNode')
   })
 
   it('should rebuild state after swithching from single to multiple', () => {

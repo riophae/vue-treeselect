@@ -31,14 +31,8 @@
     </div>
     <div v-if="isOpen" class="vue-treeselect__menu" ref="menu" :style="{ maxHeight: optimizedHeight + 'px' }">
       <template v-if="rootOptionsLoaded">
-        <div v-if="searching && noSearchResults" class="vue-treeselect__no-results-tip">
-          <div class="vue-treeselect__icon-wrapper"><span class="vue-treeselect__icon-warning" /></div>
-          <span class="vue-treeselect__no-results-tip-text">{{ noResultsText }}</span>
-        </div>
-        <div v-else-if="normalizedOptions.length === 0" class="vue-treeselect__no-options-tip">
-          <div class="vue-treeselect__icon-wrapper"><span class="vue-treeselect__icon-warning" /></div>
-          <span class="vue-treeselect__no-options-tip-text">{{ noOptionsText }}</span>
-        </div>
+        <tip v-if="searching && noSearchResults" type="no-results" icon="warning">{{ noResultsText }}</tip>
+        <tip v-else-if="normalizedOptions.length === 0" type="no-options" icon="warning">{{ noOptionsText }}</tip>
         <div v-else class="vue-treeselect__list">
           <treeselect-option
             v-for="rootNode in normalizedOptions"
@@ -58,19 +52,13 @@
         </div>
       </template>
       <template v-else>
-        <div v-if="loading || loadingRootOptions" class="vue-treeselect__loading-tip">
-          <div class="vue-treeselect__icon-wrapper"><span class="vue-treeselect__icon-loader" /></div>
-          <span class="vue-treeselect__loading-tip-text">{{ loadingText }}</span>
-        </div>
-        <div v-else-if="loadingRootOptionsError" class="vue-treeselect__error-tip">
-          <div class="vue-treeselect__icon-wrapper"><span class="vue-treeselect__icon-error" /></div>
-          <span class="vue-treeselect__error-tip-text">
-            Failed to load options: {{ loadingRootOptionsError }}.
-            <a class="vue-treeselect__retry" @click="loadOptions(true)" :title="retryTitle">
-              {{ retryText }}
-            </a>
-          </span>
-        </div>
+        <tip v-if="loading || loadingRootOptions" type="loading" icon="loader">{{ loadingText }}</tip>
+        <tip v-else-if="loadingRootOptionsError" type="error" icon="error">
+          {{ loadingRootOptionsError }}
+          <a class="vue-treeselect__retry" @click="loadRootOptions" :title="retryTitle">
+            {{ retryText }}
+          </a>
+        </tip>
       </template>
     </div>
   </div>
@@ -82,10 +70,11 @@
   import MultiValue from './MultiValue'
   import SingleValue from './SingleValue'
   import TreeselectOption from './Option'
+  import Tip from './Tip'
 
   export default {
     name: 'vue-treeselect',
-    components: { HiddenField, MultiValue, SingleValue, TreeselectOption },
+    components: { HiddenField, MultiValue, SingleValue, TreeselectOption, Tip },
     mixins: [ treeselectMixin ],
   }
 </script>
