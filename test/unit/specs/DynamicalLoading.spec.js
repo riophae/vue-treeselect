@@ -442,6 +442,42 @@ describe('Dynamical Loading', () => {
       vm.toggleExpanded(vm.nodeMap.a)
       expect(vm.nodeMap.a.loadingChildrenError).toBe('')
     })
+
+    it('should accept promises', async () => {
+      let called = false
+      const DELAY = 10
+      const wrapper = mount(Treeselect, {
+        propsData: {
+          options: [ {
+            id: 'a',
+            label: 'a',
+            children: null,
+          } ],
+          async loadOptions({ parentNode }) {
+            await sleep(DELAY)
+            if (called) {
+              parentNode.children = []
+            } else {
+              called = true
+              throw new Error('test')
+            }
+          },
+        },
+        data: {
+          isOpen: true,
+        },
+      })
+      const { vm } = wrapper
+
+      vm.toggleExpanded(vm.nodeMap.a)
+      await sleep(DELAY)
+      expect(vm.nodeMap.a.loadingChildrenError).toBe('test')
+
+      vm.toggleExpanded(vm.nodeMap.a)
+      vm.toggleExpanded(vm.nodeMap.a)
+      await sleep(DELAY)
+      expect(vm.nodeMap.a.isLoaded).toBe(true)
+    })
   })
 
   describe('Loading root options', () => {
@@ -742,6 +778,48 @@ describe('Dynamical Loading', () => {
 
       vm.openMenu()
       expect(vm.loadingRootOptionsError).toBe('test')
+    })
+
+    it('should accept promises', async () => {
+      let called = false
+      const DELAY = 10
+      const app = new Vue({
+        components: { Treeselect },
+        data: {
+          options: null,
+          async loadOptions() {
+            await sleep(DELAY)
+            if (called) {
+              app.options = [ {
+                id: 'a',
+                label: 'a',
+              } ]
+            } else {
+              called = true
+              throw new Error('test')
+            }
+          },
+        },
+        template: `
+          <div>
+            <treeselect
+              :options="options"
+              :load-options="loadOptions"
+              :auto-load-root-options= "false"
+              />
+          </div>
+        `,
+      }).$mount()
+      const vm = app.$children[0]
+
+      vm.openMenu()
+      await sleep(DELAY)
+      expect(vm.loadingRootOptionsError).toBe('test')
+
+      vm.closeMenu()
+      vm.openMenu()
+      await sleep(DELAY)
+      expect(vm.rootOptionsLoaded).toBe(true)
     })
   })
 })

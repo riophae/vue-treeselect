@@ -157,7 +157,7 @@
         description: 'Text displayed when a branch node is loading its children options.',
       }, {
         name: 'loadOptions',
-        type: `Fn(${makePropList([ 'action', 'callback', 'parentNode?', 'id' ])}) 🡒 ${code('void')}`,
+        type: `Fn(${makePropList([ 'action', 'callback', 'parentNode?', 'id' ])}) 🡒 (${code('void')} | Promise)`,
         defaultValue: NO_DEFAULT_VALUE,
         description: [
           `Used for dynamically loading options. See ${link('#delayed-loading')} for detailed information.`,

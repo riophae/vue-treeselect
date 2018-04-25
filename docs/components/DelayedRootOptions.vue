@@ -11,6 +11,7 @@
 <script>
   import { LOAD_ROOT_OPTIONS } from '@riophae/vue-treeselect'
 
+  const sleep = d => new Promise(r => setTimeout(r, d))
   let called = false
 
   export default {
@@ -18,7 +19,7 @@
       options: null,
     }),
     methods: {
-      loadOptions({ action, callback/*, id */ }) {
+      async loadOptions({ action/*, callback, id */ }) {
         // If you have multiple instances of vue-treeselect that
         // shares the same `loadRootOptions` function,
         // you can use the `id` argument (which is the `id` prop you passed)
@@ -26,18 +27,15 @@
 
         if (action === LOAD_ROOT_OPTIONS) {
           if (called) {
-            setTimeout(() => {
-              this.options = [ 'a', 'b', 'c', 'd', 'e' ].map(id => ({
-                id,
-                label: `option-${id}`,
-              }))
-              callback()
-            }, 2000)
+            await sleep(2000)
+            this.options = [ 'a', 'b', 'c', 'd', 'e' ].map(id => ({
+              id,
+              label: `option-${id}`,
+            }))
           } else {
+            await sleep(2000)
             called = true
-            setTimeout(() => {
-              callback(new Error('Failed to load options: test.'))
-            }, 2000)
+            throw new Error('Failed to load options: test.')
           }
         }
       },

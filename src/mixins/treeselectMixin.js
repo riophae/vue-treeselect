@@ -1259,29 +1259,30 @@ export default {
     },
 
     callLoadOptionsProp({ action, args, isPending, start, succeed, fail, end }) {
-      if (!this.loadOptions) {
+      if (!this.loadOptions || isPending()) {
         return
       }
 
-      if (isPending()) {
-        return
-      }
+      const callback = once(err => {
+        if (err) {
+          fail(err)
+        } else {
+          succeed()
+        }
+
+        end()
+      })
 
       start()
+      const result = this.loadOptions({ id: this.id, action, ...args, callback })
 
-      this.loadOptions({
-        id: this.id,
-        action,
-        ...args,
-        callback: once(err => {
-          if (err) {
-            fail(err)
-          } else {
-            succeed()
-          }
-          end()
-        }),
-      })
+      if (isPromise(result)) {
+        result.then(() => {
+          callback()
+        }, err => {
+          callback(err)
+        })
+      }
     },
 
     checkDuplication(node) {

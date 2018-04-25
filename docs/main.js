@@ -1,3 +1,4 @@
+import 'regenerator-runtime/runtime'
 import 'yaku/lib/global'
 import Vue from 'vue'
 import Treeselect from '../src'
