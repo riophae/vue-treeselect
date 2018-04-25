@@ -48,6 +48,15 @@ export function isPromise(x) {
   )
 }
 
+export function once(fn) {
+  let val
+  return (...args) => {
+    if (fn.called) return val
+    fn.called = true
+    return val = fn(...args)
+  }
+}
+
 export function createEmptyObjectWithoutPrototype() {
   return Object.create(null)
 }

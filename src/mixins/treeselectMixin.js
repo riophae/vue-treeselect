@@ -3,7 +3,7 @@ import fuzzysearch from 'fuzzysearch'
 import {
   warning,
   quickDiff, onlyOnLeftClick,
-  debounce, identity, constant, isPromise, createEmptyObjectWithoutPrototype,
+  debounce, identity, constant, isPromise, once, createEmptyObjectWithoutPrototype,
   assign, last, find, removeFromArray,
 } from '../utils'
 
@@ -1277,14 +1277,14 @@ export default {
         id: this.id,
         action,
         ...args,
-        callback(err) {
+        callback: once(err => {
           if (err) {
             fail(err)
           } else {
             succeed()
           }
           end()
-        },
+        }),
       })
     },
 

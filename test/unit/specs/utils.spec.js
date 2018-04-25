@@ -81,6 +81,20 @@ describe('Utils', () => {
     })
   })
 
+  describe('once', () => {
+    const { once } = utils
+
+    it('wrapped function can be executed only once', () => {
+      let n = 0
+      const fn = once(() => ++n)
+
+      for (let i = 0; i < 5; i++) {
+        expect(fn()).toBe(1)
+        expect(n).toBe(1)
+      }
+    })
+  })
+
   describe('deepExtend', () => {
     const { deepExtend } = utils
 

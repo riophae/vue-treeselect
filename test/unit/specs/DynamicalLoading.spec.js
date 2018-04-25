@@ -422,6 +422,30 @@ describe('Dynamical Loading', () => {
         callback: jasmine.any(Function),
       } ])
     })
+
+    it('callback can be executed only once', () => {
+      const wrapper = mount(Treeselect, {
+        propsData: {
+          options: [ {
+            id: 'a',
+            label: 'a',
+            children: null,
+          } ],
+          loadOptions({ parentNode, callback }) {
+            parentNode.children = []
+            callback()
+            callback(new Error('test')) // this will be ignored
+          },
+        },
+        data: {
+          isOpen: true,
+        },
+      })
+      const { vm } = wrapper
+
+      vm.toggleExpanded(vm.nodeMap.a)
+      expect(vm.nodeMap.a.loadingChildrenError).toBe('')
+    })
   })
 
   describe('Loading root options', () => {
@@ -706,6 +730,22 @@ describe('Dynamical Loading', () => {
         action: 'LOAD_ROOT_OPTIONS',
         callback: jasmine.any(Function),
       } ])
+    })
+
+    it('callback can be executed only once', () => {
+      const { vm } = mount(Treeselect, {
+        propsData: {
+          loadOptions({ callback }) {
+            callback(new Error('test'))
+            callback() // this will be ignored
+          },
+          options: null,
+          autoLoadRootOptions: false,
+        },
+      })
+
+      vm.openMenu()
+      expect(vm.loadingRootOptionsError).toBe('test')
     })
   })
 })
