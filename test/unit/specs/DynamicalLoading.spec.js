@@ -23,7 +23,7 @@ describe('Dynamical Loading', () => {
 
       expect(console.error).toHaveBeenCalledWith(
         '[Vue-Treeselect Warning]',
-        'Are you meant to dynamically loading options? You have to use `loadOptions` prop.',
+        'Are you meant to dynamically loading options? You need to use `loadOptions` prop.',
       )
     })
 
