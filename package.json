@@ -130,8 +130,7 @@
     "ui"
   ],
   "browserslist": [
-    "> 1%",
-    "Last 2 versions",
+    "> 0.25%",
     "IE >= 9"
   ],
   "size-limit": [
