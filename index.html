@@ -1,7 +1,7 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><title>Vue-Treeselect</title><meta name="description" content="A multi-select component with nested options for Vue.js"><meta property="og:title" content="Vue-Treeselect"><meta property="og:site_name" content="Vue-Treeselect"><meta property="og:url" content="https://vue-treeselect.js.org/"><meta property="og:description" content="A multi-select component with nested options for Vue.js"><meta property="og:image" content="https://vue-treeselect.js.org/static/vue-logo.png"><meta property="twitter:title" content="Vue-Treeselect"><meta property="twitter:description" content="A multi-select component with nested options for Vue.js"><meta property="twitter:image" content="https://vue-treeselect.js.org/static/vue-logo.png"><link rel="apple-touch-icon" sizes="57x57" href="/static/images/icons/apple-icon-57x57.png"><link rel="apple-touch-icon" sizes="60x60" href="/static/images/icons/apple-icon-60x60.png"><link rel="apple-touch-icon" sizes="72x72" href="/static/images/icons/apple-icon-72x72.png"><link rel="apple-touch-icon" sizes="76x76" href="/static/images/icons/apple-icon-76x76.png"><link rel="apple-touch-icon" sizes="114x114" href="/static/images/icons/apple-icon-114x114.png"><link rel="apple-touch-icon" sizes="120x120" href="/static/images/icons/apple-icon-120x120.png"><link rel="apple-touch-icon" sizes="144x144" href="/static/images/icons/apple-icon-144x144.png"><link rel="apple-touch-icon" sizes="152x152" href="/static/images/icons/apple-icon-152x152.png"><link rel="apple-touch-icon" sizes="180x180" href="/static/images/icons/apple-icon-180x180.png"><link rel="icon" type="image/png" sizes="192x192" href="/static/images/icons/android-icon-192x192.png"><link rel="icon" type="image/png" sizes="32x32" href="/static/images/icons/favicon-32x32.png"><link rel="icon" type="image/png" sizes="96x96" href="/static/images/icons/favicon-96x96.png"><link rel="icon" type="image/png" sizes="16x16" href="/static/images/icons/favicon-16x16.png"><meta name="msapplication-TileImage" content="/static/images/icons/ms-icon-144x144.png"><link rel="icon" href="/static/vue-logo.png" type="image/png"><meta name="msapplication-TileColor" content="#4fc08d"><meta name="theme-color" content="#4fc08d"><meta name="msapplication-config" content="browserconfig.xml"><!-- Global site tag (gtag.js) - Google Analytics--><script async src="https://www.googletagmanager.com/gtag/js?id=UA-108169693-1"></script><script>window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
-gtag('config', 'UA-108169693-1');</script><link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600|Dosis:300,500"><link href="static/css/app.7f8cb4d32cb69a3cd5c98c6b5235599c.css" rel="stylesheet"></head><body><div id="app"><header class="site-header"><div class="container" id="header"><div class="site-header-logo"><a class="site-header-logo-link" href="https://vue-treeselect.js.org/">Vue<span class="site-header-logo-component-name">Treeselect</span></a></div><nav class="site-header-nav"><a class="site-header-nav-item" href="https://github.com/riophae/vue-treeselect/releases">v0.0.23</a><span class="site-header-nav-item"><a class="github-button" href="https://github.com/riophae/vue-treeselect" data-show-count="true" aria-label="Star riophae/vue-treeselect on GitHub">Star</a></span></nav></div></header><div class="container"><section id="main"><div id="sidebar"><div class="sidebar-nav" :class="{ sticky: isNavSticky }"><section class="sidebar-nav-section"><h4 class="sidebar-nav-section-title">Introduction</h4><ul class="sidebar-nav-list"></ul></section><section class="sidebar-nav-section"><h4 class="sidebar-nav-section-title">Getting Started</h4><ul class="sidebar-nav-list"><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'installation' }"><a href="#installation">Installation</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'basic-usage' }"><a href="#basic-usage">Basic Usage</a></li></ul></section><section class="sidebar-nav-section"><h4 class="sidebar-nav-section-title">Guides</h4><ul class="sidebar-nav-list"><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'basic-features' }"><a href="#basic-features">Basic Features</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'more-features' }"><a href="#more-features">More Features</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'delayed-loading' }"><a href="#delayed-loading">Delayed Loading</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'flat-mode-and-sort-values' }"><a href="#flat-mode-and-sort-values">Flat Mode &amp; Sort Values</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'prevent-value-combining' }"><a href="#prevent-value-combining">Prevent Value Combining</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'disable-branch-nodes' }"><a href="#disable-branch-nodes">Disable Branch Nodes</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'disable-item-selection' }"><a href="#disable-item-selection">Disable Item Selection</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'nested-search' }"><a href="#nested-search">Nested Search</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'customize-key-names' }"><a href="#customize-key-names">Customize Key Names</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'customize-option-label' }"><a href="#customize-option-label">Customize Option Label</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'vuex-support' }"><a href="#vuex-support">Vuex Support</a></li></ul></section><section class="sidebar-nav-section"><h4 class="sidebar-nav-section-title">API</h4><ul class="sidebar-nav-list"><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'node' }"><a href="#node">Node</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'props' }"><a href="#props">Props</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'events' }"><a href="#events">Events</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'slots' }"><a href="#slots">Slots</a></li></ul></section></div></div><div id="content"><h1 id="introduction">Introduction<a class="anchor" href="#introduction"><anchor></anchor></a></h1><section><p><a href="https://github.com/riophae/vue-treeselect">vue-treeselect</a> is a multi-select component with nested options for <a href="https://www.vuejs.org">Vue.js 2</a>, featuring:</p>
+gtag('config', 'UA-108169693-1');</script><link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600|Dosis:300,500"><link href="static/css/app.8da851a538deaa440a53fd0f30276fc1.css" rel="stylesheet"></head><body><div id="app"><header class="site-header"><div class="container" id="header"><div class="site-header-logo"><a class="site-header-logo-link" href="https://vue-treeselect.js.org/">Vue<span class="site-header-logo-component-name">Treeselect</span></a></div><nav class="site-header-nav"><a class="site-header-nav-item" href="https://github.com/riophae/vue-treeselect/releases">v0.0.24</a><span class="site-header-nav-item"><a class="github-button" href="https://github.com/riophae/vue-treeselect" data-show-count="true" aria-label="Star riophae/vue-treeselect on GitHub">Star</a></span></nav></div></header><div class="container"><section id="main"><div id="sidebar"><div class="sidebar-nav" :class="{ sticky: isNavSticky }"><section class="sidebar-nav-section"><h4 class="sidebar-nav-section-title">Introduction</h4><ul class="sidebar-nav-list"></ul></section><section class="sidebar-nav-section"><h4 class="sidebar-nav-section-title">Getting Started</h4><ul class="sidebar-nav-list"><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'installation' }"><a href="#installation">Installation</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'basic-usage' }"><a href="#basic-usage">Basic Usage</a></li></ul></section><section class="sidebar-nav-section"><h4 class="sidebar-nav-section-title">Guides</h4><ul class="sidebar-nav-list"><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'basic-features' }"><a href="#basic-features">Basic Features</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'more-features' }"><a href="#more-features">More Features</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'delayed-loading' }"><a href="#delayed-loading">Delayed Loading</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'flat-mode-and-sort-values' }"><a href="#flat-mode-and-sort-values">Flat Mode &amp; Sort Values</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'prevent-value-combining' }"><a href="#prevent-value-combining">Prevent Value Combining</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'disable-branch-nodes' }"><a href="#disable-branch-nodes">Disable Branch Nodes</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'disable-item-selection' }"><a href="#disable-item-selection">Disable Item Selection</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'nested-search' }"><a href="#nested-search">Nested Search</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'customize-key-names' }"><a href="#customize-key-names">Customize Key Names</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'customize-option-label' }"><a href="#customize-option-label">Customize Option Label</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'vuex-support' }"><a href="#vuex-support">Vuex Support</a></li></ul></section><section class="sidebar-nav-section"><h4 class="sidebar-nav-section-title">API</h4><ul class="sidebar-nav-list"><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'node' }"><a href="#node">Node</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'props' }"><a href="#props">Props</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'events' }"><a href="#events">Events</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'slots' }"><a href="#slots">Slots</a></li></ul></section></div></div><div id="content"><h1 id="introduction">Introduction<a class="anchor" href="#introduction"><anchor></anchor></a></h1><section><p><a href="https://github.com/riophae/vue-treeselect">vue-treeselect</a> is a multi-select component with nested options for <a href="https://www.vuejs.org">Vue.js 2</a>, featuring:</p>
 <ul>
 <li>Single select</li>
 <li>Multiple select</li>
@@ -201,20 +201,22 @@ export default {
     },
   },
 }
-</code></template></demo></section><section><h2 id="delayed-loading" data-section>Delayed Loading<a class="anchor" href="#delayed-loading"><anchor></anchor></a></h2><p>If you have a large number of deeply nested options, you might want to load options only of the most top levels on initial load and load the rest only when needed. You can achieve that by following these steps:</p>
+</code></template></demo></section><section><h2 id="delayed-loading" data-section>Delayed Loading<a class="anchor" href="#delayed-loading"><anchor></anchor></a></h2><p>If you have a large number of deeply nested options, you might want to load options only of the most top levels on initial load, and load the rest only when needed. You can achieve that by following these steps:</p>
 <ol>
-<li>Declare an <em>unloaded</em> branch node by setting <code>children: null</code> or <code>isBranch: true</code></li>
-<li>Provide a <code>loadChildrenOptions</code> prop</li>
-<li>Whenever an unloaded branch node gets expanded, <code>loadChildrenOptions(parentNode, callback, id)</code> will be called within which you can perform the job requesting data from a remote server</li>
+<li>Declare an <em>unloaded</em> branch node by setting <code>children: null</code></li>
+<li>Add <code>loadOptions</code> prop</li>
+<li>Whenever an unloaded branch node gets expanded, <code>loadOptions({ action, parentNode, callback, id })</code> will be called, then you can perform the job requesting data from a remote server</li>
 </ol>
 <demo><delayed-loading slot="demo"></delayed-loading><template slot="html"><code v-pre>&lt;treeselect
   :multiple=&quot;true&quot;
   :options=&quot;options&quot;
-  :load-children-options=&quot;loadChildrenOptions&quot;
+  :load-options=&quot;loadOptions&quot;
   placeholder=&quot;Try expanding any folder option...&quot;
   v-model=&quot;value&quot;
   /&gt;
-</code></template><template slot="javascript"><code v-pre>export default {
+</code></template><template slot="javascript"><code v-pre>import { LOAD_CHILDREN_OPTIONS } from '@riophae/vue-treeselect'
+
+export default {
   data: () =&gt; ({
     value: null,
     options: [ {
@@ -225,8 +227,7 @@ export default {
     }, {
       id: 'no-children',
       label: 'With no children',
-      // alternative approach
-      isBranch: true,
+      children: null,
     }, {
       id: 'failure',
       label: 'Demonstrates error handling',
@@ -235,61 +236,80 @@ export default {
   }),
 
   methods: {
-    loadChildrenOptions(parent, callback/*, id */) {
+    loadOptions({ action, parentNode, callback/*, id */ }) {
       // Typically, do the AJAX stuff here.
-      // Once the server has responded, call the callback with received data.
+      // Once the server has responded,
+      // assign children options to the parent node &amp; call the callback.
       // We just use `setTimeout()` here to simulate an async operation
       // instead of requesting a real API server for demo purpose.
-      switch (parent.id) {
-      case 'success': {
-        const children = [ {
-          id: 'child',
-          label: 'Child option',
-        } ]
-        setTimeout(() =&gt; callback(null, children), 2000)
-        break
-      }
-      case 'no-children': {
-        setTimeout(() =&gt; callback(null, []), 2000)
-        break
-      }
-      case 'failure': {
-        setTimeout(() =&gt; callback(new Error('Network error')), 2000)
-        break
-      }
-      default: /* Empty */
+
+      if (action === LOAD_CHILDREN_OPTIONS) {
+        switch (parentNode.id) {
+        case 'success': {
+          setTimeout(() =&gt; {
+            parentNode.children = [ {
+              id: 'child',
+              label: 'Child option',
+            } ]
+            callback()
+          }, 2000)
+          break
+        }
+        case 'no-children': {
+          setTimeout(() =&gt; {
+            parentNode.children = []
+            callback()
+          }, 2000)
+          break
+        }
+        case 'failure': {
+          setTimeout(() =&gt; {
+            callback(new Error('Failed to load options: network error.'))
+          }, 2000)
+          break
+        }
+        default: /* empty */
+        }
       }
     },
   },
 }
-</code></template></demo><p>If you want the root level options to be delayed loaded as well, omit the <code>options</code> prop and provide an extra <code>loadRootOptions</code> prop. By default, vue-treeselect will try loading root options by calling <code>loadRootOptions(callback, id)</code> after the component is mounted. In this example I have disabled that feature, and root options will be loaded when the menu is opened.</p>
+</code></template></demo><p>It's also possible to have root level options to be delayed loaded. If no options have been initially registered (<code>options: null</code>), vue-treeselect will attempt to load root options by calling <code>loadOptions({ action, callback, id })</code> after the component is mounted. In this example I have disabled the auto loading feature by setting <code>autoLoadRootOptions: false</code>, and root options will be loaded when the menu is opened.</p>
 <demo><delayed-root-options slot="demo"></delayed-root-options><template slot="html"><code v-pre>&lt;treeselect
-  :load-root-options=&quot;loadRootOptions&quot;
+  :load-options=&quot;loadOptions&quot;
+  :options=&quot;options&quot;
   :auto-load-root-options=&quot;false&quot;
   :multiple=&quot;true&quot;
+  placeholder=&quot;Open the menu...&quot;
   /&gt;
-</code></template><template slot="javascript"><code v-pre>let called = false
+</code></template><template slot="javascript"><code v-pre>import { LOAD_ROOT_OPTIONS } from '@riophae/vue-treeselect'
+
+const sleep = d =&gt; new Promise(r =&gt; setTimeout(r, d))
+let called = false
 
 export default {
+  data: () =&gt; ({
+    options: null,
+  }),
   methods: {
-    loadRootOptions(callback/*, id */) {
+    async loadOptions({ action/*, callback, id */ }) {
       // If you have multiple instances of vue-treeselect that
       // shares the same `loadRootOptions` function,
       // you can use the `id` argument (which is the `id` prop you passed)
       // to identify the origin.
-      if (called) {
-        const rootOptions = [ {
-          id: 'a',
-          label: 'a',
-          children: [],
-        }, {
-          id: 'b',
-          label: 'b',
-        } ]
-        setTimeout(() =&gt; callback(null, rootOptions), 2000)
-      } else {
-        called = true
-        setTimeout(() =&gt; callback(new Error('test')), 2000)
+
+      if (action === LOAD_ROOT_OPTIONS) {
+        if (called) {
+          await sleep(2000)
+          this.options = [ 'a', 'b', 'c', 'd', 'e' ].map(id =&gt; ({
+            id,
+            label: `option-${id}`,
+          }))
+        } else {
+          await sleep(2000)
+          called = true
+          throw new Error('Failed to load options: test.')
+        }
       }
     },
   },
@@ -619,4 +639,4 @@ export default {
     ...mapMutations([ 'updateValue' ]),
   },
 }
-</code></template></demo></section><h1 id="api">API<a class="anchor" href="#api"><anchor></anchor></a></h1><section><h2 id="node" data-section>Node<a class="anchor" href="#node"><anchor></anchor></a></h2><doc-node></doc-node></section><section><h2 id="props" data-section>Props<a class="anchor" href="#props"><anchor></anchor></a></h2><doc-props></doc-props></section><section><h2 id="events" data-section>Events<a class="anchor" href="#events"><anchor></anchor></a></h2><doc-events></doc-events></section><section><h2 id="slots" data-section>Slots<a class="anchor" href="#slots"><anchor></anchor></a></h2><doc-slots></doc-slots></section></div></section></div><footer class="site-footer"><div class="container">Copyright &copy; 2017-2018 <a href="https://github.com/riophae">Riophae Lee</a>. MIT Licensed.</div></footer></div><script src="https://buttons.github.io/buttons.js" async defer="defer"></script><script src="static/prism.min.js"></script><script type="text/javascript" src="static/js/manifest.37a2ecbb1d1b7e6c9ada.js"></script><script type="text/javascript" src="static/js/vendor.87097b31c0af7a3b5adb.js"></script><script type="text/javascript" src="static/js/app.4939a4ac4ca978655028.js"></script></body></html>
+</code></template></demo></section><h1 id="api">API<a class="anchor" href="#api"><anchor></anchor></a></h1><section><h2 id="node" data-section>Node<a class="anchor" href="#node"><anchor></anchor></a></h2><doc-node></doc-node></section><section><h2 id="props" data-section>Props<a class="anchor" href="#props"><anchor></anchor></a></h2><doc-props></doc-props></section><section><h2 id="events" data-section>Events<a class="anchor" href="#events"><anchor></anchor></a></h2><doc-events></doc-events></section><section><h2 id="slots" data-section>Slots<a class="anchor" href="#slots"><anchor></anchor></a></h2><doc-slots></doc-slots></section></div></section></div><footer class="site-footer"><div class="container">Copyright &copy; 2017-2018 <a href="https://github.com/riophae">Riophae Lee</a>. MIT Licensed.</div></footer></div><script src="https://buttons.github.io/buttons.js" async defer="defer"></script><script src="static/prism.min.js"></script><script type="text/javascript" src="static/js/manifest.37a2ecbb1d1b7e6c9ada.js"></script><script type="text/javascript" src="static/js/vendor.65bf4e91e32c7b1ba082.js"></script><script type="text/javascript" src="static/js/app.4f96d1d0b5e04a5f3376.js"></script></body></html>
