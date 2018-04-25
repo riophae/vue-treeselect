@@ -952,7 +952,7 @@ export default {
         result.then(handler)
       } else {
         // keep the same behavior here
-        setTimeout(handler, 0, result)
+        setTimeout(() => handler(result), 0)
       }
     }),
 
