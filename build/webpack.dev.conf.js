@@ -2,9 +2,8 @@ const webpack = require('webpack')
 const merge = require('webpack-merge')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
-const config = require('../config')
-const utils = require('./utils')
 const baseWebpackConfig = require('./webpack.base.conf')
+const utils = require('./utils')
 
 // add hot-reload related code to entry chunks
 Object.keys(baseWebpackConfig.entry).forEach(name => {
@@ -12,27 +11,27 @@ Object.keys(baseWebpackConfig.entry).forEach(name => {
 })
 
 module.exports = merge(baseWebpackConfig, {
+  mode: 'development',
   module: {
-    rules: utils.styleLoaders({
-      sourceMap: config.dev.cssSourceMap,
-      usePostCSS: true,
-    }),
+    rules: [
+      utils.styleLoaders({
+        ext: 'less',
+        usePostCSS: true,
+      }),
+    ],
   },
   // cheap-module-eval-source-map is faster for development
   devtool: '#cheap-module-eval-source-map',
   plugins: [
-    new webpack.DefinePlugin({
-      'process.env': config.dev.env,
-    }),
     // https://github.com/glenjamin/webpack-hot-middleware#installation--usage
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoEmitOnErrorsPlugin(),
     // https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
-      filename: 'index.html',
       template: './docs/index.pug',
-      inject: true,
     }),
     new FriendlyErrorsPlugin(),
   ],
+  optimization: {
+    noEmitOnErrors: true,
+  },
 })

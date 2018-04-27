@@ -1,15 +1,19 @@
+const webpack = require('webpack')
 const merge = require('webpack-merge')
 const nodeExternals = require('webpack-node-externals')
-const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const OptimizeJsPlugin = require('optimize-js-plugin')
 const config = require('../config')
 const base = require('./webpack.base.conf')
 const utils = require('./utils')
+const banner = require('./banner')
 
 base.entry = {
   VueTreeselect: './src/index.js',
 }
 
 const webpackConfig = merge(base, {
+  mode: 'none',
   output: {
     path: config.bundle.assetsRoot,
     publicPath: config.bundle.assetsPublicPath,
@@ -18,19 +22,38 @@ const webpackConfig = merge(base, {
     libraryTarget: config.bundle.dev.libraryTarget,
   },
   module: {
-    rules: utils.styleLoaders({
-      sourceMap: config.bundle.dev.productionSourceMap,
-      usePostCSS: true,
-      extract: true,
-    }),
+    rules: [
+      utils.styleLoaders({
+        ext: 'less',
+        usePostCSS: true,
+        sourceMap: config.bundle.dev.productionSourceMap,
+        extract: true,
+      }),
+    ],
   },
   externals: [ nodeExternals() ],
   devtool: config.bundle.dev.productionSourceMap ? '#source-map' : false,
   plugins: [
-    new ExtractTextPlugin({
+    new MiniCssExtractPlugin({
       filename: config.bundle.dev.cssFilename,
+      chunkFilename: '[id].css',
     }),
+    new webpack.BannerPlugin(banner),
   ],
+  optimization: {
+    nodeEnv: false,
+    noEmitOnErrors: true,
+    removeEmptyChunks: true,
+    mergeDuplicateChunks: true,
+    flagIncludedChunks: true,
+    occurrenceOrder: true,
+    sideEffects: true,
+    minimizer: [
+      new OptimizeJsPlugin({
+        sourceMap: config.bundle.dev.productionSourceMap,
+      }),
+    ],
+  },
 })
 
 if (config.bundle.bundleAnalyzerReport) {

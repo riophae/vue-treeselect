@@ -1,9 +1,9 @@
 const webpack = require('webpack')
 const merge = require('webpack-merge')
-const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const OptimizeJsPlugin = require('optimize-js-plugin')
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const config = require('../config')
 const base = require('./webpack.base.conf')
 const utils = require('./utils')
@@ -14,6 +14,7 @@ base.entry = {
 }
 
 const webpackConfig = merge(base, {
+  mode: 'production',
   output: {
     path: config.bundle.assetsRoot,
     publicPath: config.bundle.assetsPublicPath,
@@ -22,38 +23,42 @@ const webpackConfig = merge(base, {
     libraryTarget: config.bundle.prod.libraryTarget,
   },
   module: {
-    rules: utils.styleLoaders({
-      sourceMap: config.bundle.prod.productionSourceMap,
-      usePostCSS: true,
-      extract: true,
-    }),
+    rules: [
+      utils.styleLoaders({
+        ext: 'less',
+        usePostCSS: true,
+        sourceMap: config.bundle.prod.productionSourceMap,
+        extract: true,
+      }),
+    ],
   },
   devtool: config.bundle.prod.productionSourceMap ? '#source-map' : false,
   plugins: [
-    new webpack.DefinePlugin({
-      'process.env': config.bundle.prod.env,
-    }),
-    new UglifyJsPlugin({
-      uglifyOptions: {
-        compress: { warnings: false },
-      },
-      sourceMap: config.bundle.prod.productionSourceMap,
-      parallel: true,
-    }),
-    new OptimizeJsPlugin({
-      sourceMap: config.bundle.prod.productionSourceMap,
-    }),
-    new ExtractTextPlugin({
+    new MiniCssExtractPlugin({
       filename: config.bundle.prod.cssFilename,
-    }),
-    new OptimizeCSSPlugin({
-      cssProcessorOptions: {
-        reduceIdents: false,
-        safe: true,
-      },
+      chunkFilename: '[id].css',
     }),
     new webpack.BannerPlugin(banner),
   ],
+  optimization: {
+    minimizer: [
+      new UglifyJsPlugin({
+        uglifyOptions: {
+          compress: { warnings: false },
+        },
+        sourceMap: config.bundle.prod.productionSourceMap,
+        parallel: true,
+      }),
+      new OptimizeJsPlugin({
+        sourceMap: config.bundle.prod.productionSourceMap,
+      }),
+      new OptimizeCSSPlugin({
+        cssProcessorOptions: {
+          reduceIdents: false,
+        },
+      }),
+    ],
+  },
 })
 
 if (config.bundle.bundleAnalyzerReport) {

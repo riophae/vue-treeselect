@@ -11,6 +11,15 @@
 - function startCase(name) {
 -   return name.replace(/\s/g, '')
 - }
+- function loadSFCSource(name, type) {
+-   const stripIndent = require('strip-indent')
+-   const source = require(`!raw-loader!./components/${name}.vue`)
+-   const startTag = `<${type}>`
+-   const endTag = `</${type}>`
+-   const start = source.indexOf(startTag) + startTag.length
+-   const end = source.indexOf(endTag)
+-   return stripIndent(source.slice(start, end).replace(/^\n+/, ''))
+- }
 - const toc = []
 
 mixin section(name)
@@ -36,9 +45,9 @@ mixin demo(name)
   demo
     #{kebabCase(name)}(slot="demo")
     template(slot="html")
-      code(v-pre)=require('!!raw-loader!vue-loader/lib/selector?type=template!./components/' + name + '.vue').replace(/^\n*/, '')
+      code(v-pre)=loadSFCSource(name, 'template')
     template(slot="javascript")
-      code(v-pre)=require('!!raw-loader!vue-loader/lib/selector?type=script!./components/' + name + '.vue').replace(/^[\/\n]*/m, '')
+      code(v-pre)=loadSFCSource(name, 'script')
 
 mixin renderToc()
   - const tocSwapBuffer = pug_html

@@ -1,5 +1,5 @@
 const path = require('path')
-const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const config = require('../config')
 
 exports.assetsPath = _path => {
@@ -9,65 +9,39 @@ exports.assetsPath = _path => {
   return path.posix.join(assetsSubDirectory, _path)
 }
 
-exports.cssLoaders = options => {
-  options = options || {}
-
-  const cssLoader = {
+exports.styleLoaders = options => {
+  const loaders = [ {
     loader: 'css-loader',
     options: {
+      importLoaders: 1,
       sourceMap: options.sourceMap,
     },
+  } ]
+
+  if (options.usePostCSS) {
+    loaders.push({
+      loader: 'postcss-loader',
+      options: {
+        sourceMap: options.sourceMap,
+      },
+    })
   }
 
-  const postcssLoader = {
-    loader: 'postcss-loader',
+  loaders.push({
+    loader: `${options.ext}-loader`,
     options: {
       sourceMap: options.sourceMap,
     },
+  })
+
+  if (options.extract) {
+    loaders.unshift(MiniCssExtractPlugin.loader)
+  } else {
+    loaders.unshift('vue-style-loader')
   }
 
-  // generate loader string to be used with extract text plugin
-  function generateLoaders(loader, loaderOptions) {
-    const loaders = options.usePostCSS ? [ cssLoader, postcssLoader ] : [ cssLoader ]
-
-    if (loader) {
-      loaders.push({
-        loader: loader + '-loader',
-        options: Object.assign({}, loaderOptions, {
-          sourceMap: options.sourceMap,
-        }),
-      })
-    }
-
-    // Extract CSS when that option is specified
-    // (which is the case during production build)
-    if (options.extract) {
-      return ExtractTextPlugin.extract({
-        use: loaders,
-        fallback: 'vue-style-loader',
-      })
-    } else {
-      return [ 'vue-style-loader' ].concat(loaders)
-    }
-  }
-
-  // https://vue-loader.vuejs.org/en/configurations/extract-css.html
   return {
-    css: generateLoaders(),
-    postcss: generateLoaders(),
-    less: generateLoaders('less'),
-    sass: generateLoaders('sass', { indentedSyntax: true }),
-    scss: generateLoaders('sass'),
-    stylus: generateLoaders('stylus'),
-    styl: generateLoaders('stylus'),
+    test: new RegExp(`\\.${options.ext}$`),
+    use: loaders,
   }
-}
-
-// Generate loaders for standalone style files (outside of .vue)
-exports.styleLoaders = function styleLoaders(options) {
-  const loaders = exports.cssLoaders(options)
-  return Object.keys(loaders).map(extension => ({
-    test: new RegExp('\\.' + extension + '$'),
-    loader: loaders[extension],
-  }))
 }
