@@ -83,7 +83,7 @@ The component will be exposed as `window.VueTreeselect.Treeselect`. Note that, V
   }
 </script>
 
-<style src="@riophae/vue-treeselect/dist/vue-treeselect.min.css"></style>
+<style src="@riophae/vue-treeselect/dist/vue-treeselect.css"></style>
 ```
 
 ### Documentation & Live Demo
