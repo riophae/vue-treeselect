@@ -1,7 +1,100 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><title>Vue-Treeselect</title><meta name="description" content="A multi-select component with nested options for Vue.js"><meta property="og:title" content="Vue-Treeselect"><meta property="og:site_name" content="Vue-Treeselect"><meta property="og:url" content="https://vue-treeselect.js.org/"><meta property="og:description" content="A multi-select component with nested options for Vue.js"><meta property="og:image" content="https://vue-treeselect.js.org/static/vue-logo.png"><meta property="twitter:title" content="Vue-Treeselect"><meta property="twitter:description" content="A multi-select component with nested options for Vue.js"><meta property="twitter:image" content="https://vue-treeselect.js.org/static/vue-logo.png"><link rel="apple-touch-icon" sizes="57x57" href="/static/images/icons/apple-icon-57x57.png"><link rel="apple-touch-icon" sizes="60x60" href="/static/images/icons/apple-icon-60x60.png"><link rel="apple-touch-icon" sizes="72x72" href="/static/images/icons/apple-icon-72x72.png"><link rel="apple-touch-icon" sizes="76x76" href="/static/images/icons/apple-icon-76x76.png"><link rel="apple-touch-icon" sizes="114x114" href="/static/images/icons/apple-icon-114x114.png"><link rel="apple-touch-icon" sizes="120x120" href="/static/images/icons/apple-icon-120x120.png"><link rel="apple-touch-icon" sizes="144x144" href="/static/images/icons/apple-icon-144x144.png"><link rel="apple-touch-icon" sizes="152x152" href="/static/images/icons/apple-icon-152x152.png"><link rel="apple-touch-icon" sizes="180x180" href="/static/images/icons/apple-icon-180x180.png"><link rel="icon" type="image/png" sizes="192x192" href="/static/images/icons/android-icon-192x192.png"><link rel="icon" type="image/png" sizes="32x32" href="/static/images/icons/favicon-32x32.png"><link rel="icon" type="image/png" sizes="96x96" href="/static/images/icons/favicon-96x96.png"><link rel="icon" type="image/png" sizes="16x16" href="/static/images/icons/favicon-16x16.png"><meta name="msapplication-TileImage" content="/static/images/icons/ms-icon-144x144.png"><link rel="icon" href="/static/vue-logo.png" type="image/png"><meta name="msapplication-TileColor" content="#4fc08d"><meta name="theme-color" content="#4fc08d"><meta name="msapplication-config" content="browserconfig.xml"><!-- Global site tag (gtag.js) - Google Analytics--><script async src="https://www.googletagmanager.com/gtag/js?id=UA-108169693-1"></script><script>window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('config', 'UA-108169693-1');</script><link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600|Dosis:300,500"><link href="static/css/app.8da851a538deaa440a53fd0f30276fc1.css" rel="stylesheet"></head><body><div id="app"><header class="site-header"><div class="container" id="header"><div class="site-header-logo"><a class="site-header-logo-link" href="https://vue-treeselect.js.org/">Vue<span class="site-header-logo-component-name">Treeselect</span></a></div><nav class="site-header-nav"><a class="site-header-nav-item" href="https://github.com/riophae/vue-treeselect/releases">v0.0.24</a><span class="site-header-nav-item"><a class="github-button" href="https://github.com/riophae/vue-treeselect" data-show-count="true" aria-label="Star riophae/vue-treeselect on GitHub">Star</a></span></nav></div></header><div class="container"><section id="main"><div id="sidebar"><div class="sidebar-nav" :class="{ sticky: isNavSticky }"><section class="sidebar-nav-section"><h4 class="sidebar-nav-section-title">Introduction</h4><ul class="sidebar-nav-list"></ul></section><section class="sidebar-nav-section"><h4 class="sidebar-nav-section-title">Getting Started</h4><ul class="sidebar-nav-list"><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'installation' }"><a href="#installation">Installation</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'basic-usage' }"><a href="#basic-usage">Basic Usage</a></li></ul></section><section class="sidebar-nav-section"><h4 class="sidebar-nav-section-title">Guides</h4><ul class="sidebar-nav-list"><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'basic-features' }"><a href="#basic-features">Basic Features</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'more-features' }"><a href="#more-features">More Features</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'delayed-loading' }"><a href="#delayed-loading">Delayed Loading</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'flat-mode-and-sort-values' }"><a href="#flat-mode-and-sort-values">Flat Mode &amp; Sort Values</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'prevent-value-combining' }"><a href="#prevent-value-combining">Prevent Value Combining</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'disable-branch-nodes' }"><a href="#disable-branch-nodes">Disable Branch Nodes</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'disable-item-selection' }"><a href="#disable-item-selection">Disable Item Selection</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'nested-search' }"><a href="#nested-search">Nested Search</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'customize-key-names' }"><a href="#customize-key-names">Customize Key Names</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'customize-option-label' }"><a href="#customize-option-label">Customize Option Label</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'vuex-support' }"><a href="#vuex-support">Vuex Support</a></li></ul></section><section class="sidebar-nav-section"><h4 class="sidebar-nav-section-title">API</h4><ul class="sidebar-nav-list"><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'node' }"><a href="#node">Node</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'props' }"><a href="#props">Props</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'events' }"><a href="#events">Events</a></li><li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'slots' }"><a href="#slots">Slots</a></li></ul></section></div></div><div id="content"><h1 id="introduction">Introduction<a class="anchor" href="#introduction"><anchor></anchor></a></h1><section><p><a href="https://github.com/riophae/vue-treeselect">vue-treeselect</a> is a multi-select component with nested options for <a href="https://www.vuejs.org">Vue.js 2</a>, featuring:</p>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+    <title>Vue-Treeselect</title>
+    <meta name="description" content="A multi-select component with nested options for Vue.js">
+    <meta property="og:title" content="Vue-Treeselect">
+    <meta property="og:site_name" content="Vue-Treeselect">
+    <meta property="og:url" content="https://vue-treeselect.js.org/">
+    <meta property="og:description" content="A multi-select component with nested options for Vue.js">
+    <meta property="og:image" content="https://vue-treeselect.js.org/static/vue-logo.png">
+    <meta property="twitter:title" content="Vue-Treeselect">
+    <meta property="twitter:description" content="A multi-select component with nested options for Vue.js">
+    <meta property="twitter:image" content="https://vue-treeselect.js.org/static/vue-logo.png">
+    <link rel="apple-touch-icon" sizes="57x57" href="/static/images/icons/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/static/images/icons/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/static/images/icons/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/static/images/icons/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/static/images/icons/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/static/images/icons/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/static/images/icons/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/static/images/icons/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/images/icons/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/static/images/icons/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/images/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/static/images/icons/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/images/icons/favicon-16x16.png">
+    <meta name="msapplication-TileImage" content="/static/images/icons/ms-icon-144x144.png">
+    <link rel="icon" href="/static/vue-logo.png" type="image/png">
+    <meta name="msapplication-TileColor" content="#4fc08d">
+    <meta name="theme-color" content="#4fc08d">
+    <meta name="msapplication-config" content="browserconfig.xml">
+    <!-- Global site tag (gtag.js) - Google Analytics-->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-108169693-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-108169693-1');
+    </script>
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600|Dosis:300,500">
+  <link href="static/css/app.6d2623d03cd024c1215d.css" rel="stylesheet"></head>
+  <body>
+    <div id="app">
+      <header class="site-header">
+        <div class="container" id="header">
+          <div class="site-header-logo"><a class="site-header-logo-link" href="https://vue-treeselect.js.org/">Vue<span class="site-header-logo-component-name">Treeselect</span></a></div>
+          <nav class="site-header-nav"><a class="site-header-nav-item" href="https://github.com/riophae/vue-treeselect/releases">v0.0.24</a><span class="site-header-nav-item"><a class="github-button" href="https://github.com/riophae/vue-treeselect" data-show-count="true" aria-label="Star riophae/vue-treeselect on GitHub">Star</a></span></nav>
+        </div>
+      </header>
+      <div class="container">
+        <section id="main">
+          <div id="sidebar">
+<div class="sidebar-nav" :class="{ sticky: isNavSticky }">
+<section class="sidebar-nav-section">
+  <h4 class="sidebar-nav-section-title">Introduction</h4>
+  <ul class="sidebar-nav-list">
+  </ul>
+</section>
+<section class="sidebar-nav-section">
+  <h4 class="sidebar-nav-section-title">Getting Started</h4>
+  <ul class="sidebar-nav-list">
+  </ul>
+</section>
+<section class="sidebar-nav-section">
+  <h4 class="sidebar-nav-section-title">Guides</h4>
+  <ul class="sidebar-nav-list">
+    <li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'basic-features' }"><a href="#basic-features">Basic Features</a></li>
+    <li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'more-features' }"><a href="#more-features">More Features</a></li>
+    <li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'delayed-loading' }"><a href="#delayed-loading">Delayed Loading</a></li>
+    <li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'flat-mode-and-sort-values' }"><a href="#flat-mode-and-sort-values">Flat Mode &amp; Sort Values</a></li>
+    <li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'prevent-value-combining' }"><a href="#prevent-value-combining">Prevent Value Combining</a></li>
+    <li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'disable-branch-nodes' }"><a href="#disable-branch-nodes">Disable Branch Nodes</a></li>
+    <li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'disable-item-selection' }"><a href="#disable-item-selection">Disable Item Selection</a></li>
+    <li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'nested-search' }"><a href="#nested-search">Nested Search</a></li>
+    <li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'customize-key-names' }"><a href="#customize-key-names">Customize Key Names</a></li>
+    <li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'customize-option-label' }"><a href="#customize-option-label">Customize Option Label</a></li>
+    <li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'vuex-support' }"><a href="#vuex-support">Vuex Support</a></li>
+  </ul>
+</section>
+<section class="sidebar-nav-section">
+  <h4 class="sidebar-nav-section-title">API</h4>
+  <ul class="sidebar-nav-list">
+    <li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'node' }"><a href="#node">Node</a></li>
+    <li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'props' }"><a href="#props">Props</a></li>
+    <li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'events' }"><a href="#events">Events</a></li>
+    <li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'slots' }"><a href="#slots">Slots</a></li>
+  </ul>
+</section>
+</div>
+          </div>
+          <div id="content">
+            <h1 id="introduction">Introduction<a class="anchor" href="#introduction">
+                <anchor></anchor></a>
+            </h1>
+            <section><p><a href="https://github.com/riophae/vue-treeselect">vue-treeselect</a> is a multi-select component with nested options for <a href="https://www.vuejs.org">Vue.js 2</a>, featuring:</p>
 <ul>
 <li>Single select</li>
 <li>Multiple select</li>
@@ -11,62 +104,114 @@ gtag('config', 'UA-108169693-1');</script><link rel="stylesheet" type="text/css"
 <li>Vuex support</li>
 <li>Rich options &amp; highly customizable</li>
 <li>Supports <a href="https://github.com/riophae/vue-treeselect#browser-compatibility">a wide range of browsers</a></li>
-<li>&gt; 95% test coverage</li>
 </ul>
 <p><em>Requires Vue 2.2+</em></p>
-</section><h1 id="getting-started">Getting Started<a class="anchor" href="#getting-started"><anchor></anchor></a></h1><section><h2 id="installation" data-section>Installation<a class="anchor" href="#installation"><anchor></anchor></a></h2><p><strong>Install vue-treeselect using npm:</strong></p>
-<pre><code class="language-shell">$ npm install --save @riophae/vue-treeselect
+
+            </section>
+            <h1 id="getting-started">Getting Started<a class="anchor" href="#getting-started">
+                <anchor></anchor></a>
+            </h1>
+            <section>
+              <p>It's recommended to install vue-treeselect from npm, and build your app using a bundler like <a href="https://webpack.js.org/">webpack</a>.</p>
+<pre><code class="language-bash">npm install --save @riophae/vue-treeselect
 </code></pre>
-<p><strong>Or via yarn:</strong></p>
-<pre><code class="language-shell">$ yarn add @riophae/vue-treeselect
-</code></pre>
-<p><strong>Or via CDN:</strong></p>
-<pre><code class="language-html">&lt;script src=&quot;https://unpkg.com/@riophae/vue-treeselect@^0.1.0&quot;&gt;&lt;/script&gt;
-&lt;link rel=&quot;stylesheet&quot; href=&quot;https://unpkg.com/@riophae/vue-treeselect@^0.1.0?main=css&quot;&gt;
-</code></pre>
-<p>The component will be exposed as <code>window.VueTreeselect.Treeselect</code>. Note that, Vue as a dependency should be included before vue-treeselect.</p>
-</section><section><h2 id="basic-usage" data-section>Basic Usage<a class="anchor" href="#basic-usage"><anchor></anchor></a></h2><pre><code class="language-html">&lt;!-- Vue component --&gt;
+              <p>This example shows how to integrate vue-treeselect with your <a href="https://vuejs.org/v2/guide/single-file-components.html">Vue SFCs</a>.</p>
+<pre><code class="language-html">&lt;!-- Vue SFC --&gt;
 &lt;template&gt;
-  &lt;treeselect
-    v-model=&quot;value&quot;
-    :multiple=&quot;true&quot;
-    :options=&quot;source&quot;
-    /&gt;
+  &lt;treeselect v-model=&quot;value&quot; :multiple=&quot;true&quot; :options=&quot;options&quot; /&gt;
 &lt;/template&gt;
 
 &lt;script&gt;
+  // import the component
   import Treeselect from '@riophae/vue-treeselect'
+  // import the styles
+  import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 
   export default {
+    // register the component
     components: { Treeselect },
-    data: {
-      value: null,
-      source: [
-        {
-          id: 'node-1',
-          label: 'Node 1',
-          children: [
-            {
-              id: 'node-1-a',
-              label: 'Node 1-A',
-            },
-            ...
-          ],
-        },
-        {
-          id: 'node-2',
-          label: 'Node 2',
-        },
-        ...
-      ],
+    data() {
+      return {
+        value: null,
+        options: [ {
+          id: 'a',
+          label: 'a',
+          children: [ {
+            id: 'aa',
+            label: 'aa',
+          }, {
+            id: 'ab',
+            label: 'ab',
+          } ],
+        }, {
+          id: 'b',
+          label: 'b',
+        }, {
+          id: 'c',
+          label: 'c',
+        } ],
+      }
     },
   }
 &lt;/script&gt;
-
-&lt;style src=&quot;@riophae/vue-treeselect/dist/vue-treeselect.min.css&quot;&gt;&lt;/style&gt;
 </code></pre>
-</section><h1 id="guides">Guides<a class="anchor" href="#guides"><anchor></anchor></a></h1><section><h2 id="basic-features" data-section>Basic Features<a class="anchor" href="#basic-features"><anchor></anchor></a></h2><p>This example demonstrates the most commonly-used features of vue-treeselect. Try the fuzzy-searching functionality by typing a few letters.</p>
-<demo><basic-features slot="demo"></basic-features><template slot="html"><code v-pre>&lt;div&gt;
+<p>If you just don't want to use webpack or other bundlers, you can also simply include the standalone UMD build in your page. In this way, you need to make sure Vue is included before vue-treeselect.</p>
+<pre><code class="language-html">&lt;html&gt;
+  &lt;head&gt;
+    &lt;!-- include Vue 2.x --&gt;
+    &lt;script src=&quot;https://cdn.jsdelivr.net/npm/vue@^2&quot;&gt;&lt;/script&gt;
+    &lt;!-- include vue-treeselect &amp; its styles. you can change the version tag to better suit your need. --&gt;
+    &lt;script src=&quot;https://unpkg.com/@riophae/vue-treeselect@0.0.24/dist/vue-treeselect.min.js&quot;&gt;&lt;/script&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://unpkg.com/@riophae/vue-treeselect@0.0.24/dist/vue-treeselect.min.css&quot;&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;div id=&quot;app&quot;&gt;
+      &lt;treeselect v-model=&quot;value&quot; :multiple=&quot;true&quot; :options=&quot;options&quot; /&gt;
+    &lt;/div&gt;
+  &lt;/body&gt;
+  &lt;script&gt;
+    // register the component
+    Vue.component('treeselect', VueTreeselect.Treeselect)
+
+    new Vue({
+      el: '#app',
+      data: {
+        value: null,
+        options: [ {
+          id: 'a',
+          label: 'a',
+          children: [ {
+            id: 'aa',
+            label: 'aa',
+          }, {
+            id: 'ab',
+            label: 'ab',
+          } ],
+        }, {
+          id: 'b',
+          label: 'b',
+        }, {
+          id: 'c',
+          label: 'c',
+        } ],
+      },
+    })
+  &lt;/script&gt;
+&lt;/html&gt;
+</code></pre>
+
+            </section>
+            <h1 id="guides">Guides<a class="anchor" href="#guides">
+                <anchor></anchor></a>
+            </h1>
+            <section>
+              <h2 id="basic-features" data-section>Basic Features<a class="anchor" href="#basic-features">
+                  <anchor></anchor></a>
+              </h2><p>This example demonstrates the most commonly-used features of vue-treeselect. Try the fuzzy-searching functionality by typing a few letters.</p>
+
+              <demo>
+                <basic-features slot="demo"></basic-features>
+                <template slot="html"><code v-pre>&lt;div&gt;
   &lt;treeselect
     :multiple=&quot;true&quot;
     :options=&quot;options&quot;
@@ -75,7 +220,8 @@ gtag('config', 'UA-108169693-1');</script><link rel="stylesheet" type="text/css"
     /&gt;
   &lt;pre class=&quot;result&quot;&gt;{{ value }}&lt;/pre&gt;
 &lt;/div&gt;
-</code></template><template slot="javascript"><code v-pre>export default {
+</code></template>
+                <template slot="javascript"><code v-pre>export default {
   data: () =&gt; ({
     value: [],
     options: [ {
@@ -116,7 +262,8 @@ gtag('config', 'UA-108169693-1');</script><link rel="stylesheet" type="text/css"
     } ],
   }),
 }
-</code></template></demo><p>The first thing you need to learn is how to define options. There are two types of options: <strong>(a) folder options</strong> that are foldable &amp; may have children options, and <strong>(b) normal options</strong> that aren't &amp; don't. Here, I'd like to borrow the basic concepts from Computer Science and call the former as <strong>branch nodes</strong> and the latter as <strong>leaf nodes</strong>. These two kinds of nodes together compose the tree.</p>
+</code></template>
+              </demo><p>The first thing you need to learn is how to define options. There are two types of options: <strong>(a) folder options</strong> that are foldable &amp; may have children options, and <strong>(b) normal options</strong> that aren't &amp; don't. Here, I'd like to borrow the basic concepts from Computer Science and call the former as <strong>branch nodes</strong> and the latter as <strong>leaf nodes</strong>. These two kinds of nodes together compose the tree.</p>
 <p>Defining leaf nodes is quite simple:</p>
 <pre><code class="language-js">{
   id: '&lt;id&gt;', // used to identify the option within the tree so it's value must be unique across all options
@@ -137,8 +284,16 @@ gtag('config', 'UA-108169693-1');</script><link rel="stylesheet" type="text/css"
 }
 </code></pre>
 <p>Then you can pass an array of these nodes as the <code>options</code> prop. For information on more properties you can use in a <code>node</code> object, see <a href="#node">below</a>.</p>
-</section><section><h2 id="more-features" data-section>More Features<a class="anchor" href="#more-features"><anchor></anchor></a></h2><p>This demonstrates more features.</p>
-<demo><more-features slot="demo"></more-features><template slot="html"><code v-pre>&lt;div&gt;
+
+            </section>
+            <section>
+              <h2 id="more-features" data-section>More Features<a class="anchor" href="#more-features">
+                  <anchor></anchor></a>
+              </h2><p>This demonstrates more features.</p>
+
+              <demo>
+                <more-features slot="demo"></more-features>
+                <template slot="html"><code v-pre>&lt;div&gt;
   &lt;treeselect
     name=&quot;demo&quot;
     :multiple=&quot;multiple&quot;
@@ -174,7 +329,8 @@ gtag('config', 'UA-108169693-1');</script><link rel="stylesheet" type="text/css"
     &lt;label&gt;&lt;input type=&quot;checkbox&quot; v-model=&quot;alwaysOpen&quot;&gt;Always open&lt;/label&gt;
   &lt;/p&gt;
 &lt;/div&gt;
-</code></template><template slot="javascript"><code v-pre>import { generateOptions } from './utils'
+</code></template>
+                <template slot="javascript"><code v-pre>import { generateOptions } from './utils'
 
 export default {
   data: () =&gt; ({
@@ -201,20 +357,30 @@ export default {
     },
   },
 }
-</code></template></demo></section><section><h2 id="delayed-loading" data-section>Delayed Loading<a class="anchor" href="#delayed-loading"><anchor></anchor></a></h2><p>If you have a large number of deeply nested options, you might want to load options only of the most top levels on initial load, and load the rest only when needed. You can achieve that by following these steps:</p>
+</code></template>
+              </demo>
+            </section>
+            <section>
+              <h2 id="delayed-loading" data-section>Delayed Loading<a class="anchor" href="#delayed-loading">
+                  <anchor></anchor></a>
+              </h2><p>If you have a large number of deeply nested options, you might want to load options only of the most top levels on initial load, and load the rest only when needed. You can achieve that by following these steps:</p>
 <ol>
 <li>Declare an <em>unloaded</em> branch node by setting <code>children: null</code></li>
 <li>Add <code>loadOptions</code> prop</li>
 <li>Whenever an unloaded branch node gets expanded, <code>loadOptions({ action, parentNode, callback, id })</code> will be called, then you can perform the job requesting data from a remote server</li>
 </ol>
-<demo><delayed-loading slot="demo"></delayed-loading><template slot="html"><code v-pre>&lt;treeselect
+
+              <demo>
+                <delayed-loading slot="demo"></delayed-loading>
+                <template slot="html"><code v-pre>&lt;treeselect
   :multiple=&quot;true&quot;
   :options=&quot;options&quot;
   :load-options=&quot;loadOptions&quot;
   placeholder=&quot;Try expanding any folder option...&quot;
   v-model=&quot;value&quot;
   /&gt;
-</code></template><template slot="javascript"><code v-pre>import { LOAD_CHILDREN_OPTIONS } from '@riophae/vue-treeselect'
+</code></template>
+                <template slot="javascript"><code v-pre>import { LOAD_CHILDREN_OPTIONS } from '@riophae/vue-treeselect'
 
 export default {
   data: () =&gt; ({
@@ -274,15 +440,20 @@ export default {
     },
   },
 }
-</code></template></demo><p>It's also possible to have root level options to be delayed loaded. If no options have been initially registered (<code>options: null</code>), vue-treeselect will attempt to load root options by calling <code>loadOptions({ action, callback, id })</code> after the component is mounted. In this example I have disabled the auto loading feature by setting <code>autoLoadRootOptions: false</code>, and root options will be loaded when the menu is opened.</p>
-<demo><delayed-root-options slot="demo"></delayed-root-options><template slot="html"><code v-pre>&lt;treeselect
+</code></template>
+              </demo><p>It's also possible to have root level options to be delayed loaded. If no options have been initially registered (<code>options: null</code>), vue-treeselect will attempt to load root options by calling <code>loadOptions({ action, callback, id })</code> after the component is mounted. In this example I have disabled the auto loading feature by setting <code>autoLoadRootOptions: false</code>, and root options will be loaded when the menu is opened.</p>
+
+              <demo>
+                <delayed-root-options slot="demo"></delayed-root-options>
+                <template slot="html"><code v-pre>&lt;treeselect
   :load-options=&quot;loadOptions&quot;
   :options=&quot;options&quot;
   :auto-load-root-options=&quot;false&quot;
   :multiple=&quot;true&quot;
   placeholder=&quot;Open the menu...&quot;
   /&gt;
-</code></template><template slot="javascript"><code v-pre>import { LOAD_ROOT_OPTIONS } from '@riophae/vue-treeselect'
+</code></template>
+                <template slot="javascript"><code v-pre>import { LOAD_ROOT_OPTIONS } from '@riophae/vue-treeselect'
 
 const sleep = d =&gt; new Promise(r =&gt; setTimeout(r, d))
 let called = false
@@ -314,7 +485,13 @@ export default {
     },
   },
 }
-</code></template></demo></section><section><h2 id="flat-mode-and-sort-values" data-section>Flat Mode &amp; Sort Values<a class="anchor" href="#flat-mode-and-sort-values"><anchor></anchor></a></h2><p>In all previous examples, we used the default non-flat mode of vue-treeselect, which means:</p>
+</code></template>
+              </demo>
+            </section>
+            <section>
+              <h2 id="flat-mode-and-sort-values" data-section>Flat Mode &amp; Sort Values<a class="anchor" href="#flat-mode-and-sort-values">
+                  <anchor></anchor></a>
+              </h2><p>In all previous examples, we used the default non-flat mode of vue-treeselect, which means:</p>
 <ol>
 <li>Whenever a branch node gets checked, all its children will be checked too</li>
 <li>Whenever a branch node has all children checked, the branch node itself will be checked too</li>
@@ -326,7 +503,10 @@ export default {
 <li><code>&quot;LEVEL&quot;</code> - Level of option: C 🡒 BB 🡒 AAA</li>
 <li><code>&quot;INDEX&quot;</code> - Index of option: AAA 🡒 BB 🡒 C</li>
 </ul>
-<demo><flat-mode-and-sort-values slot="demo"></flat-mode-and-sort-values><template slot="html"><code v-pre>&lt;div&gt;
+
+              <demo>
+                <flat-mode-and-sort-values slot="demo"></flat-mode-and-sort-values>
+                <template slot="html"><code v-pre>&lt;div&gt;
   &lt;treeselect
     :multiple=&quot;true&quot;
     :options=&quot;options&quot;
@@ -344,7 +524,8 @@ export default {
     &lt;label&gt;&lt;input type=&quot;radio&quot; value=&quot;INDEX&quot; v-model=&quot;sortValueBy&quot;&gt;Index&lt;/label&gt;
   &lt;/p&gt;
 &lt;/div&gt;
-</code></template><template slot="javascript"><code v-pre>import { generateOptions } from './utils'
+</code></template>
+                <template slot="javascript"><code v-pre>import { generateOptions } from './utils'
 
 export default {
   data() {
@@ -355,13 +536,22 @@ export default {
     }
   },
 }
-</code></template></demo></section><section><h2 id="prevent-value-combining" data-section>Prevent Value Combining<a class="anchor" href="#prevent-value-combining"><anchor></anchor></a></h2><p>For non-flat &amp; multi-select mode, if a branch node and its all descendants are checked, vue-treeselect will combine them into a single item in the value array, as demonstrated in the following example. By using <code>valueConsistsOf</code> prop you can change that behavior. This prop has three options:</p>
+</code></template>
+              </demo>
+            </section>
+            <section>
+              <h2 id="prevent-value-combining" data-section>Prevent Value Combining<a class="anchor" href="#prevent-value-combining">
+                  <anchor></anchor></a>
+              </h2><p>For non-flat &amp; multi-select mode, if a branch node and its all descendants are checked, vue-treeselect will combine them into a single item in the value array, as demonstrated in the following example. By using <code>valueConsistsOf</code> prop you can change that behavior. This prop has three options:</p>
 <ul>
 <li><code>&quot;ALL&quot;</code> - Any node that is checked will be included in the <code>value</code> array</li>
 <li><code>&quot;BRANCH_PRIORITY&quot;</code> (default) - If a branch node is checked, all its descendants will be excluded in the <code>value</code> array</li>
 <li><code>&quot;LEAF_PRIORITY&quot;</code> - If a branch node is checked, this node itself and its branch descendants will be excluded from the <code>value</code> array but its leaf descendants will be included</li>
 </ul>
-<demo><prevent-value-combining slot="demo"></prevent-value-combining><template slot="html"><code v-pre>&lt;div&gt;
+
+              <demo>
+                <prevent-value-combining slot="demo"></prevent-value-combining>
+                <template slot="html"><code v-pre>&lt;div&gt;
   &lt;treeselect
     :multiple=&quot;true&quot;
     :options=&quot;options&quot;
@@ -376,7 +566,8 @@ export default {
     &lt;label&gt;&lt;input type=&quot;radio&quot; value=&quot;LEAF_PRIORITY&quot; v-model=&quot;valueConsistsOf&quot;&gt;Leaf priority&lt;/label&gt;
   &lt;/p&gt;
 &lt;/div&gt;
-</code></template><template slot="javascript"><code v-pre>export default {
+</code></template>
+                <template slot="javascript"><code v-pre>export default {
   data: () =&gt; ({
     value: [],
     valueConsistsOf: 'BRANCH_PRIORITY',
@@ -410,27 +601,47 @@ export default {
     } ],
   }),
 }
-</code></template></demo></section><section><h2 id="disable-branch-nodes" data-section>Disable Branch Nodes<a class="anchor" href="#disable-branch-nodes"><anchor></anchor></a></h2><p>Set <code>disableBranchNodes: true</code> to make branch nodes uncheckable and treat them as collapsible folders only. You may also want to show a count next to the label of each branch node by setting <code>showCount: true</code>.</p>
-<demo><disable-branch-nodes slot="demo"></disable-branch-nodes><template slot="html"><code v-pre>&lt;treeselect
+</code></template>
+              </demo>
+            </section>
+            <section>
+              <h2 id="disable-branch-nodes" data-section>Disable Branch Nodes<a class="anchor" href="#disable-branch-nodes">
+                  <anchor></anchor></a>
+              </h2><p>Set <code>disableBranchNodes: true</code> to make branch nodes uncheckable and treat them as collapsible folders only. You may also want to show a count next to the label of each branch node by setting <code>showCount: true</code>.</p>
+
+              <demo>
+                <disable-branch-nodes slot="demo"></disable-branch-nodes>
+                <template slot="html"><code v-pre>&lt;treeselect
   :options=&quot;options&quot;
   :disable-branch-nodes=&quot;true&quot;
   :show-count=&quot;true&quot;
   placeholder=&quot;Where are you from?&quot;
   /&gt;
-</code></template><template slot="javascript"><code v-pre>import countries from './data/countries-of-the-world'
+</code></template>
+                <template slot="javascript"><code v-pre>import countries from './data/countries-of-the-world'
 
 export default {
   data: () =&gt; ({
     options: countries,
   }),
 }
-</code></template></demo></section><section><h2 id="disable-item-selection" data-section>Disable Item Selection<a class="anchor" href="#disable-item-selection"><anchor></anchor></a></h2><p>You can disable item selection by setting <code>isDisabled: true</code> on any leaf node or branch node. Setting on a branch node will disable all its descendants as well.</p>
-<demo><disable-item-selection slot="demo"></disable-item-selection><template slot="html"><code v-pre>&lt;treeselect
+</code></template>
+              </demo>
+            </section>
+            <section>
+              <h2 id="disable-item-selection" data-section>Disable Item Selection<a class="anchor" href="#disable-item-selection">
+                  <anchor></anchor></a>
+              </h2><p>You can disable item selection by setting <code>isDisabled: true</code> on any leaf node or branch node. For non-flat mode, setting on a branch node will disable all its descendants as well.</p>
+
+              <demo>
+                <disable-item-selection slot="demo"></disable-item-selection>
+                <template slot="html"><code v-pre>&lt;treeselect
   :multiple=&quot;true&quot;
   :options=&quot;options&quot;
   :value=&quot;value&quot;
   /&gt;
-</code></template><template slot="javascript"><code v-pre>export default {
+</code></template>
+                <template slot="javascript"><code v-pre>export default {
   data: () =&gt; ({
     options: [ {
       id: 'folder',
@@ -462,16 +673,26 @@ export default {
     value: [ 'disabled-checked' ],
   }),
 }
-</code></template></demo></section><section><h2 id="nested-search" data-section>Nested Search<a class="anchor" href="#nested-search"><anchor></anchor></a></h2><p>Sometimes we need the possibility to search options within a specific branch. For example your branches are different restaurants and the leafs are the foods they order. To search for the salad order of &quot;McDonals&quot; restaurant, just search for <strong>&quot;mc salad&quot;</strong>. You can also try searching <strong>&quot;salad&quot;</strong> to feel the difference.</p>
+</code></template>
+              </demo>
+            </section>
+            <section>
+              <h2 id="nested-search" data-section>Nested Search<a class="anchor" href="#nested-search">
+                  <anchor></anchor></a>
+              </h2><p>Sometimes we need the possibility to search options within a specific branch. For example your branches are different restaurants and the leafs are the foods they order. To search for the salad order of &quot;McDonals&quot; restaurant, just search for <strong>&quot;mc salad&quot;</strong>. You can also try searching <strong>&quot;salad&quot;</strong> to feel the difference.</p>
 <p>Concretely speaking, your search query gets split on spaces. If each splitted string is found within the path to the node, then we have a match.</p>
-<demo><nested-search slot="demo"></nested-search><template slot="html"><code v-pre>&lt;treeselect
+
+              <demo>
+                <nested-search slot="demo"></nested-search>
+                <template slot="html"><code v-pre>&lt;treeselect
   :multiple=&quot;true&quot;
   :options=&quot;options&quot;
   :disable-branch-nodes=&quot;true&quot;
   v-model=&quot;value&quot;
   search-nested
   /&gt;
-</code></template><template slot="javascript"><code v-pre>export default {
+</code></template>
+                <template slot="javascript"><code v-pre>export default {
   data: () =&gt; ({
     value: [],
     options: [ {
@@ -540,14 +761,26 @@ export default {
     } ],
   }),
 }
-</code></template></demo><p class="tip">Note that, fuzzy search feature is disabled for this mode to avoid mismatching.
-</p></section><section><h2 id="customize-key-names" data-section>Customize Key Names<a class="anchor" href="#customize-key-names"><anchor></anchor></a></h2><p>If your data of options is loaded via AJAX and have a different data structure than what vue-treeselect asks, e.g. your data has <code>name</code> property but vue-treeselect needs <code>label</code>, you may want to customize the key names. In this case, you can provide a function prop called <code>normalizer</code> which will be passed every node in the tree during data initialization. Use this function to create and return the transformed object.</p>
-<demo><customize-key-names slot="demo"></customize-key-names><template slot="html"><code v-pre>&lt;treeselect
+</code></template>
+              </demo>
+              <p class="tip">Note that, fuzzy search feature is disabled for this mode to avoid mismatching.
+
+              </p>
+            </section>
+            <section>
+              <h2 id="customize-key-names" data-section>Customize Key Names<a class="anchor" href="#customize-key-names">
+                  <anchor></anchor></a>
+              </h2><p>If your data of options is loaded via AJAX and have a different data structure than what vue-treeselect asks, e.g. your data has <code>name</code> property but vue-treeselect needs <code>label</code>, you may want to customize the key names. In this case, you can provide a function prop called <code>normalizer</code> which will be passed every node in the tree during data initialization. Use this function to create and return the transformed object.</p>
+
+              <demo>
+                <customize-key-names slot="demo"></customize-key-names>
+                <template slot="html"><code v-pre>&lt;treeselect
   :options=&quot;options&quot;
   :value=&quot;value&quot;
   :normalizer=&quot;normalizer&quot;
   /&gt;
-</code></template><template slot="javascript"><code v-pre>export default {
+</code></template>
+                <template slot="javascript"><code v-pre>export default {
   data: () =&gt; ({
     value: null,
     options: [ {
@@ -570,13 +803,22 @@ export default {
     },
   }),
 }
-</code></template></demo></section><section><h2 id="customize-option-label" data-section>Customize Option Label<a class="anchor" href="#customize-option-label"><anchor></anchor></a></h2><p>You can customize the label of each option. vue-treeselect utilizes Vue's <a href="https://vuejs.org/v2/guide/components.html#Scoped-Slots">scoped slot</a> feature and provides some props you should use in your customized template:</p>
+</code></template>
+              </demo>
+            </section>
+            <section>
+              <h2 id="customize-option-label" data-section>Customize Option Label<a class="anchor" href="#customize-option-label">
+                  <anchor></anchor></a>
+              </h2><p>You can customize the label of each option. vue-treeselect utilizes Vue's <a href="https://vuejs.org/v2/guide/components.html#Scoped-Slots">scoped slot</a> feature and provides some props you should use in your customized template:</p>
 <ul>
 <li><code>node</code> - a normalized node object</li>
 <li><code>count</code> &amp; <code>shouldShowCount</code> - the count number and a boolean indicates whether the count should be displayed</li>
 <li><code>labelClassName</code> &amp; <code>countClassName</code> - CSS classnames for making the style correct</li>
 </ul>
-<demo><customize-option-label slot="demo"></customize-option-label><template slot="html"><code v-pre>&lt;treeselect
+
+              <demo>
+                <customize-option-label slot="demo"></customize-option-label>
+                <template slot="html"><code v-pre>&lt;treeselect
   :options=&quot;options&quot;
   :value=&quot;value&quot;
   :searchable=&quot;false&quot;
@@ -588,7 +830,8 @@ export default {
     &lt;span v-if=&quot;shouldShowCount&quot; :class=&quot;countClassName&quot;&gt;({{ count }})&lt;/span&gt;
   &lt;/label&gt;
 &lt;/treeselect&gt;
-</code></template><template slot="javascript"><code v-pre>import { generateOptions } from './utils'
+</code></template>
+                <template slot="javascript"><code v-pre>import { generateOptions } from './utils'
 
 export default {
   data: () =&gt; ({
@@ -596,9 +839,18 @@ export default {
     options: generateOptions(2),
   }),
 }
-</code></template></demo></section><section><h2 id="vuex-support" data-section>Vuex Support<a class="anchor" href="#vuex-support"><anchor></anchor></a></h2><p>In all previous examples, we used <code>v-model</code> to sync value between application state and vue-treeselect, a.k.a two-way data binding. If you are using Vuex, we could make use of <code>:value</code> and <code>@input</code>, since <code>v-model</code> is just a syntax sugur for them in Vue 2.</p>
+</code></template>
+              </demo>
+            </section>
+            <section>
+              <h2 id="vuex-support" data-section>Vuex Support<a class="anchor" href="#vuex-support">
+                  <anchor></anchor></a>
+              </h2><p>In all previous examples, we used <code>v-model</code> to sync value between application state and vue-treeselect, a.k.a two-way data binding. If you are using Vuex, we could make use of <code>:value</code> and <code>@input</code>, since <code>v-model</code> is just a syntax sugur for them in Vue 2.</p>
 <p>Concretely speaking, we can bind <code>getter</code> to <code>:value</code> to make vue-treeselect reflect any changes in your Vuex state, and bind <code>action</code> or <code>mutation</code> to <code>@input</code> to update your Vuex state whenever the value changes.</p>
-<demo><vuex-support slot="demo"></vuex-support><template slot="html"><code v-pre>&lt;div&gt;
+
+              <demo>
+                <vuex-support slot="demo"></vuex-support>
+                <template slot="html"><code v-pre>&lt;div&gt;
   &lt;treeselect
     :options=&quot;options&quot;
     :value=&quot;value&quot;
@@ -607,7 +859,8 @@ export default {
     /&gt;
   &lt;pre class=&quot;result&quot;&gt;{{ value }}&lt;/pre&gt;
 &lt;/div&gt;
-</code></template><template slot="javascript"><code v-pre>import Vue from 'vue'
+</code></template>
+                <template slot="javascript"><code v-pre>import Vue from 'vue'
 import Vuex, { mapState, mapMutations } from 'vuex'
 import { generateOptions } from './utils'
 
@@ -639,4 +892,44 @@ export default {
     ...mapMutations([ 'updateValue' ]),
   },
 }
-</code></template></demo></section><h1 id="api">API<a class="anchor" href="#api"><anchor></anchor></a></h1><section><h2 id="node" data-section>Node<a class="anchor" href="#node"><anchor></anchor></a></h2><doc-node></doc-node></section><section><h2 id="props" data-section>Props<a class="anchor" href="#props"><anchor></anchor></a></h2><doc-props></doc-props></section><section><h2 id="events" data-section>Events<a class="anchor" href="#events"><anchor></anchor></a></h2><doc-events></doc-events></section><section><h2 id="slots" data-section>Slots<a class="anchor" href="#slots"><anchor></anchor></a></h2><doc-slots></doc-slots></section></div></section></div><footer class="site-footer"><div class="container">Copyright &copy; 2017-2018 <a href="https://github.com/riophae">Riophae Lee</a>. MIT Licensed.</div></footer></div><script src="https://buttons.github.io/buttons.js" async defer="defer"></script><script src="static/prism.min.js"></script><script type="text/javascript" src="static/js/manifest.37a2ecbb1d1b7e6c9ada.js"></script><script type="text/javascript" src="static/js/vendor.65bf4e91e32c7b1ba082.js"></script><script type="text/javascript" src="static/js/app.4f96d1d0b5e04a5f3376.js"></script></body></html>
+</code></template>
+              </demo>
+            </section>
+            <h1 id="api">API<a class="anchor" href="#api">
+                <anchor></anchor></a>
+            </h1>
+            <section>
+              <h2 id="node" data-section>Node<a class="anchor" href="#node">
+                  <anchor></anchor></a>
+              </h2>
+              <doc-node></doc-node>
+            </section>
+            <section>
+              <h2 id="props" data-section>Props<a class="anchor" href="#props">
+                  <anchor></anchor></a>
+              </h2>
+              <doc-props></doc-props>
+            </section>
+            <section>
+              <h2 id="events" data-section>Events<a class="anchor" href="#events">
+                  <anchor></anchor></a>
+              </h2>
+              <doc-events></doc-events>
+            </section>
+            <section>
+              <h2 id="slots" data-section>Slots<a class="anchor" href="#slots">
+                  <anchor></anchor></a>
+              </h2>
+              <doc-slots></doc-slots>
+            </section>
+          </div>
+        </section>
+      </div>
+      <footer class="site-footer">
+        <div class="container">Copyright &copy; 2017-2018 <a href="https://github.com/riophae">Riophae Lee</a>. MIT Licensed.</div>
+      </footer>
+    </div>
+    <script src="https://buttons.github.io/buttons.js" async defer="defer"></script>
+    <script src="static/prism.min.js"></script>
+  <script type="text/javascript" src="static/js/app.fee7bdbc85206fc6a87a.js"></script></body>
+</html>
