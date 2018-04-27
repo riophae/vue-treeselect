@@ -1,5 +1,3 @@
-/* eslint-disable camelcase, global-require */
-
 require('babel-register')
 const config = require('../../config')
 

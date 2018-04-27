@@ -16,7 +16,6 @@ module.exports = {
     'vue/attributes-order': 0,
     indent: 0, // not working well with .vue files so disable it
     'multiline-comment-style': 0,
-    'newline-per-chained-call': 0,
     'no-warning-comments': 0,
     'no-undefined': 0,
     'no-extra-parens': 0,
