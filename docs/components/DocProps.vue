@@ -290,7 +290,7 @@
         name: 'valueConsistsOf',
         type: 'String',
         defaultValue: code('"BRANCH_PRIORITY"'),
-        description: `Which kind of nodes should be included in the value array in multi-select mode. Acceptable values: ${code('"ALL"')}, ${code('"BRANCH_PRIORITY"')} or ${code('"LEAF_PRIORITY"')}. See ${link('#prevent-value-combining')} for example.`,
+        description: `Which kind of nodes should be included in the value array in multi-select mode. Acceptable values: ${code('"ALL"')}, ${code('"BRANCH_PRIORITY"')}, ${code('"LEAF_PRIORITY"')} or ${code('"ALL_WITH_INDETERMINATE"')}. See ${link('#prevent-value-combining')} for example.`,
       }, {
         name: 'valueFormat',
         type: 'String',
