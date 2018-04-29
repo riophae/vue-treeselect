@@ -12,7 +12,7 @@ import {
   UNMATCHED, DESCENDANT_MATCHED, MATCHED,
   LOAD_ROOT_OPTIONS, LOAD_CHILDREN_OPTIONS, /* ASYNC_SEARCH, */
   NO_PARENT_NODE,
-  ALL, BRANCH_PRIORITY, LEAF_PRIORITY,
+  ALL, BRANCH_PRIORITY, LEAF_PRIORITY, ALL_WITH_INDETERMINATE,
   ALL_CHILDREN, ALL_DESCENDANTS, LEAF_CHILDREN, LEAF_DESCENDANTS,
   ORDER_SELECTED, LEVEL, INDEX,
   INPUT_DEBOUNCE_DELAY, KEEP_REMAINING_HEIGHT,
@@ -497,12 +497,13 @@ export default {
      *   - "ALL" - Any node that is checked will be included in the `value` array
      *   - "BRANCH_PRIORITY" (default) - If a branch node is checked, all its descendants will be excluded in the `value` array
      *   - "LEAF_PRIORITY" - If a branch node is checked, this node itself and its branch descendants will be excluded from the `value` array but its leaf descendants will be included
+     *   - "ALL_WITH_INDETERMINATE" - Any node that is checked will be included in the `value` array, plus indeterminate nodes
      */
     valueConsistsOf: {
       type: String,
       default: BRANCH_PRIORITY,
       validator(value) {
-        const acceptableValues = [ ALL, BRANCH_PRIORITY, LEAF_PRIORITY ]
+        const acceptableValues = [ ALL, BRANCH_PRIORITY, LEAF_PRIORITY, ALL_WITH_INDETERMINATE ]
         return acceptableValues.indexOf(value) !== -1
       },
     },
@@ -571,6 +572,13 @@ export default {
           const node = this.getNode(id)
           if (node.isLeaf) return true
           return node.children.length === 0
+        })
+      } else if (this.valueConsistsOf === ALL_WITH_INDETERMINATE) {
+        internalValue = []
+        Object.keys(this.nodeCheckedStateMap).forEach(node => {
+          if ([ CHECKED, INDETERMINATE ].includes(this.nodeCheckedStateMap[node])) {
+            internalValue.push(node)
+          }
         })
       }
 

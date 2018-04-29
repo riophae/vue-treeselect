@@ -1865,6 +1865,18 @@ describe('Props', () => {
       vm.select(vm.nodeMap.ac)
       expect(vm.internalValue).toEqual([ 'aaa', 'aab', 'aba', 'abb', 'b', 'ac' ])
     })
+
+    it('when valueConsistsOf=ALL_WITH_INDETERMINATE', () => {
+      wrapper.setProps({ valueConsistsOf: 'ALL_WITH_INDETERMINATE' })
+
+      expect(vm.internalValue).toEqual([ 'aa', 'a', 'aaa', 'aab' ])
+      vm.select(vm.nodeMap.ab)
+      expect(vm.internalValue).toEqual([ 'aa', 'a', 'aaa', 'aab', 'ab', 'aba', 'abb' ])
+      vm.select(vm.nodeMap.b)
+      expect(vm.internalValue).toEqual([ 'aa', 'a', 'aaa', 'aab', 'ab', 'aba', 'abb', 'b' ])
+      vm.select(vm.nodeMap.ac)
+      expect(vm.internalValue).toEqual([ 'aa', 'aaa', 'aab', 'ab', 'aba', 'abb', 'b', 'ac', 'a' ])
+    })
   })
 
   describe('valueFormat', () => {
