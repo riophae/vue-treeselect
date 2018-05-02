@@ -24,9 +24,11 @@
     <div class="vue-treeselect__control">
       <single-value v-if="single" ref="value" />
       <multi-value v-else ref="value" />
-      <div v-if="shouldShowX" class="vue-treeselect__x" :title="multiple ? clearAllText : clearValueText" @mousedown="handleMouseDownOnClear">&times;</div>
-      <div v-if="!isOpen || !alwaysOpen" class="vue-treeselect__arrow-wrapper" @mousedown="handleMouseDownOnArrow">
-        <span :class="[ 'vue-treeselect__arrow', { 'vue-treeselect__arrow--rotated': isOpen } ]" />
+      <div v-if="shouldShowX" class="vue-treeselect__x-wrapper" :title="multiple ? clearAllText : clearValueText" @mousedown="handleMouseDownOnClear">
+        <letter-x class="vue-treeselect__x" />
+      </div>
+      <div v-if="!isOpen || !alwaysOpen" class="vue-treeselect__control-arrow-wrapper" @mousedown="handleMouseDownOnArrow">
+        <arrow :class="[ 'vue-treeselect__control-arrow', { 'vue-treeselect__control-arrow--rotated': isOpen } ]" />
       </div>
     </div>
     <div v-if="isOpen" class="vue-treeselect__menu" ref="menu" :style="{ maxHeight: optimizedHeight + 'px' }">
@@ -67,10 +69,12 @@
   import SingleValue from './SingleValue'
   import TreeselectOption from './Option'
   import Tip from './Tip'
+  import Arrow from './Arrow'
+  import LetterX from './X'
 
   export default {
     name: 'vue-treeselect',
-    components: { HiddenField, MultiValue, SingleValue, TreeselectOption, Tip },
+    components: { HiddenField, MultiValue, SingleValue, TreeselectOption, Tip, Arrow, LetterX },
     mixins: [ treeselectMixin ],
   }
 </script>

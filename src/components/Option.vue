@@ -11,9 +11,7 @@
       <div v-if="shouldShowArrorPlaceholder" class="vue-treeselect__option-arrow-placeholder">&nbsp;</div>
       <div v-else-if="node.isBranch" class="vue-treeselect__option-arrow-wrapper" @mousedown="handleMouseDownOnOptionArrow">
         <transition name="vue-treeselect__option-arrow--prepare" appear>
-          <span :class="[ 'vue-treeselect__option-arrow', {
-            'vue-treeselect__option-arrow--rotated': shouldExpand,
-          } ]" />
+          <arrow :class="[ 'vue-treeselect__option-arrow', { 'vue-treeselect__option-arrow--rotated': shouldExpand } ]" />
         </transition>
       </div>
       <div class="vue-treeselect__label-wrapper" @mousedown="handleMouseDownOnOption">
@@ -24,7 +22,8 @@
             'vue-treeselect__checkbox--unchecked': checkedState === UNCHECKED,
             'vue-treeselect__checkbox--disabled': node.isDisabled,
           } ]">
-            <span class="vue-treeselect__checkbox-mark" />
+            <check-mark class="vue-treeselect__check-mark" />
+            <minus-mark class="vue-treeselect__minus-mark" />
           </span>
         </div>
         <slot name="option-label" :node="node" :should-show-count="shouldShowCount" :count="count"
@@ -57,11 +56,14 @@
 <script>
   import optionMixin from '../mixins/optionMixin'
   import Tip from './Tip'
+  import Arrow from './Arrow'
+  import CheckMark from './CheckMark'
+  import MinusMark from './MinusMark'
 
   export default {
     name: 'vue-treeselect--option',
     inject: [ 'instance', 'UNCHECKED', 'INDETERMINATE', 'CHECKED' ],
-    components: { Tip },
+    components: { Tip, Arrow, CheckMark, MinusMark },
     mixins: [ optionMixin ],
   }
 </script>
