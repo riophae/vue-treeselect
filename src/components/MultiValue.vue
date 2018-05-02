@@ -1,10 +1,6 @@
 <template>
   <div class="vue-treeselect__value-wrapper">
-    <transition-group
-      tag="div"
-      class="vue-treeselect__multi-value"
-      name="vue-treeselect__multi-value-item--zoom"
-      appear>
+    <transition-group tag="div" class="vue-treeselect__multi-value" name="vue-treeselect__multi-value-item--zoom" appear>
       <template v-for="node in instance.visibleValue">
         <div class="vue-treeselect__multi-value-item-wrapper" @mousedown="handleMouseDownOnValue" :key="'value-' + node.id">
           <div :class="[ 'vue-treeselect__multi-value-item', { 'vue-treeselect__multi-value-item-disabled': node.isDisabled } ]">

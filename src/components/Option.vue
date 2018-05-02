@@ -34,11 +34,7 @@
     <div v-if="shouldExpand" class="vue-treeselect__list">
       <template v-if="node.isLoaded">
         <template v-if="node.children.length">
-          <vue-treeselect--option
-            v-for="childNode in node.children"
-            :node="childNode"
-            :key="childNode.id"
-            >
+          <vue-treeselect--option v-for="childNode in node.children" :node="childNode" :key="childNode.id">
             <template slot="option-label" slot-scope="{ node, shouldShowCount, count, labelClassName, countClassName }">
               <slot name="option-label" :node="node" :should-show-count="shouldShowCount" :count="count"
                 :label-class-name="labelClassName" :count-class-name="countClassName" />

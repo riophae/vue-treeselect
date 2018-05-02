@@ -34,11 +34,7 @@
         <tip v-if="searching && noSearchResults" type="no-results" icon="warning">{{ noResultsText }}</tip>
         <tip v-else-if="normalizedOptions.length === 0" type="no-options" icon="warning">{{ noOptionsText }}</tip>
         <div v-else class="vue-treeselect__list">
-          <treeselect-option
-            v-for="rootNode in normalizedOptions"
-            :node="rootNode"
-            :key="rootNode.id"
-            >
+          <treeselect-option v-for="rootNode in normalizedOptions" :node="rootNode" :key="rootNode.id">
             <template slot="option-label" slot-scope="{ node, shouldShowCount, count, labelClassName, countClassName }">
               <slot name="option-label" :node="node" :should-show-count="shouldShowCount" :count="count"
                 :label-class-name="labelClassName" :count-class-name="countClassName">
