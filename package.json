@@ -133,7 +133,7 @@
   "size-limit": [
     {
       "path": "dist/vue-treeselect.min.js",
-      "limit": "10 KB"
+      "limit": "11 KB"
     },
     {
       "path": "dist/vue-treeselect.min.css",
