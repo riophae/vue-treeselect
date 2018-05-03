@@ -574,11 +574,9 @@ export default {
           return node.children.length === 0
         })
       } else if (this.valueConsistsOf === ALL_WITH_INDETERMINATE) {
-        internalValue = []
-        Object.keys(this.nodeCheckedStateMap).forEach(node => {
-          if ([ CHECKED, INDETERMINATE ].includes(this.nodeCheckedStateMap[node])) {
-            internalValue.push(node)
-          }
+        internalValue = Object.keys(this.nodeCheckedStateMap).filter(id => {
+          const checkedState = this.nodeCheckedStateMap[id]
+          return checkedState === CHECKED || checkedState === INDETERMINATE
         })
       }
 
