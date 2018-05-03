@@ -53,7 +53,7 @@
 @treeselect-multi-value-remove-color-hover: @palette-Red-600;
 @treeselect-multi-value-remove-size: 6px;
 @treeselect-multi-value-divider-color: #fff;
-@treeselect-limit-tip-font-color: @palette-Grey-500;
+@treeselect-limit-tip-font-color: @palette-Grey-400;
 @treeselect-limit-tip-font-size: @treeselect-multi-value-font-size;
 @treeselect-limit-tip-font-weight: 600;
 @treeselect-single-input-font-size: inherit;
@@ -656,8 +656,14 @@
 .generate-level-indentations(@i) when (@i >= 0) {
   .generate-level-indentations((@i - 1));
 
-  .vue-treeselect__option--level-@{i} {
-    padding-left: @treeselect-padding + @i * @treeselect-narrow-cell-width;
+  .vue-treeselect__indent-level-@{i} {
+    .vue-treeselect__option {
+      padding-left: @treeselect-padding + @i * @treeselect-narrow-cell-width;
+    }
+
+    .vue-treeselect__tip {
+      padding-left: @treeselect-padding + (@i + 1) * @treeselect-narrow-cell-width;
+    }
   }
 }
 .generate-level-indentations(@treeselect-max-level);
@@ -858,21 +864,13 @@
   opacity: 0.6;
 }
 
-.vue-treeselect__loading-tip,
-.vue-treeselect__no-children-tip,
-.vue-treeselect__error-tip,
-.vue-treeselect__no-results-tip,
-.vue-treeselect__no-options-tip {
+.vue-treeselect__tip {
   .row();
 
   color: @treeselect-tip-color;
 }
 
-.vue-treeselect__loading-tip-text,
-.vue-treeselect__no-children-tip-text,
-.vue-treeselect__error-tip-text,
-.vue-treeselect__no-results-tip-text,
-.vue-treeselect__no-options-tip-text {
+.vue-treeselect__tip-text {
   .wide-cell();
 
   font-size: @treeselect-tip-font-size;
