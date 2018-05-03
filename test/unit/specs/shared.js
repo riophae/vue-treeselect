@@ -55,6 +55,10 @@ export function findOptionByNodeId(wrapper, nodeId) {
     .find(optionWrapper => optionWrapper.vm.node.id === nodeId)
 }
 
+export function findOptionArrowWrapperByNodeId(wrapper, nodeId) {
+  return findOptionByNodeId(wrapper, nodeId).find('.vue-treeselect__option-arrow-wrapper')
+}
+
 export function findOptionArrowByNodeId(wrapper, nodeId) {
   return findOptionByNodeId(wrapper, nodeId).find('.vue-treeselect__option-arrow')
 }

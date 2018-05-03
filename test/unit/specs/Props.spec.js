@@ -55,7 +55,7 @@ describe('Props', () => {
       const { vm } = wrapper
 
       await vm.$nextTick() // the arrow exists on first render
-      expect(wrapper.contains('.vue-treeselect__arrow-wrapper')).toBe(false)
+      expect(wrapper.contains('.vue-treeselect__control-arrow-wrapper')).toBe(false)
     })
 
     it('the menu should be unclosable', () => {
@@ -123,7 +123,7 @@ describe('Props', () => {
         },
       })
 
-      expect(wrapper.contains('.vue-treeselect__arrow-wrapper')).toBe(true)
+      expect(wrapper.contains('.vue-treeselect__control-arrow-wrapper')).toBe(true)
     })
 
     it('set `alwaysOpen` from `false` to `true` should open the menu and hide the arrow', () => {
@@ -138,7 +138,7 @@ describe('Props', () => {
       expect(vm.isOpen).toBe(false)
       wrapper.setProps({ alwaysOpen: true })
       expect(vm.isOpen).toBe(true)
-      expect(wrapper.contains('.vue-treeselect__arrow-wrapper')).toBe(false)
+      expect(wrapper.contains('.vue-treeselect__control-arrow-wrapper')).toBe(false)
     })
 
     it('set `alwaysOpen` from `true` to `false` should close the menu and show the arrow', () => {
@@ -153,7 +153,7 @@ describe('Props', () => {
       expect(vm.isOpen).toBe(true)
       wrapper.setProps({ alwaysOpen: false })
       expect(vm.isOpen).toBe(false)
-      expect(wrapper.contains('.vue-treeselect__arrow-wrapper')).toBe(true)
+      expect(wrapper.contains('.vue-treeselect__control-arrow-wrapper')).toBe(true)
     })
   })
 
@@ -205,7 +205,7 @@ describe('Props', () => {
 
   describe('beforeClearAll', () => {
     async function clickOnX(wrapper) {
-      const x = wrapper.find('.vue-treeselect__x')
+      const x = wrapper.find('.vue-treeselect__x-wrapper')
       leftClick(x)
       // the `beforeClearAll` callback is always called async
       // we have to wait here
@@ -318,7 +318,7 @@ describe('Props', () => {
 
     it('should reset value on mousedown', async () => {
       expect(vm.selectedNodeIds).toEqual([ 'a' ])
-      leftClick(wrapper.find('.vue-treeselect__x'))
+      leftClick(wrapper.find('.vue-treeselect__x-wrapper'))
       await sleep(1)
       expect(vm.selectedNodeIds).toEqual([])
     })
@@ -351,7 +351,7 @@ describe('Props', () => {
         },
       })
 
-      expect(wrapper.find('.vue-treeselect__x').attributes().title).toBe('$MULTI_TITLE$')
+      expect(wrapper.find('.vue-treeselect__x-wrapper').attributes().title).toBe('$MULTI_TITLE$')
     })
   })
 
@@ -445,7 +445,7 @@ describe('Props', () => {
         },
       })
 
-      expect(wrapper.find('.vue-treeselect__x').attributes().title).toBe('$SINGLE_TITLE$')
+      expect(wrapper.find('.vue-treeselect__x-wrapper').attributes().title).toBe('$SINGLE_TITLE$')
     })
   })
 

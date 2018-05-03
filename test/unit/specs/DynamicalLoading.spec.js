@@ -6,7 +6,7 @@ import { CHECKED } from '@riophae/vue-treeselect/constants'
 import {
   leftClick,
   findOptionByNodeId,
-  findOptionArrowByNodeId,
+  findOptionArrowWrapperByNodeId,
   findChildrenOptionListByNodeId,
 } from './shared'
 
@@ -160,12 +160,12 @@ describe('Dynamical Loading', () => {
         },
       })
       const { vm } = wrapper
-      let optionArrow
+      let optionArrowWrapper
       let childrenOptionList
 
       // 1st try
-      optionArrow = findOptionArrowByNodeId(wrapper, 'a')
-      leftClick(optionArrow) // expand
+      optionArrowWrapper = findOptionArrowWrapperByNodeId(wrapper, 'a')
+      leftClick(optionArrowWrapper) // expand
       expect(spyForLoadOptions.calls.count()).toBe(1)
       await sleep(DELAY)
       childrenOptionList = findChildrenOptionListByNodeId(wrapper, 'a')
@@ -188,9 +188,9 @@ describe('Dynamical Loading', () => {
       expect(childrenOptionList.contains('.vue-treeselect__error-tip')).toBe(true)
 
       // 3nd try - collapse & re-expand
-      optionArrow = findOptionArrowByNodeId(wrapper, 'a')
-      leftClick(optionArrow) // collapse
-      leftClick(optionArrow) // re-expand
+      optionArrowWrapper = findOptionArrowWrapperByNodeId(wrapper, 'a')
+      leftClick(optionArrowWrapper) // collapse
+      leftClick(optionArrowWrapper) // re-expand
       expect(spyForLoadOptions.calls.count()).toBe(3)
       await sleep(DELAY)
       childrenOptionList = findChildrenOptionListByNodeId(wrapper, 'a')
