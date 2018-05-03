@@ -1,9 +1,7 @@
 <template>
   <div class="vue-treeselect__list-item">
-    <div :class="[ 'vue-treeselect__option', {
+    <div :class="[ 'vue-treeselect__option', `vue-treeselect__option--level-${node.level}`, {
       'vue-treeselect__option--disabled': node.isDisabled,
-      'vue-treeselect__option--root': node.isRootNode,
-      'vue-treeselect__option--child': !node.isRootNode,
       'vue-treeselect__option--selected': instance.isSelected(node),
       'vue-treeselect__option--matched': instance.searching && node.isMatched,
       'vue-treeselect__option--hide': instance.searching && !(node.isMatched || node.hasMatchedChild),

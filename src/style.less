@@ -18,6 +18,7 @@
 @treeselect-icon-size: 12px;
 @treeselect-transition-duration: 200ms;
 @treeselect-transition-duration-slow: 400ms;
+@treeselect-max-level: 8;
 
 @treeselect-control-height: 36px;
 @treeselect-control-inner-height: @treeselect-control-height - @treeselect-control-border-width * 2;
@@ -73,6 +74,9 @@
 @treeselect-x-color: @treeselect-arrow-color;
 @treeselect-x-color-hover: @palette-Red-600;
 
+@treeselect-option-bg-hover: @palette-Grey-50;
+@treeselect-option-selected-bg: @palette-Light-Blue-50;
+@treeselect-option-selected-bg-hover: @treeselect-option-selected-bg;
 @treeselect-checkbox-size: @treeselect-icon-size;
 @treeselect-checkbox-border-radius: @treeselect-border-radius-sm;
 @treeselect-checkbox-color: @palette-Grey-300;
@@ -80,7 +84,7 @@
 @treeselect-checkbox-border-color: @treeselect-checkbox-color;
 @treeselect-checkbox-bg: #fff;
 @treeselect-checkbox-border-color-hover: @treeselect-checkbox-color-highlight;
-@treeselect-checkbox-bg-hover: #fff;
+@treeselect-checkbox-bg-hover: @treeselect-checkbox-bg;
 @treeselect-checkbox-indeterminate-border-color: @treeselect-checkbox-color-highlight;
 @treeselect-checkbox-indeterminate-bg: @treeselect-checkbox-color-highlight;
 @treeselect-checkbox-minus-mark-size: 8px;
@@ -107,7 +111,7 @@
 @treeselect-loader-animation-duration: 1.6s;
 @treeselect-warning-icon-bg: @palette-Orange-600;
 @treeselect-error-icon-bg: @palette-Red-600;
-@treeselect-tip-color: #999;
+@treeselect-tip-color: @palette-Grey-600;
 @treeselect-tip-font-size: @treeselect-font-size-sm;
 @treeselect-retry-text-color: @palette-Light-Blue-600;
 
@@ -641,17 +645,31 @@
   }
 }
 
-.vue-treeselect__list-item > .vue-treeselect__list {
-  padding-left: @treeselect-narrow-cell-width;
-}
-
 .vue-treeselect__option {
   .row();
+
+  &:hover {
+    background: @treeselect-option-bg-hover;
+  }
 }
+
+.generate-level-indentations(@i) when (@i >= 0) {
+  .generate-level-indentations((@i - 1));
+
+  .vue-treeselect__option--level-@{i} {
+    padding-left: @treeselect-padding + @i * @treeselect-narrow-cell-width;
+  }
+}
+.generate-level-indentations(@treeselect-max-level);
 
 .vue-treeselect__option--selected {
   .vue-treeselect--single & {
+    background: @treeselect-option-selected-bg;
     font-weight: 600;
+
+    &:hover {
+      background: @treeselect-option-selected-bg-hover;
+    }
   }
 }
 
