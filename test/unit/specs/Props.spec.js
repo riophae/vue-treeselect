@@ -1756,7 +1756,7 @@ describe('Props', () => {
       })
       const inputContainer = findInputContainer(wrapper)
 
-      expect(inputContainer.attributes().tabindex).toBe(undefined)
+      expect(inputContainer.attributes().tabindex).toBe('0')
     })
 
     it('when disabled=true', () => {
