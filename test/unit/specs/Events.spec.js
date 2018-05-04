@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils'
 import Treeselect from '@riophae/vue-treeselect/components/Treeselect'
-import { leftClick, findCheckboxByNodeId, findLabelWrapperByNodeId } from './shared'
+import { leftClick, findCheckboxByNodeId, findLabelContainerByNodeId } from './shared'
 
 describe('Events', () => {
   describe('select & deselect', () => {
@@ -37,7 +37,7 @@ describe('Events', () => {
     })
 
     it('click on option label or checkbox', () => {
-      leftClick(findLabelWrapperByNodeId(wrapper, 'aa'))
+      leftClick(findLabelContainerByNodeId(wrapper, 'aa'))
       expect(wrapper.emitted().select).toEqual([
         [ aa, 'test' ],
       ])
@@ -49,7 +49,7 @@ describe('Events', () => {
     })
 
     it('click on disabled option', () => {
-      leftClick(findLabelWrapperByNodeId(wrapper, 'ab'))
+      leftClick(findLabelContainerByNodeId(wrapper, 'ab'))
       expect(wrapper.emitted().deselect).toBeUndefined()
     })
 

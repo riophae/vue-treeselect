@@ -1,7 +1,7 @@
 import { mount } from '@vue/test-utils'
 import Treeselect from '@riophae/vue-treeselect/components/Treeselect'
 import { UNCHECKED, INDETERMINATE, CHECKED } from '@riophae/vue-treeselect/constants'
-import { leftClick, findLabelWrapperByNodeId } from './shared'
+import { leftClick, findLabelContainerByNodeId } from './shared'
 
 describe('Single-select', () => {
   it('basic', () => {
@@ -59,7 +59,7 @@ describe('Single-select', () => {
       },
     })
     const { vm } = wrapper
-    const labelWrapper = findLabelWrapperByNodeId(wrapper, 'a')
+    const labelWrapper = findLabelContainerByNodeId(wrapper, 'a')
 
     leftClick(labelWrapper)
     expect(vm.selectedNodeIds).toEqual([ 'a' ])

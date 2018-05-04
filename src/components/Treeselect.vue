@@ -24,10 +24,10 @@
     <div class="vue-treeselect__control">
       <single-value v-if="single" ref="value" />
       <multi-value v-else ref="value" />
-      <div v-if="shouldShowX" class="vue-treeselect__x-wrapper" :title="multiple ? clearAllText : clearValueText" @mousedown="handleMouseDownOnClear">
+      <div v-if="shouldShowX" class="vue-treeselect__x-container" :title="multiple ? clearAllText : clearValueText" @mousedown="handleMouseDownOnClear">
         <letter-x class="vue-treeselect__x" />
       </div>
-      <div v-if="!isOpen || !alwaysOpen" class="vue-treeselect__control-arrow-wrapper" @mousedown="handleMouseDownOnArrow">
+      <div v-if="!isOpen || !alwaysOpen" class="vue-treeselect__control-arrow-container" @mousedown="handleMouseDownOnArrow">
         <arrow :class="[ 'vue-treeselect__control-arrow', { 'vue-treeselect__control-arrow--rotated': isOpen } ]" />
       </div>
     </div>

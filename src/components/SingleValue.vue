@@ -1,5 +1,5 @@
 <template>
-  <div class="vue-treeselect__value-wrapper">
+  <div class="vue-treeselect__value-container">
     <div v-if="instance.hasValue && !instance.searchQuery" class="vue-treeselect__single-value">
       {{ instance.selectedNodes[0].label }}
     </div>

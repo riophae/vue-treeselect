@@ -10,7 +10,7 @@ import {
   findInput,
   findMenu,
   findOptionByNodeId,
-  findLabelWrapperByNodeId,
+  findLabelContainerByNodeId,
 } from './shared'
 
 function createArray(len, fn) {
@@ -55,7 +55,7 @@ describe('Props', () => {
       const { vm } = wrapper
 
       await vm.$nextTick() // the arrow exists on first render
-      expect(wrapper.contains('.vue-treeselect__control-arrow-wrapper')).toBe(false)
+      expect(wrapper.contains('.vue-treeselect__control-arrow-container')).toBe(false)
     })
 
     it('the menu should be unclosable', () => {
@@ -123,7 +123,7 @@ describe('Props', () => {
         },
       })
 
-      expect(wrapper.contains('.vue-treeselect__control-arrow-wrapper')).toBe(true)
+      expect(wrapper.contains('.vue-treeselect__control-arrow-container')).toBe(true)
     })
 
     it('set `alwaysOpen` from `false` to `true` should open the menu and hide the arrow', () => {
@@ -138,7 +138,7 @@ describe('Props', () => {
       expect(vm.isOpen).toBe(false)
       wrapper.setProps({ alwaysOpen: true })
       expect(vm.isOpen).toBe(true)
-      expect(wrapper.contains('.vue-treeselect__control-arrow-wrapper')).toBe(false)
+      expect(wrapper.contains('.vue-treeselect__control-arrow-container')).toBe(false)
     })
 
     it('set `alwaysOpen` from `true` to `false` should close the menu and show the arrow', () => {
@@ -153,7 +153,7 @@ describe('Props', () => {
       expect(vm.isOpen).toBe(true)
       wrapper.setProps({ alwaysOpen: false })
       expect(vm.isOpen).toBe(false)
-      expect(wrapper.contains('.vue-treeselect__control-arrow-wrapper')).toBe(true)
+      expect(wrapper.contains('.vue-treeselect__control-arrow-container')).toBe(true)
     })
   })
 
@@ -205,7 +205,7 @@ describe('Props', () => {
 
   describe('beforeClearAll', () => {
     async function clickOnX(wrapper) {
-      const x = wrapper.find('.vue-treeselect__x-wrapper')
+      const x = wrapper.find('.vue-treeselect__x-container')
       leftClick(x)
       // the `beforeClearAll` callback is always called async
       // we have to wait here
@@ -318,7 +318,7 @@ describe('Props', () => {
 
     it('should reset value on mousedown', async () => {
       expect(vm.selectedNodeIds).toEqual([ 'a' ])
-      leftClick(wrapper.find('.vue-treeselect__x-wrapper'))
+      leftClick(wrapper.find('.vue-treeselect__x-container'))
       await sleep(1)
       expect(vm.selectedNodeIds).toEqual([])
     })
@@ -351,7 +351,7 @@ describe('Props', () => {
         },
       })
 
-      expect(wrapper.find('.vue-treeselect__x-wrapper').attributes().title).toBe('$MULTI_TITLE$')
+      expect(wrapper.find('.vue-treeselect__x-container').attributes().title).toBe('$MULTI_TITLE$')
     })
   })
 
@@ -445,7 +445,7 @@ describe('Props', () => {
         },
       })
 
-      expect(wrapper.find('.vue-treeselect__x-wrapper').attributes().title).toBe('$SINGLE_TITLE$')
+      expect(wrapper.find('.vue-treeselect__x-container').attributes().title).toBe('$SINGLE_TITLE$')
     })
   })
 
@@ -462,7 +462,7 @@ describe('Props', () => {
         },
       })
       const { vm } = wrapper
-      const labelWrapper = findLabelWrapperByNodeId(wrapper, 'a')
+      const labelWrapper = findLabelContainerByNodeId(wrapper, 'a')
 
       leftClick(labelWrapper)
       expect(vm.selectedNodeIds).toEqual([ 'a' ])
@@ -482,7 +482,7 @@ describe('Props', () => {
         },
       })
       const { vm } = wrapper
-      const labelWrapper = findLabelWrapperByNodeId(wrapper, 'a')
+      const labelWrapper = findLabelContainerByNodeId(wrapper, 'a')
 
       leftClick(labelWrapper)
       expect(vm.selectedNodeIds).toEqual([ 'a' ])
@@ -646,12 +646,12 @@ describe('Props', () => {
 
     const getLabelWrapperOfBranchNode = () => {
       vm.openMenu() // ensure the menu is opened otherwise the options won't be displayed
-      return findLabelWrapperByNodeId(wrapper, 'branch')
+      return findLabelContainerByNodeId(wrapper, 'branch')
     }
 
     const getLabelWrapperOfLeafNode = () => {
       vm.openMenu() // ensure the menu is opened otherwise the options won't be displayed
-      return findLabelWrapperByNodeId(wrapper, 'leaf')
+      return findLabelContainerByNodeId(wrapper, 'leaf')
     }
 
     const clickOnLabelOfBranchNode = () => {
@@ -772,7 +772,7 @@ describe('Props', () => {
         },
       })
 
-      expect(wrapper.contains('.vue-treeselect__input-wrapper')).toBe(true)
+      expect(wrapper.contains('.vue-treeselect__input-container')).toBe(true)
       expect(wrapper.contains('.vue-treeselect__input')).toBe(true)
     })
 
@@ -786,7 +786,7 @@ describe('Props', () => {
           },
         })
 
-        expect(wrapper.contains('.vue-treeselect__input-wrapper')).toBe(true)
+        expect(wrapper.contains('.vue-treeselect__input-container')).toBe(true)
         expect(wrapper.contains('.vue-treeselect__input')).toBe(false)
       })
 
@@ -813,7 +813,7 @@ describe('Props', () => {
           },
         })
         const { vm } = wrapper
-        const valueWrapper = wrapper.find('.vue-treeselect__value-wrapper')
+        const valueWrapper = wrapper.find('.vue-treeselect__value-container')
 
         leftClick(valueWrapper)
         expect(vm.isFocused).toBe(false)
@@ -1103,7 +1103,7 @@ describe('Props', () => {
         },
       })
       const { vm } = wrapper
-      const valueWrapper = wrapper.find('.vue-treeselect__value-wrapper')
+      const valueWrapper = wrapper.find('.vue-treeselect__value-container')
 
       expect(vm.isFocused).toBe(false)
       expect(vm.isOpen).toBe(false)
@@ -1126,7 +1126,7 @@ describe('Props', () => {
         },
       })
       const { vm } = wrapper
-      const valueWrapper = wrapper.find('.vue-treeselect__value-wrapper')
+      const valueWrapper = wrapper.find('.vue-treeselect__value-container')
 
       expect(vm.isFocused).toBe(false)
       expect(vm.isOpen).toBe(false)
@@ -1147,7 +1147,7 @@ describe('Props', () => {
         },
       })
       const { vm } = wrapper
-      const valueWrapper = wrapper.find('.vue-treeselect__value-wrapper')
+      const valueWrapper = wrapper.find('.vue-treeselect__value-container')
 
       expect(vm.isFocused).toBe(false)
       expect(vm.isOpen).toBe(false)
@@ -1444,7 +1444,7 @@ describe('Props', () => {
             },
           })
 
-          expect(wrapper.contains('.vue-treeselect__input-wrapper .vue-treeselect__input')).toBe(true)
+          expect(wrapper.contains('.vue-treeselect__input-container .vue-treeselect__input')).toBe(true)
         })
 
         it('should auto resize when length of input value changes', () => {
@@ -1463,7 +1463,7 @@ describe('Props', () => {
             },
           })
 
-          expect(wrapper.contains('.vue-treeselect__input-wrapper .vue-treeselect__input')).toBe(true)
+          expect(wrapper.contains('.vue-treeselect__input-container .vue-treeselect__input')).toBe(true)
         })
       })
 
@@ -1540,8 +1540,8 @@ describe('Props', () => {
             },
           })
 
-          expect(wrapper.contains('.vue-treeselect__input-wrapper')).toBe(true)
-          expect(wrapper.find('.vue-treeselect__input-wrapper').isEmpty()).toBe(true)
+          expect(wrapper.contains('.vue-treeselect__input-container')).toBe(true)
+          expect(wrapper.find('.vue-treeselect__input-container').isEmpty()).toBe(true)
         })
       })
 
@@ -1555,8 +1555,8 @@ describe('Props', () => {
             },
           })
 
-          expect(wrapper.contains('.vue-treeselect__input-wrapper')).toBe(true)
-          expect(wrapper.find('.vue-treeselect__input-wrapper').isEmpty()).toBe(true)
+          expect(wrapper.contains('.vue-treeselect__input-container')).toBe(true)
+          expect(wrapper.find('.vue-treeselect__input-container').isEmpty()).toBe(true)
         })
       })
     })
@@ -1739,7 +1739,7 @@ describe('Props', () => {
         },
       })
 
-      const $inputWrapper = wrapper.find('.vue-treeselect__input-wrapper')
+      const $inputWrapper = wrapper.find('.vue-treeselect__input-container')
       const $input = wrapper.find('.vue-treeselect__input')
       expect($inputWrapper.attributes().tabindex).toBe(undefined)
       expect($input.attributes().tabindex).toBe('0')
@@ -1754,7 +1754,7 @@ describe('Props', () => {
         },
       })
 
-      const $inputWrapper = wrapper.find('.vue-treeselect__input-wrapper')
+      const $inputWrapper = wrapper.find('.vue-treeselect__input-container')
       expect($inputWrapper.attributes().tabindex).toBe('0')
     })
 
@@ -1766,7 +1766,7 @@ describe('Props', () => {
         },
       })
 
-      const $inputWrapper = wrapper.find('.vue-treeselect__input-wrapper')
+      const $inputWrapper = wrapper.find('.vue-treeselect__input-container')
       expect($inputWrapper.attributes().tabindex).toBe(undefined)
     })
 

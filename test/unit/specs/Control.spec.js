@@ -10,7 +10,7 @@ describe('Control', () => {
         options: [],
       },
     })
-    const arrow = wrapper.find('.vue-treeselect__control-arrow-wrapper')
+    const arrow = wrapper.find('.vue-treeselect__control-arrow-container')
 
     leftClick(arrow)
     expect(wrapper.vm.isOpen).toBe(true)

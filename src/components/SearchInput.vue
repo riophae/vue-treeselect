@@ -102,7 +102,7 @@
 
       renderInputWrapper(h) {
         const props = {
-          class: 'vue-treeselect__input-wrapper',
+          class: 'vue-treeselect__input-container',
         }
         const children = []
 
