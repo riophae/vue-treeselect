@@ -31,7 +31,9 @@ This example shows how to integrate vue-treeselect with your [Vue SFCs](https://
 ```html
 <!-- Vue SFC -->
 <template>
-  <treeselect v-model="value" :multiple="true" :options="options" />
+  <div id="app">
+    <treeselect v-model="value" :multiple="true" :options="options" />
+  </div>
 </template>
 
 <script>
@@ -45,7 +47,9 @@ This example shows how to integrate vue-treeselect with your [Vue SFCs](https://
     components: { Treeselect },
     data() {
       return {
+        // define default value
         value: null,
+        // define options
         options: [ {
           id: 'a',
           label: 'a',
@@ -77,8 +81,8 @@ If you just don't want to use webpack or other bundlers, you can also simply inc
     <!-- include Vue 2.x -->
     <script src="https://cdn.jsdelivr.net/npm/vue@^2"></script>
     <!-- include vue-treeselect & its styles. you can change the version tag to better suit your need. -->
-    <script src="https://unpkg.com/@riophae/vue-treeselect@0.0.24/dist/vue-treeselect.min.js"></script>
-    <link rel="stylesheet" href="https://unpkg.com/@riophae/vue-treeselect@0.0.24/dist/vue-treeselect.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@riophae/vue-treeselect@0.0.24/dist/vue-treeselect.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@riophae/vue-treeselect@0.0.24/dist/vue-treeselect.min.css">
   </head>
   <body>
     <div id="app">
@@ -92,7 +96,9 @@ If you just don't want to use webpack or other bundlers, you can also simply inc
     new Vue({
       el: '#app',
       data: {
+        // define default value
         value: null,
+        // define options
         options: [ {
           id: 'a',
           label: 'a',
