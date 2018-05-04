@@ -13,5 +13,6 @@ module.exports = {
     'no-unknown-animations': null,
     'font-weight-notation': null,
     'no-descending-specificity': null,
+    'selector-max-compound-selectors': null,
   },
 }

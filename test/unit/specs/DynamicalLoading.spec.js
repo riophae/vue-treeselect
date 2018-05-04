@@ -556,7 +556,7 @@ describe('Dynamical Loading', () => {
       const menu = vm.$refs.menu
       expect(vm.loadingRootOptions).toBe(true)
       // should show a loading tip
-      expect(menu.firstElementChild.className).toBe('vue-treeselect__loading-tip')
+      expect(menu.firstElementChild.className).toEqual(jasmine.stringMatching('vue-treeselect__loading-tip'))
       expect(menu.firstElementChild.textContent.trim()).toBe('Loading...')
 
       await sleep(DELAY)
@@ -625,7 +625,7 @@ describe('Dynamical Loading', () => {
       expect(vm.loadingRootOptionsError).toBe(ERROR_MESSAGE)
       expect(vm.rootOptionsLoaded).toBe(false)
       menu = vm.$refs.menu
-      expect(menu.firstElementChild.className).toBe('vue-treeselect__error-tip')
+      expect(menu.firstElementChild.className).toEqual(jasmine.stringMatching('vue-treeselect__error-tip'))
       expect(menu.querySelector('.vue-treeselect__error-tip-text').textContent.includes(ERROR_MESSAGE)).toBe(true)
 
       // 2nd try
