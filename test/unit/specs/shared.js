@@ -13,25 +13,25 @@ export function leftClick(wrapper) {
 }
 
 export function pressBackspaceKey(wrapper) {
-  const inputWrapper = findInput(wrapper)
-  inputWrapper.trigger('keydown', KEY_BACKSPACE)
+  const input = findInput(wrapper)
+  input.trigger('keydown', KEY_BACKSPACE)
 }
 
 export function pressDeleteKey(wrapper) {
-  const inputWrapper = findInput(wrapper)
-  inputWrapper.trigger('keydown', KEY_DELETE)
+  const input = findInput(wrapper)
+  input.trigger('keydown', KEY_DELETE)
 }
 
 export function pressEscapeKey(wrapper, modifierKey) {
-  const inputWrapper = findInput(wrapper)
+  const input = findInput(wrapper)
   let eventData = KEY_ESCAPE
   if (modifierKey) eventData = { ...KEY_ESCAPE, [modifierKey]: true }
-  inputWrapper.trigger('keydown', eventData)
+  input.trigger('keydown', eventData)
 }
 
 export function pressAKey(wrapper) {
-  const inputWrapper = findInput(wrapper)
-  inputWrapper.trigger('keydown', KEY_A)
+  const input = findInput(wrapper)
+  input.trigger('keydown', KEY_A)
 }
 
 export async function typeSearchText(wrapper, text) {
@@ -40,6 +40,10 @@ export async function typeSearchText(wrapper, text) {
   $input.trigger('input')
   await sleep(INPUT_DEBOUNCE_DELAY + 10)
   expect(wrapper.vm.searchQuery).toBe(text)
+}
+
+export function findInputContainer(wrapper) {
+  return wrapper.find('.vue-treeselect__input-container')
 }
 
 export function findInput(wrapper) {
@@ -52,7 +56,7 @@ export function findMenu(wrapper) {
 
 export function findOptionByNodeId(wrapper, nodeId) {
   return wrapper.findAll(TreeselectOption).wrappers
-    .find(optionWrapper => optionWrapper.vm.node.id === nodeId)
+    .find(option => option.vm.node.id === nodeId)
 }
 
 export function findOptionArrowContainerByNodeId(wrapper, nodeId) {

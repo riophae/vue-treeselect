@@ -7,6 +7,7 @@ import { UNCHECKED, CHECKED } from '@riophae/vue-treeselect/constants'
 import {
   leftClick,
   typeSearchText,
+  findInputContainer,
   findInput,
   findMenu,
   findOptionByNodeId,
@@ -167,8 +168,8 @@ describe('Props', () => {
           searchable: true,
         },
       })
-      const inputWrapper = findInput(wrapper)
-      expect(document.activeElement).toBe(inputWrapper.element)
+      const input = findInput(wrapper)
+      expect(document.activeElement).toBe(input.element)
     })
 
     it('deprecated', () => {
@@ -198,8 +199,8 @@ describe('Props', () => {
           searchable: true,
         },
       })
-      const inputWrapper = findInput(wrapper)
-      expect(document.activeElement).toBe(inputWrapper.element)
+      const input = findInput(wrapper)
+      expect(document.activeElement).toBe(input.element)
     })
   })
 
@@ -462,9 +463,9 @@ describe('Props', () => {
         },
       })
       const { vm } = wrapper
-      const labelWrapper = findLabelContainerByNodeId(wrapper, 'a')
+      const labelContainer = findLabelContainerByNodeId(wrapper, 'a')
 
-      leftClick(labelWrapper)
+      leftClick(labelContainer)
       expect(vm.selectedNodeIds).toEqual([ 'a' ])
       expect(vm.isOpen).toBe(false)
     })
@@ -482,9 +483,9 @@ describe('Props', () => {
         },
       })
       const { vm } = wrapper
-      const labelWrapper = findLabelContainerByNodeId(wrapper, 'a')
+      const labelContainer = findLabelContainerByNodeId(wrapper, 'a')
 
-      leftClick(labelWrapper)
+      leftClick(labelContainer)
       expect(vm.selectedNodeIds).toEqual([ 'a' ])
       expect(vm.isOpen).toBe(true)
       expect(vm.isFocused).toBe(false) // auto blur
@@ -644,19 +645,19 @@ describe('Props', () => {
       vm = wrapper.vm
     })
 
-    const getLabelWrapperOfBranchNode = () => {
+    const getLabelContainerOfBranchNode = () => {
       vm.openMenu() // ensure the menu is opened otherwise the options won't be displayed
       return findLabelContainerByNodeId(wrapper, 'branch')
     }
 
-    const getLabelWrapperOfLeafNode = () => {
+    const getLabelContainerOfLeafNode = () => {
       vm.openMenu() // ensure the menu is opened otherwise the options won't be displayed
       return findLabelContainerByNodeId(wrapper, 'leaf')
     }
 
     const clickOnLabelOfBranchNode = () => {
-      const labelWrapperOfBranchNode = getLabelWrapperOfBranchNode()
-      leftClick(labelWrapperOfBranchNode)
+      const labelContainerOfBranchNode = getLabelContainerOfBranchNode()
+      leftClick(labelContainerOfBranchNode)
     }
 
     describe('when disableBranchNodes=false', () => {
@@ -666,16 +667,16 @@ describe('Props', () => {
 
       it('a branch node should have checkbox when multiple=true', () => {
         wrapper.setProps({ multiple: true })
-        const labelWrapperOfBranchNode = getLabelWrapperOfBranchNode()
+        const labelContainerOfBranchNode = getLabelContainerOfBranchNode()
 
-        expect(labelWrapperOfBranchNode.contains('.vue-treeselect__checkbox')).toBe(true)
+        expect(labelContainerOfBranchNode.contains('.vue-treeselect__checkbox')).toBe(true)
       })
 
       it('a leaf node should have checkbox too when multiple=true', () => {
         wrapper.setProps({ multiple: true })
-        const labelWrapperOfLeafNode = getLabelWrapperOfLeafNode()
+        const labelContainerOfLeafNode = getLabelContainerOfLeafNode()
 
-        expect(labelWrapperOfLeafNode.contains('.vue-treeselect__checkbox')).toBe(true)
+        expect(labelContainerOfLeafNode.contains('.vue-treeselect__checkbox')).toBe(true)
       })
 
       it('click on label of a branch node should toggle checking state when multiple=true', () => {
@@ -713,16 +714,16 @@ describe('Props', () => {
 
       it('a branch node should not have checkbox when multiple=true', () => {
         wrapper.setProps({ multiple: true })
-        const labelWrapperOfBranchNode = getLabelWrapperOfBranchNode()
+        const labelContainerOfBranchNode = getLabelContainerOfBranchNode()
 
-        expect(labelWrapperOfBranchNode.contains('.vue-treeselect__checkbox')).toBe(false)
+        expect(labelContainerOfBranchNode.contains('.vue-treeselect__checkbox')).toBe(false)
       })
 
       it('a leaf node should have checkbox when multiple=true', () => {
         wrapper.setProps({ multiple: true })
-        const labelWrapperOfLeafNode = getLabelWrapperOfLeafNode()
+        const labelContainerOfLeafNode = getLabelContainerOfLeafNode()
 
-        expect(labelWrapperOfLeafNode.contains('.vue-treeselect__checkbox')).toBe(true)
+        expect(labelContainerOfLeafNode.contains('.vue-treeselect__checkbox')).toBe(true)
       })
 
       it('click on label of a branch node should not toggle checking state when multiple=true', () => {
@@ -813,9 +814,9 @@ describe('Props', () => {
           },
         })
         const { vm } = wrapper
-        const valueWrapper = wrapper.find('.vue-treeselect__value-container')
+        const valeContainer = wrapper.find('.vue-treeselect__value-container')
 
-        leftClick(valueWrapper)
+        leftClick(valeContainer)
         expect(vm.isFocused).toBe(false)
         expect(vm.isOpen).toBe(false)
       })
@@ -1103,16 +1104,16 @@ describe('Props', () => {
         },
       })
       const { vm } = wrapper
-      const valueWrapper = wrapper.find('.vue-treeselect__value-container')
+      const valeContainer = wrapper.find('.vue-treeselect__value-container')
 
       expect(vm.isFocused).toBe(false)
       expect(vm.isOpen).toBe(false)
 
-      leftClick(valueWrapper)
+      leftClick(valeContainer)
       expect(vm.isFocused).toBe(true)
       expect(vm.isOpen).toBe(false)
 
-      leftClick(valueWrapper)
+      leftClick(valeContainer)
       expect(vm.isFocused).toBe(true)
       expect(vm.isOpen).toBe(true)
     })
@@ -1126,12 +1127,12 @@ describe('Props', () => {
         },
       })
       const { vm } = wrapper
-      const valueWrapper = wrapper.find('.vue-treeselect__value-container')
+      const valeContainer = wrapper.find('.vue-treeselect__value-container')
 
       expect(vm.isFocused).toBe(false)
       expect(vm.isOpen).toBe(false)
 
-      leftClick(valueWrapper)
+      leftClick(valeContainer)
       expect(vm.isFocused).toBe(true)
       expect(vm.isOpen).toBe(true)
     })
@@ -1147,7 +1148,7 @@ describe('Props', () => {
         },
       })
       const { vm } = wrapper
-      const valueWrapper = wrapper.find('.vue-treeselect__value-container')
+      const valeContainer = wrapper.find('.vue-treeselect__value-container')
 
       expect(vm.isFocused).toBe(false)
       expect(vm.isOpen).toBe(false)
@@ -1156,7 +1157,7 @@ describe('Props', () => {
       expect(vm.isFocused).toBe(true)
       expect(vm.isOpen).toBe(false)
 
-      leftClick(valueWrapper)
+      leftClick(valeContainer)
       expect(vm.isFocused).toBe(true)
       expect(vm.isOpen).toBe(true)
     })
@@ -1354,7 +1355,7 @@ describe('Props', () => {
   })
 
   describe('required', () => {
-    let wrapper, inputWrapper
+    let wrapper, input
 
     beforeEach(() => {
       wrapper = mount(Treeselect, {
@@ -1366,25 +1367,25 @@ describe('Props', () => {
           searchable: true,
         },
       })
-      inputWrapper = findInput(wrapper)
+      input = findInput(wrapper)
     })
 
     describe('when required=true', () => {
       it('the input should have `required` attribute if having no value', () => {
         wrapper.setProps({ required: true })
-        expect(inputWrapper.attributes().required).toBe('required')
+        expect(input.attributes().required).toBe('required')
       })
 
       it('the input should not have `required` attribute if value is present', () => {
         wrapper.setProps({ value: 'a', required: true })
-        expect(inputWrapper.attributes()).not.toHaveMember('required')
+        expect(input.attributes()).not.toHaveMember('required')
       })
     })
 
     describe('when required=false', () => {
       it('the input should not have `required` attribute even if value is present', () => {
         wrapper.setProps({ value: 'a', required: false })
-        expect(inputWrapper.attributes()).not.toHaveMember('required')
+        expect(input.attributes()).not.toHaveMember('required')
       })
     })
   })
@@ -1520,10 +1521,10 @@ describe('Props', () => {
         expect(vm.noSearchResults).toBe(false)
 
         const expectedMatchedNodeIds = [ 'ab', 'b' ]
-        const optionWrappers = wrapper.findAll(TreeselectOption)
-        expect(optionWrappers.length).toBe(4)
-        optionWrappers.wrappers.forEach(optionWrapper => {
-          const { node } = optionWrapper.vm
+        const options = wrapper.findAll(TreeselectOption)
+        expect(options.length).toBe(4)
+        options.wrappers.forEach(option => {
+          const { node } = option.vm
           expect(node.isMatched).toBe(expectedMatchedNodeIds.indexOf(node.id) !== -1)
         })
       })
@@ -1738,11 +1739,11 @@ describe('Props', () => {
           disabled: false,
         },
       })
+      const inputContainer = findInputContainer(wrapper)
+      const input = findInput(wrapper)
 
-      const $inputWrapper = wrapper.find('.vue-treeselect__input-container')
-      const $input = wrapper.find('.vue-treeselect__input')
-      expect($inputWrapper.attributes().tabindex).toBe(undefined)
-      expect($input.attributes().tabindex).toBe('0')
+      expect(inputContainer.attributes().tabindex).toBe(undefined)
+      expect(input.attributes().tabindex).toBe('0')
     })
 
     it('when disabled=false & searchable=false', () => {
@@ -1753,9 +1754,9 @@ describe('Props', () => {
           disabled: false,
         },
       })
+      const inputContainer = findInputContainer(wrapper)
 
-      const $inputWrapper = wrapper.find('.vue-treeselect__input-container')
-      expect($inputWrapper.attributes().tabindex).toBe('0')
+      expect(inputContainer.attributes().tabindex).toBe(undefined)
     })
 
     it('when disabled=true', () => {
@@ -1765,9 +1766,9 @@ describe('Props', () => {
           disabled: true,
         },
       })
+      const inputContainer = findInputContainer(wrapper)
 
-      const $inputWrapper = wrapper.find('.vue-treeselect__input-container')
-      expect($inputWrapper.attributes().tabindex).toBe(undefined)
+      expect(inputContainer.attributes().tabindex).toBe(undefined)
     })
 
     it('customized value', () => {
@@ -1779,9 +1780,9 @@ describe('Props', () => {
           tabIndex: 1,
         },
       })
-      const inputWrapper = findInput(wrapper)
+      const input = findInput(wrapper)
 
-      expect(inputWrapper.attributes().tabindex).toBe('1')
+      expect(input.attributes().tabindex).toBe('1')
     })
   })
 

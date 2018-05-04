@@ -914,9 +914,9 @@ export default {
 
       if (this.disabled) return
 
-      const isClickedOnValueWrapper = this.$refs.value.$el.contains(evt.target)
+      const isClickedOnValueContainer = this.$refs.value.$el.contains(evt.target)
 
-      if (isClickedOnValueWrapper) {
+      if (isClickedOnValueContainer) {
         if (this.isOpen && !this.searchable && !this._wasClickedOnValueItem) {
           this.closeMenu()
         } else if (!this.isOpen && (this.openOnClick || this.isFocused)) {

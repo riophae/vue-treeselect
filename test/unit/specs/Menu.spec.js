@@ -30,9 +30,9 @@ describe('Menu', () => {
         isFocused: true,
       },
     })
-    const valueWrapper = wrapper.find('.vue-treeselect__value-container')
+    const valueContainer = wrapper.find('.vue-treeselect__value-container')
 
-    leftClick(valueWrapper)
+    leftClick(valueContainer)
     expect(wrapper.vm.isOpen).toBe(true)
   })
 
@@ -54,8 +54,8 @@ describe('Menu', () => {
     })
 
     wrapper.vm.openMenu()
-    const valueWrapper = wrapper.find('.vue-treeselect__value-container')
-    leftClick(valueWrapper)
+    const valueContainer = wrapper.find('.vue-treeselect__value-container')
+    leftClick(valueContainer)
     expect(wrapper.vm.isOpen).toBe(false)
   })
 

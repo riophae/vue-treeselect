@@ -59,9 +59,9 @@ describe('Single-select', () => {
       },
     })
     const { vm } = wrapper
-    const labelWrapper = findLabelContainerByNodeId(wrapper, 'a')
+    const labelContainer = findLabelContainerByNodeId(wrapper, 'a')
 
-    leftClick(labelWrapper)
+    leftClick(labelContainer)
     expect(vm.selectedNodeIds).toEqual([ 'a' ])
     expect(vm.isFocused).toEqual(false)
     expect(vm.isOpen).toEqual(false)

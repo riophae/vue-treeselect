@@ -100,7 +100,7 @@
         }
       },
 
-      renderInputWrapper(h) {
+      renderInputContainer(h) {
         const props = {
           class: 'vue-treeselect__input-container',
         }
@@ -178,7 +178,7 @@
     },
 
     render(h) {
-      return this.renderInputWrapper(h)
+      return this.renderInputContainer(h)
     },
   }
 </script>

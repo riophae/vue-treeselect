@@ -160,12 +160,12 @@ describe('Dynamical Loading', () => {
         },
       })
       const { vm } = wrapper
-      let optionArrowWrapper
+      let optionArrowContainer
       let childrenOptionList
 
       // 1st try
-      optionArrowWrapper = findOptionArrowContainerByNodeId(wrapper, 'a')
-      leftClick(optionArrowWrapper) // expand
+      optionArrowContainer = findOptionArrowContainerByNodeId(wrapper, 'a')
+      leftClick(optionArrowContainer) // expand
       expect(spyForLoadOptions.calls.count()).toBe(1)
       await sleep(DELAY)
       childrenOptionList = findChildrenOptionListByNodeId(wrapper, 'a')
@@ -188,9 +188,9 @@ describe('Dynamical Loading', () => {
       expect(childrenOptionList.contains('.vue-treeselect__error-tip')).toBe(true)
 
       // 3nd try - collapse & re-expand
-      optionArrowWrapper = findOptionArrowContainerByNodeId(wrapper, 'a')
-      leftClick(optionArrowWrapper) // collapse
-      leftClick(optionArrowWrapper) // re-expand
+      optionArrowContainer = findOptionArrowContainerByNodeId(wrapper, 'a')
+      leftClick(optionArrowContainer) // collapse
+      leftClick(optionArrowContainer) // re-expand
       expect(spyForLoadOptions.calls.count()).toBe(3)
       await sleep(DELAY)
       childrenOptionList = findChildrenOptionListByNodeId(wrapper, 'a')
