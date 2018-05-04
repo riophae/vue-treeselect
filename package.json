@@ -26,7 +26,8 @@
     "lint:css": "stylelint '**/*.less'",
     "lint": "npm run lint:js && npm run lint:css",
     "size": "size-limit",
-    "finish": "npm test && npm run bundle && npm run size"
+    "verify-bundle": "npm run size && node build/verify-bundle.js",
+    "finish": "npm test && npm run bundle && npm run verify-bundle"
   },
   "pre-commit": "lint",
   "dependencies": {
@@ -93,6 +94,7 @@
     "regenerator-runtime": "^0.11.1",
     "rimraf": "^2.6.2",
     "selenium-server": "^3.11.0",
+    "shallow-equal": "^1.0.0",
     "shelljs": "^0.8.1",
     "size-limit": "^0.17.0",
     "strip-indent": "^2.0.0",
