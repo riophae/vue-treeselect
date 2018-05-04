@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 const config = require('../config')
 
 if (!process.env.NODE_ENV) {
