@@ -162,4 +162,4 @@ Some icons used in this project:
 
 Copyright (c) 2017-present [Riophae Lee](https://github.com/riophae).
 
-Released under the [MIT License](https://github.com/riophae/vue-treeselect/blob/master/LICENSE.md).
+Released under the [MIT License](https://github.com/riophae/vue-treeselect/blob/master/LICENSE).
