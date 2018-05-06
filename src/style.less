@@ -87,22 +87,18 @@
 @treeselect-checkbox-bg-hover: @treeselect-checkbox-bg;
 @treeselect-checkbox-indeterminate-border-color: @treeselect-checkbox-color-highlight;
 @treeselect-checkbox-indeterminate-bg: @treeselect-checkbox-color-highlight;
-@treeselect-checkbox-minus-mark-size: 8px;
-@treeselect-checkbox-minus-mark-color: #fff;
+@treeselect-checkbox-indeterminate-icon: "./assets/checkbox-indeterminate.png";
 @treeselect-checkbox-indeterminate-border-color-hover: @treeselect-checkbox-color-highlight;
 @treeselect-checkbox-indeterminate-bg-hover: @treeselect-checkbox-color-highlight;
-@treeselect-checkbox-minus-mark-color-hover: #fff;
 @treeselect-checkbox-checked-border-color: @treeselect-checkbox-color-highlight;
 @treeselect-checkbox-checked-bg: @treeselect-checkbox-color-highlight;
-@treeselect-checkbox-check-mark-size: 8px;
-@treeselect-checkbox-check-mark-color: #fff;
+@treeselect-checkbox-checked-icon: "./assets/checkbox-checked.png";
 @treeselect-checkbox-checked-border-color-hover: @treeselect-checkbox-color-highlight;
 @treeselect-checkbox-checked-bg-hover: @treeselect-checkbox-color-highlight;
-@treeselect-checkbox-check-mark-color-hover: #fff;
 @treeselect-checkbox-disabled-border-color: @treeselect-checkbox-border-color;
 @treeselect-checkbox-disabled-bg-color: darken(@treeselect-checkbox-bg, 3%);
-@treeselect-checkbox-disabled-minus-mark-color: @treeselect-checkbox-disabled-border-color;
-@treeselect-checkbox-disabled-check-mark-color: @treeselect-checkbox-disabled-border-color;
+@treeselect-checkbox-disabled-indeterminate-icon: "./assets/checkbox-indeterminate-disabled.png";
+@treeselect-checkbox-disabled-checked-icon: "./assets/checkbox-checked-disabled.png";
 @treeselect-option-label-color: inherit;
 @treeselect-option-label-color-disabled: rgba(0, 0, 0, 0.25);
 
@@ -200,6 +196,31 @@
   font-size: 0;
 }
 
+// based on: https://github.com/strues/retinajs/blob/master/dist/retina.less
+.retina(@path, @cap: 2) {
+  @lowretina: ~"(min-resolution: 1.5dppx)";
+  @2xpath: replace(@path, "(\.\w+)$", "@2x$1");
+
+  background-image: url(@path);
+
+  @media @lowretina {
+    background-image: url(@2xpath);
+  }
+
+  .create-queries() when (@cap >= 2) {
+    .loop(@env) when (@env <= @cap) {
+      @retinapath: replace(@path, "(\.\w+)$", "@@{env}x$1");
+      @media (min-resolution: @env * 96dpi) {
+        background-image: url(@retinapath);
+      }
+
+      .loop((@env + 1));
+    }
+
+    .loop(2);
+  }
+  .create-queries();
+}
 
 /**
  * Helpers
@@ -763,48 +784,38 @@
 }
 
 .vue-treeselect__minus-mark {
-  color: @treeselect-checkbox-minus-mark-color;
-  width: @treeselect-checkbox-minus-mark-size;
-  height: @treeselect-checkbox-minus-mark-size;
+  width: image-width(@treeselect-checkbox-indeterminate-icon);
+  height: image-height(@treeselect-checkbox-indeterminate-icon);
+  // svg icons are rendered differently in different browsers thus unacceptable
+  // png provides the best consistency with a drawback that
+  // its color can't be controlled by CSS
+  .retina(@treeselect-checkbox-indeterminate-icon, 3);
+  background-size: image-size(@treeselect-checkbox-indeterminate-icon);
 
   .vue-treeselect__checkbox--indeterminate > & {
     opacity: 1;
   }
 
-  .vue-treeselect__label-container:hover & {
-    color: @treeselect-checkbox-minus-mark-color-hover;
-  }
-
   .vue-treeselect__checkbox--disabled & {
-    color: @treeselect-checkbox-disabled-minus-mark-color;
-
-    .vue-treeselect__label-container:hover & {
-      color: @treeselect-checkbox-disabled-minus-mark-color;
-    }
+    .retina(@treeselect-checkbox-disabled-indeterminate-icon, 3);
   }
 }
 
 .vue-treeselect__check-mark {
-  width: @treeselect-checkbox-check-mark-size;
-  height: @treeselect-checkbox-check-mark-size;
-  color: @treeselect-checkbox-check-mark-color;
-  transform: scaleY(1 / unit(@treeselect-checkbox-check-mark-size));
+  width: image-width(@treeselect-checkbox-checked-icon);
+  height: image-height(@treeselect-checkbox-checked-icon);
+  .retina(@treeselect-checkbox-checked-icon, 3);
+  background-size: image-size(@treeselect-checkbox-checked-icon);
+  // set initial height to 1px
+  transform: scaleY(1 / unit(image-height(@treeselect-checkbox-checked-icon)));
 
   .vue-treeselect__checkbox--checked > & {
     opacity: 1;
     transform: scaleY(1);
   }
 
-  .vue-treeselect__label-container:hover & {
-    color: @treeselect-checkbox-check-mark-color-hover;
-  }
-
   .vue-treeselect__checkbox--disabled & {
-    color: @treeselect-checkbox-disabled-check-mark-color;
-
-    .vue-treeselect__label-container:hover & {
-      color: @treeselect-checkbox-disabled-check-mark-color;
-    }
+    .retina(@treeselect-checkbox-disabled-checked-icon, 3);
   }
 }
 

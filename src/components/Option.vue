@@ -20,8 +20,8 @@
             'vue-treeselect__checkbox--unchecked': checkedState === UNCHECKED,
             'vue-treeselect__checkbox--disabled': node.isDisabled,
           } ]">
-            <check-mark class="vue-treeselect__check-mark" />
-            <minus-mark class="vue-treeselect__minus-mark" />
+            <span class="vue-treeselect__check-mark" />
+            <span class="vue-treeselect__minus-mark" />
           </span>
         </div>
         <slot name="option-label" :node="node" :should-show-count="shouldShowCount" :count="count"
@@ -55,13 +55,11 @@
   import optionMixin from '../mixins/optionMixin'
   import Tip from './Tip'
   import Arrow from './Arrow'
-  import CheckMark from './CheckMark'
-  import MinusMark from './MinusMark'
 
   export default {
     name: 'vue-treeselect--option',
     inject: [ 'instance', 'UNCHECKED', 'INDETERMINATE', 'CHECKED' ],
-    components: { Tip, Arrow, CheckMark, MinusMark },
+    components: { Tip, Arrow },
     mixins: [ optionMixin ],
   }
 </script>
