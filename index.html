@@ -40,13 +40,13 @@
       gtag('config', 'UA-108169693-1');
     </script>
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600|Dosis:300,500">
-  <link href="static/css/app.6d2623d03cd024c1215d.css" rel="stylesheet"></head>
+  <link href="static/css/app.4459d9b78469e8e060e3.css" rel="stylesheet"></head>
   <body>
     <div id="app">
       <header class="site-header">
         <div class="container" id="header">
           <div class="site-header-logo"><a class="site-header-logo-link" href="https://vue-treeselect.js.org/">Vue<span class="site-header-logo-component-name">Treeselect</span></a></div>
-          <nav class="site-header-nav"><a class="site-header-nav-item" href="https://github.com/riophae/vue-treeselect/releases">v0.0.24</a><span class="site-header-nav-item"><a class="github-button" href="https://github.com/riophae/vue-treeselect" data-show-count="true" aria-label="Star riophae/vue-treeselect on GitHub">Star</a></span></nav>
+          <nav class="site-header-nav"><a class="site-header-nav-item" href="https://github.com/riophae/vue-treeselect/releases">v0.0.25</a><span class="site-header-nav-item"><a class="github-button" href="https://github.com/riophae/vue-treeselect" data-show-count="true" aria-label="Star riophae/vue-treeselect on GitHub">Star</a></span></nav>
         </div>
       </header>
       <div class="container">
@@ -118,7 +118,9 @@
               <p>This example shows how to integrate vue-treeselect with your <a href="https://vuejs.org/v2/guide/single-file-components.html">Vue SFCs</a>.</p>
 <pre><code class="language-html">&lt;!-- Vue SFC --&gt;
 &lt;template&gt;
-  &lt;treeselect v-model=&quot;value&quot; :multiple=&quot;true&quot; :options=&quot;options&quot; /&gt;
+  &lt;div id=&quot;app&quot;&gt;
+    &lt;treeselect v-model=&quot;value&quot; :multiple=&quot;true&quot; :options=&quot;options&quot; /&gt;
+  &lt;/div&gt;
 &lt;/template&gt;
 
 &lt;script&gt;
@@ -132,7 +134,9 @@
     components: { Treeselect },
     data() {
       return {
+        // define default value
         value: null,
+        // define options
         options: [ {
           id: 'a',
           label: 'a',
@@ -161,8 +165,8 @@
     &lt;!-- include Vue 2.x --&gt;
     &lt;script src=&quot;https://cdn.jsdelivr.net/npm/vue@^2&quot;&gt;&lt;/script&gt;
     &lt;!-- include vue-treeselect &amp; its styles. you can change the version tag to better suit your need. --&gt;
-    &lt;script src=&quot;https://unpkg.com/@riophae/vue-treeselect@0.0.24/dist/vue-treeselect.min.js&quot;&gt;&lt;/script&gt;
-    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://unpkg.com/@riophae/vue-treeselect@0.0.24/dist/vue-treeselect.min.css&quot;&gt;
+    &lt;script src=&quot;https://cdn.jsdelivr.net/npm/@riophae/vue-treeselect@0.0.24/dist/vue-treeselect.min.js&quot;&gt;&lt;/script&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@riophae/vue-treeselect@0.0.24/dist/vue-treeselect.min.css&quot;&gt;
   &lt;/head&gt;
   &lt;body&gt;
     &lt;div id=&quot;app&quot;&gt;
@@ -176,7 +180,9 @@
     new Vue({
       el: '#app',
       data: {
+        // define default value
         value: null,
+        // define options
         options: [ {
           id: 'a',
           label: 'a',
@@ -542,11 +548,12 @@ export default {
             <section>
               <h2 id="prevent-value-combining" data-section>Prevent Value Combining<a class="anchor" href="#prevent-value-combining">
                   <anchor></anchor></a>
-              </h2><p>For non-flat &amp; multi-select mode, if a branch node and its all descendants are checked, vue-treeselect will combine them into a single item in the value array, as demonstrated in the following example. By using <code>valueConsistsOf</code> prop you can change that behavior. This prop has three options:</p>
+              </h2><p>For non-flat &amp; multi-select mode, if a branch node and its all descendants are checked, vue-treeselect will combine them into a single item in the value array, as demonstrated in the following example. By using <code>valueConsistsOf</code> prop you can change that behavior. This prop has four options:</p>
 <ul>
 <li><code>&quot;ALL&quot;</code> - Any node that is checked will be included in the <code>value</code> array</li>
 <li><code>&quot;BRANCH_PRIORITY&quot;</code> (default) - If a branch node is checked, all its descendants will be excluded in the <code>value</code> array</li>
 <li><code>&quot;LEAF_PRIORITY&quot;</code> - If a branch node is checked, this node itself and its branch descendants will be excluded from the <code>value</code> array but its leaf descendants will be included</li>
+<li><code>&quot;ALL_WITH_INDETERMINATE&quot;</code> - Any node that is checked will be included in the <code>value</code> array, plus indeterminate nodes</li>
 </ul>
 
               <demo>
@@ -564,6 +571,7 @@ export default {
     &lt;label&gt;&lt;input type=&quot;radio&quot; value=&quot;ALL&quot; v-model=&quot;valueConsistsOf&quot;&gt;All&lt;/label&gt;
     &lt;label&gt;&lt;input type=&quot;radio&quot; value=&quot;BRANCH_PRIORITY&quot; v-model=&quot;valueConsistsOf&quot;&gt;Branch priority&lt;/label&gt;
     &lt;label&gt;&lt;input type=&quot;radio&quot; value=&quot;LEAF_PRIORITY&quot; v-model=&quot;valueConsistsOf&quot;&gt;Leaf priority&lt;/label&gt;
+    &lt;label&gt;&lt;input type=&quot;radio&quot; value=&quot;ALL_WITH_INDETERMINATE&quot; v-model=&quot;valueConsistsOf&quot;&gt;All with indeterminate&lt;/label&gt;
   &lt;/p&gt;
 &lt;/div&gt;
 </code></template>
@@ -931,5 +939,5 @@ export default {
     </div>
     <script src="https://buttons.github.io/buttons.js" async defer="defer"></script>
     <script src="static/prism.min.js"></script>
-  <script type="text/javascript" src="static/js/app.fee7bdbc85206fc6a87a.js"></script></body>
+  <script type="text/javascript" src="static/js/app.e4b220d464c1fd16b751.js"></script></body>
 </html>
