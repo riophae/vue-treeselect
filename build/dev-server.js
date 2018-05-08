@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 const config = require('../config')
 
 if (!process.env.NODE_ENV) {
@@ -24,7 +26,7 @@ const compiler = webpack(webpackConfig)
 
 const devMiddleware = require('webpack-dev-middleware')(compiler, {
   publicPath: webpackConfig.output.publicPath,
-  quiet: true,
+  stats: 'minimal',
 })
 
 const hotMiddleware = require('webpack-hot-middleware')(compiler, {

@@ -33,13 +33,18 @@ export default {
         ? this.instance.searchingCount[this.node.id][this.instance.showCountOf]
         : this.node.count[this.instance.showCountOf]
     },
+
+    shouldShowArrorPlaceholder() {
+      if (this.node.isBranch) return false
+      return this.node.isLeaf && this.instance.hasBranchNodes
+    },
   },
 
   watch: {
-    'node.isExpanded'(newValue) {
+    'shouldExpand'(newValue) {
       if (newValue === true && !this.node.isLoaded) {
         // load children when expanded
-        this.instance.loadOptions(false, this.node)
+        this.instance.loadChildrenOptions(this.node)
       }
     },
   },

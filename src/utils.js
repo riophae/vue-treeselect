@@ -28,11 +28,37 @@ export function onlyOnLeftClick(mouseDownHandler) {
 }
 
 export function noop() {
-  /* istanbul ignore next */
+  // empty
 }
 
 export function identity(x) {
   return x
+}
+
+export function constant(x) {
+  return () => x
+}
+
+export function isPromise(x) {
+  // https://github.com/then/is-promise/blob/master/index.js
+  return (
+    x != null &&
+    (typeof x === 'object' || typeof x === 'function') &&
+    typeof x.then === 'function'
+  )
+}
+
+export function once(fn) {
+  let val
+  return (...args) => {
+    if (fn.called) return val
+    fn.called = true
+    return val = fn(...args)
+  }
+}
+
+export function createEmptyObjectWithoutPrototype() {
+  return Object.create(null)
 }
 
 // a simplified version of debounce from underscore
@@ -73,8 +99,21 @@ function copy(obj, key, value) {
   }
 }
 
-export function hasOwn(obj, key) {
+function hasOwn(obj, key) {
   return Object.prototype.hasOwnProperty.call(obj, key)
+}
+
+export function assign(target, ...sources) {
+  for (let i = 0; i < sources.length; i++) {
+    const source = sources[i]
+    for (const key in source) {
+      // istanbul ignore else
+      if (hasOwn(source, key)) {
+        target[key] = source[key]
+      }
+    }
+  }
+  return target
 }
 
 export function deepExtend(target, source) {
@@ -93,10 +132,6 @@ export function deepExtend(target, source) {
 }
 
 export function last(arr) {
-  warning(
-    () => Array.isArray(arr),
-    () => 'unexpected type',
-  )
   return arr[arr.length - 1]
 }
 

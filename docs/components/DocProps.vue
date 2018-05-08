@@ -3,16 +3,18 @@
     <thead>
       <tr>
         <th class="name">Name</th>
-        <th>Type</th>
-        <th>Default</th>
+        <th>Type / Default</th>
         <th class="desc">Description</th>
       </tr>
     </thead>
     <tbody>
       <tr v-for="prop in props" :key="prop[0]">
         <td><strong>{{ prop.name }}</strong></td>
-        <td class="nowrap" v-html="prop.type" />
-        <td v-html="prop.defaultValue" />
+        <td class="type">
+          <strong>Type:</strong> <span v-html="prop.type" />
+          <br>
+          <strong>Default:</strong> <span v-html="prop.defaultValue" />
+        </td>
         <td v-html="prop.description" />
       </tr>
     </tbody>
@@ -21,7 +23,8 @@
 
 <script>
   /* eslint-disable no-template-curly-in-string */
-  import { code, strong, link } from './utils'
+  import entities from 'entities'
+  import { code, strong, link, makeArgNameList, makePropList } from './utils'
 
   const NO_DEFAULT_VALUE = '–'
 
@@ -47,6 +50,11 @@
         type: 'Boolean',
         defaultValue: code('true'),
         description: 'Whether pressing backspace key removes the last item if there is no text input.',
+      }, {
+        name: 'beforeClearAll',
+        type: entities.encodeHTML(`Fn${makeArgNameList([])} 🡒 (Boolean | Promise<Boolean>)`),
+        defaultValue: code('() => true'),
+        description: `Function that processes before clearing all input fields. Return ${code('false')} to stop values being cleared.`,
       }, {
         name: 'branchNodesFirst',
         type: 'Boolean',
@@ -134,29 +142,30 @@
         description: `Limit the display of selected options. The rest will be hidden within the ${code('limitText')} string.`,
       }, {
         name: 'limitText',
-        type: 'Function',
+        type: `Fn${makeArgNameList([ 'count' ])} 🡒 String`,
         defaultValue: code('count => `and ${count} more`'),
         description: 'Function that processes the message shown when selected elements pass the defined limit.',
       }, {
-        name: 'loadChildrenErrorText',
-        type: 'Function',
-        defaultValue: code('error => `Failed to load children options: ${error.message || String(error)}.`'),
-        description: 'Function that processes error message shown when loading children options failed.',
-      }, {
-        name: 'loadChildrenOptions',
-        type: 'Function',
-        defaultValue: NO_DEFAULT_VALUE,
-        description: `As the name suggests, it's used for dynamic loading options. See ${link('#delayed-loading')} for detailed information.`,
+        name: 'loading',
+        type: 'Boolean',
+        defaultValue: code('false'),
+        description: `Whether is externally loading options or not. Set ${code('true')} to show a spinner.`,
       }, {
         name: 'loadingText',
         type: 'String',
         defaultValue: code('"Loading..."'),
         description: 'Text displayed when a branch node is loading its children options.',
       }, {
-        name: 'loadRootOptions',
-        type: 'Function',
+        name: 'loadOptions',
+        type: `Fn(${makePropList([ 'action', 'callback', 'parentNode?', 'id' ])}) 🡒 (${code('void')} | Promise)`,
         defaultValue: NO_DEFAULT_VALUE,
-        description: `Used for delayed loading root options. See ${link('#delayed-loading')} for detailed information.`,
+        description: [
+          `Used for dynamically loading options. See ${link('#delayed-loading')} for detailed information.`,
+          `Possible values of ${code('action')}: ${code('"LOAD_ROOT_OPTIONS"')} or ${code('"LOAD_CHILDREN_OPTIONS"')}.`,
+          `${code('callback')} - a function that accepts an optional ${code('error')} argument`,
+          `${code('parentNode')} - only presents when loading children options`,
+          `${code('id')} - eqauls to the value of ${code('id')} prop you passed to vue-treeselect`,
+        ].join('<br>'),
       }, {
         name: 'maxHeight',
         type: 'Number',
@@ -175,7 +184,7 @@
       }, {
         name: 'noChildrenText',
         type: 'String',
-        defaultValue: code('"No children available..."'),
+        defaultValue: code('"No sub-options."'),
         description: 'Text displayed when a branch node has no children options.',
       }, {
         name: 'noOptionsText',
@@ -189,7 +198,7 @@
         description: 'Text displayed when there are no matching search results.',
       }, {
         name: 'normalizer',
-        type: 'Function',
+        type: `Fn${makeArgNameList([ 'node', 'id' ])} 🡒 ${code('node')}`,
         defaultValue: code('node => node'),
         description: `Used for normalizing source data. See ${link('#customize-key-names')} for detailed information.`,
       }, {
@@ -217,6 +226,11 @@
         type: 'String',
         defaultValue: code('"Select..."'),
         description: "Field placeholder, displayed when there's no value.",
+      }, {
+        name: 'required',
+        type: 'Boolean',
+        defaultValue: code('false'),
+        description: `Applies HTML5 ${code('required')} attribute when needed.`,
       }, {
         name: 'retainScrollPosition',
         type: 'Boolean',
@@ -251,7 +265,7 @@
         name: 'showCountOf',
         type: 'String',
         defaultValue: code('"ALL_CHILDREN"'),
-        description: `Used in pairs with ${code('showCount')} specifying what count should be displayed. Acceptable values: ${code('"ALL_CHILDREN"')}, ${code('"ALL_DESCENDANTS"')}, ${code('"LEAF_CHILDREN"')} or ${code('"LEAF_DESCENDANTS"')}.`,
+        description: `Used in pairs with ${code('showCount')} specifying which count number should be displayed. Acceptable values: ${code('"ALL_CHILDREN"')}, ${code('"ALL_DESCENDANTS"')}, ${code('"LEAF_CHILDREN"')} or ${code('"LEAF_DESCENDANTS"')}.`,
       }, {
         name: 'showCountOnSearch',
         type: 'Boolean',
@@ -276,7 +290,7 @@
         name: 'valueConsistsOf',
         type: 'String',
         defaultValue: code('"BRANCH_PRIORITY"'),
-        description: `Which kind of nodes should be included in the value array in multi-select mode. Acceptable values: ${code('"ALL"')}, ${code('"BRANCH_PRIORITY"')} or ${code('"LEAF_PRIORITY"')}. See ${link('#prevent-value-combining')} for example.`,
+        description: `Which kind of nodes should be included in the value array in multi-select mode. Acceptable values: ${code('"ALL"')}, ${code('"BRANCH_PRIORITY"')}, ${code('"LEAF_PRIORITY"')} or ${code('"ALL_WITH_INDETERMINATE"')}. See ${link('#prevent-value-combining')} for example.`,
       }, {
         name: 'valueFormat',
         type: 'String',

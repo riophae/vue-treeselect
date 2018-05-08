@@ -32,13 +32,7 @@
     }
     ```
 
-    Then you can pass an array of these nodes as the `options` prop.
-  p.tip
-    :markdown-it(inline=true)
-      Note that, because a complex state tree needs to be maintained internally, vue-treeselect will copy `options` and will not react to the changes of the original array. In other words, directly modify `options` **will not** work as expected. If children options needs to be dynamically loaded, see [below](#delayed-loading).
-
-  :markdown-it
-    For information on more properties you can use in a `node` object, see [below](#node).
+    Then you can pass an array of these nodes as the `options` prop. For information on more properties you can use in a `node` object, see [below](#node).
 
 +guide('More Features')
   :markdown-it
@@ -47,14 +41,14 @@
 
 +guide('Delayed Loading')
   :markdown-it
-    If you have a large number of deeply nested options, you might want to load options only of the most top levels on initial load and load the rest only when needed. You can achieve that by following these steps:
+    If you have a large number of deeply nested options, you might want to load options only of the most top levels on initial load, and load the rest only when needed. You can achieve that by following these steps:
 
-      1. Declare an *unloaded* branch node by setting `children: null` or `isBranch: true`
-      2. Provide a `loadChildrenOptions` prop
-      3. Whenever an unloaded branch node gets expanded, `loadChildrenOptions(parentNode, callback, id)` will be called within which you can perform the job requesting data from a remote server
+      1. Declare an *unloaded* branch node by setting `children: null`
+      2. Add `loadOptions` prop
+      3. Whenever an unloaded branch node gets expanded, `loadOptions({ action, parentNode, callback, id })` will be called, then you can perform the job requesting data from a remote server
   +demo('DelayedLoading')
   :markdown-it
-    If you want the root level options to be delayed loaded as well, omit the `options` prop and provide an extra `loadRootOptions` prop. By default, vue-treeselect will try loading root options by calling `loadRootOptions(callback, id)` after the component is mounted. In this example I have disabled that feature, and root options will be loaded when the menu is opened.
+    It's also possible to have root level options to be delayed loaded. If no options have been initially registered (`options: null`), vue-treeselect will attempt to load root options by calling `loadOptions({ action, callback, id })` after the component is mounted. In this example I have disabled the auto loading feature by setting `autoLoadRootOptions: false`, and root options will be loaded when the menu is opened.
   +demo('DelayedRootOptions')
 
 +guide('Flat Mode & Sort Values')
@@ -75,11 +69,12 @@
 
 +guide('Prevent Value Combining')
   :markdown-it
-    For non-flat & multi-select mode, if a branch node and its all descendants are checked, vue-treeselect will combine them into a single item in the value array, as demonstrated in the following example. By using `valueConsistsOf` prop you can change that behavior. This prop has three options:
+    For non-flat & multi-select mode, if a branch node and its all descendants are checked, vue-treeselect will combine them into a single item in the value array, as demonstrated in the following example. By using `valueConsistsOf` prop you can change that behavior. This prop has four options:
 
       - `"ALL"` - Any node that is checked will be included in the `value` array
       - `"BRANCH_PRIORITY"` (default) - If a branch node is checked, all its descendants will be excluded in the `value` array
       - `"LEAF_PRIORITY"` - If a branch node is checked, this node itself and its branch descendants will be excluded from the `value` array but its leaf descendants will be included
+      - `"ALL_WITH_INDETERMINATE"` - Any node that is checked will be included in the `value` array, plus indeterminate nodes
   +demo('PreventValueCombining')
 
 +guide('Disable Branch Nodes')
@@ -89,7 +84,7 @@
 
 +guide('Disable Item Selection')
   :markdown-it
-    You can disable item selection by setting `isDisabled: true` on any leaf node or branch node. Setting on a branch node will disable all its descendants as well.
+    You can disable item selection by setting `isDisabled: true` on any leaf node or branch node. For non-flat mode, setting on a branch node will disable all its descendants as well.
   +demo('DisableItemSelection')
 
 +guide('Nested Search')

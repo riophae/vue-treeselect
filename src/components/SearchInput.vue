@@ -1,12 +1,6 @@
 <script>
   import { deepExtend } from '../utils'
-
-  const MIN_INPUT_WIDTH = 5
-  const KEY_CODES = {
-    BACKSPACE: 8,
-    ESCAPE: 27,
-    DELETE: 46,
-  }
+  import { MIN_INPUT_WIDTH, KEY_CODES } from '../constants'
 
   export default {
     name: 'vue-treeselect--input',
@@ -23,6 +17,7 @@
     },
 
     updated() {
+      // istanbul ignore else
       if (this.needsAutoSize) this.updateInputWidth()
     },
 
@@ -40,9 +35,7 @@
       onFocus() {
         this.instance.isFocused = true
         // istanbul ignore else
-        if (!this.instance.isOpen && this.instance.openOnFocus) {
-          this.instance.openMenu()
-        }
+        if (this.instance.openOnFocus) this.instance.openMenu()
       },
 
       onBlur() {
@@ -93,9 +86,7 @@
         }
         default: {
           // istanbul ignore else
-          if (!this.instance.isOpen) {
-            this.instance.openMenu()
-          }
+          this.instance.openMenu()
         }
         }
       },
@@ -109,9 +100,9 @@
         }
       },
 
-      renderInputWrapper(h) {
+      renderInputContainer(h) {
         const props = {
-          class: 'vue-treeselect__input-wrapper',
+          class: 'vue-treeselect__input-container',
         }
         const children = []
 
@@ -149,6 +140,7 @@
             type: 'text',
             autocomplete: 'off',
             tabIndex: this.instance.tabIndex,
+            required: this.instance.required && !this.instance.hasValue,
           },
           domProps: {
             value: this.instance.searchQuery,
@@ -180,15 +172,13 @@
       updateInputWidth() {
         this.inputWidth = Math.max(
           MIN_INPUT_WIDTH,
-          this.$refs.sizer
-            ? this.$refs.sizer.scrollWidth + 8
-            : /* istanbul ignore next */ 0,
+          this.$refs.sizer.scrollWidth + 8,
         )
       },
     },
 
     render(h) {
-      return this.renderInputWrapper(h)
+      return this.renderInputContainer(h)
     },
   }
 </script>

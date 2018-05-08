@@ -1,5 +1,3 @@
-/* eslint-disable import/prefer-default-export */
-
 import entities from 'entities'
 
 export const code = str => `<code>${entities.encodeHTML(str)}</code>`

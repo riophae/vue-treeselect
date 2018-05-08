@@ -1,8 +1,6 @@
 const path = require('path')
-const webpack = require('webpack')
+const { VueLoaderPlugin } = require('vue-loader')
 const config = require('../config')
-const utils = require('./utils')
-const vueLoaderConfig = require('./vue-loader.conf')
 
 function resolve(dir) {
   return path.join(__dirname, '..', dir)
@@ -28,7 +26,7 @@ module.exports = {
     ],
     alias: {
       vue$: 'vue/dist/vue',
-      '@riophae/vue-treeselect': resolve('src'), // for consistent docs
+      '@riophae/vue-treeselect': resolve('src'),
     },
   },
   module: {
@@ -40,13 +38,11 @@ module.exports = {
         include: [ resolve('src'), resolve('test') ],
         options: {
           formatter: require('eslint-friendly-formatter'),
-          emitWarning: !config.dev.showEslintErrorsInOverlay,
         },
       },
       {
         test: /\.vue$/,
         loader: 'vue-loader',
-        options: vueLoaderConfig,
       },
       {
         test: /\.js$/,
@@ -55,28 +51,25 @@ module.exports = {
       },
       {
         test: /\.pug$/,
-        use: 'pug-loader',
+        loader: 'pug-loader',
         include: [ resolve('src'), resolve('docs') ],
+        options: {
+          pretty: true,
+        },
       },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
         loader: 'url-loader',
-        query: {
+        options: {
           limit: 10000,
-          name: utils.assetsPath('img/[name].[hash:7].[ext]'),
-        },
-      },
-      {
-        test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
-        loader: 'url-loader',
-        query: {
-          limit: 10000,
-          name: utils.assetsPath('fonts/[name].[hash:7].[ext]'),
         },
       },
     ],
   },
+  optimization: {
+    concatenateModules: true,
+  },
   plugins: [
-    new webpack.optimize.ModuleConcatenationPlugin(),
+    new VueLoaderPlugin(),
   ],
 }

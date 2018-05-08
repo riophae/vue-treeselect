@@ -1,4 +1,4 @@
-import * as utils from '../../../src/utils'
+import * as utils from '@riophae/vue-treeselect/utils'
 
 describe('Utils', () => {
   describe('warning', () => {
@@ -73,16 +73,26 @@ describe('Utils', () => {
     })
   })
 
-  it('hasOwn', () => {
-    const { hasOwn } = utils
-    const objectWithoutPrototypes = Object.create(null)
-    const normalObject = {}
-    expect(hasOwn(objectWithoutPrototypes, 'key')).toBe(false)
-    expect(hasOwn(normalObject, 'key')).toBe(false)
-    objectWithoutPrototypes.key = true
-    normalObject.key = true
-    expect(hasOwn(objectWithoutPrototypes, 'key')).toBe(true)
-    expect(hasOwn(normalObject, 'key')).toBe(true)
+  describe('noop', () => {
+    const { noop } = utils
+
+    it('does nothing', () => {
+      noop()
+    })
+  })
+
+  describe('once', () => {
+    const { once } = utils
+
+    it('wrapped function can be executed only once', () => {
+      let n = 0
+      const fn = once(() => ++n)
+
+      for (let i = 0; i < 5; i++) {
+        expect(fn()).toBe(1)
+        expect(n).toBe(1)
+      }
+    })
   })
 
   describe('deepExtend', () => {
@@ -114,12 +124,6 @@ describe('Utils', () => {
     it('returns last element of array', () => {
       expect(last([ 1 ])).toBe(1)
       expect(last([ 1, 2, 3 ])).toBe(3)
-    })
-
-    it('throws an error if non-array argument passed', () => {
-      spyOn(console, 'error')
-      last({})
-      expect(console.error).toHaveBeenCalledWith('[Vue-Treeselect Warning]', 'unexpected type')
     })
   })
 
