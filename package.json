@@ -10,7 +10,6 @@
   "unpkg": "dist/vue-treeselect.min.js",
   "css": "dist/vue-treeselect.min.css",
   "files": [
-    "src",
     "dist"
   ],
   "scripts": {
