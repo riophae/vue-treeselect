@@ -69,6 +69,9 @@ module.exports = {
   optimization: {
     concatenateModules: true,
   },
+  node: {
+    process: false,
+  },
   plugins: [
     new VueLoaderPlugin(),
   ],

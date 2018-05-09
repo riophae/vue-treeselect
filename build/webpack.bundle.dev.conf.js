@@ -43,11 +43,7 @@ const webpackConfig = merge(base, {
   optimization: {
     nodeEnv: false,
     noEmitOnErrors: true,
-    removeEmptyChunks: true,
-    mergeDuplicateChunks: true,
     flagIncludedChunks: true,
-    occurrenceOrder: true,
-    sideEffects: true,
     minimizer: [
       new OptimizeJsPlugin({
         sourceMap: config.bundle.dev.productionSourceMap,

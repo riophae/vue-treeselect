@@ -22,6 +22,12 @@ module.exports = merge(baseWebpackConfig, {
   },
   // cheap-module-eval-source-map is faster for development
   devtool: '#cheap-module-eval-source-map',
+  optimization: {
+    noEmitOnErrors: true,
+  },
+  node: {
+    process: true,
+  },
   plugins: [
     // https://github.com/glenjamin/webpack-hot-middleware#installation--usage
     new webpack.HotModuleReplacementPlugin(),
@@ -31,7 +37,4 @@ module.exports = merge(baseWebpackConfig, {
     }),
     new FriendlyErrorsPlugin(),
   ],
-  optimization: {
-    noEmitOnErrors: true,
-  },
 })
