@@ -2,6 +2,7 @@ import Vue from 'vue'
 import { mount } from '@vue/test-utils'
 import sleep from 'yaku/lib/sleep'
 import Treeselect from '@riophae/vue-treeselect/components/Treeselect'
+import { findOptionByNodeId } from './shared'
 
 describe('Basic', () => {
   describe('nodeMap', () => {
@@ -800,5 +801,29 @@ describe('Basic', () => {
     comp.select(comp.nodeMap.a)
     await comp.$nextTick()
     expect(vm.value).toEqual([])
+  })
+
+  it('an option should be rendered with its id in the markup', () => {
+    const wrapper = mount(Treeselect, {
+      propsData: {
+        options: [ {
+          id: 'a',
+          label: 'a',
+          children: [ {
+            id: 'aa',
+            label: 'aa',
+          } ],
+        } ],
+        defaultExpandLevel: Infinity,
+      },
+      data: {
+        isOpen: true,
+      },
+    })
+    const a = findOptionByNodeId(wrapper, 'a').find('.vue-treeselect__option')
+    const aa = findOptionByNodeId(wrapper, 'aa').find('.vue-treeselect__option')
+
+    expect(a.attributes()['data-id']).toBe('a')
+    expect(aa.attributes()['data-id']).toBe('aa')
   })
 })
