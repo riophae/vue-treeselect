@@ -1,6 +1,9 @@
 module.exports = {
   root: true,
   extends: [ 'eslint-config-riophae/vue' ],
+  globals: {
+    PKG_VERSION: true,
+  },
   settings: {
     'import/resolver': {
       node: null,
