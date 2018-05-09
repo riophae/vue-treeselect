@@ -988,6 +988,7 @@ export default {
         this.traverseAllNodes(node => {
           if (node.isBranch) {
             node.expandsOnSearch = false
+            node.showAllChildrenOnSearch = false
             node.hasMatchedChild = false
             this.$set(this.searchingCount, node.id, {
               [ALL_CHILDREN]: 0,
@@ -1069,6 +1070,7 @@ export default {
 
       if (this.searching) {
         node.expandsOnSearch = !node.expandsOnSearch
+        if (node.expandsOnSearch) node.showAllChildrenOnSearch = true
       } else {
         node.isExpanded = !node.isExpanded
       }
@@ -1159,6 +1161,7 @@ export default {
             this.$set(normalized, 'hasMatchedChild', false)
             this.$set(normalized, 'hasDisabledDescendants', false)
             this.$set(normalized, 'expandsOnSearch', false)
+            this.$set(normalized, 'showAllChildrenOnSearch', false)
             this.$set(normalized, 'loadingChildrenError', '')
             this.$set(normalized, 'count', {
               [ALL_CHILDREN]: 0,

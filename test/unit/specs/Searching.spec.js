@@ -28,12 +28,14 @@ describe('Searching', () => {
 
       await typeSearchText(wrapper, 'a')
       expect(vm.nodeMap.a.isMatched).toBe(true)
+      expect(vm.nodeMap.a.expandsOnSearch).toBe(true)
       expect(vm.nodeMap.aa.isMatched).toBe(true)
       expect(vm.nodeMap.ab.isMatched).toBe(true)
       expect(vm.nodeMap.b.isMatched).toBe(false)
 
       await typeSearchText(wrapper, 'b')
       expect(vm.nodeMap.a.isMatched).toBe(false)
+      expect(vm.nodeMap.a.expandsOnSearch).toBe(true)
       expect(vm.nodeMap.aa.isMatched).toBe(false)
       expect(vm.nodeMap.ab.isMatched).toBe(true)
       expect(vm.nodeMap.b.isMatched).toBe(true)
@@ -122,6 +124,51 @@ describe('Searching', () => {
       // search again
       await typeSearchText(wrapper, 'a')
       expectArrowToBeRotatedOrNot(true)
+    })
+
+    describe('matching branch nodes', () => {
+      const wrapper = mount(Treeselect, {
+        propsData: {
+          searchable: true,
+          options: [ {
+            id: 'branch',
+            label: 'branch',
+            children: [ {
+              id: 'child-1',
+              label: 'child-1',
+            }, {
+              id: 'child-2',
+              label: 'child-2',
+            }, {
+              id: 'child-3',
+              label: 'child-3',
+              children: [],
+            } ],
+          } ],
+        },
+        data: {
+          isOpen: true,
+        },
+      })
+      const { vm } = wrapper
+
+      it('if no children are matched, the branch node should be collapsed', async () => {
+        await typeSearchText(wrapper, 'branch')
+        expect(vm.nodeMap.branch.isMatched).toBe(true)
+        expect(vm.nodeMap.branch.expandsOnSearch).toBe(false)
+        expect(vm.nodeMap['child-1'].isMatched).toBe(false)
+        expect(vm.nodeMap['child-2'].isMatched).toBe(false)
+        expect(vm.nodeMap['child-3'].isMatched).toBe(false)
+      })
+
+      it('expand the branch node should show all its children', async () => {
+        vm.toggleExpanded(vm.nodeMap.branch)
+        await vm.$nextTick()
+        expect(wrapper.contains('.vue-treeselect__option[data-id="child-1"]')).toBe(true)
+        expect(wrapper.contains('.vue-treeselect__option[data-id="child-2"]')).toBe(true)
+        expect(wrapper.contains('.vue-treeselect__option[data-id="child-3"]')).toBe(true)
+        expect(vm.nodeMap['child-3'].expandsOnSearch).toBe(false)
+      })
     })
   })
 

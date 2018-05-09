@@ -20,6 +20,14 @@ export default {
         : this.node.isExpanded
     },
 
+    shouldHideOption() {
+      if (!this.instance.searching) return false
+      if (this.node.isMatched) return false
+      if (this.node.isBranch && this.node.hasMatchedChild) return false
+      if (!this.node.isRootNode && this.node.parentNode.showAllChildrenOnSearch) return false
+      return true
+    },
+
     shouldShowCount() {
       if (!this.node.isBranch) return false
       return this.instance.searching
@@ -41,7 +49,7 @@ export default {
   },
 
   watch: {
-    'shouldExpand'(newValue) {
+    shouldExpand(newValue) {
       if (newValue === true && !this.node.isLoaded) {
         // load children when expanded
         this.instance.loadChildrenOptions(this.node)

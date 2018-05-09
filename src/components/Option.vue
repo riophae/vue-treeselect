@@ -4,7 +4,7 @@
       'vue-treeselect__option--disabled': node.isDisabled,
       'vue-treeselect__option--selected': instance.isSelected(node),
       'vue-treeselect__option--matched': instance.searching && node.isMatched,
-      'vue-treeselect__option--hide': instance.searching && !(node.isMatched || node.hasMatchedChild),
+      'vue-treeselect__option--hide': shouldHideOption,
     } ]" :data-id="node.id">
       <div v-if="shouldShowArrorPlaceholder" class="vue-treeselect__option-arrow-placeholder">&nbsp;</div>
       <div v-else-if="node.isBranch" class="vue-treeselect__option-arrow-container" @mousedown="handleMouseDownOnOptionArrow">
