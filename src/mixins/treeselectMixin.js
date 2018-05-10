@@ -1440,14 +1440,12 @@ export default {
       delete this.selectedNodeMap[node.id]
     },
 
-    maybeRemoveLastValue() {
+    removeLastValue() {
       // istanbul ignore next
       if (!this.hasValue) return
-      const lastValue = last(this.selectedNodeIds)
+      const lastValue = last(this.internalValue)
       const lastSelectedNode = this.getNode(lastValue)
-      this.removeValue(lastSelectedNode)
-      this.buildSelectedNodeMap()
-      this.buildNodeCheckedStateMap()
+      this.select(lastSelectedNode)
     },
 
     saveScrollPosition() {

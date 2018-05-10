@@ -64,13 +64,13 @@
         switch (/* istanbul ignore next */ 'which' in evt ? evt.which : evt.keyCode) {
         case KEY_CODES.BACKSPACE: {
           if (this.instance.backspaceRemoves && !this.instance.searchQuery.length) {
-            this.instance.maybeRemoveLastValue()
+            this.instance.removeLastValue()
           }
           break
         }
         case KEY_CODES.DELETE: {
           if (this.instance.deleteRemoves && !this.instance.searchQuery.length) {
-            this.instance.maybeRemoveLastValue()
+            this.instance.removeLastValue()
           }
           break
         }
