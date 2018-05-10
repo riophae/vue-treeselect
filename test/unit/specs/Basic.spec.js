@@ -128,45 +128,40 @@ describe('Basic', () => {
     })
 
     describe('isDisabled', () => {
-      it('flat=false', () => {
-        const wrapper = mount(Treeselect, {
-          propsData: {
-            flat: false,
-            options: [ {
-              id: 'a',
-              label: 'a',
-              isDisabled: true,
-              children: [ {
-                id: 'aa',
-                label: 'aa',
-              } ],
-            }, {
-              id: 'b',
-              label: 'b',
-              children: [ {
-                id: 'ba',
-                label: 'ba',
-                isDisabled: true,
-              }, {
-                id: 'bb',
-                label: 'bb',
-              } ],
-            }, {
-              id: 'c',
-              label: 'c',
-              children: [ {
-                id: 'ca',
-                label: 'ca',
-                isDisabled: true,
-                children: [ {
-                  id: 'caa',
-                  label: 'caa',
-                } ],
-              } ],
-            } ],
-          },
-        })
-        const { vm } = wrapper
+      const options = [ {
+        id: 'a',
+        label: 'a',
+        isDisabled: true,
+        children: [ {
+          id: 'aa',
+          label: 'aa',
+        } ],
+      }, {
+        id: 'b',
+        label: 'b',
+        children: [ {
+          id: 'ba',
+          label: 'ba',
+          isDisabled: true,
+        }, {
+          id: 'bb',
+          label: 'bb',
+        } ],
+      }, {
+        id: 'c',
+        label: 'c',
+        children: [ {
+          id: 'ca',
+          label: 'ca',
+          isDisabled: true,
+          children: [ {
+            id: 'caa',
+            label: 'caa',
+          } ],
+        } ],
+      } ]
+
+      const whenNonFlatMode = vm => {
         const { a, aa, b, ba, bb, c, ca, caa } = vm.nodeMap
 
         expect(a.isDisabled).toBe(true)
@@ -177,47 +172,9 @@ describe('Basic', () => {
         expect(c.isDisabled).toBe(false)
         expect(ca.isDisabled).toBe(true)
         expect(caa.isDisabled).toBe(true)
-      })
+      }
 
-      it('flat=true', () => {
-        const wrapper = mount(Treeselect, {
-          propsData: {
-            flat: true,
-            options: [ {
-              id: 'a',
-              label: 'a',
-              isDisabled: true,
-              children: [ {
-                id: 'aa',
-                label: 'aa',
-              } ],
-            }, {
-              id: 'b',
-              label: 'b',
-              children: [ {
-                id: 'ba',
-                label: 'ba',
-                isDisabled: true,
-              }, {
-                id: 'bb',
-                label: 'bb',
-              } ],
-            }, {
-              id: 'c',
-              label: 'c',
-              children: [ {
-                id: 'ca',
-                label: 'ca',
-                isDisabled: true,
-                children: [ {
-                  id: 'caa',
-                  label: 'caa',
-                } ],
-              } ],
-            } ],
-          },
-        })
-        const { vm } = wrapper
+      const whenFlatMode = vm => {
         const { a, aa, b, ba, bb, c, ca, caa } = vm.nodeMap
 
         expect(a.isDisabled).toBe(true)
@@ -228,6 +185,48 @@ describe('Basic', () => {
         expect(c.isDisabled).toBe(false)
         expect(ca.isDisabled).toBe(true)
         expect(caa.isDisabled).toBe(false)
+      }
+
+      it('flat=false', () => {
+        const wrapper = mount(Treeselect, {
+          propsData: {
+            flat: false,
+            options,
+          },
+        })
+        const { vm } = wrapper
+
+        whenNonFlatMode(vm)
+      })
+
+      it('flat=true', () => {
+        const wrapper = mount(Treeselect, {
+          propsData: {
+            flat: true,
+            options,
+          },
+        })
+        const { vm } = wrapper
+
+        whenFlatMode(vm)
+      })
+
+      it('should reinitialize options after value of `flat` prop changes', () => {
+        const wrapper = mount(Treeselect, {
+          propsData: {
+            options,
+          },
+        })
+        const { vm } = wrapper
+
+        wrapper.setProps({ flat: false })
+        whenNonFlatMode(vm)
+
+        wrapper.setProps({ flat: true })
+        whenFlatMode(vm)
+
+        wrapper.setProps({ flat: false })
+        whenNonFlatMode(vm)
       })
     })
 

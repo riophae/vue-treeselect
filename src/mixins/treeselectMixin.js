@@ -660,6 +660,11 @@ export default {
       if (!newValue && !this.isOpen && this.alwaysOpen) this.openMenu()
     },
 
+    flat() {
+      // re-initialize options
+      this.initialize(this.options)
+    },
+
     internalValue() {
       this.$emit('input', this.getValue(), this.id)
     },
@@ -1487,6 +1492,7 @@ export default {
     this.verifyProps()
     this.resetFlags()
     this.initialize(this.options)
+    // re-initialize options when the `options` prop has changed
     this.$watch('options', () => this.initialize(this.options), { deep: true })
   },
 
