@@ -31,34 +31,36 @@
         <arrow :class="[ 'vue-treeselect__control-arrow', { 'vue-treeselect__control-arrow--rotated': isOpen } ]" />
       </div>
     </div>
-    <div v-if="isOpen" class="vue-treeselect__menu" ref="menu" :style="{ maxHeight: optimizedHeight + 'px' }">
-      <template v-if="rootOptionsLoaded">
-        <tip v-if="searching && noSearchResults" type="no-results" icon="warning">{{ noResultsText }}</tip>
-        <tip v-else-if="normalizedOptions.length === 0" type="no-options" icon="warning">{{ noOptionsText }}</tip>
-        <div v-else class="vue-treeselect__list">
-          <treeselect-option v-for="rootNode in normalizedOptions" :node="rootNode" :key="rootNode.id">
-            <template slot="option-label" slot-scope="{ node, shouldShowCount, count, labelClassName, countClassName }">
-              <slot name="option-label" :node="node" :should-show-count="shouldShowCount" :count="count"
-                :label-class-name="labelClassName" :count-class-name="countClassName">
-                <label :class="labelClassName">
-                  {{ node.label }}
-                  <span v-if="shouldShowCount" :class="countClassName">({{ count }})</span>
-                </label>
-              </slot>
-            </template>
-          </treeselect-option>
-        </div>
-      </template>
-      <template v-else>
-        <tip v-if="loading || loadingRootOptions" type="loading" icon="loader">{{ loadingText }}</tip>
-        <tip v-else-if="loadingRootOptionsError" type="error" icon="error">
-          {{ loadingRootOptionsError }}
-          <a class="vue-treeselect__retry" @click="loadRootOptions" :title="retryTitle">
-            {{ retryText }}
-          </a>
-        </tip>
-      </template>
-    </div>
+    <transition name="vue-treeselect__menu--transition">
+      <div v-if="isOpen" class="vue-treeselect__menu" ref="menu" :style="{ maxHeight: optimizedHeight + 'px' }">
+        <template v-if="rootOptionsLoaded">
+          <tip v-if="searching && noSearchResults" type="no-results" icon="warning">{{ noResultsText }}</tip>
+          <tip v-else-if="normalizedOptions.length === 0" type="no-options" icon="warning">{{ noOptionsText }}</tip>
+          <div v-else class="vue-treeselect__list">
+            <treeselect-option v-for="rootNode in normalizedOptions" :node="rootNode" :key="rootNode.id">
+              <template slot="option-label" slot-scope="{ node, shouldShowCount, count, labelClassName, countClassName }">
+                <slot name="option-label" :node="node" :should-show-count="shouldShowCount" :count="count"
+                  :label-class-name="labelClassName" :count-class-name="countClassName">
+                  <label :class="labelClassName">
+                    {{ node.label }}
+                    <span v-if="shouldShowCount" :class="countClassName">({{ count }})</span>
+                  </label>
+                </slot>
+              </template>
+            </treeselect-option>
+          </div>
+        </template>
+        <template v-else>
+          <tip v-if="loading || loadingRootOptions" type="loading" icon="loader">{{ loadingText }}</tip>
+          <tip v-else-if="loadingRootOptionsError" type="error" icon="error">
+            {{ loadingRootOptionsError }}
+            <a class="vue-treeselect__retry" @click="loadRootOptions" :title="retryTitle">
+              {{ retryText }}
+            </a>
+          </tip>
+        </template>
+      </div>
+    </transition>
   </div>
 </template>
 

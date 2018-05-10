@@ -261,45 +261,44 @@
  * Transitions
  */
 
-.vue-treeselect-transition-fade {
+.vue-treeselect__multi-value-item--transition {
+  &-enter-active,
+  &-leave-active {
+    transition-duration: @treeselect-transition-duration;
+    transition-property: transform, opacity;
+  }
+
   &-enter-active {
-    transition: @treeselect-transition-duration opacity ease-out-circ;
+    transition-timing-function: ease-out-circ;
   }
 
   &-leave-active {
-    transition: @treeselect-transition-duration opacity ease-in-circ;
+    transition-timing-function: ease-out-cubic;
+    // trigger animation when element is removed
+    position: absolute;
   }
 
   &-enter,
   &-leave-to {
+    transform: scale(0.7);
     opacity: 0;
+  }
+
+  &-move {
+    transition: @treeselect-transition-duration transform ease-out-quart;
   }
 }
 
-.vue-treeselect__multi-value-item--zoom-enter-active,
-.vue-treeselect__multi-value-item--zoom-leave-active {
-  transition-duration: @treeselect-transition-duration;
-  transition-property: transform, opacity;
-}
+.vue-treeselect__menu--transition {
+  &-enter-active,
+  &-leave-active {
+    /* to be overriden */
+  }
 
-.vue-treeselect__multi-value-item--zoom-enter-active {
-  transition-timing-function: ease-out-circ;
-}
-
-.vue-treeselect__multi-value-item--zoom-leave-active {
-  transition-timing-function: ease-out-cubic;
-  // trigger animation when element is removed
-  position: absolute;
-}
-
-.vue-treeselect__multi-value-item--zoom-enter,
-.vue-treeselect__multi-value-item--zoom-leave-to {
-  transform: scale(0.7);
-  opacity: 0;
-}
-
-.vue-treeselect__multi-value-item--zoom-move {
-  transition: @treeselect-transition-duration transform ease-out-quart;
+  &-enter,
+  &-leave-to {
+    /* to be overriden */
+  }
 }
 
 
