@@ -158,12 +158,11 @@ This project is inspired by [vue-multiselect](https://github.com/monterail/vue-m
 
 Some icons used in this project:
 
-  - "anchor" icon made by [Smashicons](https://www.flaticon.com/authors/smashicons) is licensed under [CC 3.0 BY](https://creativecommons.org/licenses/by/3.0/)
+  - "link" icon made by [Smashicons](https://www.flaticon.com/authors/smashicons) is licensed under [CC 3.0 BY](https://creativecommons.org/licenses/by/3.0/)
   - "spinner" icon from [SpinKit](https://github.com/tobiasahlin/SpinKit) is licensed under the [MIT License](https://github.com/tobiasahlin/SpinKit/blob/master/LICENSE)
   - "caret" icon made by [Dave Gandy](https://www.flaticon.com/authors/dave-gandy) is licensed under [CC 3.0 BY](https://creativecommons.org/licenses/by/3.0/)
-  - "x" icon made by [Freepik](http://www.freepik.com) is licensed under [CC 3.0 BY](https://creativecommons.org/licenses/by/3.0/)
-  - "x" icon (thin) made by [Egor Rumyantsev](https://www.flaticon.com/authors/egor-rumyantsev) is licensed under [CC 3.0 BY](https://creativecommons.org/licenses/by/3.0/)
-  - "check mark" & "minus mark" icons made by [Catalin Fertu](https://www.flaticon.com/authors/catalin-fertu) is licensed under [CC 3.0 BY](https://creativecommons.org/licenses/by/3.0/)
+  - "delete" icon made by [Freepik](https://www.flaticon.com/authors/freepik) is licensed under [CC 3.0 BY](https://creativecommons.org/licenses/by/3.0/)
+  - "checkmark symbol" & "minus symbol" icons made by [Catalin Fertu](https://www.flaticon.com/authors/catalin-fertu) is licensed under [CC 3.0 BY](https://creativecommons.org/licenses/by/3.0/)
 
 ### License
 
