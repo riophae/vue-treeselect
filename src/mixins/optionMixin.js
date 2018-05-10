@@ -16,7 +16,7 @@ export default {
     shouldExpand() {
       if (!this.node.isBranch) return false
       return this.instance.searching
-        ? this.node.expandsOnSearch
+        ? this.node.isExpandedOnSearch
         : this.node.isExpanded
     },
 

@@ -987,7 +987,7 @@ export default {
         // reset state
         this.traverseAllNodes(node => {
           if (node.isBranch) {
-            node.expandsOnSearch = false
+            node.isExpandedOnSearch = false
             node.showAllChildrenOnSearch = false
             node.hasMatchedChild = false
             this.$set(this.searchingCount, node.id, {
@@ -1023,10 +1023,10 @@ export default {
           }
 
           if (
-            (isMatched || (node.isBranch && node.expandsOnSearch)) &&
+            (isMatched || (node.isBranch && node.isExpandedOnSearch)) &&
             node.parentNode !== NO_PARENT_NODE
           ) {
-            node.parentNode.expandsOnSearch = true
+            node.parentNode.isExpandedOnSearch = true
             node.parentNode.hasMatchedChild = true
           }
         })
@@ -1069,8 +1069,8 @@ export default {
       this.checkIfBranchNode(node)
 
       if (this.searching) {
-        node.expandsOnSearch = !node.expandsOnSearch
-        if (node.expandsOnSearch) node.showAllChildrenOnSearch = true
+        node.isExpandedOnSearch = !node.isExpandedOnSearch
+        if (node.isExpandedOnSearch) node.showAllChildrenOnSearch = true
       } else {
         node.isExpanded = !node.isExpanded
       }
@@ -1160,7 +1160,7 @@ export default {
               : level < this.defaultExpandLevel)
             this.$set(normalized, 'hasMatchedChild', false)
             this.$set(normalized, 'hasDisabledDescendants', false)
-            this.$set(normalized, 'expandsOnSearch', false)
+            this.$set(normalized, 'isExpandedOnSearch', false)
             this.$set(normalized, 'showAllChildrenOnSearch', false)
             this.$set(normalized, 'loadingChildrenError', '')
             this.$set(normalized, 'count', {
@@ -1198,7 +1198,7 @@ export default {
             const prev = prevNodeMap[id]
             if (prev.isBranch && normalized.isBranch) {
               normalized.isExpanded = prev.isExpanded
-              normalized.expandsOnSearch = prev.expandsOnSearch
+              normalized.isExpandedOnSearch = prev.isExpandedOnSearch
               normalized.isPending = prev.isPending
               normalized.loadingChildrenError = prev.loadingChildrenError
             }
