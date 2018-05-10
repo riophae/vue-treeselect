@@ -134,15 +134,18 @@ describe('Searching', () => {
             id: 'branch',
             label: 'branch',
             children: [ {
-              id: 'child-1',
-              label: 'child-1',
+              id: 'aa',
+              label: 'aa',
             }, {
-              id: 'child-2',
-              label: 'child-2',
+              id: 'ab',
+              label: 'ab',
             }, {
-              id: 'child-3',
-              label: 'child-3',
-              children: [],
+              id: 'ac',
+              label: 'ac',
+              children: [ {
+                id: 'aca',
+                label: 'aca',
+              } ],
             } ],
           } ],
         },
@@ -156,18 +159,22 @@ describe('Searching', () => {
         await typeSearchText(wrapper, 'branch')
         expect(vm.nodeMap.branch.isMatched).toBe(true)
         expect(vm.nodeMap.branch.isExpandedOnSearch).toBe(false)
-        expect(vm.nodeMap['child-1'].isMatched).toBe(false)
-        expect(vm.nodeMap['child-2'].isMatched).toBe(false)
-        expect(vm.nodeMap['child-3'].isMatched).toBe(false)
+        expect(vm.nodeMap.aa.isMatched).toBe(false)
+        expect(vm.nodeMap.ab.isMatched).toBe(false)
+        expect(vm.nodeMap.ac.isMatched).toBe(false)
+        expect(vm.nodeMap.aca.isMatched).toBe(false)
       })
 
-      it('expand the branch node should show all its children', async () => {
+      it('expand a branch node should show all its children', async () => {
         vm.toggleExpanded(vm.nodeMap.branch)
         await vm.$nextTick()
-        expect(wrapper.contains('.vue-treeselect__option[data-id="child-1"]')).toBe(true)
-        expect(wrapper.contains('.vue-treeselect__option[data-id="child-2"]')).toBe(true)
-        expect(wrapper.contains('.vue-treeselect__option[data-id="child-3"]')).toBe(true)
-        expect(vm.nodeMap['child-3'].isExpandedOnSearch).toBe(false)
+        expect(wrapper.contains('.vue-treeselect__option[data-id="aa"]')).toBe(true)
+        expect(wrapper.contains('.vue-treeselect__option[data-id="ab"]')).toBe(true)
+        expect(wrapper.contains('.vue-treeselect__option[data-id="ac"]')).toBe(true)
+        expect(vm.nodeMap.ac.isExpandedOnSearch).toBe(false)
+        vm.toggleExpanded(vm.nodeMap.ac)
+        await vm.$nextTick()
+        expect(wrapper.contains('.vue-treeselect__option[data-id="aca"]')).toBe(true)
       })
     })
   })
