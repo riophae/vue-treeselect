@@ -1316,7 +1316,7 @@ export default {
     },
 
     select(node) {
-      if (node.isDisabled) {
+      if (this.disabled || node.isDisabled) {
         return
       }
 

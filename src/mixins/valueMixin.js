@@ -17,12 +17,9 @@ export default {
       this.$refs.input.blur()
     },
 
-    handleMouseDownOnValue: onlyOnLeftClick(function handleMouseDownOnValue() {
-      this.instance._wasClickedOnValueItem = true
-    }),
-
-    handleMouseDownOnValueRemove: onlyOnLeftClick(function handleMouseDownOnValueRemove(evt, node) {
-      this.instance.select(node)
+    handleMouseDownOnValueItem: onlyOnLeftClick(function handleMouseDownOnValueItem(evt, node) {
+      this._wasClickedOnValueItem = true
+      this.instance.select(node) // deselect
     }),
   },
 }

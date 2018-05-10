@@ -44,8 +44,10 @@
 @treeselect-multi-value-item-bg: @palette-Blue-50;
 @treeselect-multi-value-item-border-width: 1px;
 @treeselect-multi-value-item-border-color: transparent;
-@treeselect-multi-value-font-color-disabled: @treeselect-multi-value-font-color;
-@treeselect-multi-value-item-bg-disabled: greyscale(@treeselect-multi-value-item-bg);
+@treeselect-multi-value-font-color-hover: @treeselect-multi-value-font-color;
+@treeselect-multi-value-item-bg-hover: @treeselect-multi-value-item-bg;
+@treeselect-multi-value-font-color-disabled: @palette-Grey-600;
+@treeselect-multi-value-item-bg-disabled: @palette-Grey-100;
 @treeselect-multi-value-item-font-color-control-disabled: #555;
 @treeselect-multi-value-item-bg-control-disabled: #fff;
 @treeselect-multi-value-item-border-color-control-disabled: #e5e5e5;
@@ -434,12 +436,23 @@
   font-size: @treeselect-multi-value-font-size;
   vertical-align: top; // stylelint-disable-line plugin/declaration-block-no-ignored-properties
 
+  .vue-treeselect:not(.vue-treeselect--disabled) &:not(.vue-treeselect__multi-value-item-disabled):hover {
+    .clickable();
+
+    background: @treeselect-multi-value-item-bg-hover;
+    color: @treeselect-multi-value-font-color-hover;
+  }
+
   &.vue-treeselect__multi-value-item-disabled {
+    .reset-cursor();
+
+    background: @treeselect-multi-value-item-bg-disabled;
     color: @treeselect-multi-value-font-color-disabled;
-    background: @treeselect-multi-value-item-bg;
   }
 
   .vue-treeselect--disabled & {
+    .reset-cursor();
+
     background: @treeselect-multi-value-item-bg-control-disabled;
     border-color: @treeselect-multi-value-item-border-color-control-disabled;
     color: @treeselect-multi-value-item-font-color-control-disabled;
@@ -461,7 +474,7 @@
   border-left: 1px solid @treeselect-multi-value-divider-color;
   line-height: 0;
 
-  &:hover {
+  .vue-treeselect__multi-value-item:hover & {
     color: @treeselect-multi-value-remove-color-hover;
   }
 
@@ -477,8 +490,6 @@
 }
 
 .vue-treeselect__multi-value-label {
-  .reset-cursor();
-
   padding-right: @treeselect-multi-value-padding-x;
   white-space: pre-line;
   user-select: none;
