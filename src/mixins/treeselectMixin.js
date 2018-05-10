@@ -1446,11 +1446,11 @@ export default {
     },
 
     removeLastValue() {
-      // istanbul ignore next
       if (!this.hasValue) return
+      if (this.single) return this.clear()
       const lastValue = last(this.internalValue)
       const lastSelectedNode = this.getNode(lastValue)
-      this.select(lastSelectedNode)
+      this.select(lastSelectedNode) // deselect
     },
 
     saveScrollPosition() {
