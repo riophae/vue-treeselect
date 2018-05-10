@@ -9,7 +9,7 @@
       <div v-if="shouldShowArrorPlaceholder" class="vue-treeselect__option-arrow-placeholder">&nbsp;</div>
       <div v-else-if="node.isBranch" class="vue-treeselect__option-arrow-container" @mousedown="handleMouseDownOnOptionArrow">
         <transition name="vue-treeselect__option-arrow--prepare" appear>
-          <arrow :class="[ 'vue-treeselect__option-arrow', { 'vue-treeselect__option-arrow--rotated': shouldExpand } ]" />
+          <arrow-icon :class="[ 'vue-treeselect__option-arrow', { 'vue-treeselect__option-arrow--rotated': shouldExpand } ]" />
         </transition>
       </div>
       <div class="vue-treeselect__label-container" @mousedown="handleMouseDownOnOption">
@@ -54,12 +54,12 @@
 <script>
   import optionMixin from '../mixins/optionMixin'
   import Tip from './Tip'
-  import Arrow from './Arrow'
+  import ArrowIcon from './icons/Arrow'
 
   export default {
     name: 'vue-treeselect--option',
     inject: [ 'instance', 'UNCHECKED', 'INDETERMINATE', 'CHECKED' ],
-    components: { Tip, Arrow },
+    components: { Tip, ArrowIcon },
     mixins: [ optionMixin ],
   }
 </script>

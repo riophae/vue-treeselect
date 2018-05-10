@@ -4,7 +4,7 @@
       <template v-for="node in instance.visibleValue">
         <div class="vue-treeselect__multi-value-item-container" :key="'value-' + node.id">
           <div :class="[ 'vue-treeselect__multi-value-item', { 'vue-treeselect__multi-value-item-disabled': node.isDisabled } ]" @mousedown="handleMouseDownOnValueItem($event, node)">
-            <span class="vue-treeselect__multi-value-label">{{ node.label }}</span><span class="vue-treeselect__icon vue-treeselect__value-remove"><letter-x /></span>
+            <span class="vue-treeselect__multi-value-label">{{ node.label }}</span><span class="vue-treeselect__icon vue-treeselect__value-remove"><delete-icon /></span>
           </div>
         </div>
       </template>
@@ -21,11 +21,11 @@
   import valueMixin from '../mixins/valueMixin'
   import Placeholder from './Placeholder'
   import SearchInput from './SearchInput'
-  import LetterX from './X'
+  import DeleteIcon from './icons/Delete'
 
   export default {
     name: 'vue-treeselect--multi-value',
-    components: { Placeholder, SearchInput, LetterX },
+    components: { Placeholder, SearchInput, DeleteIcon },
     mixins: [ valueMixin ],
     inject: [ 'instance' ],
   }
