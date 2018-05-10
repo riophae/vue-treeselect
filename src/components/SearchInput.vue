@@ -172,7 +172,7 @@
       updateInputWidth() {
         this.inputWidth = Math.max(
           MIN_INPUT_WIDTH,
-          this.$refs.sizer.scrollWidth + 8,
+          this.$refs.sizer.scrollWidth + 15,
         )
       },
     },
