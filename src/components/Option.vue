@@ -28,26 +28,28 @@
           label-class-name="vue-treeselect__label" count-class-name="vue-treeselect__count" />
       </div>
     </div>
-    <div v-if="shouldExpand" class="vue-treeselect__list">
-      <template v-if="node.isLoaded">
-        <template v-if="node.children.length">
-          <vue-treeselect--option v-for="childNode in node.children" :node="childNode" :key="childNode.id">
-            <template slot="option-label" slot-scope="{ node, shouldShowCount, count, labelClassName, countClassName }">
-              <slot name="option-label" :node="node" :should-show-count="shouldShowCount" :count="count"
-                :label-class-name="labelClassName" :count-class-name="countClassName" />
-            </template>
-          </vue-treeselect--option>
+    <transition name="vue-treeselect__list--transition">
+      <div v-if="shouldExpand" class="vue-treeselect__list">
+        <template v-if="node.isLoaded">
+          <template v-if="node.children.length">
+            <vue-treeselect--option v-for="childNode in node.children" :node="childNode" :key="childNode.id">
+              <template slot="option-label" slot-scope="{ node, shouldShowCount, count, labelClassName, countClassName }">
+                <slot name="option-label" :node="node" :should-show-count="shouldShowCount" :count="count"
+                  :label-class-name="labelClassName" :count-class-name="countClassName" />
+              </template>
+            </vue-treeselect--option>
+          </template>
+          <tip v-else type="no-children" icon="warning">{{ instance.noChildrenText }}</tip>
         </template>
-        <tip v-else type="no-children" icon="warning">{{ instance.noChildrenText }}</tip>
-      </template>
-      <tip v-else-if="node.isPending" type="loading" icon="loader">{{ instance.loadingText }}</tip>
-      <tip v-else-if="node.loadingChildrenError" type="error" icon="error">
-        {{ node.loadingChildrenError }}
-        <a class="vue-treeselect__retry" @click="instance.loadChildrenOptions(node)" :title="instance.retryTitle">
-          {{ instance.retryText }}
-        </a>
-      </tip>
-    </div>
+        <tip v-else-if="node.isPending" type="loading" icon="loader">{{ instance.loadingText }}</tip>
+        <tip v-else-if="node.loadingChildrenError" type="error" icon="error">
+          {{ node.loadingChildrenError }}
+          <a class="vue-treeselect__retry" @click="instance.loadChildrenOptions(node)" :title="instance.retryTitle">
+            {{ instance.retryText }}
+          </a>
+        </tip>
+      </div>
+    </transition>
   </div>
 </template>
 
