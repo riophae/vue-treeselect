@@ -109,6 +109,8 @@ describe('Dynamical Loading', () => {
       expect(vm.nodeMap.a.isLoaded).toBe(false)
       // expand it
       vm.toggleExpanded(vm.nodeMap.a)
+      // wait for the transition
+      await vm.$nextTick()
       expect(spyForLoadOptions).toHaveBeenCalled()
       expect(vm.nodeMap.a.isPending).toBe(true)
       childrenOptionList = findChildrenOptionListByNodeId(wrapper, 'a')
