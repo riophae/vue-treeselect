@@ -12,7 +12,11 @@
 
     computed: {
       needsAutoSize() {
-        return this.instance.multiple
+        return (
+          this.instance.searchable &&
+          !this.instance.disabled &&
+          this.instance.multiple
+        )
       },
     },
 
