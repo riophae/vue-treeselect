@@ -9,13 +9,12 @@ import {
 
 import {
   UNCHECKED, INDETERMINATE, CHECKED,
-  UNMATCHED, DESCENDANT_MATCHED, MATCHED,
   LOAD_ROOT_OPTIONS, LOAD_CHILDREN_OPTIONS, /* ASYNC_SEARCH, */
   NO_PARENT_NODE,
   ALL, BRANCH_PRIORITY, LEAF_PRIORITY, ALL_WITH_INDETERMINATE,
   ALL_CHILDREN, ALL_DESCENDANTS, LEAF_CHILDREN, LEAF_DESCENDANTS,
   ORDER_SELECTED, LEVEL, INDEX,
-  INPUT_DEBOUNCE_DELAY, KEEP_REMAINING_HEIGHT,
+  INPUT_DEBOUNCE_DELAY, MENU_BUFFER,
 } from '../constants'
 
 function sortValueByIndex(a, b) {
@@ -48,9 +47,6 @@ export default {
       UNCHECKED,
       INDETERMINATE,
       CHECKED,
-      UNMATCHED,
-      DESCENDANT_MATCHED,
-      MATCHED,
     }
   },
 
@@ -1469,7 +1465,7 @@ export default {
       const spaceAbove = rect.top
       const spaceBelow = window.innerHeight - rect.bottom
       const hasEnoughSpaceBelow = spaceBelow > this.maxHeight
-      const isInViewport = rect.top > 0 && (window.innerHeight - rect.top) > KEEP_REMAINING_HEIGHT
+      const isInViewport = rect.top > 0 && (window.innerHeight - rect.top) > MENU_BUFFER
 
       switch (true) {
       case hasEnoughSpaceBelow:
@@ -1478,12 +1474,12 @@ export default {
       case this.openDirection === 'below':
       case this.openDirection === 'bottom':
         this.prefferedOpenDirection = 'below'
-        this.optimizedHeight = Math.max(Math.min(spaceBelow - KEEP_REMAINING_HEIGHT, this.maxHeight), this.maxHeight)
+        this.optimizedHeight = Math.max(Math.min(spaceBelow - MENU_BUFFER, this.maxHeight), this.maxHeight)
         break
 
       default:
         this.prefferedOpenDirection = 'above'
-        this.optimizedHeight = Math.min(spaceAbove - KEEP_REMAINING_HEIGHT, this.maxHeight)
+        this.optimizedHeight = Math.min(spaceAbove - MENU_BUFFER, this.maxHeight)
       }
     },
   },
