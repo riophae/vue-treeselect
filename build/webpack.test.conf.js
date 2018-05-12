@@ -9,10 +9,7 @@ const webpackConfig = merge(baseConfig, {
   mode: 'development',
   module: {
     rules: [
-      utils.styleLoaders({
-        ext: 'less',
-        usePostCSS: true,
-      }),
+      utils.styleLoaders(),
     ],
   },
   // use inline sourcemap for karma-sourcemap-loader

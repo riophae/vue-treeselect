@@ -16,12 +16,23 @@ if (!shallowEqual(expectedDistFiles.sort(), actualFiles.sort())) {
   throw new Error('Built files are not as expected.')
 }
 
+function readFile(fileName) {
+  return fs.readFileSync(path.join(config.bundle.assetsRoot, fileName))
+}
+
 function shouldReplaceEnvOrNot(expected, fileName) {
-  const source = fs.readFileSync(path.join(config.bundle.assetsRoot, fileName))
-  const actual = source.indexOf('process.env.NODE_ENV') === -1
+  const source = readFile(fileName)
+  const actual = !source.includes('process.env.NODE_ENV')
   if (expected !== actual) {
     throw new Error('The bundle file was not built correctly.')
   }
 }
-shouldReplaceEnvOrNot(true, 'vue-treeselect.min.js')
 shouldReplaceEnvOrNot(false, 'vue-treeselect.js')
+shouldReplaceEnvOrNot(true, 'vue-treeselect.min.js')
+
+function shouldReplaceCssEasings(fileName) {
+  const source = readFile(fileName)
+  return source.includes('cubic-bezier(')
+}
+shouldReplaceCssEasings('vue-treeselect.css')
+shouldReplaceCssEasings('vue-treeselect.min.css')

@@ -9,30 +9,24 @@ exports.assetsPath = _path => {
   return path.posix.join(assetsSubDirectory, _path)
 }
 
-exports.styleLoaders = options => {
+exports.styleLoaders = (options = {}) => {
   const loaders = [ {
     loader: 'css-loader',
     options: {
       importLoaders: 1,
       sourceMap: options.sourceMap,
     },
-  } ]
-
-  if (options.usePostCSS) {
-    loaders.push({
-      loader: 'postcss-loader',
-      options: {
-        sourceMap: options.sourceMap,
-      },
-    })
-  }
-
-  loaders.push({
-    loader: `${options.ext}-loader`,
+  }, {
+    loader: 'postcss-loader',
     options: {
       sourceMap: options.sourceMap,
     },
-  })
+  }, {
+    loader: 'less-loader',
+    options: {
+      sourceMap: options.sourceMap,
+    },
+  } ]
 
   if (options.extract) {
     loaders.unshift(MiniCssExtractPlugin.loader)
@@ -41,7 +35,7 @@ exports.styleLoaders = options => {
   }
 
   return {
-    test: new RegExp(`\\.${options.ext}$`),
+    test: /\.less$/,
     use: loaders,
   }
 }

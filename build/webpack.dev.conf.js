@@ -14,10 +14,7 @@ module.exports = merge(baseWebpackConfig, {
   mode: 'development',
   module: {
     rules: [
-      utils.styleLoaders({
-        ext: 'less',
-        usePostCSS: true,
-      }),
+      utils.styleLoaders(),
     ],
   },
   // cheap-module-eval-source-map is faster for development
