@@ -15,17 +15,7 @@ export default {
 
     shouldExpand() {
       if (!this.node.isBranch) return false
-      return this.instance.searching
-        ? this.node.isExpandedOnSearch
-        : this.node.isExpanded
-    },
-
-    shouldHideOption() {
-      if (!this.instance.searching) return false
-      if (this.node.isMatched) return false
-      if (this.node.isBranch && this.node.hasMatchedChild) return false
-      if (!this.node.isRootNode && this.node.parentNode.showAllChildrenOnSearch) return false
-      return true
+      return this.instance.shouldExpand(this.node)
     },
 
     shouldShowCount() {
@@ -69,5 +59,9 @@ export default {
     handleMouseDownOnOptionArrow: onlyOnLeftClick(function handleMouseDownOnOptionArrow() {
       this.instance.toggleExpanded(this.node)
     }),
+
+    setCurrentHighlightedOption() {
+      this.instance.setCurrentHighlightedOption(this.node)
+    },
   },
 }

@@ -2,35 +2,98 @@ import sleep from 'yaku/lib/sleep'
 import TreeselectOption from '@riophae/vue-treeselect/components/Option'
 import { INPUT_DEBOUNCE_DELAY } from '@riophae/vue-treeselect/constants'
 
-const MOUSE_BUTTON_LEFT = { button: 0 }
-const KEY_BACKSPACE = { which: 8, keyCode: 8 }
-const KEY_DELETE = { which: 46, keyCode: 46 }
-const KEY_ESCAPE = { which: 27, keyCode: 27 }
-const KEY_A = { which: 65, keyCode: 65 }
+function createArray(len, fn) {
+  const arr = []
+  let i = 0
+  while (i < len) arr.push(fn(i++))
+  return arr
+}
+
+export function generateOptions(maxLevel) {
+  const generate = (i, level) => {
+    const id = String.fromCharCode(97 + i).repeat(level)
+    const option = { id, label: id.toUpperCase() }
+    if (level < maxLevel) option.children = [ generate(i, level + 1) ]
+    return option
+  }
+
+  return createArray(maxLevel, i => generate(i, 1))
+}
+
+function createKeyObject(keyCode) {
+  return { which: keyCode, keyCode }
+}
 
 export function leftClick(wrapper) {
+  const MOUSE_BUTTON_LEFT = { button: 0 }
   wrapper.trigger('mousedown', MOUSE_BUTTON_LEFT)
 }
 
 export function pressBackspaceKey(wrapper) {
   const input = findInput(wrapper)
+  const KEY_BACKSPACE = createKeyObject(8)
   input.trigger('keydown', KEY_BACKSPACE)
 }
 
-export function pressDeleteKey(wrapper) {
+export function pressEnterKey(wrapper) {
   const input = findInput(wrapper)
-  input.trigger('keydown', KEY_DELETE)
+  const KEY_ENTER = createKeyObject(13)
+  input.trigger('keydown', KEY_ENTER)
 }
 
 export function pressEscapeKey(wrapper, modifierKey) {
   const input = findInput(wrapper)
+  const KEY_ESCAPE = createKeyObject(27)
   let eventData = KEY_ESCAPE
   if (modifierKey) eventData = { ...KEY_ESCAPE, [modifierKey]: true }
   input.trigger('keydown', eventData)
 }
 
+export function pressEndKey(wrapper) {
+  const input = findInput(wrapper)
+  const KEY_END = createKeyObject(35)
+  input.trigger('keydown', KEY_END)
+}
+
+export function pressHomeKey(wrapper) {
+  const input = findInput(wrapper)
+  const KEY_HOME = createKeyObject(36)
+  input.trigger('keydown', KEY_HOME)
+}
+
+export function pressArrowLeft(wrapper) {
+  const input = findInput(wrapper)
+  const ARROW_LEFT = createKeyObject(37)
+  input.trigger('keydown', ARROW_LEFT)
+}
+
+export function pressArrowUp(wrapper) {
+  const input = findInput(wrapper)
+  const ARROW_UP = createKeyObject(38)
+  input.trigger('keydown', ARROW_UP)
+}
+
+export function pressArrowRight(wrapper) {
+  const input = findInput(wrapper)
+  const ARROW_RIGHT = createKeyObject(39)
+  input.trigger('keydown', ARROW_RIGHT)
+}
+
+export function pressArrowDown(wrapper) {
+  const input = findInput(wrapper)
+  const ARROW_DOWN = createKeyObject(40)
+  input.trigger('keydown', ARROW_DOWN)
+}
+
+export function pressDeleteKey(wrapper) {
+  const input = findInput(wrapper)
+  const KEY_DELETE = createKeyObject(46)
+  input.trigger('keydown', KEY_DELETE)
+}
+
 export function pressAKey(wrapper) {
   const input = findInput(wrapper)
+  const KEY_A = createKeyObject(65)
   input.trigger('keydown', KEY_A)
 }
 
@@ -55,8 +118,7 @@ export function findMenu(wrapper) {
 }
 
 export function findOptionByNodeId(wrapper, nodeId) {
-  return wrapper.findAll(TreeselectOption).wrappers
-    .find(option => option.vm.node.id === nodeId)
+  return wrapper.find(`.vue-treeselect__option[data-id="${nodeId}"]`)
 }
 
 export function findOptionArrowContainerByNodeId(wrapper, nodeId) {
@@ -76,5 +138,7 @@ export function findLabelContainerByNodeId(wrapper, nodeId) {
 }
 
 export function findChildrenOptionListByNodeId(wrapper, nodeId) {
-  return findOptionByNodeId(wrapper, nodeId).find('.vue-treeselect__list')
+  return wrapper.findAll(TreeselectOption).wrappers
+    .find(optionWrapper => optionWrapper.vm.node.id === nodeId)
+    .find('.vue-treeselect__list')
 }

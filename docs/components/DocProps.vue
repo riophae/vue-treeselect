@@ -232,11 +232,6 @@
         defaultValue: code('false'),
         description: `Applies HTML5 ${code('required')} attribute when needed.`,
       }, {
-        name: 'retainScrollPosition',
-        type: 'Boolean',
-        defaultValue: code('true'),
-        description: 'Retain the scroll position on menu reopen.',
-      }, {
         name: 'retryText',
         type: 'String',
         defaultValue: code('"Retry?"'),

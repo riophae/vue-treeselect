@@ -4,7 +4,7 @@ import {
   warning,
   quickDiff, onlyOnLeftClick,
   debounce, identity, constant, isPromise, once, createEmptyObjectWithoutPrototype,
-  assign, last, find, removeFromArray,
+  assign, getLast, find, removeFromArray,
 } from '../utils'
 
 import {
@@ -16,6 +16,9 @@ import {
   ORDER_SELECTED, LEVEL, INDEX,
   INPUT_DEBOUNCE_DELAY, MENU_BUFFER,
 } from '../constants'
+
+// seems this package is not a valid ES6 module, we import it in commonjs manner
+const scrollIntoViewIfNeeded = require('scroll-into-view-if-needed').default
 
 function sortValueByIndex(a, b) {
   let i = 0
@@ -393,14 +396,6 @@ export default {
     },
 
     /**
-     * Whether to retain the scroll position on menu reopen
-     */
-    retainScrollPosition: {
-      type: Boolean,
-      default: true,
-    },
-
-    /**
      * Text displayed asking user whether to retry loading children options
      */
     retryText: {
@@ -532,6 +527,7 @@ export default {
       searchingCount: createEmptyObjectWithoutPrototype(),
       searching: false,
       searchQuery: '',
+      current: null, // id of current highlighted option
       lastScrollPosition: 0,
       optimizedHeight: 0,
       prefferedOpenDirection: 'below',
@@ -613,6 +609,31 @@ export default {
     visibleValue() {
       return this.internalValue.map(this.getNode).slice(0, this.limit)
     },
+    visibleOptionIds() {
+      const visibleOptionIds = []
+
+      this.traverseAllNodesByIndex(node => {
+        if (!this.searching || node.isMatched || (node.isBranch && node.hasMatchedChild)) {
+          visibleOptionIds.push(node.id)
+        }
+        // skip the traversal of descendants of a branch node if it's not expanded
+        if (node.isBranch && !this.shouldExpand(node)) {
+          return false
+        }
+      })
+
+      return visibleOptionIds
+    },
+    hasVisibleOptions() {
+      if (!this.rootOptionsLoaded) return false
+      if (!this.normalizedOptions.length) return false
+      if (this.searching) {
+        return this.normalizedOptions.some(option => {
+          return option.isMatched || (option.isBranch && option.hasMatchedChild)
+        })
+      }
+      return true
+    },
     /**
      * Whether has passed the defined limit or not
      * @type {boolean}
@@ -640,6 +661,13 @@ export default {
     },
     hasBranchNodes() {
       return this.normalizedOptions.some(rootNode => rootNode.isBranch)
+    },
+    firstVisibleOption() {
+      if (!this.normalizedOptions.length) return null
+      if (this.searching) return find(this.normalizedOptions, node => {
+        return node.isMatched || (node.isBranch && node.hasMatchedChild)
+      })
+      return this.normalizedOptions[0]
     },
     /* eslint-enable valid-jsdoc */
   },
@@ -869,7 +897,7 @@ export default {
     traverseDescendantsDFS(parentNode, callback) {
       if (!parentNode.isBranch) return
       parentNode.children.forEach(child => {
-        // post-order traversal
+        // deep-level node first
         this.traverseDescendantsDFS(child, callback)
         callback(child)
       })
@@ -879,18 +907,37 @@ export default {
       const { parentNode } = childNode
 
       if (parentNode !== NO_PARENT_NODE) {
-        // pre-order traversal
+        // deep-level node first
         callback(parentNode)
         this.traverseAncestors(parentNode, callback)
       }
     },
 
-    traverseAllNodes(callback) {
+    traverseAllNodesDFS(callback) {
       this.normalizedOptions.forEach(rootNode => {
-        // post-order traversal
+        // deep-level node first
         this.traverseDescendantsDFS(rootNode, callback)
         callback(rootNode)
       })
+    },
+
+    traverseAllNodesByIndex(callback) {
+      // The data structure of our options is actually a multi-rooted tree.
+      // To simplify the logic of traversal code, we create a fake node that holds all the root options.
+      const singleRootedTree = {
+        isBranch: true,
+        children: this.normalizedOptions,
+      }
+      const traverse = parentNode => {
+        if (!parentNode.isBranch) return
+        parentNode.children.forEach(child => {
+          if (callback(child) !== false) {
+            traverse(child)
+          }
+        })
+      }
+
+      traverse(singleRootedTree)
     },
 
     toggleClickOutsideEvent(enabled) {
@@ -986,7 +1033,7 @@ export default {
         this.searching = true
         this.noSearchResults = true
         // reset state
-        this.traverseAllNodes(node => {
+        this.traverseAllNodesDFS(node => {
           if (node.isBranch) {
             node.isExpandedOnSearch = false
             node.showAllChildrenOnSearch = false
@@ -1001,7 +1048,7 @@ export default {
         })
         const lowerCasedSearchQuery = this.searchQuery.trim().toLocaleLowerCase()
         const splitSearchQuery = lowerCasedSearchQuery.replace(/\s+/g, ' ').split(' ')
-        this.traverseAllNodes(node => {
+        this.traverseAllNodesDFS(node => {
           let isMatched
           if (this.searchNested && splitSearchQuery.length > 1) {
             isMatched = node.isMatched = splitSearchQuery.every(
@@ -1034,12 +1081,96 @@ export default {
       } else {
         this.searching = false
       }
+
+      this.resetHighlightedOptionWhenNecessary(true)
+    },
+
+    shouldExpand(node) {
+      return this.searching ? node.isExpandedOnSearch : node.isExpanded
+    },
+
+    isAllAncestorsExpanded(node) {
+      return node.ancestors.every(ancestor => this.shouldExpand(ancestor))
+    },
+
+    shouldOptionBeIncludedInSearchResult(node) {
+      // this option is matched
+      if (node.isMatched) return true
+      // this option is not matched, but has matched descendant(s)
+      if (node.isBranch && node.hasMatchedChild) return true
+      // this option's parent has no matched descendants,
+      // but after being expanded, all its children should be shown
+      if (!node.isRootNode && node.parentNode.showAllChildrenOnSearch) return true
+      return false
+    },
+
+    shouldShowOptionInMenu(node, checkIfCollapsed = true) {
+      if (checkIfCollapsed && !node.isRootNode && !this.isAllAncestorsExpanded(node)) {
+        // this option belongs to a collapsed folder option
+        return false
+      }
+      if (this.searching && !this.shouldOptionBeIncludedInSearchResult(node)) {
+        return false
+      }
+      return true
+    },
+
+    setCurrentHighlightedOption(node) {
+      if (!node) return
+
+      this.current = node.id
+
+      const $option = this.$el.querySelector(`.vue-treeselect__option[data-id="${node.id}"]`)
+      if ($option) scrollIntoViewIfNeeded($option, {
+        scrollMode: 'if-needed',
+        block: 'nearest',
+        inline: 'nearest',
+        boundary: this.$refs.menu,
+      })
+    },
+
+    resetHighlightedOptionWhenNecessary(forceReset = false) {
+      if (forceReset || this.current == null || !this.shouldShowOptionInMenu(this.getNode(this.current))) {
+        this.setCurrentHighlightedOption(this.firstVisibleOption)
+        this.setMenuScrollPosition(0)
+      }
+    },
+
+    highlightFirstOption() {
+      if (!this.hasVisibleOptions) return
+
+      const first = this.visibleOptionIds[0]
+      this.setCurrentHighlightedOption(this.getNode(first))
+      this.setMenuScrollPosition(0)
+    },
+
+    highlightPrevOption() {
+      if (!this.hasVisibleOptions) return
+
+      const prev = this.visibleOptionIds.indexOf(this.current) - 1
+      if (prev === -1) return this.highlightLastOption()
+      this.setCurrentHighlightedOption(this.getNode(this.visibleOptionIds[prev]))
+    },
+
+    highlightNextOption() {
+      if (!this.hasVisibleOptions) return
+
+      const next = this.visibleOptionIds.indexOf(this.current) + 1
+      if (next === this.visibleOptionIds.length) return this.highlightFirstOption()
+      this.setCurrentHighlightedOption(this.getNode(this.visibleOptionIds[next]))
+    },
+
+    highlightLastOption() {
+      if (!this.hasVisibleOptions) return
+
+      const last = getLast(this.visibleOptionIds)
+      this.setCurrentHighlightedOption(this.getNode(last))
+      this.setMenuScrollPosition(Infinity)
     },
 
     closeMenu() {
       if (!this.isOpen || (!this.disabled && this.alwaysOpen)) return
-      /* istanbul ignore else */
-      if (this.retainScrollPosition) this.saveScrollPosition()
+      this.saveMenuScrollPosition()
       this.isOpen = false
       this.toggleClickOutsideEvent(false)
       // reset search query after menu closes
@@ -1050,11 +1181,11 @@ export default {
     openMenu() {
       if (this.disabled || this.isOpen) return
       this.isOpen = true
-      this.$nextTick(this.adjustPosition)
-      /* istanbul ignore else */
-      if (this.retainScrollPosition) this.$nextTick(this.restoreScrollPosition)
+      this.$nextTick(this.adjustMenuOpenDirection)
+      this.$nextTick(this.restoreMenuScrollPosition)
       if (!this.rootOptionsLoaded) this.loadRootOptions()
       this.toggleClickOutsideEvent(true)
+      this.resetHighlightedOptionWhenNecessary()
       this.$emit('open', this.id)
     },
 
@@ -1103,7 +1234,7 @@ export default {
           }
         })
 
-        this.traverseAllNodes(node => {
+        this.traverseAllNodesDFS(node => {
           if (!(node.id in map)) {
             map[node.id] = UNCHECKED
           }
@@ -1444,20 +1575,29 @@ export default {
     removeLastValue() {
       if (!this.hasValue) return
       if (this.single) return this.clear()
-      const lastValue = last(this.internalValue)
+      const lastValue = getLast(this.internalValue)
       const lastSelectedNode = this.getNode(lastValue)
       this.select(lastSelectedNode) // deselect
     },
 
-    saveScrollPosition() {
+    setMenuScrollPosition(pos) {
+      if (this.$refs.menu) {
+        if (pos === Infinity) pos = this.$refs.menu.scrollHeight
+        this.$refs.menu.scrollTop = pos
+      } else {
+        this.lastScrollPosition = pos
+      }
+    },
+
+    saveMenuScrollPosition() {
       if (this.$refs.menu) this.lastScrollPosition = this.$refs.menu.scrollTop
     },
 
-    restoreScrollPosition() {
-      if (this.$refs.menu) this.$refs.menu.scrollTop = this.lastScrollPosition
+    restoreMenuScrollPosition() {
+      if (this.$refs.menu) this.setMenuScrollPosition(this.lastScrollPosition)
     },
 
-    adjustPosition() {
+    adjustMenuOpenDirection() {
       // istanbul ignore next
       if (typeof window === 'undefined') return
 

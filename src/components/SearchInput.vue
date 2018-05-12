@@ -2,6 +2,16 @@
   import { deepExtend } from '../utils'
   import { MIN_INPUT_WIDTH, KEY_CODES } from '../constants'
 
+  const keysThatRequireMenuBeingOpen = [
+    KEY_CODES.ENTER,
+    KEY_CODES.END,
+    KEY_CODES.HOME,
+    KEY_CODES.ARROW_LEFT,
+    KEY_CODES.ARROW_UP,
+    KEY_CODES.ARROW_RIGHT,
+    KEY_CODES.ARROW_DOWN,
+  ]
+
   export default {
     name: 'vue-treeselect--input',
     inject: [ 'instance' ],
@@ -65,17 +75,23 @@
 
         // https://css-tricks.com/snippets/javascript/javascript-keycodes/
         // https://stackoverflow.com/questions/4471582/javascript-keycode-vs-which
-        switch (/* istanbul ignore next */ 'which' in evt ? evt.which : evt.keyCode) {
+        const key = 'which' in evt ? evt.which : /* istanbul ignore next */ evt.keyCode
+        if (!this.instance.isOpen && keysThatRequireMenuBeingOpen.indexOf(key) !== -1) {
+          return this.instance.openMenu()
+        }
+
+        switch (key) {
         case KEY_CODES.BACKSPACE: {
           if (this.instance.backspaceRemoves && !this.instance.searchQuery.length) {
             this.instance.removeLastValue()
           }
           break
         }
-        case KEY_CODES.DELETE: {
-          if (this.instance.deleteRemoves && !this.instance.searchQuery.length) {
-            this.instance.removeLastValue()
-          }
+        case KEY_CODES.ENTER: {
+          evt.preventDefault()
+          const current = this.instance.getNode(this.instance.current)
+          if (current.isBranch && this.instance.disableBranchNodes) return
+          this.instance.select(current)
           break
         }
         case KEY_CODES.ESCAPE: {
@@ -85,6 +101,51 @@
             this.instance.closeMenu()
           } else if (this.instance.escapeClearsValue) {
             this.instance.clear()
+          }
+          break
+        }
+        case KEY_CODES.END: {
+          evt.preventDefault()
+          this.instance.highlightLastOption()
+          break
+        }
+        case KEY_CODES.HOME: {
+          evt.preventDefault()
+          this.instance.highlightFirstOption()
+          break
+        }
+        case KEY_CODES.ARROW_LEFT: {
+          const current = this.instance.getNode(this.instance.current)
+          if (current.isBranch && this.instance.shouldExpand(current)) {
+            evt.preventDefault()
+            this.instance.toggleExpanded(current)
+          } else if (!current.isRootNode && (current.isLeaf || (current.isBranch && !(this.instance.shouldExpand(current))))) {
+            evt.preventDefault()
+            this.instance.setCurrentHighlightedOption(current.parentNode)
+          }
+          break
+        }
+        case KEY_CODES.ARROW_UP: {
+          evt.preventDefault()
+          this.instance.highlightPrevOption()
+          break
+        }
+        case KEY_CODES.ARROW_RIGHT: {
+          const current = this.instance.getNode(this.instance.current)
+          if (current.isBranch && !this.instance.shouldExpand(current)) {
+            evt.preventDefault()
+            this.instance.toggleExpanded(current)
+          }
+          break
+        }
+        case KEY_CODES.ARROW_DOWN: {
+          evt.preventDefault()
+          this.instance.highlightNextOption()
+          break
+        }
+        case KEY_CODES.DELETE: {
+          if (this.instance.deleteRemoves && !this.instance.searchQuery.length) {
+            this.instance.removeLastValue()
           }
           break
         }

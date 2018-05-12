@@ -131,7 +131,7 @@ export function deepExtend(target, source) {
   return target
 }
 
-export function last(arr) {
+export function getLast(arr) {
   return arr[arr.length - 1]
 }
 

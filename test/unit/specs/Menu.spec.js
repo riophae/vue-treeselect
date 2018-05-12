@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils'
 import Treeselect from '@riophae/vue-treeselect/components/Treeselect'
-import { leftClick, findOptionByNodeId } from './shared'
+import { generateOptions, leftClick, findMenu, findOptionByNodeId } from './shared'
 
 describe('Menu', () => {
   it('should blur the input & close the menu after clicking anywhere outside the component', () => {
@@ -112,5 +112,57 @@ describe('Menu', () => {
     expect(a.isExpanded).toBe(true)
     leftClick(optionArrow)
     expect(a.isExpanded).toBe(false)
+  })
+
+  it('should highlight the option when the cursor hovering over it', () => {
+    const wrapper = mount(Treeselect, {
+      propsData: {
+        options: [ {
+          id: 'a',
+          label: 'a',
+        }, {
+          id: 'b',
+          label: 'b',
+        } ],
+      },
+    })
+    const { vm } = wrapper
+
+    vm.openMenu()
+    expect(vm.current).toBe('a')
+
+    findOptionByNodeId(wrapper, 'b').trigger('mouseenter')
+    expect(vm.current).toBe('b')
+
+    findOptionByNodeId(wrapper, 'a').trigger('mouseenter')
+    expect(vm.current).toBe('a')
+  })
+
+  it('retain scroll position on menu reopen', async () => {
+    const maxHeight = 100
+    const wrapper = mount(Treeselect, {
+      propsData: {
+        options: generateOptions(3),
+        defaultExpandLevel: Infinity,
+        maxHeight,
+      },
+      attachToDocument: true,
+    })
+    const { vm } = wrapper
+
+    let i = 3
+    let pos = 0
+    const step = 20
+    while (i--) {
+      vm.openMenu()
+      await vm.$nextTick()
+      const menu = findMenu(wrapper)
+      expect(menu.element.scrollHeight).toBeGreaterThan(maxHeight)
+      expect(menu.element.scrollTop).toBe(pos)
+      pos += step
+      menu.element.scrollBy(0, step)
+      vm.closeMenu()
+      await vm.$nextTick()
+    }
   })
 })

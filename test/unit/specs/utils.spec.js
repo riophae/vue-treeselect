@@ -114,16 +114,16 @@ describe('Utils', () => {
     })
   })
 
-  describe('last', () => {
-    const { last } = utils
+  describe('getLast', () => {
+    const { getLast } = utils
 
     it('returns undefined if array is empty', () => {
-      expect(last([])).toBe(undefined)
+      expect(getLast([])).toBe(undefined)
     })
 
     it('returns last element of array', () => {
-      expect(last([ 1 ])).toBe(1)
-      expect(last([ 1, 2, 3 ])).toBe(3)
+      expect(getLast([ 1 ])).toBe(1)
+      expect(getLast([ 1, 2, 3 ])).toBe(3)
     })
   })
 

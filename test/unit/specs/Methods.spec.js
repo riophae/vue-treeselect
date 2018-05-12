@@ -266,4 +266,8 @@ describe('Methods', () => {
       })
     })
   })
+
+  it('setCurrentHighlightedOption()', () => {
+    // TODO
+  })
 })

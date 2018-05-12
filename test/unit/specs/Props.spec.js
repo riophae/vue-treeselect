@@ -5,32 +5,14 @@ import Treeselect from '@riophae/vue-treeselect/components/Treeselect'
 import TreeselectOption from '@riophae/vue-treeselect/components/Option'
 import { UNCHECKED, CHECKED } from '@riophae/vue-treeselect/constants'
 import {
+  generateOptions,
   leftClick,
   typeSearchText,
   findInputContainer,
   findInput,
-  findMenu,
   findOptionByNodeId,
   findLabelContainerByNodeId,
 } from './shared'
-
-function createArray(len, fn) {
-  const arr = []
-  let i = 0
-  while (i < len) arr.push(fn(i++))
-  return arr
-}
-
-function generateOptions(maxLevel) {
-  const generate = (i, level) => {
-    const id = String.fromCharCode(97 + i).repeat(level)
-    const option = { id, label: id.toUpperCase() }
-    if (level < maxLevel) option.children = [ generate(i, level + 1) ]
-    return option
-  }
-
-  return createArray(maxLevel, i => generate(i, 1))
-}
 
 describe('Props', () => {
   describe('alwaysOpen', () => {
@@ -1386,49 +1368,6 @@ describe('Props', () => {
       it('the input should not have `required` attribute even if value is present', () => {
         wrapper.setProps({ value: 'a', required: false })
         expect(input.attributes()).not.toHaveMember('required')
-      })
-    })
-  })
-
-  describe('retainScrollPosition', () => {
-    const step = 20
-
-    async function test(value, callback) {
-      const maxHeight = 100
-      const wrapper = mount(Treeselect, {
-        propsData: {
-          options: generateOptions(3),
-          defaultExpandLevel: Infinity,
-          retainScrollPosition: value,
-          maxHeight,
-        },
-        attachToDocument: true,
-      })
-      const { vm } = wrapper
-
-      for (let i = 0; i < 3; i++) {
-        vm.openMenu()
-        await vm.$nextTick()
-        const menu = findMenu(wrapper)
-        expect(menu.element.scrollHeight).toBeGreaterThan(maxHeight)
-        callback(menu)
-        menu.element.scrollBy(0, step)
-        vm.closeMenu()
-        await vm.$nextTick()
-      }
-    }
-
-    it('when retainScrollPosition=false', async () => {
-      await test(false, menu => {
-        expect(menu.element.scrollTop).toBe(0)
-      })
-    })
-
-    it('when retainScrollPosition=true', async () => {
-      let pos = 0
-      await test(true, menu => {
-        expect(menu.element.scrollTop).toBe(pos)
-        pos += step
       })
     })
   })

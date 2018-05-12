@@ -76,7 +76,7 @@
 @treeselect-x-color: @treeselect-arrow-color;
 @treeselect-x-color-hover: @palette-Red-600;
 
-@treeselect-option-bg-hover: @palette-Grey-100;
+@treeselect-option-bg-highlight: @palette-Grey-100;
 @treeselect-option-selected-bg: @palette-Blue-50;
 @treeselect-option-selected-bg-hover: @treeselect-option-selected-bg;
 @treeselect-checkbox-size: @treeselect-icon-size;
@@ -688,14 +688,6 @@
   }
 }
 
-.vue-treeselect__option {
-  .row();
-
-  &:hover {
-    background: @treeselect-option-bg-hover;
-  }
-}
-
 .generate-level-indentations(@i) when (@i >= 0) {
   .generate-level-indentations((@i - 1));
 
@@ -711,7 +703,16 @@
 }
 .generate-level-indentations(@treeselect-max-level);
 
+.vue-treeselect__option {
+  .row();
+}
+
+.vue-treeselect__option--highlight {
+  background: @treeselect-option-bg-highlight;
+}
+
 .vue-treeselect__option--selected {
+  // note that these should override `.vue-treeselect__option--highlight`
   .vue-treeselect--single & {
     background: @treeselect-option-selected-bg;
     font-weight: 600;

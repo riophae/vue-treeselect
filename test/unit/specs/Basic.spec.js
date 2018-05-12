@@ -2,7 +2,7 @@ import Vue from 'vue'
 import { mount } from '@vue/test-utils'
 import sleep from 'yaku/lib/sleep'
 import Treeselect from '@riophae/vue-treeselect/components/Treeselect'
-import { findOptionByNodeId } from './shared'
+import TreeselectOption from '@riophae/vue-treeselect/components/Option'
 
 describe('Basic', () => {
   describe('nodeMap', () => {
@@ -820,8 +820,11 @@ describe('Basic', () => {
         isOpen: true,
       },
     })
-    const a = findOptionByNodeId(wrapper, 'a').find('.vue-treeselect__option')
-    const aa = findOptionByNodeId(wrapper, 'aa').find('.vue-treeselect__option')
+    const optionsWrappers = wrapper.findAll(TreeselectOption).wrappers
+    const a = optionsWrappers.find(optionWrapper => optionWrapper.vm.node.id === 'a')
+      .find('.vue-treeselect__option')
+    const aa = optionsWrappers.find(optionWrapper => optionWrapper.vm.node.id === 'aa')
+      .find('.vue-treeselect__option')
 
     expect(a.attributes()['data-id']).toBe('a')
     expect(aa.attributes()['data-id']).toBe('aa')
