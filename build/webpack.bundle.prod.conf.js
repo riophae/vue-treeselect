@@ -51,9 +51,7 @@ const webpackConfig = merge(base, {
         sourceMap: config.bundle.prod.productionSourceMap,
       }),
       new OptimizeCSSPlugin({
-        cssProcessorOptions: {
-          reduceIdents: false,
-        },
+        cssProcessor: config.bundle.prod.cssProcessor,
       }),
     ],
   },
