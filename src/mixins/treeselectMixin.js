@@ -2,7 +2,7 @@ import fuzzysearch from 'fuzzysearch'
 
 import {
   warning,
-  quickDiff, onlyOnLeftClick,
+  quickDiff, onlyOnLeftClick, scrollIntoView,
   debounce, identity, constant, isPromise, once, createEmptyObjectWithoutPrototype,
   assign, getLast, find, removeFromArray,
 } from '../utils'
@@ -16,9 +16,6 @@ import {
   ORDER_SELECTED, LEVEL, INDEX,
   INPUT_DEBOUNCE_DELAY, MENU_BUFFER,
 } from '../constants'
-
-// seems this package is not a valid ES6 module, we import it in commonjs manner
-const scrollIntoViewIfNeeded = require('scroll-into-view-if-needed').default
 
 function sortValueByIndex(a, b) {
   let i = 0
@@ -1121,12 +1118,7 @@ export default {
       this.current = node.id
 
       const $option = this.$el.querySelector(`.vue-treeselect__option[data-id="${node.id}"]`)
-      if ($option) scrollIntoViewIfNeeded($option, {
-        scrollMode: 'if-needed',
-        block: 'nearest',
-        inline: 'nearest',
-        boundary: this.$refs.menu,
-      })
+      if ($option) scrollIntoView(this.$refs.menu, $option)
     },
 
     resetHighlightedOptionWhenNecessary(forceReset = false) {

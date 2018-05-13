@@ -30,8 +30,7 @@
   },
   "pre-commit": "lint",
   "dependencies": {
-    "fuzzysearch": "^1.0.3",
-    "scroll-into-view-if-needed": "^2.1.5"
+    "fuzzysearch": "^1.0.3"
   },
   "devDependencies": {
     "@vue/test-utils": "^1.0.0-beta.14",
