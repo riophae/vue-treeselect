@@ -1,5 +1,5 @@
 # vue-treeselect
-[![npm](https://img.shields.io/npm/v/@riophae/vue-treeselect.svg)](https://www.npmjs.com/package/@riophae/vue-treeselect) [![CircleCI](https://img.shields.io/circleci/project/github/riophae/vue-treeselect/dev.svg)](https://circleci.com/gh/riophae/vue-treeselect/tree/dev) [![Codecov](https://codecov.io/gh/riophae/vue-treeselect/branch/dev/graph/badge.svg)](https://codecov.io/gh/riophae/vue-treeselect?branch=dev)
+[![npm](https://img.shields.io/npm/v/@riophae/vue-treeselect.svg)](https://www.npmjs.com/package/@riophae/vue-treeselect) [![CircleCI](https://img.shields.io/circleci/project/github/riophae/vue-treeselect/master.svg)](https://circleci.com/gh/riophae/vue-treeselect/tree/master) [![Codecov](https://codecov.io/gh/riophae/vue-treeselect/branch/master/graph/badge.svg)](https://codecov.io/gh/riophae/vue-treeselect?branch=master)
 ![npm monthly downloads](https://img.shields.io/npm/dm/@riophae/vue-treeselect.svg)
 
 > A multi-select component with nested options for Vue.js
@@ -147,10 +147,10 @@ You can use this [pen](https://codepen.io/riophae/pen/MExgzP) to reproduce bugs 
 
 1. Fork & clone the repo
 2. Install dependencies by `yarn` or `npm install`
-3. Check out a new branch **from `dev`**
+3. Check out a new branch
 4. `npm run dev` & hack
 5. Make sure `npm test` passes
-6. Push your changes & file a pull request to `dev` branch
+6. Push your changes & file a pull request
 
 ### Credits
 
