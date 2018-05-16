@@ -36,60 +36,6 @@ describe('Menu', () => {
     expect(wrapper.vm.isOpen).toBe(true)
   })
 
-  it('should close the menu after clicking inside the value wrapper when isOpen=true && searchable=false', () => {
-    const wrapper = mount(Treeselect, {
-      attachToDocument: true,
-      propsData: {
-        options: [ {
-          id: 'a',
-          label: 'a',
-        } ],
-        multiple: false,
-        searchable: false,
-      },
-      data: {
-        isOpen: true,
-        isFocused: true,
-      },
-    })
-
-    wrapper.vm.openMenu()
-    const valueContainer = wrapper.find('.vue-treeselect__value-container')
-    leftClick(valueContainer)
-    expect(wrapper.vm.isOpen).toBe(false)
-  })
-
-  it('should not close the menu after clicking a value remove button when multiple=true && searchable=false', () => {
-    const wrapper = mount(Treeselect, {
-      attachToDocument: true,
-      propsData: {
-        multiple: true,
-        options: [ {
-          id: 'a',
-          label: 'a',
-        }, {
-          id: 'b',
-          label: 'b',
-        } ],
-        value: [ 'a', 'b' ],
-      },
-      data: {
-        isOpen: true,
-      },
-    })
-    const { vm } = wrapper
-
-    const [ firstRemove, secondRemove ] = wrapper.findAll('.vue-treeselect__value-remove').wrappers
-
-    leftClick(firstRemove)
-    expect(vm.isOpen).toBe(true)
-    expect(vm.selectedNodeIds).toEqual([ 'b' ])
-
-    leftClick(secondRemove)
-    expect(vm.isOpen).toBe(true)
-    expect(vm.selectedNodeIds).toEqual([])
-  })
-
   it('click on option arrow should toggle expanded', () => {
     const wrapper = mount(Treeselect, {
       attachToDocument: true,

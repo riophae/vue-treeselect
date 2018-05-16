@@ -734,7 +734,6 @@ export default {
 
     resetFlags() {
       this._blurOnSelect = false
-      this._wasClickedOnValueItem = false
     },
 
     initialize(rootOptions) {
@@ -960,13 +959,8 @@ export default {
       if (this.disabled) return
 
       const isClickedOnValueContainer = this.$refs.value.$el.contains(evt.target)
-
-      if (isClickedOnValueContainer) {
-        if (this.isOpen && !this.searchable && !this._wasClickedOnValueItem) {
-          this.closeMenu()
-        } else if (!this.isOpen && (this.openOnClick || this.isFocused)) {
-          this.openMenu()
-        }
+      if (isClickedOnValueContainer && !this.isOpen && (this.openOnClick || this.isFocused)) {
+        this.openMenu()
       }
 
       if (this._blurOnSelect) {

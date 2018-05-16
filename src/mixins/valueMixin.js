@@ -18,7 +18,6 @@ export default {
     },
 
     handleMouseDownOnValueItem: onlyOnLeftClick(function handleMouseDownOnValueItem(evt, node) {
-      this._wasClickedOnValueItem = true
       this.instance.select(node) // deselect
     }),
   },
