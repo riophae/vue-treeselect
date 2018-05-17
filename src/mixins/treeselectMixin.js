@@ -610,7 +610,7 @@ export default {
       const visibleOptionIds = []
 
       this.traverseAllNodesByIndex(node => {
-        if (!this.searching || node.isMatched || (node.isBranch && node.hasMatchedChild)) {
+        if (!this.searching || node.isMatched || (node.isBranch && node.hasMatchedDescendants)) {
           visibleOptionIds.push(node.id)
         }
         // skip the traversal of descendants of a branch node if it's not expanded
@@ -626,7 +626,7 @@ export default {
       if (!this.normalizedOptions.length) return false
       if (this.searching) {
         return this.normalizedOptions.some(option => {
-          return option.isMatched || (option.isBranch && option.hasMatchedChild)
+          return option.isMatched || (option.isBranch && option.hasMatchedDescendants)
         })
       }
       return true
@@ -662,7 +662,7 @@ export default {
     firstVisibleOption() {
       if (!this.normalizedOptions.length) return null
       if (this.searching) return find(this.normalizedOptions, node => {
-        return node.isMatched || (node.isBranch && node.hasMatchedChild)
+        return node.isMatched || (node.isBranch && node.hasMatchedDescendants)
       })
       return this.normalizedOptions[0]
     },
@@ -1028,7 +1028,7 @@ export default {
           if (node.isBranch) {
             node.isExpandedOnSearch = false
             node.showAllChildrenOnSearch = false
-            node.hasMatchedChild = false
+            node.hasMatchedDescendants = false
             this.$set(this.searchingCount, node.id, {
               [ALL_CHILDREN]: 0,
               [ALL_DESCENDANTS]: 0,
@@ -1066,7 +1066,7 @@ export default {
             node.parentNode !== NO_PARENT_NODE
           ) {
             node.parentNode.isExpandedOnSearch = true
-            node.parentNode.hasMatchedChild = true
+            node.parentNode.hasMatchedDescendants = true
           }
         })
       } else {
@@ -1088,7 +1088,7 @@ export default {
       // this option is matched
       if (node.isMatched) return true
       // this option is not matched, but has matched descendant(s)
-      if (node.isBranch && node.hasMatchedChild) return true
+      if (node.isBranch && node.hasMatchedDescendants) return true
       // this option's parent has no matched descendants,
       // but after being expanded, all its children should be shown
       if (!node.isRootNode && node.parentNode.showAllChildrenOnSearch) return true
@@ -1276,7 +1276,7 @@ export default {
             this.$set(normalized, 'isExpanded', typeof isDefaultExpanded === 'boolean'
               ? isDefaultExpanded
               : level < this.defaultExpandLevel)
-            this.$set(normalized, 'hasMatchedChild', false)
+            this.$set(normalized, 'hasMatchedDescendants', false)
             this.$set(normalized, 'hasDisabledDescendants', false)
             this.$set(normalized, 'isExpandedOnSearch', false)
             this.$set(normalized, 'showAllChildrenOnSearch', false)

@@ -60,7 +60,7 @@ describe('Basic', () => {
         isDisabled: jasmine.any(Boolean),
         isLoaded: jasmine.any(Boolean),
         isPending: jasmine.any(Boolean),
-        hasMatchedChild: jasmine.any(Boolean),
+        hasMatchedDescendants: jasmine.any(Boolean),
         hasDisabledDescendants: jasmine.any(Boolean),
         isExpandedOnSearch: jasmine.any(Boolean),
         showAllChildrenOnSearch: jasmine.any(Boolean),
