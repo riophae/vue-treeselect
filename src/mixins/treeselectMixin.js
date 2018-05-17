@@ -954,15 +954,6 @@ export default {
       })
     },
 
-    traverseAncestors(childNode, callback) {
-      let parentNode = childNode
-
-      while ((parentNode = parentNode.parentNode) !== NO_PARENT_NODE) {
-        // deep-level node first
-        callback(parentNode)
-      }
-    },
-
     traverseAllNodesDFS(callback) {
       this.forest.normalizedOptions.forEach(rootNode => {
         // deep-level node first
@@ -1260,12 +1251,12 @@ export default {
 
     buildForestState() {
       const selectedNodeMap = createMap()
-      const checkedStateMap = createMap()
-
       this.forest.selectedNodeIds.forEach(selectedNodeId => {
         selectedNodeMap[selectedNodeId] = true
       })
+      this.forest.selectedNodeMap = selectedNodeMap
 
+      const checkedStateMap = createMap()
       if (this.multiple) {
         this.traverseAllNodesByIndex(node => {
           checkedStateMap[node.id] = UNCHECKED
@@ -1274,17 +1265,13 @@ export default {
         this.selectedNodes.forEach(selectedNode => {
           checkedStateMap[selectedNode.id] = CHECKED
 
-          if (!this.flat) {
-            this.traverseAncestors(selectedNode, ancestorNode => {
-              if (!this.isSelected(ancestorNode)) {
-                checkedStateMap[ancestorNode.id] = INDETERMINATE
-              }
-            })
-          }
+          if (!this.flat) selectedNode.ancestors.forEach(ancestorNode => {
+            if (!this.isSelected(ancestorNode)) {
+              checkedStateMap[ancestorNode.id] = INDETERMINATE
+            }
+          })
         })
       }
-
-      this.forest.selectedNodeMap = selectedNodeMap
       this.forest.checkedStateMap = checkedStateMap
     },
 
