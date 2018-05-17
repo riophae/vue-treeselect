@@ -751,9 +751,9 @@ export default {
     multiple(newValue) {
       // istanbul ignore else
       if (newValue) {
-        // needs to rebuild the state tree when switching from
+        // needs to rebuild the state when switching from
         // single-select mode to multi-select mode
-        this.buildNodeCheckedStateMap()
+        this.buildForestState()
       }
     },
 
@@ -769,8 +769,7 @@ export default {
       if (hasChanged) {
         this.forest.selectedNodeIds = newInternalValue
         this.completeSelectedNodeIdList()
-        this.buildSelectedNodeMap()
-        this.buildNodeCheckedStateMap()
+        this.buildForestState()
       }
     },
   },
@@ -802,8 +801,7 @@ export default {
         this.keepDataOfSelectedNodes(prevNodeMap)
         this.forest.normalizedOptions = this.normalize(NO_PARENT_NODE, rootOptions, prevNodeMap)
         this.completeSelectedNodeIdList()
-        this.buildSelectedNodeMap()
-        this.buildNodeCheckedStateMap()
+        this.buildForestState()
         this.forest.isLoaded = true
       } else {
         this.forest.normalizedOptions = []
@@ -957,12 +955,11 @@ export default {
     },
 
     traverseAncestors(childNode, callback) {
-      const { parentNode } = childNode
+      let parentNode = childNode
 
-      if (parentNode !== NO_PARENT_NODE) {
+      while ((parentNode = parentNode.parentNode) !== NO_PARENT_NODE) {
         // deep-level node first
         callback(parentNode)
-        this.traverseAncestors(parentNode, callback)
       }
     },
 
@@ -1261,38 +1258,34 @@ export default {
       }
     },
 
-    buildSelectedNodeMap() {
-      const map = createMap()
+    buildForestState() {
+      const selectedNodeMap = createMap()
+      const checkedStateMap = createMap()
 
       this.forest.selectedNodeIds.forEach(selectedNodeId => {
-        map[selectedNodeId] = true
+        selectedNodeMap[selectedNodeId] = true
       })
-
-      this.forest.selectedNodeMap = map
-    },
-
-    buildNodeCheckedStateMap() {
-      const map = createMap()
 
       if (this.multiple) {
         this.traverseAllNodesByIndex(node => {
-          map[node.id] = UNCHECKED
+          checkedStateMap[node.id] = UNCHECKED
         })
 
         this.selectedNodes.forEach(selectedNode => {
-          map[selectedNode.id] = CHECKED
+          checkedStateMap[selectedNode.id] = CHECKED
 
           if (!this.flat) {
             this.traverseAncestors(selectedNode, ancestorNode => {
               if (!this.isSelected(ancestorNode)) {
-                map[ancestorNode.id] = INDETERMINATE
+                checkedStateMap[ancestorNode.id] = INDETERMINATE
               }
             })
           }
         })
       }
 
-      this.forest.checkedStateMap = map
+      this.forest.selectedNodeMap = selectedNodeMap
+      this.forest.checkedStateMap = checkedStateMap
     },
 
     enhancedNormalizer(raw) {
@@ -1512,8 +1505,7 @@ export default {
         this._deselectNode(node)
       }
 
-      this.buildSelectedNodeMap()
-      this.buildNodeCheckedStateMap()
+      this.buildForestState()
 
       if (state) {
         this.$emit('select', node.raw, this.id)
@@ -1540,8 +1532,7 @@ export default {
         this.forest.selectedNodeIds = this.multiple
           ? this.forest.selectedNodeIds.filter(nodeId => this.getNode(nodeId).isDisabled)
           : []
-        this.buildSelectedNodeMap()
-        this.buildNodeCheckedStateMap()
+        this.buildForestState()
       }
     },
 
