@@ -1275,6 +1275,10 @@ export default {
       const map = createMap()
 
       if (this.multiple) {
+        this.traverseAllNodesByIndex(node => {
+          map[node.id] = UNCHECKED
+        })
+
         this.selectedNodes.forEach(selectedNode => {
           map[selectedNode.id] = CHECKED
 
@@ -1284,12 +1288,6 @@ export default {
                 map[ancestorNode.id] = INDETERMINATE
               }
             })
-          }
-        })
-
-        this.traverseAllNodesDFS(node => {
-          if (!(node.id in map)) {
-            map[node.id] = UNCHECKED
           }
         })
       }

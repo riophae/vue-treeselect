@@ -1796,13 +1796,13 @@ describe('Props', () => {
     it('when valueConsistsOf=ALL_WITH_INDETERMINATE', () => {
       wrapper.setProps({ valueConsistsOf: 'ALL_WITH_INDETERMINATE' })
 
-      expect(vm.internalValue).toEqual([ 'aa', 'a', 'aaa', 'aab' ])
+      expect(vm.internalValue).toEqual([ 'a', 'aa', 'aaa', 'aab' ])
       vm.select(vm.forest.nodeMap.ab)
-      expect(vm.internalValue).toEqual([ 'aa', 'a', 'aaa', 'aab', 'ab', 'aba', 'abb' ])
+      expect(vm.internalValue).toEqual([ 'a', 'aa', 'aaa', 'aab', 'ab', 'aba', 'abb' ])
       vm.select(vm.forest.nodeMap.b)
-      expect(vm.internalValue).toEqual([ 'aa', 'a', 'aaa', 'aab', 'ab', 'aba', 'abb', 'b' ])
+      expect(vm.internalValue).toEqual([ 'a', 'aa', 'aaa', 'aab', 'ab', 'aba', 'abb', 'b' ])
       vm.select(vm.forest.nodeMap.ac)
-      expect(vm.internalValue).toEqual([ 'aa', 'aaa', 'aab', 'ab', 'aba', 'abb', 'b', 'ac', 'a' ])
+      expect(vm.internalValue).toEqual([ 'a', 'aa', 'aaa', 'aab', 'ab', 'aba', 'abb', 'ac', 'b' ])
     })
   })
 
