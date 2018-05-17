@@ -1541,14 +1541,9 @@ export default {
 
       if (node.isLeaf || (node.isBranch && (!node.hasDisabledDescendants || ignoreDisabled))) {
         let curr = node
-        while (!curr.isRootNode) {
-          curr = curr.parentNode
-          const siblings = curr.children
-          if (siblings.every(this.isSelected)) {
-            this.addValue(curr)
-          } else {
-            break
-          }
+        while ((curr = curr.parentNode) !== NO_PARENT_NODE) {
+          if (curr.children.every(this.isSelected)) this.addValue(curr)
+          else break
         }
       }
     },
@@ -1569,25 +1564,18 @@ export default {
         })
       }
 
-      switch (true) {
-      case node.isLeaf:
-      case /* node.isBranch && */hasUncheckedSomeDescendants:
-      case /* node.isBranch && */node.children.length === 0: {
+      if (
+        node.isLeaf ||
+        /* node.isBranch && */hasUncheckedSomeDescendants ||
+        /* node.isBranch && */node.children.length === 0
+      ) {
         this.removeValue(node)
 
         let curr = node
-        while (!curr.isRootNode) {
-          curr = curr.parentNode
-          if (this.isSelected(curr)) {
-            this.removeValue(curr)
-          } else {
-            break
-          }
+        while ((curr = curr.parentNode) !== NO_PARENT_NODE) {
+          if (this.isSelected(curr)) this.removeValue(curr)
+          else break
         }
-        break
-      }
-
-      default:
       }
     },
 
