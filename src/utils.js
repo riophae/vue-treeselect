@@ -1,3 +1,7 @@
+/**
+ * Debugging helpers
+ */
+
 export const warning = process.env.NODE_ENV === 'production'
   ? /* istanbul ignore next */ noop
   : function warning(checker, complainer) {
@@ -10,14 +14,33 @@ export const warning = process.env.NODE_ENV === 'production'
     }
   }
 
-export const unreachable = process.env.NODE_ENV === 'production'
-  ? /* istanbul ignore next */ noop
-  : function unreachable() {
-    // eslint-disable-next-line no-console
-    console.error('[Vue-Treeselect Error] You should not reach here.')
-    // eslint-disable-next-line no-debugger
-    debugger
+/**
+ * Dom utilites
+ */
+
+// a simplified version of debounce from underscore
+export function debounce(func, wait = 100) {
+  let timeout, args, context, timestamp
+
+  function later() {
+    const diff = Date.now() - timestamp
+
+    if (diff < wait && diff >= 0) {
+      timeout = setTimeout(later, wait - diff)
+    } else {
+      timeout = null
+      func.apply(context, args)
+      context = args = null
+    }
   }
+
+  return function debounced(..._args) {
+    context = this // eslint-disable-line consistent-this
+    args = _args
+    timestamp = Date.now()
+    if (!timeout) timeout = setTimeout(later, wait)
+  }
+}
 
 export function onlyOnLeftClick(mouseDownHandler) {
   return function onMouseDown(evt, ...args) {
@@ -46,17 +69,9 @@ export function scrollIntoView(scrollingEl, focusedEl) {
   }
 }
 
-export function noop() {
-  // empty
-}
-
-export function identity(x) {
-  return x
-}
-
-export function constant(x) {
-  return () => x
-}
+/**
+ * Language helpers
+ */
 
 export function isPromise(x) {
   // https://github.com/then/is-promise/blob/master/index.js
@@ -76,32 +91,20 @@ export function once(fn) {
   }
 }
 
-export function createEmptyObjectWithoutPrototype() {
-  return Object.create(null)
+export function noop() {
+  // empty
 }
 
-// a simplified version of debounce from underscore
-export function debounce(func, wait = 100) {
-  let timeout, args, context, timestamp
+export function identity(x) {
+  return x
+}
 
-  function later() {
-    const diff = Date.now() - timestamp
+export function constant(x) {
+  return () => x
+}
 
-    if (diff < wait && diff >= 0) {
-      timeout = setTimeout(later, wait - diff)
-    } else {
-      timeout = null
-      func.apply(context, args)
-      context = args = null
-    }
-  }
-
-  return function debounced(..._args) {
-    context = this // eslint-disable-line consistent-this
-    args = _args
-    timestamp = Date.now()
-    if (!timeout) timeout = setTimeout(later, wait)
-  }
+export function createEmptyObjectWithoutPrototype() {
+  return Object.create(null)
 }
 
 function isPlainObject(value) {
@@ -136,15 +139,11 @@ export function assign(target, ...sources) {
 }
 
 export function deepExtend(target, source) {
-  if (source == null) {
-    // empty
-  } else if (isPlainObject(source)) {
+  if (isPlainObject(source)) {
     const keys = Object.keys(source)
     for (let i = 0, len = keys.length; i < len; i++) {
       copy(target, keys[i], source[keys[i]])
     }
-  } else {
-    unreachable()
   }
 
   return target

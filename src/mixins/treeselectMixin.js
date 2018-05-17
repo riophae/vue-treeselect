@@ -2,9 +2,11 @@ import fuzzysearch from 'fuzzysearch'
 
 import {
   warning,
-  quickDiff, onlyOnLeftClick, scrollIntoView,
-  debounce, identity, constant, isPromise, once, createEmptyObjectWithoutPrototype,
-  assign, getLast, find, removeFromArray,
+  debounce, onlyOnLeftClick, scrollIntoView,
+  isPromise, once,
+  identity, constant, createEmptyObjectWithoutPrototype,
+  assign,
+  quickDiff, getLast, find, removeFromArray,
 } from '../utils'
 
 import {
@@ -31,10 +33,6 @@ function sortValueByLevel(a, b) {
   return a.level !== b.level
     ? a.level - b.level
     : sortValueByIndex(a, b)
-}
-
-function limitTextDefault(count) {
-  return `and ${count} more`
 }
 
 export default {
@@ -260,7 +258,9 @@ export default {
      */
     limitText: {
       type: Function,
-      default: limitTextDefault,
+      default: function limitTextDefault(count) { // eslint-disable-line func-name-matching
+        return `and ${count} more`
+      },
     },
 
     /**
@@ -510,7 +510,7 @@ export default {
 
   data() {
     return {
-      normalizedOptions: null, // normalized options tree
+      normalizedOptions: [], // normalized options tree
       selectedNodeIds: this.extractCheckedNodeIdsFromValue(),
       nodeCheckedStateMap: createEmptyObjectWithoutPrototype(), // used for multi-select mode
       nodeMap: createEmptyObjectWithoutPrototype(), // map: nodeId -> node
@@ -599,18 +599,21 @@ export default {
       return !this.multiple
     },
     /**
-     * Options displayed in the control, the upper limit of number of which is
-     * equal to the value of `limit` prop
+     * Options displayed in the control
      * @type {Object[]}
      */
     visibleValue() {
       return this.internalValue.map(this.getNode).slice(0, this.limit)
     },
+    /**
+     * Id list of options displayed in the menu
+     * @type {Object[]}
+     */
     visibleOptionIds() {
       const visibleOptionIds = []
 
       this.traverseAllNodesByIndex(node => {
-        if (!this.searching || node.isMatched || (node.isBranch && node.hasMatchedDescendants)) {
+        if (!this.searching || this.shouldOptionBeIncludedInSearchResult(node)) {
           visibleOptionIds.push(node.id)
         }
         // skip the traversal of descendants of a branch node if it's not expanded
@@ -621,13 +624,19 @@ export default {
 
       return visibleOptionIds
     },
+    /**
+     * Has any options should be displayed in the menu?
+     * @type {boolean}
+     */
     hasVisibleOptions() {
-      if (!this.rootOptionsLoaded) return false
-      if (!this.normalizedOptions.length) return false
+      if (!this.rootOptionsLoaded) {
+        return false
+      }
+      if (!this.normalizedOptions.length) {
+        return false
+      }
       if (this.searching) {
-        return this.normalizedOptions.some(option => {
-          return option.isMatched || (option.isBranch && option.hasMatchedDescendants)
-        })
+        return this.normalizedOptions.some(option => this.shouldOptionBeIncludedInSearchResult(option))
       }
       return true
     },
@@ -656,13 +665,21 @@ export default {
         ? this.showCountOnSearch
         : this.showCount
     },
+    /**
+     * Is there any branch node?
+     * @type {boolean}
+     */
     hasBranchNodes() {
       return this.normalizedOptions.some(rootNode => rootNode.isBranch)
     },
+    /**
+     * The first option that should be displayed in the menu
+     * @type {Object?}
+     */
     firstVisibleOption() {
       if (!this.normalizedOptions.length) return null
       if (this.searching) return find(this.normalizedOptions, node => {
-        return node.isMatched || (node.isBranch && node.hasMatchedDescendants)
+        return this.shouldOptionBeIncludedInSearchResult(node)
       })
       return this.normalizedOptions[0]
     },
@@ -678,7 +695,7 @@ export default {
     disabled(newValue) {
       // force close the menu after disabling the control
       if (newValue && this.isOpen) this.closeMenu()
-      if (!newValue && !this.isOpen && this.alwaysOpen) this.openMenu()
+      else if (!newValue && !this.isOpen && this.alwaysOpen) this.openMenu()
     },
 
     flat() {
@@ -700,7 +717,7 @@ export default {
     },
 
     searchQuery: debounce(function onSearchQueryChange() {
-      this.handleSearch()
+      this.handleSearchQueryChange()
       this.$emit('search-change', this.searchQuery, this.id)
     }, INPUT_DEBOUNCE_DELAY),
 
@@ -738,8 +755,7 @@ export default {
 
     initialize(rootOptions) {
       if (Array.isArray(rootOptions)) {
-        // in case we are reinitializing options,
-        // keep the old state tree temporarily.
+        // In case we are reinitializing options, keep the old state tree temporarily.
         const prevNodeMap = this.nodeMap
         this.nodeMap = createEmptyObjectWithoutPrototype()
         this.keepDataOfSelectedNodes(prevNodeMap)
@@ -778,9 +794,9 @@ export default {
     },
 
     createFallbackNode(id) {
-      // in case there is a default selected node that is not loaded into the tree yet
-      // we create a fallback node to keep the component working
-      // when the real data is loaded, we'll override this fake node
+      // In case there is a default selected node that is not loaded into the tree yet,
+      // we create a fallback node to keep the component working.
+      // When the real data is loaded, we'll override this fake node.
 
       const raw = this.extractNodeFromValue(id)
       const label = this.enhancedNormalizer(raw).label || `${id} (unknown)`
@@ -848,8 +864,8 @@ export default {
     },
 
     keepDataOfSelectedNodes(prevNodeMap) {
-      // in case there is any selected node that is not present in the new `options` array
-      // which could be useful for async search mode
+      // In case there is any selected node that is not present in the new `options` array.
+      // It could be useful for async search mode.
       this.selectedNodeIds.forEach(id => {
         if (!prevNodeMap[id]) return
         const fallbackNode = assign({}, prevNodeMap[id], {
@@ -1018,62 +1034,73 @@ export default {
       }
     },
 
-    handleSearch() {
+    handleSearchQueryChange() {
       if (this.searchQuery) {
-        // enter search mode
-        this.searching = true
-        this.noSearchResults = true
-        // reset state
-        this.traverseAllNodesDFS(node => {
-          if (node.isBranch) {
-            node.isExpandedOnSearch = false
-            node.showAllChildrenOnSearch = false
-            node.hasMatchedDescendants = false
-            this.$set(this.searchingCount, node.id, {
-              [ALL_CHILDREN]: 0,
-              [ALL_DESCENDANTS]: 0,
-              [LEAF_CHILDREN]: 0,
-              [LEAF_DESCENDANTS]: 0,
-            })
-          }
-        })
-        const lowerCasedSearchQuery = this.searchQuery.trim().toLocaleLowerCase()
-        const splitSearchQuery = lowerCasedSearchQuery.replace(/\s+/g, ' ').split(' ')
-        this.traverseAllNodesDFS(node => {
-          let isMatched
-          if (this.searchNested && splitSearchQuery.length > 1) {
-            isMatched = node.isMatched = splitSearchQuery.every(
-              filterValue => node.nestedSearchLabel.indexOf(filterValue) !== -1,
-            )
-          } else {
-            isMatched = node.isMatched = this.disableFuzzyMatching
-              ? node.lowerCasedLabel.indexOf(lowerCasedSearchQuery) !== -1
-              : fuzzysearch(lowerCasedSearchQuery, node.lowerCasedLabel)
-          }
-          if (isMatched) {
-            this.noSearchResults = false
-            node.ancestors.forEach(ancestor => this.searchingCount[ancestor.id].ALL_DESCENDANTS++)
-            if (node.isLeaf) node.ancestors.forEach(ancestor => this.searchingCount[ancestor.id].LEAF_DESCENDANTS++)
-            if (node.parentNode !== NO_PARENT_NODE) {
-              this.searchingCount[node.parentNode.id].ALL_CHILDREN += 1
-              // istanbul ignore else
-              if (node.isLeaf) this.searchingCount[node.parentNode.id].LEAF_CHILDREN += 1
-            }
-          }
-
-          if (
-            (isMatched || (node.isBranch && node.isExpandedOnSearch)) &&
-            node.parentNode !== NO_PARENT_NODE
-          ) {
-            node.parentNode.isExpandedOnSearch = true
-            node.parentNode.hasMatchedDescendants = true
-          }
-        })
+        this.handleSearch()
       } else {
-        this.searching = false
+        this.exitSearchMode()
       }
 
       this.resetHighlightedOptionWhenNecessary(true)
+    },
+
+    handleSearch() {
+      // enter search mode
+      this.searching = true
+      this.noSearchResults = true
+
+      // reset state
+      this.traverseAllNodesDFS(node => {
+        if (node.isBranch) {
+          node.isExpandedOnSearch = false
+          node.showAllChildrenOnSearch = false
+          node.hasMatchedDescendants = false
+          this.$set(this.searchingCount, node.id, {
+            [ALL_CHILDREN]: 0,
+            [ALL_DESCENDANTS]: 0,
+            [LEAF_CHILDREN]: 0,
+            [LEAF_DESCENDANTS]: 0,
+          })
+        }
+      })
+
+      const lowerCasedSearchQuery = this.searchQuery.trim().toLocaleLowerCase()
+      const splitSearchQuery = lowerCasedSearchQuery.replace(/\s+/g, ' ').split(' ')
+      this.traverseAllNodesDFS(node => {
+        let isMatched
+        if (this.searchNested && splitSearchQuery.length > 1) {
+          isMatched = node.isMatched = splitSearchQuery.every(
+            filterValue => node.nestedSearchLabel.indexOf(filterValue) !== -1,
+          )
+        } else {
+          isMatched = node.isMatched = this.disableFuzzyMatching
+            ? node.lowerCasedLabel.indexOf(lowerCasedSearchQuery) !== -1
+            : fuzzysearch(lowerCasedSearchQuery, node.lowerCasedLabel)
+        }
+
+        if (isMatched) {
+          this.noSearchResults = false
+          node.ancestors.forEach(ancestor => this.searchingCount[ancestor.id].ALL_DESCENDANTS++)
+          if (node.isLeaf) node.ancestors.forEach(ancestor => this.searchingCount[ancestor.id].LEAF_DESCENDANTS++)
+          if (node.parentNode !== NO_PARENT_NODE) {
+            this.searchingCount[node.parentNode.id].ALL_CHILDREN += 1
+            // istanbul ignore else
+            if (node.isLeaf) this.searchingCount[node.parentNode.id].LEAF_CHILDREN += 1
+          }
+        }
+
+        if (
+          (isMatched || (node.isBranch && node.isExpandedOnSearch)) &&
+          node.parentNode !== NO_PARENT_NODE
+        ) {
+          node.parentNode.isExpandedOnSearch = true
+          node.parentNode.hasMatchedDescendants = true
+        }
+      })
+    },
+
+    exitSearchMode() {
+      this.searching = false
     },
 
     shouldExpand(node) {

@@ -20,13 +20,6 @@ describe('Utils', () => {
     })
   })
 
-  it('unreachable', () => {
-    const { unreachable } = utils
-    spyOn(console, 'error')
-    unreachable()
-    expect(console.error).toHaveBeenCalledWith('[Vue-Treeselect Error] You should not reach here.')
-  })
-
   describe('onlyOnLeftClick', () => {
     const { onlyOnLeftClick } = utils
     let spy
@@ -105,12 +98,6 @@ describe('Utils', () => {
     it('should work with undefined/null', () => {
       expect(deepExtend({}, undefined)).toEqual({})
       expect(deepExtend({}, null)).toEqual({})
-    })
-
-    it('should throw an error if source is not a plain object', () => {
-      spyOn(console, 'error')
-      deepExtend({}, [])
-      expect(console.error).toHaveBeenCalledWith('[Vue-Treeselect Error] You should not reach here.')
     })
   })
 
