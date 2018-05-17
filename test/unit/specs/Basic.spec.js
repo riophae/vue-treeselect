@@ -17,9 +17,9 @@ describe('Basic', () => {
       })
       const { vm } = wrapper
 
-      expect(vm.nodeMap).toBeObject()
-      expect(Object.getPrototypeOf(vm.nodeMap)).toBe(null)
-      expect(vm.nodeMap.id).toBeObject()
+      expect(vm.forest.nodeMap).toBeObject()
+      expect(Object.getPrototypeOf(vm.forest.nodeMap)).toBe(null)
+      expect(vm.forest.nodeMap.id).toBeObject()
     })
   })
 
@@ -40,9 +40,9 @@ describe('Basic', () => {
         },
       })
       const { vm } = wrapper
-      const { a, aa } = vm.nodeMap
+      const { a, aa } = vm.forest.nodeMap
 
-      expect(vm.nodeMap).toEqual({
+      expect(vm.forest.nodeMap).toEqual({
         a: jasmine.any(Object),
         aa: jasmine.any(Object),
       })
@@ -108,8 +108,8 @@ describe('Basic', () => {
       })
       const { vm } = wrapper
 
-      expect(vm.nodeMap.a.id).toBe('a')
-      expect(vm.nodeMap.a.label).toBe('a')
+      expect(vm.forest.nodeMap.a.id).toBe('a')
+      expect(vm.forest.nodeMap.a.label).toBe('a')
     })
 
     it('lowerCasedLabel', () => {
@@ -123,8 +123,8 @@ describe('Basic', () => {
       })
       const { vm } = wrapper
 
-      expect(vm.nodeMap.a.label).toBe('A')
-      expect(vm.nodeMap.a.lowerCasedLabel).toBe('a')
+      expect(vm.forest.nodeMap.a.label).toBe('A')
+      expect(vm.forest.nodeMap.a.lowerCasedLabel).toBe('a')
     })
 
     describe('isDisabled', () => {
@@ -162,7 +162,7 @@ describe('Basic', () => {
       } ]
 
       const whenNonFlatMode = vm => {
-        const { a, aa, b, ba, bb, c, ca, caa } = vm.nodeMap
+        const { a, aa, b, ba, bb, c, ca, caa } = vm.forest.nodeMap
 
         expect(a.isDisabled).toBe(true)
         expect(aa.isDisabled).toBe(true)
@@ -175,7 +175,7 @@ describe('Basic', () => {
       }
 
       const whenFlatMode = vm => {
-        const { a, aa, b, ba, bb, c, ca, caa } = vm.nodeMap
+        const { a, aa, b, ba, bb, c, ca, caa } = vm.forest.nodeMap
 
         expect(a.isDisabled).toBe(true)
         expect(aa.isDisabled).toBe(false)
@@ -250,7 +250,7 @@ describe('Basic', () => {
         },
       })
       const { vm } = wrapper
-      const { a, aa } = vm.nodeMap
+      const { a, aa } = vm.forest.nodeMap
 
       expect(a.hasDisabledDescendants).toBe(true)
       expect(aa.hasDisabledDescendants).toBe(false)
@@ -278,7 +278,7 @@ describe('Basic', () => {
         },
       })
       const { vm } = wrapper
-      const { a, b, c } = vm.nodeMap
+      const { a, b, c } = vm.forest.nodeMap
 
       expect(a).toEqual(jasmine.objectContaining({
         isLeaf: true,
@@ -316,7 +316,7 @@ describe('Basic', () => {
           } ],
         },
       })
-      const { a, b } = wrapper.vm.nodeMap
+      const { a, b } = wrapper.vm.forest.nodeMap
 
       expect(a.isExpanded).toBe(true)
       expect(b.isExpanded).toBe(false)
@@ -336,7 +336,7 @@ describe('Basic', () => {
         },
       })
       const { vm } = wrapper
-      const { a, aa } = vm.nodeMap
+      const { a, aa } = vm.forest.nodeMap
 
       expect(a.isRootNode).toBe(true)
       expect(aa.isRootNode).toBe(false)
@@ -360,7 +360,7 @@ describe('Basic', () => {
         },
       })
       const { vm } = wrapper
-      const { a, aa, aaa } = vm.nodeMap
+      const { a, aa, aaa } = vm.forest.nodeMap
 
       expect(a.parentNode).toBe(null)
       expect(aa.parentNode).toBe(a)
@@ -410,7 +410,7 @@ describe('Basic', () => {
         },
       })
       const { vm } = wrapper
-      const { a, aa, aaa, ab, b, ba, bb, bba } = vm.nodeMap
+      const { a, aa, aaa, ab, b, ba, bb, bba } = vm.forest.nodeMap
 
       expect(a.index).toEqual([ 0 ])
       expect(aa.index).toEqual([ 0, 0 ])
@@ -449,7 +449,7 @@ describe('Basic', () => {
         },
       })
       const { vm } = wrapper
-      const { a, b, aa, ab } = vm.nodeMap
+      const { a, b, aa, ab } = vm.forest.nodeMap
 
       expect(a.count).toEqual({
         ALL_CHILDREN: 2,
@@ -486,7 +486,7 @@ describe('Basic', () => {
         },
       })
       const { vm } = wrapper
-      const { a, aa } = vm.nodeMap
+      const { a, aa } = vm.forest.nodeMap
 
       expect(a.raw).toBe(rawA)
       expect(aa.raw).toBe(rawAa)
@@ -510,10 +510,10 @@ describe('Basic', () => {
       },
     })
     const { vm } = wrapper
-    const { a, b } = vm.nodeMap
+    const { a, b } = vm.forest.nodeMap
 
-    expect(vm.normalizedOptions).toEqual([ a, b ])
-    vm.normalizedOptions.forEach(normalized => {
+    expect(vm.forest.normalizedOptions).toEqual([ a, b ])
+    vm.forest.normalizedOptions.forEach(normalized => {
       expect(normalized.isRootNode).toBe(true)
     })
   })
@@ -527,9 +527,9 @@ describe('Basic', () => {
       })
       const { vm } = wrapper
 
-      expect(vm.nodeMap).toBeEmptyObject()
+      expect(vm.forest.nodeMap).toBeEmptyObject()
       wrapper.setProps({ value: 'test' })
-      expect(vm.nodeMap.test).toEqual({
+      expect(vm.forest.nodeMap.test).toEqual({
         id: jasmine.any(String),
         label: jasmine.any(String),
         ancestors: [],
@@ -561,7 +561,7 @@ describe('Basic', () => {
         })
         const { vm } = wrapper
 
-        expect(vm.nodeMap.id).toEqual(jasmine.objectContaining({
+        expect(vm.forest.nodeMap.id).toEqual(jasmine.objectContaining({
           id: 'id',
           label: 'label',
           isFallbackNode: true,
@@ -577,7 +577,7 @@ describe('Basic', () => {
         })
         const { vm } = wrapper
 
-        expect(vm.nodeMap.a).toEqual(jasmine.objectContaining({
+        expect(vm.forest.nodeMap.a).toEqual(jasmine.objectContaining({
           id: 'a',
           label: 'a (unknown)',
           isFallbackNode: true,
@@ -608,7 +608,7 @@ describe('Basic', () => {
         })
         const { vm } = wrapper
 
-        expect(vm.selectedNodeIds).toBeEmptyArray()
+        expect(vm.forest.selectedNodeIds).toBeEmptyArray()
       })
     })
   })
@@ -711,11 +711,11 @@ describe('Basic', () => {
     }).$mount()
     const comp = vm.$children[0]
 
-    expect(comp.nodeMap.a.isFallbackNode).toBe(true)
+    expect(comp.forest.nodeMap.a.isFallbackNode).toBe(true)
 
     await sleep(DELAY + 1)
     expect(console.error).not.toHaveBeenCalled()
-    expect(comp.nodeMap.a).not.toHaveMember('isFallbackNode')
+    expect(comp.forest.nodeMap.a).not.toHaveMember('isFallbackNode')
   })
 
   it('should rebuild state after swithching from single to multiple', () => {
@@ -735,9 +735,9 @@ describe('Basic', () => {
     })
     const { vm } = wrapper
 
-    expect(vm.nodeCheckedStateMap).toBeEmptyObject()
+    expect(vm.forest.checkedStateMap).toBeEmptyObject()
     wrapper.setProps({ multiple: true })
-    expect(vm.nodeCheckedStateMap).toBeNonEmptyObject()
+    expect(vm.forest.checkedStateMap).toBeNonEmptyObject()
   })
 
   it('should rebuild state after value changed externally when multiple=true', () => {
@@ -757,12 +757,12 @@ describe('Basic', () => {
     })
     const { vm } = wrapper
 
-    expect(vm.nodeCheckedStateMap).toEqual({
+    expect(vm.forest.checkedStateMap).toEqual({
       a: 0,
       aa: 0,
     })
     wrapper.setProps({ value: [ 'a' ] })
-    expect(vm.nodeCheckedStateMap).toEqual({
+    expect(vm.forest.checkedStateMap).toEqual({
       a: 2,
       aa: 2,
     })
@@ -795,10 +795,10 @@ describe('Basic', () => {
     }).$mount()
     const comp = vm.$children[0]
 
-    comp.select(comp.nodeMap.a)
+    comp.select(comp.forest.nodeMap.a)
     await comp.$nextTick()
     expect(vm.value).toEqual([ 'a' ])
-    comp.select(comp.nodeMap.a)
+    comp.select(comp.forest.nodeMap.a)
     await comp.$nextTick()
     expect(vm.value).toEqual([])
   })
@@ -816,10 +816,10 @@ describe('Basic', () => {
         } ],
         defaultExpandLevel: Infinity,
       },
-      data: {
-        isOpen: true,
-      },
     })
+
+    wrapper.vm.openMenu()
+
     const optionsWrappers = wrapper.findAll(TreeselectOption).wrappers
     const a = optionsWrappers.find(optionWrapper => optionWrapper.vm.node.id === 'a')
       .find('.vue-treeselect__option')

@@ -12,7 +12,7 @@
       <div v-if="instance.hasExceededLimit" class="vue-treeselect__limit-tip vue-treeselect-helper-zoom-effect-off" key="limit-tip">
         <span class="vue-treeselect__limit-tip-text">{{ limitText }}</span>
       </div>
-      <placeholder v-if="!instance.hasValue && !instance.searchQuery" key="placeholer" />
+      <placeholder v-if="!instance.hasValue && !instance.trigger.searchQuery" key="placeholer" />
       <search-input key="input" ref="input" />
     </transition-group>
   </div>

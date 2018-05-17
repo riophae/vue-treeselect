@@ -102,7 +102,7 @@ export async function typeSearchText(wrapper, text) {
   $input.element.value = text
   $input.trigger('input')
   await sleep(INPUT_DEBOUNCE_DELAY + 10)
-  expect(wrapper.vm.searchQuery).toBe(text)
+  expect(wrapper.vm.trigger.searchQuery).toBe(text)
 }
 
 export function findInputContainer(wrapper) {

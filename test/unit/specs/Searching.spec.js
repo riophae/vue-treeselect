@@ -27,18 +27,18 @@ describe('Searching', () => {
       const { vm } = wrapper
 
       await typeSearchText(wrapper, 'a')
-      expect(vm.nodeMap.a.isMatched).toBe(true)
-      expect(vm.nodeMap.a.isExpandedOnSearch).toBe(true)
-      expect(vm.nodeMap.aa.isMatched).toBe(true)
-      expect(vm.nodeMap.ab.isMatched).toBe(true)
-      expect(vm.nodeMap.b.isMatched).toBe(false)
+      expect(vm.forest.nodeMap.a.isMatched).toBe(true)
+      expect(vm.forest.nodeMap.a.isExpandedOnSearch).toBe(true)
+      expect(vm.forest.nodeMap.aa.isMatched).toBe(true)
+      expect(vm.forest.nodeMap.ab.isMatched).toBe(true)
+      expect(vm.forest.nodeMap.b.isMatched).toBe(false)
 
       await typeSearchText(wrapper, 'b')
-      expect(vm.nodeMap.a.isMatched).toBe(false)
-      expect(vm.nodeMap.a.isExpandedOnSearch).toBe(true)
-      expect(vm.nodeMap.aa.isMatched).toBe(false)
-      expect(vm.nodeMap.ab.isMatched).toBe(true)
-      expect(vm.nodeMap.b.isMatched).toBe(true)
+      expect(vm.forest.nodeMap.a.isMatched).toBe(false)
+      expect(vm.forest.nodeMap.a.isExpandedOnSearch).toBe(true)
+      expect(vm.forest.nodeMap.aa.isMatched).toBe(false)
+      expect(vm.forest.nodeMap.ab.isMatched).toBe(true)
+      expect(vm.forest.nodeMap.b.isMatched).toBe(true)
     })
 
     it('should be case insensitive', async () => {
@@ -57,12 +57,12 @@ describe('Searching', () => {
       const { vm } = wrapper
 
       await typeSearchText(wrapper, 'james')
-      expect(vm.nodeMap.a.isMatched).toBe(true)
-      expect(vm.nodeMap.b.isMatched).toBe(false)
+      expect(vm.forest.nodeMap.a.isMatched).toBe(true)
+      expect(vm.forest.nodeMap.b.isMatched).toBe(false)
 
       await typeSearchText(wrapper, 'chen')
-      expect(vm.nodeMap.a.isMatched).toBe(false)
-      expect(vm.nodeMap.b.isMatched).toBe(true)
+      expect(vm.forest.nodeMap.a.isMatched).toBe(false)
+      expect(vm.forest.nodeMap.b.isMatched).toBe(true)
     })
 
     it('toggle expanded', async () => {
@@ -84,11 +84,10 @@ describe('Searching', () => {
             } ],
           } ],
         },
-        data: {
-          isOpen: true,
-        },
       })
       const { vm } = wrapper
+
+      vm.openMenu()
 
       // not rotated by default
       expectArrowToBeRotatedOrNot(false)
@@ -103,7 +102,7 @@ describe('Searching', () => {
       expectArrowToBeRotatedOrNot(false)
 
       // manually toggle
-      vm.toggleExpanded(vm.nodeMap.a)
+      vm.toggleExpanded(vm.forest.nodeMap.a)
       await vm.$nextTick()
       expectArrowToBeRotatedOrNot(true)
 
@@ -112,7 +111,7 @@ describe('Searching', () => {
       expectArrowToBeRotatedOrNot(true)
 
       // manually toggle
-      vm.toggleExpanded(vm.nodeMap.a)
+      vm.toggleExpanded(vm.forest.nodeMap.a)
       await vm.$nextTick()
       expectArrowToBeRotatedOrNot(false)
 
@@ -149,30 +148,34 @@ describe('Searching', () => {
             } ],
           } ],
         },
-        data: {
-          isOpen: true,
-        },
       })
       const { vm } = wrapper
 
+      it('preparation', () => {
+        vm.openMenu()
+        expect(vm.menu.isOpen).toBe(true)
+      })
+
       it('if no children are matched, the branch node should be collapsed', async () => {
         await typeSearchText(wrapper, 'branch')
-        expect(vm.nodeMap.branch.isMatched).toBe(true)
-        expect(vm.nodeMap.branch.isExpandedOnSearch).toBe(false)
-        expect(vm.nodeMap.aa.isMatched).toBe(false)
-        expect(vm.nodeMap.ab.isMatched).toBe(false)
-        expect(vm.nodeMap.ac.isMatched).toBe(false)
-        expect(vm.nodeMap.aca.isMatched).toBe(false)
+        expect(vm.forest.nodeMap.branch.isMatched).toBe(true)
+        expect(vm.forest.nodeMap.branch.isExpandedOnSearch).toBe(false)
+        expect(vm.forest.nodeMap.aa.isMatched).toBe(false)
+        expect(vm.forest.nodeMap.ab.isMatched).toBe(false)
+        expect(vm.forest.nodeMap.ac.isMatched).toBe(false)
+        expect(vm.forest.nodeMap.aca.isMatched).toBe(false)
       })
 
       it('expand a branch node should show all its children', async () => {
-        vm.toggleExpanded(vm.nodeMap.branch)
+        vm.toggleExpanded(vm.forest.nodeMap.branch)
         await vm.$nextTick()
+        expect(vm.menu.isOpen).toBe(true)
+        expect(vm.forest.nodeMap.branch.isExpandedOnSearch).toBe(true)
         expect(wrapper.contains('.vue-treeselect__option[data-id="aa"]')).toBe(true)
         expect(wrapper.contains('.vue-treeselect__option[data-id="ab"]')).toBe(true)
         expect(wrapper.contains('.vue-treeselect__option[data-id="ac"]')).toBe(true)
-        expect(vm.nodeMap.ac.isExpandedOnSearch).toBe(false)
-        vm.toggleExpanded(vm.nodeMap.ac)
+        expect(vm.forest.nodeMap.ac.isExpandedOnSearch).toBe(false)
+        vm.toggleExpanded(vm.forest.nodeMap.ac)
         await vm.$nextTick()
         expect(wrapper.contains('.vue-treeselect__option[data-id="aca"]')).toBe(true)
       })
@@ -211,8 +214,8 @@ describe('Searching', () => {
       const { vm } = wrapper
 
       await typeSearchText(wrapper, 'a x')
-      expect(vm.nodeMap.aa.isMatched).toBe(false)
-      expect(vm.nodeMap.ab.isMatched).toBe(true)
+      expect(vm.forest.nodeMap.aa.isMatched).toBe(false)
+      expect(vm.forest.nodeMap.ab.isMatched).toBe(true)
     })
 
     describe('when searchNested=true', () => {
@@ -239,17 +242,17 @@ describe('Searching', () => {
 
       it('should also search ancestor nodes', async () => {
         await typeSearchText(wrapper, 'ab yz')
-        expect(vm.nodeMap.aa.isMatched).toBe(true)
+        expect(vm.forest.nodeMap.aa.isMatched).toBe(true)
       })
 
       it('should disable fuzzy search', async () => {
         await typeSearchText(wrapper, 'ac yz')
-        expect(vm.nodeMap.aa.isMatched).toBe(false)
+        expect(vm.forest.nodeMap.aa.isMatched).toBe(false)
       })
 
       it('when search query not contains whitespaces, search in a normal manner', async () => {
         await typeSearchText(wrapper, 'xz') // fuzzy search
-        expect(vm.nodeMap.aa.isMatched).toBe(true)
+        expect(vm.forest.nodeMap.aa.isMatched).toBe(true)
       })
 
       it('should be case insensitive', async () => {

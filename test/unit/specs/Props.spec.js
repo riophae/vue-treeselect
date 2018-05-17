@@ -25,7 +25,7 @@ describe('Props', () => {
       })
       const { vm } = wrapper
 
-      expect(vm.isOpen).toBe(true)
+      expect(vm.menu.isOpen).toBe(true)
     })
 
     it('should hide the arrow', async () => {
@@ -51,7 +51,7 @@ describe('Props', () => {
       const { vm } = wrapper
 
       vm.closeMenu()
-      expect(vm.isOpen).toBe(true)
+      expect(vm.menu.isOpen).toBe(true)
     })
 
     it('when disabled=true, should not auto open the menu on mount', () => {
@@ -64,7 +64,7 @@ describe('Props', () => {
       })
       const { vm } = wrapper
 
-      expect(vm.isOpen).toBe(false)
+      expect(vm.menu.isOpen).toBe(false)
     })
 
     it('set disabled=true should close the already opened menu', () => {
@@ -77,9 +77,9 @@ describe('Props', () => {
       })
       const { vm } = wrapper
 
-      expect(vm.isOpen).toBe(true)
+      expect(vm.menu.isOpen).toBe(true)
       wrapper.setProps({ disabled: true })
-      expect(vm.isOpen).toBe(false)
+      expect(vm.menu.isOpen).toBe(false)
     })
 
     it('set `disabled` from true to false should open the menu', () => {
@@ -92,9 +92,9 @@ describe('Props', () => {
       })
       const { vm } = wrapper
 
-      expect(vm.isOpen).toBe(false)
+      expect(vm.menu.isOpen).toBe(false)
       wrapper.setProps({ disabled: false })
-      expect(vm.isOpen).toBe(true)
+      expect(vm.menu.isOpen).toBe(true)
     })
 
     it('should show the arrow when disabled', () => {
@@ -118,9 +118,9 @@ describe('Props', () => {
       })
       const { vm } = wrapper
 
-      expect(vm.isOpen).toBe(false)
+      expect(vm.menu.isOpen).toBe(false)
       wrapper.setProps({ alwaysOpen: true })
-      expect(vm.isOpen).toBe(true)
+      expect(vm.menu.isOpen).toBe(true)
       expect(wrapper.contains('.vue-treeselect__control-arrow-container')).toBe(false)
     })
 
@@ -133,9 +133,9 @@ describe('Props', () => {
       })
       const { vm } = wrapper
 
-      expect(vm.isOpen).toBe(true)
+      expect(vm.menu.isOpen).toBe(true)
       wrapper.setProps({ alwaysOpen: false })
-      expect(vm.isOpen).toBe(false)
+      expect(vm.menu.isOpen).toBe(false)
       expect(wrapper.contains('.vue-treeselect__control-arrow-container')).toBe(true)
     })
   })
@@ -275,8 +275,8 @@ describe('Props', () => {
       })
       const { vm } = wrapper
 
-      expect(vm.normalizedOptions.map(node => node.id)).toEqual([ 'b', 'a', 'c' ])
-      expect(vm.nodeMap.b.children.map(node => node.id)).toEqual([ 'bb', 'ba', 'bc' ])
+      expect(vm.forest.normalizedOptions.map(node => node.id)).toEqual([ 'b', 'a', 'c' ])
+      expect(vm.forest.nodeMap.b.children.map(node => node.id)).toEqual([ 'bb', 'ba', 'bc' ])
     })
   })
 
@@ -300,10 +300,10 @@ describe('Props', () => {
     })
 
     it('should reset value on mousedown', async () => {
-      expect(vm.selectedNodeIds).toEqual([ 'a' ])
+      expect(vm.forest.selectedNodeIds).toEqual([ 'a' ])
       leftClick(wrapper.find('.vue-treeselect__x-container'))
       await sleep(1)
-      expect(vm.selectedNodeIds).toEqual([])
+      expect(vm.forest.selectedNodeIds).toEqual([])
     })
 
     it('should hide when no options selected', () => {
@@ -347,15 +347,13 @@ describe('Props', () => {
             multiple: false,
             options: [ { id: 'a', label: 'a' } ],
           },
-          data: {
-            searching: true,
-            searchQuery: '$SEARCH_QUERY$',
-          },
         })
         const { vm } = wrapper
+        vm.localSearch.active = true
+        vm.trigger.searchQuery = '$SEARCH_QUERY$'
 
-        vm.select(vm.nodeMap.a)
-        expect(vm.searchQuery).toBe('')
+        vm.select(vm.forest.nodeMap.a)
+        expect(vm.trigger.searchQuery).toBe('')
       })
 
       it('still clears the input after selecting even if clearOnSelect!=true', () => {
@@ -365,15 +363,13 @@ describe('Props', () => {
             multiple: false,
             options: [ { id: 'a', label: 'a' } ],
           },
-          data: {
-            searching: true,
-            searchQuery: '$SEARCH_QUERY$',
-          },
         })
         const { vm } = wrapper
+        vm.localSearch.active = true
+        vm.trigger.searchQuery = '$SEARCH_QUERY$'
 
-        vm.select(vm.nodeMap.a)
-        expect(vm.searchQuery).toBe('')
+        vm.select(vm.forest.nodeMap.a)
+        expect(vm.trigger.searchQuery).toBe('')
       })
     })
 
@@ -385,15 +381,13 @@ describe('Props', () => {
             multiple: true,
             options: [ { id: 'a', label: 'a' } ],
           },
-          data: {
-            searching: true,
-            searchQuery: '$SEARCH_QUERY$',
-          },
         })
         const { vm } = wrapper
+        vm.localSearch.active = true
+        vm.trigger.searchQuery = '$SEARCH_QUERY$'
 
-        vm.select(vm.nodeMap.a)
-        expect(vm.searchQuery).toBe('')
+        vm.select(vm.forest.nodeMap.a)
+        expect(vm.trigger.searchQuery).toBe('')
       })
 
       it("won't clear the input after selecting when clearOnSelect!=true", () => {
@@ -403,15 +397,13 @@ describe('Props', () => {
             multiple: true,
             options: [ { id: 'a', label: 'a' } ],
           },
-          data: {
-            searching: true,
-            searchQuery: '$SEARCH_QUERY$',
-          },
         })
         const { vm } = wrapper
+        vm.localSearch.active = true
+        vm.trigger.searchQuery = '$SEARCH_QUERY$'
 
-        vm.select(vm.nodeMap.a)
-        expect(vm.searchQuery).toBe('$SEARCH_QUERY$')
+        vm.select(vm.forest.nodeMap.a)
+        expect(vm.trigger.searchQuery).toBe('$SEARCH_QUERY$')
       })
     })
   })
@@ -440,16 +432,16 @@ describe('Props', () => {
           multiple: false,
           options: [ { id: 'a', label: 'a' } ],
         },
-        data: {
-          isOpen: true,
-        },
       })
       const { vm } = wrapper
+
+      vm.openMenu()
+
       const labelContainer = findLabelContainerByNodeId(wrapper, 'a')
 
       leftClick(labelContainer)
-      expect(vm.selectedNodeIds).toEqual([ 'a' ])
-      expect(vm.isOpen).toBe(false)
+      expect(vm.forest.selectedNodeIds).toEqual([ 'a' ])
+      expect(vm.menu.isOpen).toBe(false)
     })
 
     it('keeps the menu open after selecting when closeOnSelect=false', () => {
@@ -460,17 +452,17 @@ describe('Props', () => {
           searchable: true,
           options: [ { id: 'a', label: 'a' } ],
         },
-        data: {
-          isOpen: true,
-        },
       })
       const { vm } = wrapper
+
+      vm.openMenu()
+
       const labelContainer = findLabelContainerByNodeId(wrapper, 'a')
 
       leftClick(labelContainer)
-      expect(vm.selectedNodeIds).toEqual([ 'a' ])
-      expect(vm.isOpen).toBe(true)
-      expect(vm.isFocused).toBe(false) // auto blur
+      expect(vm.forest.selectedNodeIds).toEqual([ 'a' ])
+      expect(vm.menu.isOpen).toBe(true)
+      expect(vm.trigger.isFocused).toBe(false) // auto blur
     })
   })
 
@@ -487,7 +479,7 @@ describe('Props', () => {
         },
       })
       const { vm } = wrapper
-      const { a } = vm.nodeMap
+      const { a } = vm.forest.nodeMap
 
       expect(a.isExpanded).toBe(false)
     })
@@ -508,7 +500,7 @@ describe('Props', () => {
         },
       })
       const { vm } = wrapper
-      const { a, aa } = vm.nodeMap
+      const { a, aa } = vm.forest.nodeMap
 
       expect(a.isExpanded).toBe(true)
       expect(aa.isExpanded).toBe(false)
@@ -530,7 +522,7 @@ describe('Props', () => {
         },
       })
       const { vm } = wrapper
-      const { a, aa } = vm.nodeMap
+      const { a, aa } = vm.forest.nodeMap
 
       expect(a.isExpanded).toBe(true)
       expect(aa.isExpanded).toBe(true)
@@ -561,7 +553,7 @@ describe('Props', () => {
           defaultExpandLevel: 1,
         },
       })
-      const { a, aa, b, bb } = wrapper.vm.nodeMap
+      const { a, aa, b, bb } = wrapper.vm.forest.nodeMap
 
       expect(a.isExpanded).toBe(true)
       expect(aa.isExpanded).toBe(false)
@@ -593,7 +585,7 @@ describe('Props', () => {
         },
       })
       const { vm } = wrapper
-      const { a } = vm.nodeMap
+      const { a } = vm.forest.nodeMap
 
       expect(loadOptions.calls.count()).toBe(1)
       expect(loadOptions).toHaveBeenCalledWith({
@@ -664,28 +656,28 @@ describe('Props', () => {
       it('click on label of a branch node should toggle checking state when multiple=true', () => {
         wrapper.setProps({ multiple: true })
 
-        expect(vm.isSelected(vm.nodeMap.branch)).toBe(false)
+        expect(vm.isSelected(vm.forest.nodeMap.branch)).toBe(false)
         clickOnLabelOfBranchNode()
-        expect(vm.isSelected(vm.nodeMap.branch)).toBe(true)
+        expect(vm.isSelected(vm.forest.nodeMap.branch)).toBe(true)
         clickOnLabelOfBranchNode()
-        expect(vm.isSelected(vm.nodeMap.branch)).toBe(false)
+        expect(vm.isSelected(vm.forest.nodeMap.branch)).toBe(false)
       })
 
       it('click on label of a branch node should not toggle expanding state when multiple=true', () => {
         wrapper.setProps({ multiple: true })
 
-        expect(vm.nodeMap.branch.isExpanded).toBe(true)
+        expect(vm.forest.nodeMap.branch.isExpanded).toBe(true)
         clickOnLabelOfBranchNode()
-        expect(vm.nodeMap.branch.isExpanded).toBe(true)
+        expect(vm.forest.nodeMap.branch.isExpanded).toBe(true)
       })
 
       it('click on label of a branch node should close the dropdown when multiple=false & closeOnSelect=true', () => {
         wrapper.setProps({ multiple: false, closeOnSelect: true })
         vm.openMenu()
 
-        expect(vm.isOpen).toBe(true)
+        expect(vm.menu.isOpen).toBe(true)
         clickOnLabelOfBranchNode()
-        expect(vm.isOpen).toBe(false)
+        expect(vm.menu.isOpen).toBe(false)
       })
     })
 
@@ -711,36 +703,36 @@ describe('Props', () => {
       it('click on label of a branch node should not toggle checking state when multiple=true', () => {
         wrapper.setProps({ multiple: true })
 
-        expect(vm.isSelected(vm.nodeMap.branch)).toBe(false)
+        expect(vm.isSelected(vm.forest.nodeMap.branch)).toBe(false)
         clickOnLabelOfBranchNode()
-        expect(vm.isSelected(vm.nodeMap.branch)).toBe(false)
+        expect(vm.isSelected(vm.forest.nodeMap.branch)).toBe(false)
       })
 
       it('click on label of a branch node should toggle expanding state when multiple=true', () => {
         wrapper.setProps({ multiple: true })
 
-        expect(vm.nodeMap.branch.isExpanded).toBe(true)
+        expect(vm.forest.nodeMap.branch.isExpanded).toBe(true)
         clickOnLabelOfBranchNode()
-        expect(vm.nodeMap.branch.isExpanded).toBe(false)
+        expect(vm.forest.nodeMap.branch.isExpanded).toBe(false)
         clickOnLabelOfBranchNode()
-        expect(vm.nodeMap.branch.isExpanded).toBe(true)
+        expect(vm.forest.nodeMap.branch.isExpanded).toBe(true)
       })
 
       it('click on label of a branch node should not close the dropdown when multiple=false & closeOnSelect=true', () => {
         wrapper.setProps({ multiple: false, closeOnSelect: true })
         vm.openMenu()
 
-        expect(vm.isOpen).toBe(true)
+        expect(vm.menu.isOpen).toBe(true)
         clickOnLabelOfBranchNode()
-        expect(vm.isOpen).toBe(true)
+        expect(vm.menu.isOpen).toBe(true)
       })
 
       it('should not auto-select ancestor nodes like flat-mode', () => {
         wrapper.setProps({ multiple: true })
 
-        vm.select(vm.nodeMap.leaf)
-        expect(vm.isSelected(vm.nodeMap.leaf)).toBe(true)
-        expect(vm.isSelected(vm.nodeMap.branch)).toBe(false)
+        vm.select(vm.forest.nodeMap.leaf)
+        expect(vm.isSelected(vm.forest.nodeMap.leaf)).toBe(true)
+        expect(vm.isSelected(vm.forest.nodeMap.branch)).toBe(false)
       })
     })
   })
@@ -782,9 +774,9 @@ describe('Props', () => {
         })
 
         wrapper.vm.openMenu()
-        expect(wrapper.vm.isOpen).toBe(true)
+        expect(wrapper.vm.menu.isOpen).toBe(true)
         wrapper.setProps({ disabled: true })
-        expect(wrapper.vm.isOpen).toBe(false)
+        expect(wrapper.vm.menu.isOpen).toBe(false)
       })
 
       it('the control should reject all clicks', () => {
@@ -799,8 +791,8 @@ describe('Props', () => {
         const valeContainer = wrapper.find('.vue-treeselect__value-container')
 
         leftClick(valeContainer)
-        expect(vm.isFocused).toBe(false)
-        expect(vm.isOpen).toBe(false)
+        expect(vm.trigger.isFocused).toBe(false)
+        expect(vm.menu.isOpen).toBe(false)
       })
 
       it('the control should be non-focusable', () => {
@@ -814,7 +806,7 @@ describe('Props', () => {
         const { vm } = wrapper
 
         wrapper.vm.focusInput()
-        expect(vm.isFocused).toBe(false)
+        expect(vm.trigger.isFocused).toBe(false)
       })
 
       it('should be uanble to open the menu', () => {
@@ -827,7 +819,7 @@ describe('Props', () => {
         const { vm } = wrapper
 
         wrapper.vm.openMenu()
-        expect(vm.isOpen).toBe(false)
+        expect(vm.menu.isOpen).toBe(false)
       })
     })
   })
@@ -850,13 +842,13 @@ describe('Props', () => {
     it('when disableFuzzyMatching=false', async () => {
       wrapper.setProps({ disableFuzzyMatching: false })
       await typeSearchText(wrapper, 'jb')
-      expect(vm.nodeMap.jamesblunt.isMatched).toBe(true)
+      expect(vm.forest.nodeMap.jamesblunt.isMatched).toBe(true)
     })
 
     it('when disableFuzzyMatching=true', async () => {
       wrapper.setProps({ disableFuzzyMatching: true })
       await typeSearchText(wrapper, 'jb')
-      expect(vm.nodeMap.jamesblunt.isMatched).toBe(false)
+      expect(vm.forest.nodeMap.jamesblunt.isMatched).toBe(false)
     })
   })
 
@@ -883,9 +875,9 @@ describe('Props', () => {
         },
       })
       const { vm } = wrapper
-      const { a, b, c, d } = vm.nodeMap
+      const { a, b, c, d } = vm.forest.nodeMap
 
-      expect(vm.selectedNodeIds).toEqual([ 'a', 'b', 'c', 'd' ])
+      expect(vm.forest.selectedNodeIds).toEqual([ 'a', 'b', 'c', 'd' ])
       expect(vm.visibleValue).toEqual([ a, b, c, d ])
       expect(wrapper.findAll('.vue-treeselect__multi-value-item').length).toBe(4)
       expect(wrapper.contains('.vue-treeselect__limit-tip')).toBe(false)
@@ -913,9 +905,9 @@ describe('Props', () => {
         },
       })
       const { vm } = wrapper
-      const { a } = vm.nodeMap
+      const { a } = vm.forest.nodeMap
 
-      expect(vm.selectedNodeIds).toEqual([ 'a', 'b', 'c', 'd' ])
+      expect(vm.forest.selectedNodeIds).toEqual([ 'a', 'b', 'c', 'd' ])
       expect(vm.visibleValue).toEqual([ a ])
       expect(wrapper.findAll('.vue-treeselect__multi-value-item').length).toBe(1)
       expect(wrapper.contains('.vue-treeselect__limit-tip')).toBe(true)
@@ -941,7 +933,7 @@ describe('Props', () => {
       })
       const { vm } = wrapper
 
-      expect(vm.nodeMap.a).toEqual(jasmine.objectContaining({
+      expect(vm.forest.nodeMap.a).toEqual(jasmine.objectContaining({
         id: 'a',
         label: 'a',
         raw: {
@@ -970,8 +962,8 @@ describe('Props', () => {
       })
       const { vm } = wrapper
 
-      expect(vm.selectedNodeIds).toEqual([ 'a' ])
-      expect(vm.nodeMap.a).toEqual(jasmine.objectContaining({
+      expect(vm.forest.selectedNodeIds).toEqual([ 'a' ])
+      expect(vm.forest.nodeMap.a).toEqual(jasmine.objectContaining({
         id: 'a',
         label: 'a',
         isFallbackNode: true,
@@ -1008,8 +1000,8 @@ describe('Props', () => {
         },
       })
 
-      expect(Object.keys(vm1.nodeMap)).toEqual([ '1-a' ])
-      expect(Object.keys(vm2.nodeMap)).toEqual([ '2-a' ])
+      expect(Object.keys(vm1.forest.nodeMap)).toEqual([ '1-a' ])
+      expect(Object.keys(vm2.forest.nodeMap)).toEqual([ '2-a' ])
     })
 
     it('provide only the keys that need to be customized', () => {
@@ -1029,17 +1021,17 @@ describe('Props', () => {
       })
       const { vm } = wrapper
 
-      expect(vm.nodeMap.a).toEqual(jasmine.objectContaining({
+      expect(vm.forest.nodeMap.a).toEqual(jasmine.objectContaining({
         id: 'a',
         label: 'a',
       }))
-      expect(vm.nodeMap.aa).toEqual(jasmine.objectContaining({
+      expect(vm.forest.nodeMap.aa).toEqual(jasmine.objectContaining({
         id: 'aa',
         label: 'aa',
       }))
     })
 
-    it('with `loadOptions` prop', () => {
+    it('with `loadOptions` prop', async () => {
       const wrapper = mount(Treeselect, {
         propsData: {
           options: [ {
@@ -1065,14 +1057,14 @@ describe('Props', () => {
             callback()
           },
         },
-        data: {
-          isOpen: true,
-        },
       })
       const { vm } = wrapper
 
-      vm.toggleExpanded(vm.nodeMap.a)
-      expect(vm.nodeMap.a.children).toBeNonEmptyArray()
+      vm.openMenu()
+
+      vm.toggleExpanded(vm.forest.nodeMap.a)
+      await vm.$nextTick()
+      expect(vm.forest.nodeMap.a.children).toBeNonEmptyArray()
     })
   })
 
@@ -1088,16 +1080,16 @@ describe('Props', () => {
       const { vm } = wrapper
       const valeContainer = wrapper.find('.vue-treeselect__value-container')
 
-      expect(vm.isFocused).toBe(false)
-      expect(vm.isOpen).toBe(false)
+      expect(vm.trigger.isFocused).toBe(false)
+      expect(vm.menu.isOpen).toBe(false)
 
       leftClick(valeContainer)
-      expect(vm.isFocused).toBe(true)
-      expect(vm.isOpen).toBe(false)
+      expect(vm.trigger.isFocused).toBe(true)
+      expect(vm.menu.isOpen).toBe(false)
 
       leftClick(valeContainer)
-      expect(vm.isFocused).toBe(true)
-      expect(vm.isOpen).toBe(true)
+      expect(vm.trigger.isFocused).toBe(true)
+      expect(vm.menu.isOpen).toBe(true)
     })
 
     it('when openOnClick=true', () => {
@@ -1111,12 +1103,12 @@ describe('Props', () => {
       const { vm } = wrapper
       const valeContainer = wrapper.find('.vue-treeselect__value-container')
 
-      expect(vm.isFocused).toBe(false)
-      expect(vm.isOpen).toBe(false)
+      expect(vm.trigger.isFocused).toBe(false)
+      expect(vm.menu.isOpen).toBe(false)
 
       leftClick(valeContainer)
-      expect(vm.isFocused).toBe(true)
-      expect(vm.isOpen).toBe(true)
+      expect(vm.trigger.isFocused).toBe(true)
+      expect(vm.menu.isOpen).toBe(true)
     })
   })
 
@@ -1132,16 +1124,16 @@ describe('Props', () => {
       const { vm } = wrapper
       const valeContainer = wrapper.find('.vue-treeselect__value-container')
 
-      expect(vm.isFocused).toBe(false)
-      expect(vm.isOpen).toBe(false)
+      expect(vm.trigger.isFocused).toBe(false)
+      expect(vm.menu.isOpen).toBe(false)
 
       wrapper.vm.focusInput()
-      expect(vm.isFocused).toBe(true)
-      expect(vm.isOpen).toBe(false)
+      expect(vm.trigger.isFocused).toBe(true)
+      expect(vm.menu.isOpen).toBe(false)
 
       leftClick(valeContainer)
-      expect(vm.isFocused).toBe(true)
-      expect(vm.isOpen).toBe(true)
+      expect(vm.trigger.isFocused).toBe(true)
+      expect(vm.menu.isOpen).toBe(true)
     })
 
     it('when openOnFocus=true', () => {
@@ -1154,12 +1146,12 @@ describe('Props', () => {
       })
       const { vm } = wrapper
 
-      expect(vm.isFocused).toBe(false)
-      expect(vm.isOpen).toBe(false)
+      expect(vm.trigger.isFocused).toBe(false)
+      expect(vm.menu.isOpen).toBe(false)
 
       wrapper.vm.focusInput()
-      expect(vm.isFocused).toBe(true)
-      expect(vm.isOpen).toBe(true)
+      expect(vm.trigger.isFocused).toBe(true)
+      expect(vm.menu.isOpen).toBe(true)
     })
 
     describe('combined with autoFocus', () => {
@@ -1174,8 +1166,8 @@ describe('Props', () => {
         })
         const { vm } = wrapper
 
-        expect(vm.isFocused).toBe(true)
-        expect(vm.isOpen).toBe(false)
+        expect(vm.trigger.isFocused).toBe(true)
+        expect(vm.menu.isOpen).toBe(false)
       })
 
       it('when openOnFocus=true', () => {
@@ -1189,8 +1181,8 @@ describe('Props', () => {
         })
         const { vm } = wrapper
 
-        expect(vm.isFocused).toBe(true)
-        expect(vm.isOpen).toBe(true)
+        expect(vm.trigger.isFocused).toBe(true)
+        expect(vm.menu.isOpen).toBe(true)
       })
     })
   })
@@ -1201,10 +1193,9 @@ describe('Props', () => {
         propsData: {
           options: [],
         },
-        data: {
-          isOpen: true,
-        },
       })
+
+      wrapper.vm.openMenu()
 
       const menu = wrapper.find('.vue-treeselect__menu')
       const noOptionsTip = menu.find('.vue-treeselect__no-options-tip')
@@ -1221,7 +1212,7 @@ describe('Props', () => {
         })
         const { vm } = wrapper
 
-        expect(vm.nodeMap.a).toEqual(jasmine.objectContaining({
+        expect(vm.forest.nodeMap.a).toEqual(jasmine.objectContaining({
           isFallbackNode: true,
           label: 'a (unknown)',
         }))
@@ -1232,7 +1223,7 @@ describe('Props', () => {
             label: 'a',
           } ],
         })
-        expect(vm.nodeMap.a.label).toBe('a')
+        expect(vm.forest.nodeMap.a.label).toBe('a')
       })
 
       it('directly modify `options` prop should trigger reinitializing', async () => {
@@ -1252,7 +1243,7 @@ describe('Props', () => {
         // not creating a new `options` array.
         vm.options[0].label = 'xxx'
         await vm.$nextTick()
-        expect(comp.nodeMap.a.label).toBe('xxx')
+        expect(comp.forest.nodeMap.a.label).toBe('xxx')
       })
 
       it('should keep state', () => {
@@ -1272,10 +1263,10 @@ describe('Props', () => {
         })
         const { vm } = wrapper
 
-        vm.toggleExpanded(vm.nodeMap.a)
-        expect(vm.isSelected(vm.nodeMap.a)).toBe(true)
-        expect(vm.nodeMap.a.isExpanded).toBe(true)
-        expect(vm.nodeCheckedStateMap).toEqual({
+        vm.toggleExpanded(vm.forest.nodeMap.a)
+        expect(vm.isSelected(vm.forest.nodeMap.a)).toBe(true)
+        expect(vm.forest.nodeMap.a.isExpanded).toBe(true)
+        expect(vm.forest.checkedStateMap).toEqual({
           a: CHECKED,
           aa: CHECKED,
         })
@@ -1298,9 +1289,9 @@ describe('Props', () => {
             label: 'b',
           } ],
         })
-        expect(vm.isSelected(vm.nodeMap.a)).toBe(true)
-        expect(vm.nodeMap.a.isExpanded).toBe(true)
-        expect(vm.nodeCheckedStateMap).toEqual({
+        expect(vm.isSelected(vm.forest.nodeMap.a)).toBe(true)
+        expect(vm.forest.nodeMap.a.isExpanded).toBe(true)
+        expect(vm.forest.checkedStateMap).toEqual({
           a: CHECKED,
           aa: CHECKED,
           ab: CHECKED,
@@ -1320,7 +1311,7 @@ describe('Props', () => {
         })
         const { vm } = wrapper
 
-        expect(vm.nodeMap.a.label).toBe('a')
+        expect(vm.forest.nodeMap.a.label).toBe('a')
 
         wrapper.setProps({
           options: [ {
@@ -1330,8 +1321,8 @@ describe('Props', () => {
           } ],
         })
 
-        expect(vm.nodeMap.a.label).toBe('a')
-        expect(vm.nodeMap.a.isFallbackNode).toBe(true)
+        expect(vm.forest.nodeMap.a.label).toBe('a')
+        expect(vm.forest.nodeMap.a.isFallbackNode).toBe(true)
       })
     })
   })
@@ -1416,21 +1407,22 @@ describe('Props', () => {
         })
         const { vm } = wrapper
 
-        expect(vm.searching).toBe(false)
-        expect(vm.searchQuery).toBe('')
+        expect(vm.localSearch.active).toBe(false)
+        expect(vm.trigger.searchQuery).toBe('')
 
         await typeSearchText(wrapper, '$SEARCH_QUERY$')
-        expect(vm.searching).toBe(true)
-        expect(vm.searchQuery).toBe('$SEARCH_QUERY$')
+        expect(vm.localSearch.active).toBe(true)
+        expect(vm.trigger.searchQuery).toBe('$SEARCH_QUERY$')
 
         await typeSearchText(wrapper, '')
-        expect(vm.searching).toBe(false)
-        expect(vm.searchQuery).toBe('')
+        expect(vm.localSearch.active).toBe(false)
+        expect(vm.trigger.searchQuery).toBe('')
       })
 
       it('filtering', async () => {
         const wrapper = mount(Treeselect, {
           propsData: {
+            alwaysOpen: true,
             multiple: true,
             searchable: true,
             options: [ {
@@ -1448,16 +1440,13 @@ describe('Props', () => {
               label: 'b',
             } ],
           },
-          data: {
-            isOpen: true,
-          },
         })
         const { vm } = wrapper
 
-        expect(vm.noSearchResults).toBe(true)
+        expect(vm.localSearch.noResults).toBe(true)
 
         await typeSearchText(wrapper, 'b')
-        expect(vm.noSearchResults).toBe(false)
+        expect(vm.localSearch.noResults).toBe(false)
 
         const expectedMatchedNodeIds = [ 'ab', 'b' ]
         const options = wrapper.findAll(TreeselectOption)
@@ -1512,6 +1501,7 @@ describe('Props', () => {
     beforeEach(() => {
       wrapper = mount(Treeselect, {
         propsData: {
+          alwaysOpen: true,
           options: [ {
             id: 'a',
             label: 'a',
@@ -1534,9 +1524,6 @@ describe('Props', () => {
             } ],
           } ],
           showCount: true,
-        },
-        data: {
-          isOpen: true,
         },
       })
     })
@@ -1590,41 +1577,41 @@ describe('Props', () => {
     it('when sortValueBy="ORDER_SELECTED"', () => {
       wrapper.setProps({ sortValueBy: 'ORDER_SELECTED' })
 
-      vm.select(vm.nodeMap.bb)
+      vm.select(vm.forest.nodeMap.bb)
       expect(vm.internalValue).toEqual([ 'bb' ])
-      vm.select(vm.nodeMap.a)
+      vm.select(vm.forest.nodeMap.a)
       expect(vm.internalValue).toEqual([ 'bb', 'a' ])
-      vm.select(vm.nodeMap.dddd)
+      vm.select(vm.forest.nodeMap.dddd)
       expect(vm.internalValue).toEqual([ 'bb', 'a', 'dddd' ])
-      vm.select(vm.nodeMap.ccc)
+      vm.select(vm.forest.nodeMap.ccc)
       expect(vm.internalValue).toEqual([ 'bb', 'a', 'dddd', 'ccc' ])
     })
 
     it('when sortValueBy="LEVEL"', () => {
       wrapper.setProps({ sortValueBy: 'LEVEL' })
 
-      vm.select(vm.nodeMap.bb)
+      vm.select(vm.forest.nodeMap.bb)
       expect(vm.internalValue).toEqual([ 'bb' ])
-      vm.select(vm.nodeMap.aaa)
+      vm.select(vm.forest.nodeMap.aaa)
       expect(vm.internalValue).toEqual([ 'bb', 'aaa' ])
-      vm.select(vm.nodeMap.dddd)
+      vm.select(vm.forest.nodeMap.dddd)
       expect(vm.internalValue).toEqual([ 'bb', 'aaa', 'dddd' ])
-      vm.select(vm.nodeMap.c)
+      vm.select(vm.forest.nodeMap.c)
       expect(vm.internalValue).toEqual([ 'c', 'bb', 'aaa', 'dddd' ])
-      vm.select(vm.nodeMap.aa)
+      vm.select(vm.forest.nodeMap.aa)
       expect(vm.internalValue).toEqual([ 'c', 'aa', 'bb', 'aaa', 'dddd' ])
     })
 
     it('when sortValueBy="INDEX"', () => {
       wrapper.setProps({ sortValueBy: 'INDEX' })
 
-      vm.select(vm.nodeMap.d)
+      vm.select(vm.forest.nodeMap.d)
       expect(vm.internalValue).toEqual([ 'd' ])
-      vm.select(vm.nodeMap.bbb)
+      vm.select(vm.forest.nodeMap.bbb)
       expect(vm.internalValue).toEqual([ 'bbb', 'd' ])
-      vm.select(vm.nodeMap.aaaa)
+      vm.select(vm.forest.nodeMap.aaaa)
       expect(vm.internalValue).toEqual([ 'aaaa', 'bbb', 'd' ])
-      vm.select(vm.nodeMap.cc)
+      vm.select(vm.forest.nodeMap.cc)
       expect(vm.internalValue).toEqual([ 'aaaa', 'bbb', 'cc', 'd' ])
     })
 
@@ -1774,11 +1761,11 @@ describe('Props', () => {
       wrapper.setProps({ valueConsistsOf: 'ALL' })
 
       expect(vm.internalValue).toEqual([ 'aa', 'aaa', 'aab' ])
-      vm.select(vm.nodeMap.ab)
+      vm.select(vm.forest.nodeMap.ab)
       expect(vm.internalValue).toEqual([ 'aa', 'aaa', 'aab', 'ab', 'aba', 'abb' ])
-      vm.select(vm.nodeMap.b)
+      vm.select(vm.forest.nodeMap.b)
       expect(vm.internalValue).toEqual([ 'aa', 'aaa', 'aab', 'ab', 'aba', 'abb', 'b' ])
-      vm.select(vm.nodeMap.ac)
+      vm.select(vm.forest.nodeMap.ac)
       expect(vm.internalValue).toEqual([ 'aa', 'aaa', 'aab', 'ab', 'aba', 'abb', 'b', 'ac', 'a' ])
     })
 
@@ -1786,11 +1773,11 @@ describe('Props', () => {
       wrapper.setProps({ valueConsistsOf: 'BRANCH_PRIORITY' })
 
       expect(vm.internalValue).toEqual([ 'aa' ])
-      vm.select(vm.nodeMap.ab)
+      vm.select(vm.forest.nodeMap.ab)
       expect(vm.internalValue).toEqual([ 'aa', 'ab' ])
-      vm.select(vm.nodeMap.b)
+      vm.select(vm.forest.nodeMap.b)
       expect(vm.internalValue).toEqual([ 'aa', 'ab', 'b' ])
-      vm.select(vm.nodeMap.ac)
+      vm.select(vm.forest.nodeMap.ac)
       expect(vm.internalValue).toEqual([ 'b', 'a' ])
     })
 
@@ -1798,11 +1785,11 @@ describe('Props', () => {
       wrapper.setProps({ valueConsistsOf: 'LEAF_PRIORITY' })
 
       expect(vm.internalValue).toEqual([ 'aaa', 'aab' ])
-      vm.select(vm.nodeMap.ab)
+      vm.select(vm.forest.nodeMap.ab)
       expect(vm.internalValue).toEqual([ 'aaa', 'aab', 'aba', 'abb' ])
-      vm.select(vm.nodeMap.b)
+      vm.select(vm.forest.nodeMap.b)
       expect(vm.internalValue).toEqual([ 'aaa', 'aab', 'aba', 'abb', 'b' ])
-      vm.select(vm.nodeMap.ac)
+      vm.select(vm.forest.nodeMap.ac)
       expect(vm.internalValue).toEqual([ 'aaa', 'aab', 'aba', 'abb', 'b', 'ac' ])
     })
 
@@ -1810,11 +1797,11 @@ describe('Props', () => {
       wrapper.setProps({ valueConsistsOf: 'ALL_WITH_INDETERMINATE' })
 
       expect(vm.internalValue).toEqual([ 'aa', 'a', 'aaa', 'aab' ])
-      vm.select(vm.nodeMap.ab)
+      vm.select(vm.forest.nodeMap.ab)
       expect(vm.internalValue).toEqual([ 'aa', 'a', 'aaa', 'aab', 'ab', 'aba', 'abb' ])
-      vm.select(vm.nodeMap.b)
+      vm.select(vm.forest.nodeMap.b)
       expect(vm.internalValue).toEqual([ 'aa', 'a', 'aaa', 'aab', 'ab', 'aba', 'abb', 'b' ])
-      vm.select(vm.nodeMap.ac)
+      vm.select(vm.forest.nodeMap.ac)
       expect(vm.internalValue).toEqual([ 'aa', 'aaa', 'aab', 'ab', 'aba', 'abb', 'b', 'ac', 'a' ])
     })
   })
@@ -1846,11 +1833,11 @@ describe('Props', () => {
         }).$mount()
         const comp = vm.$children[0]
 
-        expect(comp.selectedNodeIds).toEqual([ 'a' ])
+        expect(comp.forest.selectedNodeIds).toEqual([ 'a' ])
 
-        comp.select(comp.nodeMap.b)
+        comp.select(comp.forest.nodeMap.b)
         await comp.$nextTick()
-        expect(comp.selectedNodeIds).toEqual([ 'b' ])
+        expect(comp.forest.selectedNodeIds).toEqual([ 'b' ])
         expect(vm.value).toEqual('b')
       })
 
@@ -1880,11 +1867,11 @@ describe('Props', () => {
         }).$mount()
         const comp = vm.$children[0]
 
-        expect(comp.selectedNodeIds).toEqual([ 'a' ])
+        expect(comp.forest.selectedNodeIds).toEqual([ 'a' ])
 
-        comp.select(comp.nodeMap.b)
+        comp.select(comp.forest.nodeMap.b)
         await comp.$nextTick()
-        expect(comp.selectedNodeIds).toEqual([ 'a', 'b' ])
+        expect(comp.forest.selectedNodeIds).toEqual([ 'a', 'b' ])
         expect(vm.value).toEqual([ 'a', 'b' ])
       })
     })
@@ -1918,11 +1905,11 @@ describe('Props', () => {
         }).$mount()
         const comp = vm.$children[0]
 
-        expect(comp.selectedNodeIds).toEqual([ 'a' ])
+        expect(comp.forest.selectedNodeIds).toEqual([ 'a' ])
 
-        comp.select(comp.nodeMap.b)
+        comp.select(comp.forest.nodeMap.b)
         await comp.$nextTick()
-        expect(comp.selectedNodeIds).toEqual([ 'b' ])
+        expect(comp.forest.selectedNodeIds).toEqual([ 'b' ])
         expect(vm.value).toEqual({
           id: 'b',
           label: 'b',
@@ -1958,11 +1945,11 @@ describe('Props', () => {
         }).$mount()
         const comp = vm.$children[0]
 
-        expect(comp.selectedNodeIds).toEqual([ 'a' ])
+        expect(comp.forest.selectedNodeIds).toEqual([ 'a' ])
 
-        comp.select(comp.nodeMap.b)
+        comp.select(comp.forest.nodeMap.b)
         await comp.$nextTick()
-        expect(comp.selectedNodeIds).toEqual([ 'a', 'b' ])
+        expect(comp.forest.selectedNodeIds).toEqual([ 'a', 'b' ])
         expect(vm.value).toEqual([ {
           id: 'a',
           label: 'a',
@@ -2002,9 +1989,9 @@ describe('Props', () => {
         }).$mount()
         const comp = vm.$children[0]
 
-        expect(comp.selectedNodeIds).toEqual([ 'a' ])
+        expect(comp.forest.selectedNodeIds).toEqual([ 'a' ])
 
-        comp.select(comp.nodeMap.b)
+        comp.select(comp.forest.nodeMap.b)
         await comp.$nextTick()
         expect(vm.value).toEqual({
           id: 'b',

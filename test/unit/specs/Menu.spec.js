@@ -16,8 +16,8 @@ describe('Menu', () => {
     const event = document.createEvent('event')
     event.initEvent('mousedown', true, true)
     document.body.dispatchEvent(event)
-    expect(vm.isFocused).toBe(false)
-    expect(vm.isOpen).toBe(false)
+    expect(vm.trigger.isFocused).toBe(false)
+    expect(vm.menu.isOpen).toBe(false)
   })
 
   it('should open the menu after clicking the control when focused', () => {
@@ -26,14 +26,12 @@ describe('Menu', () => {
       propsData: {
         options: [],
       },
-      data: {
-        isFocused: true,
-      },
     })
+    wrapper.vm.trigger.isFocused = true
     const valueContainer = wrapper.find('.vue-treeselect__value-container')
 
     leftClick(valueContainer)
-    expect(wrapper.vm.isOpen).toBe(true)
+    expect(wrapper.vm.menu.isOpen).toBe(true)
   })
 
   it('click on option arrow should toggle expanded', () => {
@@ -46,11 +44,10 @@ describe('Menu', () => {
           children: [],
         } ],
       },
-      data: {
-        isOpen: true,
-      },
     })
-    const { a } = wrapper.vm.nodeMap
+    const { a } = wrapper.vm.forest.nodeMap
+
+    wrapper.vm.openMenu()
 
     expect(a.isExpanded).toBe(false)
     const optionArrow = findOptionByNodeId(wrapper, 'a').find('.vue-treeselect__option-arrow-container')
@@ -75,13 +72,13 @@ describe('Menu', () => {
     const { vm } = wrapper
 
     vm.openMenu()
-    expect(vm.current).toBe('a')
+    expect(vm.menu.current).toBe('a')
 
     findOptionByNodeId(wrapper, 'b').trigger('mouseenter')
-    expect(vm.current).toBe('b')
+    expect(vm.menu.current).toBe('b')
 
     findOptionByNodeId(wrapper, 'a').trigger('mouseenter')
-    expect(vm.current).toBe('a')
+    expect(vm.menu.current).toBe('a')
   })
 
   it('retain scroll position on menu reopen', async () => {

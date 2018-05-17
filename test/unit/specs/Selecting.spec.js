@@ -28,18 +28,18 @@ describe('Single-select', () => {
       },
     })
     const { vm } = wrapper
-    const { a, aa } = vm.nodeMap
+    const { a, aa } = vm.forest.nodeMap
 
-    expect(vm.selectedNodeIds).toBeEmptyArray()
+    expect(vm.forest.selectedNodeIds).toBeEmptyArray()
     vm.select(a) // select one
-    expect(vm.selectedNodeIds).toEqual([ 'a' ])
-    expect(vm.selectedNodeMap).toEqual({ a: true })
+    expect(vm.forest.selectedNodeIds).toEqual([ 'a' ])
+    expect(vm.forest.selectedNodeMap).toEqual({ a: true })
     vm.select(aa) // select another
-    expect(vm.selectedNodeIds).toEqual([ 'aa' ])
-    expect(vm.selectedNodeMap).toEqual({ aa: true })
+    expect(vm.forest.selectedNodeIds).toEqual([ 'aa' ])
+    expect(vm.forest.selectedNodeMap).toEqual({ aa: true })
     vm.select(aa) // select again
-    expect(vm.selectedNodeIds).toEqual([ 'aa' ])
-    expect(vm.selectedNodeMap).toEqual({ aa: true })
+    expect(vm.forest.selectedNodeIds).toEqual([ 'aa' ])
+    expect(vm.forest.selectedNodeMap).toEqual({ aa: true })
   })
 
   it('should blur the input after selecting an option when closeOnSelect=true & searchable=true', () => {
@@ -54,17 +54,17 @@ describe('Single-select', () => {
         searchable: true,
         closeOnSelect: true,
       },
-      data: {
-        isOpen: true,
-      },
     })
     const { vm } = wrapper
+
+    vm.openMenu()
+
     const labelContainer = findLabelContainerByNodeId(wrapper, 'a')
 
     leftClick(labelContainer)
-    expect(vm.selectedNodeIds).toEqual([ 'a' ])
-    expect(vm.isFocused).toEqual(false)
-    expect(vm.isOpen).toEqual(false)
+    expect(vm.forest.selectedNodeIds).toEqual([ 'a' ])
+    expect(vm.trigger.isFocused).toEqual(false)
+    expect(vm.menu.isOpen).toEqual(false)
   })
 })
 
@@ -117,16 +117,16 @@ describe('Multi-select', () => {
     //    |   |--[v] aab
     //    |--[v] ab
     //   [ ] b
-    vm.select(vm.nodeMap.a)
-    expect(vm.selectedNodeIds).toEqual([ 'a', 'aa', 'ab', 'aaa', 'aab' ])
-    expect(vm.selectedNodeMap).toEqual({
+    vm.select(vm.forest.nodeMap.a)
+    expect(vm.forest.selectedNodeIds).toEqual([ 'a', 'aa', 'ab', 'aaa', 'aab' ])
+    expect(vm.forest.selectedNodeMap).toEqual({
       a: true,
       aa: true,
       ab: true,
       aaa: true,
       aab: true,
     })
-    expect(vm.nodeCheckedStateMap).toEqual({
+    expect(vm.forest.checkedStateMap).toEqual({
       a: CHECKED,
       aa: CHECKED,
       aaa: CHECKED,
@@ -149,10 +149,10 @@ describe('Multi-select', () => {
     //    |   |--[ ] aab
     //    |--[v] ab
     //   [ ] b
-    vm.select(vm.nodeMap.aa)
-    expect(vm.selectedNodeIds).toEqual([ 'ab' ])
-    expect(vm.selectedNodeMap).toEqual({ ab: true })
-    expect(vm.nodeCheckedStateMap).toEqual({
+    vm.select(vm.forest.nodeMap.aa)
+    expect(vm.forest.selectedNodeIds).toEqual([ 'ab' ])
+    expect(vm.forest.selectedNodeMap).toEqual({ ab: true })
+    expect(vm.forest.checkedStateMap).toEqual({
       a: INDETERMINATE,
       aa: UNCHECKED,
       aaa: UNCHECKED,
@@ -175,10 +175,10 @@ describe('Multi-select', () => {
     //    |   |--[ ] aab
     //    |--[v] ab
     //   [v] b
-    vm.select(vm.nodeMap.b)
-    expect(vm.selectedNodeIds).toEqual([ 'ab', 'b' ])
-    expect(vm.selectedNodeMap).toEqual({ ab: true, b: true })
-    expect(vm.nodeCheckedStateMap).toEqual({
+    vm.select(vm.forest.nodeMap.b)
+    expect(vm.forest.selectedNodeIds).toEqual([ 'ab', 'b' ])
+    expect(vm.forest.selectedNodeMap).toEqual({ ab: true, b: true })
+    expect(vm.forest.checkedStateMap).toEqual({
       a: INDETERMINATE,
       aa: UNCHECKED,
       aaa: UNCHECKED,
@@ -201,9 +201,9 @@ describe('Multi-select', () => {
     //    |   |--[v] aab
     //    |--[v] ab
     //   [v] b
-    vm.select(vm.nodeMap.aa)
-    expect(vm.selectedNodeIds).toEqual([ 'ab', 'b', 'aa', 'aaa', 'aab', 'a' ]) // a should be after b
-    expect(vm.selectedNodeMap).toEqual({
+    vm.select(vm.forest.nodeMap.aa)
+    expect(vm.forest.selectedNodeIds).toEqual([ 'ab', 'b', 'aa', 'aaa', 'aab', 'a' ]) // a should be after b
+    expect(vm.forest.selectedNodeMap).toEqual({
       a: true,
       aa: true,
       aaa: true,
@@ -211,7 +211,7 @@ describe('Multi-select', () => {
       ab: true,
       b: true,
     })
-    expect(vm.nodeCheckedStateMap).toEqual({
+    expect(vm.forest.checkedStateMap).toEqual({
       a: CHECKED,
       aa: CHECKED,
       aaa: CHECKED,
@@ -234,10 +234,10 @@ describe('Multi-select', () => {
     //    |   |--[ ] aab
     //    |--[ ] ab
     //   [v] b
-    vm.select(vm.nodeMap.a)
-    expect(vm.selectedNodeIds).toEqual([ 'b' ])
-    expect(vm.selectedNodeMap).toEqual({ b: true })
-    expect(vm.nodeCheckedStateMap).toEqual({
+    vm.select(vm.forest.nodeMap.a)
+    expect(vm.forest.selectedNodeIds).toEqual([ 'b' ])
+    expect(vm.forest.selectedNodeMap).toEqual({ b: true })
+    expect(vm.forest.checkedStateMap).toEqual({
       a: UNCHECKED,
       aa: UNCHECKED,
       aaa: UNCHECKED,
@@ -260,15 +260,15 @@ describe('Multi-select', () => {
     //    |   |--[v] aab
     //    |--[ ] ab
     //   [v] b
-    vm.select(vm.nodeMap.aa)
-    expect(vm.selectedNodeIds).toEqual([ 'b', 'aa', 'aaa', 'aab' ])
-    expect(vm.selectedNodeMap).toEqual({
+    vm.select(vm.forest.nodeMap.aa)
+    expect(vm.forest.selectedNodeIds).toEqual([ 'b', 'aa', 'aaa', 'aab' ])
+    expect(vm.forest.selectedNodeMap).toEqual({
       aa: true,
       aaa: true,
       aab: true,
       b: true,
     })
-    expect(vm.nodeCheckedStateMap).toEqual({
+    expect(vm.forest.checkedStateMap).toEqual({
       a: INDETERMINATE,
       aa: CHECKED,
       aaa: CHECKED,
@@ -291,10 +291,10 @@ describe('Multi-select', () => {
     //    |   |--[ ] aab
     //    |--[ ] ab
     //   [v] b
-    vm.select(vm.nodeMap.aa)
-    expect(vm.selectedNodeIds).toEqual([ 'b' ])
-    expect(vm.selectedNodeMap).toEqual({ b: true })
-    expect(vm.nodeCheckedStateMap).toEqual({
+    vm.select(vm.forest.nodeMap.aa)
+    expect(vm.forest.selectedNodeIds).toEqual([ 'b' ])
+    expect(vm.forest.selectedNodeMap).toEqual({ b: true })
+    expect(vm.forest.checkedStateMap).toEqual({
       a: UNCHECKED,
       aa: UNCHECKED,
       aaa: UNCHECKED,
@@ -319,16 +319,16 @@ describe('Multi-select', () => {
     //    |   |--[v] aab
     //    |--[v] ab
     //   [ ] b
-    vm.select(vm.nodeMap.a)
-    expect(vm.selectedNodeIds).toEqual([ 'a', 'aa', 'ab', 'aaa', 'aab' ])
-    expect(vm.selectedNodeMap).toEqual({
+    vm.select(vm.forest.nodeMap.a)
+    expect(vm.forest.selectedNodeIds).toEqual([ 'a', 'aa', 'ab', 'aaa', 'aab' ])
+    expect(vm.forest.selectedNodeMap).toEqual({
       a: true,
       aa: true,
       ab: true,
       aaa: true,
       aab: true,
     })
-    expect(vm.nodeCheckedStateMap).toEqual({
+    expect(vm.forest.checkedStateMap).toEqual({
       a: CHECKED,
       aa: CHECKED,
       aaa: CHECKED,
@@ -351,9 +351,9 @@ describe('Multi-select', () => {
     //    |   |--[v] aab
     //    |--[v] ab
     //   [v] b
-    vm.select(vm.nodeMap.b)
-    expect(vm.selectedNodeIds).toEqual([ 'a', 'aa', 'ab', 'aaa', 'aab', 'b' ])
-    expect(vm.selectedNodeMap).toEqual({
+    vm.select(vm.forest.nodeMap.b)
+    expect(vm.forest.selectedNodeIds).toEqual([ 'a', 'aa', 'ab', 'aaa', 'aab', 'b' ])
+    expect(vm.forest.selectedNodeMap).toEqual({
       a: true,
       aa: true,
       ab: true,
@@ -361,7 +361,7 @@ describe('Multi-select', () => {
       aab: true,
       b: true,
     })
-    expect(vm.nodeCheckedStateMap).toEqual({
+    expect(vm.forest.checkedStateMap).toEqual({
       a: CHECKED,
       aa: CHECKED,
       aaa: CHECKED,
@@ -384,10 +384,10 @@ describe('Multi-select', () => {
     //    |   |--[v] aab
     //    |--[v] ab
     //   [v] b
-    vm.select(vm.nodeMap.aaa)
-    expect(vm.selectedNodeIds).toEqual([ 'ab', 'aab', 'b' ]) // keep order
-    expect(vm.selectedNodeMap).toEqual({ aab: true, ab: true, b: true })
-    expect(vm.nodeCheckedStateMap).toEqual({
+    vm.select(vm.forest.nodeMap.aaa)
+    expect(vm.forest.selectedNodeIds).toEqual([ 'ab', 'aab', 'b' ]) // keep order
+    expect(vm.forest.selectedNodeMap).toEqual({ aab: true, ab: true, b: true })
+    expect(vm.forest.checkedStateMap).toEqual({
       a: INDETERMINATE,
       aa: INDETERMINATE,
       aaa: UNCHECKED,
@@ -410,9 +410,9 @@ describe('Multi-select', () => {
     //    |   |--[v] aab
     //    |--[v] ab
     //   [v] b
-    vm.select(vm.nodeMap.aaa)
-    expect(vm.selectedNodeIds).toEqual([ 'ab', 'aab', 'b', 'aaa', 'aa', 'a' ]) // keep order
-    expect(vm.selectedNodeMap).toEqual({
+    vm.select(vm.forest.nodeMap.aaa)
+    expect(vm.forest.selectedNodeIds).toEqual([ 'ab', 'aab', 'b', 'aaa', 'aa', 'a' ]) // keep order
+    expect(vm.forest.selectedNodeMap).toEqual({
       a: true,
       aa: true,
       ab: true,
@@ -420,7 +420,7 @@ describe('Multi-select', () => {
       aab: true,
       b: true,
     })
-    expect(vm.nodeCheckedStateMap).toEqual({
+    expect(vm.forest.checkedStateMap).toEqual({
       a: CHECKED,
       aa: CHECKED,
       aaa: CHECKED,
@@ -445,10 +445,10 @@ describe('Multi-select', () => {
     //    |   |--[ ] aab
     //    |--[ ] ab
     //   [ ] b
-    vm.select(vm.nodeMap.aaa)
-    expect(vm.selectedNodeIds).toEqual([ 'aaa' ])
-    expect(vm.selectedNodeMap).toEqual({ aaa: true })
-    expect(vm.nodeCheckedStateMap).toEqual({
+    vm.select(vm.forest.nodeMap.aaa)
+    expect(vm.forest.selectedNodeIds).toEqual([ 'aaa' ])
+    expect(vm.forest.selectedNodeMap).toEqual({ aaa: true })
+    expect(vm.forest.checkedStateMap).toEqual({
       a: INDETERMINATE,
       aa: INDETERMINATE,
       aaa: CHECKED,
@@ -471,10 +471,10 @@ describe('Multi-select', () => {
     //    |   |--[ ] aab
     //    |--[v] ab
     //   [ ] b
-    vm.select(vm.nodeMap.ab)
-    expect(vm.selectedNodeIds).toEqual([ 'aaa', 'ab' ])
-    expect(vm.selectedNodeMap).toEqual({ aaa: true, ab: true })
-    expect(vm.nodeCheckedStateMap).toEqual({
+    vm.select(vm.forest.nodeMap.ab)
+    expect(vm.forest.selectedNodeIds).toEqual([ 'aaa', 'ab' ])
+    expect(vm.forest.selectedNodeMap).toEqual({ aaa: true, ab: true })
+    expect(vm.forest.checkedStateMap).toEqual({
       a: INDETERMINATE,
       aa: INDETERMINATE,
       aaa: CHECKED,
@@ -497,16 +497,16 @@ describe('Multi-select', () => {
     //    |   |--[v] aab
     //    |--[v] ab
     //   [ ] b
-    vm.select(vm.nodeMap.aab)
-    expect(vm.selectedNodeIds).toEqual([ 'aaa', 'ab', 'aab', 'aa', 'a' ])
-    expect(vm.selectedNodeMap).toEqual({
+    vm.select(vm.forest.nodeMap.aab)
+    expect(vm.forest.selectedNodeIds).toEqual([ 'aaa', 'ab', 'aab', 'aa', 'a' ])
+    expect(vm.forest.selectedNodeMap).toEqual({
       a: true,
       aa: true,
       ab: true,
       aaa: true,
       aab: true,
     })
-    expect(vm.nodeCheckedStateMap).toEqual({
+    expect(vm.forest.checkedStateMap).toEqual({
       a: CHECKED,
       aa: CHECKED,
       aaa: CHECKED,
@@ -531,10 +531,10 @@ describe('Multi-select', () => {
     //    |   |--[ ] aab
     //    |--[v] ab
     //   [ ] b
-    vm.select(vm.nodeMap.ab)
-    expect(vm.selectedNodeIds).toEqual([ 'ab' ])
-    expect(vm.selectedNodeMap).toEqual({ ab: true })
-    expect(vm.nodeCheckedStateMap).toEqual({
+    vm.select(vm.forest.nodeMap.ab)
+    expect(vm.forest.selectedNodeIds).toEqual([ 'ab' ])
+    expect(vm.forest.selectedNodeMap).toEqual({ ab: true })
+    expect(vm.forest.checkedStateMap).toEqual({
       a: INDETERMINATE,
       aa: UNCHECKED,
       aaa: UNCHECKED,
@@ -557,10 +557,10 @@ describe('Multi-select', () => {
     //    |   |--[ ] aab
     //    |--[v] ab
     //   [v] b
-    vm.select(vm.nodeMap.b)
-    expect(vm.selectedNodeIds).toEqual([ 'ab', 'b' ])
-    expect(vm.selectedNodeMap).toEqual({ ab: true, b: true })
-    expect(vm.nodeCheckedStateMap).toEqual({
+    vm.select(vm.forest.nodeMap.b)
+    expect(vm.forest.selectedNodeIds).toEqual([ 'ab', 'b' ])
+    expect(vm.forest.selectedNodeMap).toEqual({ ab: true, b: true })
+    expect(vm.forest.checkedStateMap).toEqual({
       a: INDETERMINATE,
       aa: UNCHECKED,
       aaa: UNCHECKED,
@@ -583,10 +583,10 @@ describe('Multi-select', () => {
     //    |   |--[v] aab
     //    |--[v] ab
     //   [v] b
-    vm.select(vm.nodeMap.aab)
-    expect(vm.selectedNodeIds).toEqual([ 'ab', 'b', 'aab' ])
-    expect(vm.selectedNodeMap).toEqual({ aab: true, ab: true, b: true })
-    expect(vm.nodeCheckedStateMap).toEqual({
+    vm.select(vm.forest.nodeMap.aab)
+    expect(vm.forest.selectedNodeIds).toEqual([ 'ab', 'b', 'aab' ])
+    expect(vm.forest.selectedNodeMap).toEqual({ aab: true, ab: true, b: true })
+    expect(vm.forest.checkedStateMap).toEqual({
       a: INDETERMINATE,
       aa: INDETERMINATE,
       aaa: UNCHECKED,
@@ -609,9 +609,9 @@ describe('Multi-select', () => {
     //    |   |--[v] aab
     //    |--[v] ab
     //   [v] b
-    vm.select(vm.nodeMap.aaa)
-    expect(vm.selectedNodeIds).toEqual([ 'ab', 'b', 'aab', 'aaa', 'aa', 'a' ]) // keep order
-    expect(vm.selectedNodeMap).toEqual({
+    vm.select(vm.forest.nodeMap.aaa)
+    expect(vm.forest.selectedNodeIds).toEqual([ 'ab', 'b', 'aab', 'aaa', 'aa', 'a' ]) // keep order
+    expect(vm.forest.selectedNodeMap).toEqual({
       a: true,
       aa: true,
       ab: true,
@@ -619,7 +619,7 @@ describe('Multi-select', () => {
       aab: true,
       b: true,
     })
-    expect(vm.nodeCheckedStateMap).toEqual({
+    expect(vm.forest.checkedStateMap).toEqual({
       a: CHECKED,
       aa: CHECKED,
       aaa: CHECKED,
@@ -644,10 +644,10 @@ describe('Multi-select', () => {
     //    |   |--[v] aab
     //    |--[ ] ab
     //   [ ] b
-    vm.select(vm.nodeMap.aa)
-    expect(vm.selectedNodeIds).toEqual([ 'aa', 'aaa', 'aab' ])
-    expect(vm.selectedNodeMap).toEqual({ aa: true, aaa: true, aab: true })
-    expect(vm.nodeCheckedStateMap).toEqual({
+    vm.select(vm.forest.nodeMap.aa)
+    expect(vm.forest.selectedNodeIds).toEqual([ 'aa', 'aaa', 'aab' ])
+    expect(vm.forest.selectedNodeMap).toEqual({ aa: true, aaa: true, aab: true })
+    expect(vm.forest.checkedStateMap).toEqual({
       a: INDETERMINATE,
       aa: CHECKED,
       aaa: CHECKED,
@@ -656,10 +656,10 @@ describe('Multi-select', () => {
       b: UNCHECKED,
     })
 
-    vm.select(vm.nodeMap.a)
-    expect(vm.selectedNodeIds).toEqual([])
-    expect(vm.selectedNodeMap).toEqual({})
-    expect(vm.nodeCheckedStateMap).toEqual({
+    vm.select(vm.forest.nodeMap.a)
+    expect(vm.forest.selectedNodeIds).toEqual([])
+    expect(vm.forest.selectedNodeMap).toEqual({})
+    expect(vm.forest.checkedStateMap).toEqual({
       a: UNCHECKED,
       aa: UNCHECKED,
       aaa: UNCHECKED,
@@ -684,10 +684,10 @@ describe('Multi-select', () => {
     // expected result:
     //   [v] a
     //    |-- (no children options)
-    vm.select(vm.nodeMap.a)
-    expect(vm.selectedNodeIds).toEqual([ 'a' ])
-    expect(vm.selectedNodeMap).toEqual({ a: true })
-    expect(vm.nodeCheckedStateMap).toEqual({ a: CHECKED })
+    vm.select(vm.forest.nodeMap.a)
+    expect(vm.forest.selectedNodeIds).toEqual([ 'a' ])
+    expect(vm.forest.selectedNodeMap).toEqual({ a: true })
+    expect(vm.forest.checkedStateMap).toEqual({ a: CHECKED })
 
     // current:
     //   [v] a <- deselect
@@ -695,10 +695,10 @@ describe('Multi-select', () => {
     // expected result:
     //   [ ] a
     //    |-- (no children options)
-    vm.select(vm.nodeMap.a)
-    expect(vm.selectedNodeIds).toEqual([])
-    expect(vm.selectedNodeMap).toEqual({})
-    expect(vm.nodeCheckedStateMap).toEqual({ a: UNCHECKED })
+    vm.select(vm.forest.nodeMap.a)
+    expect(vm.forest.selectedNodeIds).toEqual([])
+    expect(vm.forest.selectedNodeMap).toEqual({})
+    expect(vm.forest.checkedStateMap).toEqual({ a: UNCHECKED })
   })
 })
 
@@ -721,10 +721,10 @@ describe('Disable Item Selection', () => {
       })
       const { vm } = wrapper
 
-      vm.select(vm.nodeMap.b)
-      expect(vm.selectedNodeIds).toEqual([ 'b' ])
-      vm.select(vm.nodeMap.a)
-      expect(vm.selectedNodeIds).toEqual([ 'b' ])
+      vm.select(vm.forest.nodeMap.b)
+      expect(vm.forest.selectedNodeIds).toEqual([ 'b' ])
+      vm.select(vm.forest.nodeMap.a)
+      expect(vm.forest.selectedNodeIds).toEqual([ 'b' ])
     })
 
     it('nested', () => {
@@ -774,26 +774,26 @@ describe('Disable Item Selection', () => {
       })
       const { vm } = wrapper
 
-      vm.select(vm.nodeMap.a)
-      expect(vm.selectedNodeIds).toEqual([])
-      vm.select(vm.nodeMap.aa)
-      expect(vm.selectedNodeIds).toEqual([])
-      vm.select(vm.nodeMap.b)
-      expect(vm.selectedNodeIds).toEqual([ 'b' ])
-      vm.select(vm.nodeMap.ba)
-      expect(vm.selectedNodeIds).toEqual([ 'b' ])
-      vm.select(vm.nodeMap.bb)
-      expect(vm.selectedNodeIds).toEqual([ 'bb' ])
-      vm.select(vm.nodeMap.c)
-      expect(vm.selectedNodeIds).toEqual([ 'c' ])
-      vm.select(vm.nodeMap.ca)
-      expect(vm.selectedNodeIds).toEqual([ 'c' ])
-      vm.select(vm.nodeMap.cb)
-      expect(vm.selectedNodeIds).toEqual([ 'cb' ])
-      vm.select(vm.nodeMap.cba)
-      expect(vm.selectedNodeIds).toEqual([ 'cb' ])
-      vm.select(vm.nodeMap.cbb)
-      expect(vm.selectedNodeIds).toEqual([ 'cbb' ])
+      vm.select(vm.forest.nodeMap.a)
+      expect(vm.forest.selectedNodeIds).toEqual([])
+      vm.select(vm.forest.nodeMap.aa)
+      expect(vm.forest.selectedNodeIds).toEqual([])
+      vm.select(vm.forest.nodeMap.b)
+      expect(vm.forest.selectedNodeIds).toEqual([ 'b' ])
+      vm.select(vm.forest.nodeMap.ba)
+      expect(vm.forest.selectedNodeIds).toEqual([ 'b' ])
+      vm.select(vm.forest.nodeMap.bb)
+      expect(vm.forest.selectedNodeIds).toEqual([ 'bb' ])
+      vm.select(vm.forest.nodeMap.c)
+      expect(vm.forest.selectedNodeIds).toEqual([ 'c' ])
+      vm.select(vm.forest.nodeMap.ca)
+      expect(vm.forest.selectedNodeIds).toEqual([ 'c' ])
+      vm.select(vm.forest.nodeMap.cb)
+      expect(vm.forest.selectedNodeIds).toEqual([ 'cb' ])
+      vm.select(vm.forest.nodeMap.cba)
+      expect(vm.forest.selectedNodeIds).toEqual([ 'cb' ])
+      vm.select(vm.forest.nodeMap.cbb)
+      expect(vm.forest.selectedNodeIds).toEqual([ 'cbb' ])
     })
   })
 
@@ -820,12 +820,12 @@ describe('Disable Item Selection', () => {
         })
         const { vm } = wrapper
 
-        vm.select(vm.nodeMap.a)
-        expect(vm.selectedNodeIds).toEqual([ 'a' ])
-        vm.select(vm.nodeMap.b)
-        expect(vm.selectedNodeIds).toEqual([ 'a' ])
-        vm.select(vm.nodeMap.c)
-        expect(vm.selectedNodeIds).toEqual([ 'a', 'c' ])
+        vm.select(vm.forest.nodeMap.a)
+        expect(vm.forest.selectedNodeIds).toEqual([ 'a' ])
+        vm.select(vm.forest.nodeMap.b)
+        expect(vm.forest.selectedNodeIds).toEqual([ 'a' ])
+        vm.select(vm.forest.nodeMap.c)
+        expect(vm.forest.selectedNodeIds).toEqual([ 'a', 'c' ])
       })
 
       it('disabled parent node', () => {
@@ -891,8 +891,8 @@ describe('Disable Item Selection', () => {
         //   {v} c
         //    |--{v} ca
         //    |--{v} cb
-        vm.select(vm.nodeMap.a)
-        expect(vm.selectedNodeIds).toEqual([ 'ba', 'c', 'ca', 'cb' ])
+        vm.select(vm.forest.nodeMap.a)
+        expect(vm.forest.selectedNodeIds).toEqual([ 'ba', 'c', 'ca', 'cb' ])
 
         // current:
         //   { } a
@@ -914,8 +914,8 @@ describe('Disable Item Selection', () => {
         //   {v} c
         //    |--{v} ca
         //    |--{v} cb
-        vm.select(vm.nodeMap.b)
-        expect(vm.selectedNodeIds).toEqual([ 'ba', 'c', 'ca', 'cb' ])
+        vm.select(vm.forest.nodeMap.b)
+        expect(vm.forest.selectedNodeIds).toEqual([ 'ba', 'c', 'ca', 'cb' ])
 
         // current:
         //   { } a
@@ -937,8 +937,8 @@ describe('Disable Item Selection', () => {
         //   {v} c
         //    |--{v} ca
         //    |--{v} cb
-        vm.select(vm.nodeMap.c)
-        expect(vm.selectedNodeIds).toEqual([ 'ba', 'c', 'ca', 'cb' ])
+        vm.select(vm.forest.nodeMap.c)
+        expect(vm.forest.selectedNodeIds).toEqual([ 'ba', 'c', 'ca', 'cb' ])
       })
 
       it('disabled child node', () => {
@@ -1029,8 +1029,8 @@ describe('Disable Item Selection', () => {
         //    |--{v} da
         //    |--{ } db
         //    |--[ ] dc
-        vm.select(vm.nodeMap.a)
-        expect(vm.selectedNodeIds).toEqual([ 'aa', 'b', 'ba', 'bb', 'da' ])
+        vm.select(vm.forest.nodeMap.a)
+        expect(vm.forest.selectedNodeIds).toEqual([ 'aa', 'b', 'ba', 'bb', 'da' ])
 
         // current:
         //   [-] a
@@ -1060,8 +1060,8 @@ describe('Disable Item Selection', () => {
         //    |--{v} da
         //    |--{ } db
         //    |--[ ] dc
-        vm.select(vm.nodeMap.ab)
-        expect(vm.selectedNodeIds).toEqual([ 'aa', 'b', 'ba', 'bb', 'da', 'ab', 'a' ])
+        vm.select(vm.forest.nodeMap.ab)
+        expect(vm.forest.selectedNodeIds).toEqual([ 'aa', 'b', 'ba', 'bb', 'da', 'ab', 'a' ])
 
         // current:
         //   [v] a <- deselect
@@ -1091,8 +1091,8 @@ describe('Disable Item Selection', () => {
         //    |--{v} da
         //    |--{ } db
         //    |--[ ] dc
-        vm.select(vm.nodeMap.a)
-        expect(vm.selectedNodeIds).toEqual([ 'aa', 'b', 'ba', 'bb', 'da' ])
+        vm.select(vm.forest.nodeMap.a)
+        expect(vm.forest.selectedNodeIds).toEqual([ 'aa', 'b', 'ba', 'bb', 'da' ])
 
         // current:
         //   [-] a
@@ -1122,8 +1122,8 @@ describe('Disable Item Selection', () => {
         //    |--{v} da
         //    |--{ } db
         //    |--[ ] dc
-        vm.select(vm.nodeMap.ab)
-        expect(vm.selectedNodeIds).toEqual([ 'aa', 'b', 'ba', 'bb', 'da', 'ab', 'a' ])
+        vm.select(vm.forest.nodeMap.ab)
+        expect(vm.forest.selectedNodeIds).toEqual([ 'aa', 'b', 'ba', 'bb', 'da', 'ab', 'a' ])
 
         // current:
         //   [-] a
@@ -1153,8 +1153,8 @@ describe('Disable Item Selection', () => {
         //    |--{v} da
         //    |--{ } db
         //    |--[ ] dc
-        vm.select(vm.nodeMap.b)
-        expect(vm.selectedNodeIds).toEqual([ 'aa', 'b', 'ba', 'bb', 'da', 'ab', 'a' ])
+        vm.select(vm.forest.nodeMap.b)
+        expect(vm.forest.selectedNodeIds).toEqual([ 'aa', 'b', 'ba', 'bb', 'da', 'ab', 'a' ])
 
         // current:
         //   [-] a
@@ -1184,8 +1184,8 @@ describe('Disable Item Selection', () => {
         //    |--{v} da
         //    |--{ } db
         //    |--[ ] dc
-        vm.select(vm.nodeMap.c)
-        expect(vm.selectedNodeIds).toEqual([ 'aa', 'b', 'ba', 'bb', 'da', 'ab', 'a' ])
+        vm.select(vm.forest.nodeMap.c)
+        expect(vm.forest.selectedNodeIds).toEqual([ 'aa', 'b', 'ba', 'bb', 'da', 'ab', 'a' ])
 
         // current:
         //   [-] a
@@ -1215,8 +1215,8 @@ describe('Disable Item Selection', () => {
         //    |--{v} da
         //    |--{ } db
         //    |--[ ] dc
-        vm.select(vm.nodeMap.d)
-        expect(vm.selectedNodeIds).toEqual([ 'aa', 'b', 'ba', 'bb', 'da', 'ab', 'a' ])
+        vm.select(vm.forest.nodeMap.d)
+        expect(vm.forest.selectedNodeIds).toEqual([ 'aa', 'b', 'ba', 'bb', 'da', 'ab', 'a' ])
 
         // current:
         //   [-] a
@@ -1246,8 +1246,8 @@ describe('Disable Item Selection', () => {
         //    |--{v} da
         //    |--{ } db
         //    |--[v] dc
-        vm.select(vm.nodeMap.dc)
-        expect(vm.selectedNodeIds).toEqual([ 'aa', 'b', 'ba', 'bb', 'da', 'ab', 'a', 'dc' ])
+        vm.select(vm.forest.nodeMap.dc)
+        expect(vm.forest.selectedNodeIds).toEqual([ 'aa', 'b', 'ba', 'bb', 'da', 'ab', 'a', 'dc' ])
 
         // current:
         //   [-] a
@@ -1277,8 +1277,8 @@ describe('Disable Item Selection', () => {
         //    |--{v} da
         //    |--{ } db
         //    |--[ ] dc
-        vm.select(vm.nodeMap.d)
-        expect(vm.selectedNodeIds).toEqual([ 'aa', 'b', 'ba', 'bb', 'da', 'ab', 'a' ])
+        vm.select(vm.forest.nodeMap.d)
+        expect(vm.forest.selectedNodeIds).toEqual([ 'aa', 'b', 'ba', 'bb', 'da', 'ab', 'a' ])
       })
 
       it('nested', () => {
@@ -1333,8 +1333,8 @@ describe('Disable Item Selection', () => {
         //    |--[-] ab
         //    |   |--{v} aba
         //    |   |--[ ] abb
-        vm.select(vm.nodeMap.a)
-        expect(vm.selectedNodeIds).toEqual([ 'aa', 'aaa', 'aab', 'aba' ])
+        vm.select(vm.forest.nodeMap.a)
+        expect(vm.forest.selectedNodeIds).toEqual([ 'aa', 'aaa', 'aab', 'aba' ])
 
         // current:
         //   [-] a
@@ -1352,8 +1352,8 @@ describe('Disable Item Selection', () => {
         //    |--[-] ab
         //    |   |--{v} aba
         //    |   |--[ ] abb
-        vm.select(vm.nodeMap.ab)
-        expect(vm.selectedNodeIds).toEqual([ 'aa', 'aaa', 'aab', 'aba' ])
+        vm.select(vm.forest.nodeMap.ab)
+        expect(vm.forest.selectedNodeIds).toEqual([ 'aa', 'aaa', 'aab', 'aba' ])
 
         // current:
         //   [-] a
@@ -1371,8 +1371,8 @@ describe('Disable Item Selection', () => {
         //    |--[v] ab
         //    |   |--{v} aba
         //    |   |--[v] abb
-        vm.select(vm.nodeMap.abb)
-        expect(vm.selectedNodeIds).toEqual([ 'aa', 'aaa', 'aab', 'aba', 'abb', 'ab', 'a' ])
+        vm.select(vm.forest.nodeMap.abb)
+        expect(vm.forest.selectedNodeIds).toEqual([ 'aa', 'aaa', 'aab', 'aba', 'abb', 'ab', 'a' ])
       })
     })
 
@@ -1406,18 +1406,18 @@ describe('Disable Item Selection', () => {
         })
         const { vm } = wrapper
 
-        vm.select(vm.nodeMap.a)
-        expect(vm.selectedNodeIds).toEqual([])
-        vm.select(vm.nodeMap.aa)
-        expect(vm.selectedNodeIds).toEqual([ 'aa' ])
-        vm.select(vm.nodeMap.aa)
-        expect(vm.selectedNodeIds).toEqual([])
-        vm.select(vm.nodeMap.b)
-        expect(vm.selectedNodeIds).toEqual([ 'b' ])
-        vm.select(vm.nodeMap.ba)
-        expect(vm.selectedNodeIds).toEqual([ 'b' ])
-        vm.select(vm.nodeMap.bb)
-        expect(vm.selectedNodeIds).toEqual([ 'b', 'bb' ])
+        vm.select(vm.forest.nodeMap.a)
+        expect(vm.forest.selectedNodeIds).toEqual([])
+        vm.select(vm.forest.nodeMap.aa)
+        expect(vm.forest.selectedNodeIds).toEqual([ 'aa' ])
+        vm.select(vm.forest.nodeMap.aa)
+        expect(vm.forest.selectedNodeIds).toEqual([])
+        vm.select(vm.forest.nodeMap.b)
+        expect(vm.forest.selectedNodeIds).toEqual([ 'b' ])
+        vm.select(vm.forest.nodeMap.ba)
+        expect(vm.forest.selectedNodeIds).toEqual([ 'b' ])
+        vm.select(vm.forest.nodeMap.bb)
+        expect(vm.forest.selectedNodeIds).toEqual([ 'b', 'bb' ])
       })
 
       it('nested', () => {
@@ -1446,14 +1446,14 @@ describe('Disable Item Selection', () => {
         })
         const { vm } = wrapper
 
-        vm.select(vm.nodeMap.a)
-        expect(vm.selectedNodeIds).toEqual([ 'a' ])
-        vm.select(vm.nodeMap.aa)
-        expect(vm.selectedNodeIds).toEqual([ 'a' ])
-        vm.select(vm.nodeMap.aaa)
-        expect(vm.selectedNodeIds).toEqual([ 'a' ])
-        vm.select(vm.nodeMap.aab)
-        expect(vm.selectedNodeIds).toEqual([ 'a', 'aab' ])
+        vm.select(vm.forest.nodeMap.a)
+        expect(vm.forest.selectedNodeIds).toEqual([ 'a' ])
+        vm.select(vm.forest.nodeMap.aa)
+        expect(vm.forest.selectedNodeIds).toEqual([ 'a' ])
+        vm.select(vm.forest.nodeMap.aaa)
+        expect(vm.forest.selectedNodeIds).toEqual([ 'a' ])
+        vm.select(vm.forest.nodeMap.aab)
+        expect(vm.forest.selectedNodeIds).toEqual([ 'a', 'aab' ])
       })
     })
   })

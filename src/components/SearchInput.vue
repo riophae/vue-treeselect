@@ -47,7 +47,7 @@
       },
 
       onFocus() {
-        this.instance.isFocused = true
+        this.instance.trigger.isFocused = true
         // istanbul ignore else
         if (this.instance.openOnFocus) this.instance.openMenu()
       },
@@ -60,12 +60,12 @@
           return
         }
 
-        this.instance.isFocused = false
+        this.instance.trigger.isFocused = false
         this.instance.closeMenu()
       },
 
       onInput(evt) {
-        this.instance.searchQuery = evt.target.value
+        this.instance.trigger.searchQuery = evt.target.value
       },
 
       // 用 keyUp 事件存在一个问题，删除输入框最后一个字符也会导致取消选中最后一项
@@ -76,28 +76,28 @@
         // https://css-tricks.com/snippets/javascript/javascript-keycodes/
         // https://stackoverflow.com/questions/4471582/javascript-keycode-vs-which
         const key = 'which' in evt ? evt.which : /* istanbul ignore next */ evt.keyCode
-        if (!this.instance.isOpen && keysThatRequireMenuBeingOpen.indexOf(key) !== -1) {
+        if (!this.instance.menu.isOpen && keysThatRequireMenuBeingOpen.indexOf(key) !== -1) {
           return this.instance.openMenu()
         }
 
         switch (key) {
         case KEY_CODES.BACKSPACE: {
-          if (this.instance.backspaceRemoves && !this.instance.searchQuery.length) {
+          if (this.instance.backspaceRemoves && !this.instance.trigger.searchQuery.length) {
             this.instance.removeLastValue()
           }
           break
         }
         case KEY_CODES.ENTER: {
           evt.preventDefault()
-          const current = this.instance.getNode(this.instance.current)
+          const current = this.instance.getNode(this.instance.menu.current)
           if (current.isBranch && this.instance.disableBranchNodes) return
           this.instance.select(current)
           break
         }
         case KEY_CODES.ESCAPE: {
-          if (this.instance.searchQuery.length) {
-            this.instance.searchQuery = ''
-          } else if (this.instance.isOpen) {
+          if (this.instance.trigger.searchQuery.length) {
+            this.instance.trigger.searchQuery = ''
+          } else if (this.instance.menu.isOpen) {
             this.instance.closeMenu()
           } else if (this.instance.escapeClearsValue) {
             this.instance.clear()
@@ -115,7 +115,7 @@
           break
         }
         case KEY_CODES.ARROW_LEFT: {
-          const current = this.instance.getNode(this.instance.current)
+          const current = this.instance.getNode(this.instance.menu.current)
           if (current.isBranch && this.instance.shouldExpand(current)) {
             evt.preventDefault()
             this.instance.toggleExpanded(current)
@@ -131,7 +131,7 @@
           break
         }
         case KEY_CODES.ARROW_RIGHT: {
-          const current = this.instance.getNode(this.instance.current)
+          const current = this.instance.getNode(this.instance.menu.current)
           if (current.isBranch && !this.instance.shouldExpand(current)) {
             evt.preventDefault()
             this.instance.toggleExpanded(current)
@@ -144,7 +144,7 @@
           break
         }
         case KEY_CODES.DELETE: {
-          if (this.instance.deleteRemoves && !this.instance.searchQuery.length) {
+          if (this.instance.deleteRemoves && !this.instance.trigger.searchQuery.length) {
             this.instance.removeLastValue()
           }
           break
@@ -158,7 +158,7 @@
 
       onMouseDown(evt) {
         // istanbul ignore next
-        if (this.instance.searchQuery.length) {
+        if (this.instance.trigger.searchQuery.length) {
           // Prevent it from bubbling to the top level and triggering `preventDefault()`
           // to make the textbox unselectable
           evt.stopPropagation()
@@ -208,7 +208,7 @@
             required: this.instance.required && !this.instance.hasValue,
           },
           domProps: {
-            value: this.instance.searchQuery,
+            value: this.instance.trigger.searchQuery,
           },
           style: {
             width: this.needsAutoSize ? `${this.inputWidth}px` : null,
@@ -228,7 +228,7 @@
         return h('div', {
           class: 'vue-treeselect__sizer',
           domProps: {
-            textContent: this.instance.searchQuery,
+            textContent: this.instance.trigger.searchQuery,
           },
           ref: 'sizer',
         })

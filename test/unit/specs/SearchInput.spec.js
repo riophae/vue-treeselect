@@ -23,9 +23,9 @@ describe('Search Input', () => {
       },
     })
 
-    expect(wrapper.vm.isFocused).toBe(false)
+    expect(wrapper.vm.trigger.isFocused).toBe(false)
     wrapper.vm.focusInput()
-    expect(wrapper.vm.isFocused).toBe(false)
+    expect(wrapper.vm.trigger.isFocused).toBe(false)
   })
 
   it('when multiple=true, input should fit the width of user-input text', async () => {

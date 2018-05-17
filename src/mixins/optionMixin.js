@@ -10,7 +10,7 @@ export default {
 
   computed: {
     checkedState() {
-      return this.instance.nodeCheckedStateMap[this.node.id]
+      return this.instance.forest.checkedStateMap[this.node.id]
     },
 
     shouldExpand() {
@@ -20,15 +20,15 @@ export default {
 
     shouldShowCount() {
       if (!this.node.isBranch) return false
-      return this.instance.searching
+      return this.instance.localSearch.active
         ? this.instance.showCountOnSearchComputed
         : this.instance.showCount
     },
 
     count() {
       if (!this.shouldShowCount) return NaN
-      return this.instance.searching
-        ? this.instance.searchingCount[this.node.id][this.instance.showCountOf]
+      return this.instance.localSearch.active
+        ? this.instance.localSearch.countMap[this.node.id][this.instance.showCountOf]
         : this.node.count[this.instance.showCountOf]
     },
 

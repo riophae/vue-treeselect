@@ -103,7 +103,7 @@ export function constant(x) {
   return () => x
 }
 
-export function createEmptyObjectWithoutPrototype() {
+export function createMap() {
   return Object.create(null)
 }
 

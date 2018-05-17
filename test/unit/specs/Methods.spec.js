@@ -17,7 +17,7 @@ describe('Methods', () => {
         },
       })
       const { vm } = wrapper
-      const { a } = vm.nodeMap
+      const { a } = vm.forest.nodeMap
 
       expect(a.isExpanded).toBe(false)
       wrapper.vm.toggleExpanded(a)
@@ -37,11 +37,11 @@ describe('Methods', () => {
     })
     const { vm } = wrapper
 
-    expect(vm.isFocused).toBe(false)
+    expect(vm.trigger.isFocused).toBe(false)
     wrapper.vm.focusInput()
-    expect(vm.isFocused).toBe(true)
+    expect(vm.trigger.isFocused).toBe(true)
     wrapper.vm.blurInput()
-    expect(vm.isFocused).toBe(false)
+    expect(vm.trigger.isFocused).toBe(false)
   })
 
   describe('openMenu()', () => {
@@ -53,38 +53,35 @@ describe('Methods', () => {
           options: [],
         },
       })
-      expect(wrapper.vm.isOpen).toBe(false)
+      expect(wrapper.vm.menu.isOpen).toBe(false)
     })
 
     it('should activate the menu', () => {
       wrapper.vm.openMenu()
-      expect(wrapper.vm.isOpen).toBe(true)
+      expect(wrapper.vm.menu.isOpen).toBe(true)
     })
 
     it('should ignore when disabled=true', () => {
       wrapper.setProps({ disabled: true })
       wrapper.vm.openMenu()
-      expect(wrapper.vm.isOpen).toBe(false)
+      expect(wrapper.vm.menu.isOpen).toBe(false)
     })
   })
 
   describe('closeMenu()', () => {
-    let wrapper
-
-    beforeEach(() => {
-      wrapper = mount(Treeselect, {
+    it('should close the menu', () => {
+      const wrapper = mount(Treeselect, {
         propsData: {
           options: [],
         },
-        data: {
-          isOpen: true,
-        },
       })
-    })
+      const { vm } = wrapper
 
-    it('should close the menu', () => {
-      wrapper.vm.closeMenu()
-      expect(wrapper.vm.isOpen).toBe(false)
+      vm.openMenu()
+      expect(wrapper.vm.menu.isOpen).toBe(true)
+
+      vm.closeMenu()
+      expect(wrapper.vm.menu.isOpen).toBe(false)
     })
   })
 

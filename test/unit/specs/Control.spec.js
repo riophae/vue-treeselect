@@ -13,8 +13,8 @@ describe('Control', () => {
     const arrow = wrapper.find('.vue-treeselect__control-arrow-container')
 
     leftClick(arrow)
-    expect(wrapper.vm.isOpen).toBe(true)
+    expect(wrapper.vm.menu.isOpen).toBe(true)
     leftClick(arrow)
-    expect(wrapper.vm.isOpen).toBe(false)
+    expect(wrapper.vm.menu.isOpen).toBe(false)
   })
 })

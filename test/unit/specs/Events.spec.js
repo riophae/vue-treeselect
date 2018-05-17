@@ -30,10 +30,8 @@ describe('Events', () => {
           multiple: true,
           value: [ 'ab' ],
         },
-        data: {
-          isOpen: true,
-        },
       })
+      wrapper.vm.openMenu()
     })
 
     it('click on option label or checkbox', () => {

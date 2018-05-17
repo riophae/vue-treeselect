@@ -38,7 +38,7 @@ describe('Keyboard Support', () => {
       const { vm } = wrapper
 
       keyPressor(wrapper)
-      expect(vm.isOpen).toBe(true)
+      expect(vm.menu.isOpen).toBe(true)
     })
   })
 
@@ -61,28 +61,28 @@ describe('Keyboard Support', () => {
         },
       })
 
-      expect(wrapper.vm.searchQuery).toBe('')
-      expect(wrapper.vm.selectedNodeIds).toEqual([ 'a', 'b' ])
+      expect(wrapper.vm.trigger.searchQuery).toBe('')
+      expect(wrapper.vm.forest.selectedNodeIds).toEqual([ 'a', 'b' ])
     })
 
     it('should remove the last value if search input is empty', () => {
       pressBackspaceKey(wrapper)
-      expect(wrapper.vm.selectedNodeIds).toEqual([ 'a' ])
+      expect(wrapper.vm.forest.selectedNodeIds).toEqual([ 'a' ])
       pressBackspaceKey(wrapper)
-      expect(wrapper.vm.selectedNodeIds).toEqual([])
+      expect(wrapper.vm.forest.selectedNodeIds).toEqual([])
     })
 
     it('should do nothing if search input has value', async () => {
       await typeSearchText(wrapper, 'test')
-      expect(wrapper.vm.searchQuery).toBe('test')
+      expect(wrapper.vm.trigger.searchQuery).toBe('test')
       pressBackspaceKey(wrapper)
-      expect(wrapper.vm.selectedNodeIds).toEqual([ 'a', 'b' ])
+      expect(wrapper.vm.forest.selectedNodeIds).toEqual([ 'a', 'b' ])
     })
 
     it('should do nothing when backspaceRemoves=false', () => {
       wrapper.setProps({ backspaceRemoves: false })
       pressBackspaceKey(wrapper)
-      expect(wrapper.vm.selectedNodeIds).toEqual([ 'a', 'b' ])
+      expect(wrapper.vm.forest.selectedNodeIds).toEqual([ 'a', 'b' ])
     })
   })
 
@@ -112,8 +112,8 @@ describe('Keyboard Support', () => {
       })
       vm = wrapper.vm
 
-      expect(vm.isOpen).toBe(true)
-      expect(vm.current).toBe('a')
+      expect(vm.menu.isOpen).toBe(true)
+      expect(vm.menu.current).toBe('a')
     })
 
     it('select or deselect option using enter key (single-select)', () => {
@@ -124,8 +124,8 @@ describe('Keyboard Support', () => {
       pressEnterKey(wrapper)
       expect(vm.internalValue).toEqual([ 'a' ])
 
-      vm.setCurrentHighlightedOption(vm.nodeMap.b)
-      expect(vm.current).toBe('b')
+      vm.setCurrentHighlightedOption(vm.forest.nodeMap.b)
+      expect(vm.menu.current).toBe('b')
       pressEnterKey(wrapper)
       expect(vm.internalValue).toEqual([ 'b' ])
     })
@@ -138,16 +138,16 @@ describe('Keyboard Support', () => {
       pressEnterKey(wrapper)
       expect(vm.internalValue).toEqual([])
 
-      vm.setCurrentHighlightedOption(vm.nodeMap.b)
-      expect(vm.current).toBe('b')
+      vm.setCurrentHighlightedOption(vm.forest.nodeMap.b)
+      expect(vm.menu.current).toBe('b')
       pressEnterKey(wrapper)
       expect(vm.internalValue).toEqual([ 'b' ])
     })
 
     it('pressing enter key on a disabled option should be no-op', () => {
-      vm.setCurrentHighlightedOption(vm.nodeMap.c)
-      expect(vm.current).toBe('c')
-      expect(vm.nodeMap.c.isDisabled).toBe(true)
+      vm.setCurrentHighlightedOption(vm.forest.nodeMap.c)
+      expect(vm.menu.current).toBe('c')
+      expect(vm.forest.nodeMap.c.isDisabled).toBe(true)
       pressEnterKey(wrapper)
       expect(vm.internalValue).toEqual([])
     })
@@ -155,9 +155,9 @@ describe('Keyboard Support', () => {
     it('pressing enter key on a branch node when disabledBranchNodes=true should be no-op', () => {
       wrapper.setProps({ disableBranchNodes: true })
 
-      vm.setCurrentHighlightedOption(vm.nodeMap.d)
-      expect(vm.current).toBe('d')
-      expect(vm.nodeMap.d.isBranch).toBe(true)
+      vm.setCurrentHighlightedOption(vm.forest.nodeMap.d)
+      expect(vm.menu.current).toBe('d')
+      expect(vm.forest.nodeMap.d.isBranch).toBe(true)
       pressEnterKey(wrapper)
       expect(vm.internalValue).toEqual([])
     })
@@ -187,38 +187,38 @@ describe('Keyboard Support', () => {
     it('should reset search query if input has value', async () => {
       await typeSearchText(wrapper, 'test')
       pressEscapeKey(wrapper)
-      expect(vm.searchQuery).toBe('')
-      expect(vm.selectedNodeIds).toEqual([ 'a', 'b' ])
+      expect(vm.trigger.searchQuery).toBe('')
+      expect(vm.forest.selectedNodeIds).toEqual([ 'a', 'b' ])
     })
 
     it('should close the menu if input is empty', () => {
       wrapper.vm.openMenu()
-      expect(vm.searchQuery).toBe('')
-      expect(vm.selectedNodeIds).toEqual([ 'a', 'b' ])
+      expect(vm.trigger.searchQuery).toBe('')
+      expect(vm.forest.selectedNodeIds).toEqual([ 'a', 'b' ])
 
       pressEscapeKey(wrapper)
-      expect(vm.searchQuery).toBe('')
-      expect(vm.selectedNodeIds).toEqual([ 'a', 'b' ])
-      expect(vm.isOpen).toBe(false)
+      expect(vm.trigger.searchQuery).toBe('')
+      expect(vm.forest.selectedNodeIds).toEqual([ 'a', 'b' ])
+      expect(vm.menu.isOpen).toBe(false)
     })
 
     it('should reset value if menu is closed', () => {
-      expect(vm.searchQuery).toBe('')
-      expect(vm.selectedNodeIds).toEqual([ 'a', 'b' ])
-      expect(vm.isOpen).toBe(false)
+      expect(vm.trigger.searchQuery).toBe('')
+      expect(vm.forest.selectedNodeIds).toEqual([ 'a', 'b' ])
+      expect(vm.menu.isOpen).toBe(false)
 
       pressEscapeKey(wrapper)
-      expect(vm.searchQuery).toBe('')
-      expect(vm.selectedNodeIds).toEqual([])
-      expect(vm.isOpen).toBe(false)
+      expect(vm.trigger.searchQuery).toBe('')
+      expect(vm.forest.selectedNodeIds).toEqual([])
+      expect(vm.menu.isOpen).toBe(false)
     })
 
     it('should not reset value when escapeClearsValue=false', () => {
       wrapper.setProps({ escapeClearsValue: false })
       pressEscapeKey(wrapper)
-      expect(vm.searchQuery).toBe('')
-      expect(vm.selectedNodeIds).toEqual([ 'a', 'b' ])
-      expect(vm.isOpen).toBe(false)
+      expect(vm.trigger.searchQuery).toBe('')
+      expect(vm.forest.selectedNodeIds).toEqual([ 'a', 'b' ])
+      expect(vm.menu.isOpen).toBe(false)
     })
   })
 
@@ -239,39 +239,39 @@ describe('Keyboard Support', () => {
 
     it('preparation', () => {
       vm.openMenu()
-      vm.setCurrentHighlightedOption(vm.nodeMap.b)
-      expect(vm.current).toBe('b')
+      vm.setCurrentHighlightedOption(vm.forest.nodeMap.b)
+      expect(vm.menu.current).toBe('b')
     })
 
     it('move to the first option using home key', () => {
       pressHomeKey(wrapper)
-      expect(vm.current).toBe('a')
+      expect(vm.menu.current).toBe('a')
     })
 
     it('move to the last option using end key', () => {
       pressEndKey(wrapper)
-      expect(vm.current).toBe('c')
+      expect(vm.menu.current).toBe('c')
     })
 
     it('with nested options', () => {
       [ 'a', 'b', 'c' ].forEach(branchNodeId => {
-        const branchNode = vm.nodeMap[branchNodeId]
+        const branchNode = vm.forest.nodeMap[branchNodeId]
         vm.toggleExpanded(branchNode)
         expect(branchNode.isExpanded).toBe(true)
       })
 
       pressHomeKey(wrapper)
-      expect(vm.current).toBe('a')
+      expect(vm.menu.current).toBe('a')
       pressEndKey(wrapper)
-      expect(vm.current).toBe('cb')
+      expect(vm.menu.current).toBe('cb')
     })
 
     it('when searching', async () => {
       await typeSearchText(wrapper, 'ba')
       pressHomeKey(wrapper)
-      expect(vm.current).toBe('b')
+      expect(vm.menu.current).toBe('b')
       pressEndKey(wrapper)
-      expect(vm.current).toBe('ba')
+      expect(vm.menu.current).toBe('ba')
     })
   })
 
@@ -288,7 +288,7 @@ describe('Keyboard Support', () => {
           index = 0
           cycleToTop = true
         }
-        expect(vm.current).toBe(idListOfVisibleOptions[index])
+        expect(vm.menu.current).toBe(idListOfVisibleOptions[index])
       }
 
       for (let i = 0; i < idListOfVisibleOptions.length * 2; i++) {
@@ -297,7 +297,7 @@ describe('Keyboard Support', () => {
           index = idListOfVisibleOptions.length - 1
           cycleToBottom = true
         }
-        expect(vm.current).toBe(idListOfVisibleOptions[index])
+        expect(vm.menu.current).toBe(idListOfVisibleOptions[index])
       }
 
       expect(cycleToTop && cycleToBottom).toBe(true)
@@ -341,7 +341,7 @@ describe('Keyboard Support', () => {
       const { vm } = wrapper
 
       vm.openMenu()
-      expect(vm.current).toBe('a')
+      expect(vm.menu.current).toBe('a')
       moveAround(wrapper, [ 'a', 'aa', 'ab', 'aba', 'abb', 'b', 'ba', 'baa' ])
     })
 
@@ -361,14 +361,14 @@ describe('Keyboard Support', () => {
       const { vm } = wrapper
 
       vm.openMenu()
-      expect(vm.current).toBe('a')
+      expect(vm.menu.current).toBe('a')
 
       await typeSearchText(wrapper, 'a')
-      expect(vm.current).toBe('a')
+      expect(vm.menu.current).toBe('a')
       moveAround(wrapper, [ 'a', 'aa', 'ab', 'b', 'ba', 'c', 'ca' ])
 
       await typeSearchText(wrapper, 'bb')
-      expect(vm.current).toBe('b')
+      expect(vm.menu.current).toBe('b')
       moveAround(wrapper, [ 'b', 'bb' ])
     })
   })
@@ -399,71 +399,71 @@ describe('Keyboard Support', () => {
       vm = wrapper.vm
 
       vm.openMenu()
-      expect(vm.current).toBe('a')
+      expect(vm.menu.current).toBe('a')
     })
 
     it('toggle expanded state', () => {
       pressArrowRight(wrapper)
-      expect(vm.nodeMap.a.isExpanded).toBe(true)
+      expect(vm.forest.nodeMap.a.isExpanded).toBe(true)
       pressArrowLeft(wrapper)
-      expect(vm.nodeMap.a.isExpanded).toBe(false)
+      expect(vm.forest.nodeMap.a.isExpanded).toBe(false)
     })
 
     it('when a leaf node is highlighted, press arrow left to jump to its parent', () => {
-      vm.toggleExpanded(vm.nodeMap.a)
-      expect(vm.nodeMap.a.isExpanded).toBe(true)
-      vm.setCurrentHighlightedOption(vm.nodeMap.aa)
-      expect(vm.current).toBe('aa')
+      vm.toggleExpanded(vm.forest.nodeMap.a)
+      expect(vm.forest.nodeMap.a.isExpanded).toBe(true)
+      vm.setCurrentHighlightedOption(vm.forest.nodeMap.aa)
+      expect(vm.menu.current).toBe('aa')
       // should jump from aa to a
       pressArrowLeft(wrapper)
-      expect(vm.current).toBe('a')
+      expect(vm.menu.current).toBe('a')
 
-      vm.setCurrentHighlightedOption(vm.nodeMap.b)
-      expect(vm.current).toBe('b')
+      vm.setCurrentHighlightedOption(vm.forest.nodeMap.b)
+      expect(vm.menu.current).toBe('b')
       // should be no-op, since b is a root level node
       pressArrowLeft(wrapper)
-      expect(vm.current).toBe('b')
+      expect(vm.menu.current).toBe('b')
     })
 
     it('pressing arrow right on a leaf node should be no-op', () => {
-      vm.setCurrentHighlightedOption(vm.nodeMap.b)
-      expect(vm.current).toBe('b')
-      expect(vm.nodeMap.b.isLeaf).toBe(true)
+      vm.setCurrentHighlightedOption(vm.forest.nodeMap.b)
+      expect(vm.menu.current).toBe('b')
+      expect(vm.forest.nodeMap.b.isLeaf).toBe(true)
       pressArrowRight(wrapper)
-      expect(vm.current).toBe('b')
+      expect(vm.menu.current).toBe('b')
     })
 
     it('pressing arrow right on an expanded branch node should be no-op', () => {
-      expect(vm.current).toBe('a')
-      expect(vm.nodeMap.a.isBranch).toBe(true)
-      vm.toggleExpanded(vm.nodeMap.a)
-      expect(vm.nodeMap.a.isExpanded).toBe(true)
+      expect(vm.menu.current).toBe('a')
+      expect(vm.forest.nodeMap.a.isBranch).toBe(true)
+      vm.toggleExpanded(vm.forest.nodeMap.a)
+      expect(vm.forest.nodeMap.a.isExpanded).toBe(true)
       pressArrowRight(wrapper)
-      expect(vm.current).toBe('a')
+      expect(vm.menu.current).toBe('a')
     })
 
     it('when a branch node is collapsed, press arrow left to jump to its parent', () => {
-      vm.toggleExpanded(vm.nodeMap.a)
-      expect(vm.nodeMap.a.isExpanded).toBe(true)
-      vm.toggleExpanded(vm.nodeMap.ab)
-      expect(vm.nodeMap.ab.isExpanded).toBe(true)
-      vm.setCurrentHighlightedOption(vm.nodeMap.ab)
+      vm.toggleExpanded(vm.forest.nodeMap.a)
+      expect(vm.forest.nodeMap.a.isExpanded).toBe(true)
+      vm.toggleExpanded(vm.forest.nodeMap.ab)
+      expect(vm.forest.nodeMap.ab.isExpanded).toBe(true)
+      vm.setCurrentHighlightedOption(vm.forest.nodeMap.ab)
       // should collapse
       pressArrowLeft(wrapper)
-      expect(vm.nodeMap.ab.isExpanded).toBe(false)
+      expect(vm.forest.nodeMap.ab.isExpanded).toBe(false)
       pressArrowLeft(wrapper)
       // should jump from ab to a
-      expect(vm.current).toBe('a')
+      expect(vm.menu.current).toBe('a')
     })
 
     it('toggle expanded state when searching', async () => {
       await typeSearchText(wrapper, 'ab')
-      expect(vm.current).toBe('a')
-      expect(vm.nodeMap.a.isExpandedOnSearch).toBe(true)
+      expect(vm.menu.current).toBe('a')
+      expect(vm.forest.nodeMap.a.isExpandedOnSearch).toBe(true)
       pressArrowLeft(wrapper)
-      expect(vm.nodeMap.a.isExpandedOnSearch).toBe(false)
+      expect(vm.forest.nodeMap.a.isExpandedOnSearch).toBe(false)
       pressArrowRight(wrapper)
-      expect(vm.nodeMap.a.isExpandedOnSearch).toBe(true)
+      expect(vm.forest.nodeMap.a.isExpandedOnSearch).toBe(true)
     })
   })
 
@@ -529,28 +529,28 @@ describe('Keyboard Support', () => {
         },
       })
 
-      expect(wrapper.vm.searchQuery).toBe('')
-      expect(wrapper.vm.selectedNodeIds).toEqual([ 'a', 'b' ])
+      expect(wrapper.vm.trigger.searchQuery).toBe('')
+      expect(wrapper.vm.forest.selectedNodeIds).toEqual([ 'a', 'b' ])
     })
 
     it('should remove the last value if search input is empty', () => {
       pressDeleteKey(wrapper)
-      expect(wrapper.vm.selectedNodeIds).toEqual([ 'a' ])
+      expect(wrapper.vm.forest.selectedNodeIds).toEqual([ 'a' ])
       pressDeleteKey(wrapper)
-      expect(wrapper.vm.selectedNodeIds).toEqual([])
+      expect(wrapper.vm.forest.selectedNodeIds).toEqual([])
     })
 
     it('should do nothing if search input has value', async () => {
       await typeSearchText(wrapper, 'test')
-      expect(wrapper.vm.searchQuery).toBe('test')
+      expect(wrapper.vm.trigger.searchQuery).toBe('test')
       pressDeleteKey(wrapper)
-      expect(wrapper.vm.selectedNodeIds).toEqual([ 'a', 'b' ])
+      expect(wrapper.vm.forest.selectedNodeIds).toEqual([ 'a', 'b' ])
     })
 
     it('should do nothing when backspaceRemoves=false', () => {
       wrapper.setProps({ deleteRemoves: false })
       pressDeleteKey(wrapper)
-      expect(wrapper.vm.selectedNodeIds).toEqual([ 'a', 'b' ])
+      expect(wrapper.vm.forest.selectedNodeIds).toEqual([ 'a', 'b' ])
     })
   })
 
@@ -569,7 +569,7 @@ describe('Keyboard Support', () => {
       })
 
       pressEscapeKey(wrapper, modifierKey)
-      expect(wrapper.vm.selectedNodeIds).toEqual([ 'a' ])
+      expect(wrapper.vm.forest.selectedNodeIds).toEqual([ 'a' ])
     })
   })
 
@@ -580,8 +580,8 @@ describe('Keyboard Support', () => {
       },
     })
 
-    expect(wrapper.vm.isOpen).toBe(false)
+    expect(wrapper.vm.menu.isOpen).toBe(false)
     pressAKey(wrapper)
-    expect(wrapper.vm.isOpen).toBe(true)
+    expect(wrapper.vm.menu.isOpen).toBe(true)
   })
 })

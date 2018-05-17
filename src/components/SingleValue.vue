@@ -1,9 +1,9 @@
 <template>
   <div class="vue-treeselect__value-container">
-    <div v-if="instance.hasValue && !instance.searchQuery" class="vue-treeselect__single-value">
+    <div v-if="instance.hasValue && !instance.trigger.searchQuery" class="vue-treeselect__single-value">
       {{ instance.selectedNodes[0].label }}
     </div>
-    <placeholder v-else-if="!instance.searchQuery" />
+    <placeholder v-else-if="!instance.trigger.searchQuery" />
     <search-input key="input" ref="input" />
   </div>
 </template>
