@@ -3,6 +3,7 @@
  */
 
 @import "~google-material-color/dist/palette.less";
+@import "~easings-css/easings.less";
 
 /**
  * Variables
@@ -70,7 +71,7 @@
 @treeselect-arrow-size: 9px;
 @treeselect-arrow-color: #ccc;
 @treeselect-arrow-color-hover: @palette-Grey-700;
-@treeselect-arrow-transition-timing-function: ease-out-expo;
+@treeselect-arrow-transition-timing-function: @ease-out-expo;
 
 @treeselect-x-size: 8px;
 @treeselect-x-color: @treeselect-arrow-color;
@@ -271,11 +272,11 @@
   }
 
   &-enter-active {
-    transition-timing-function: ease-out-circ;
+    transition-timing-function: @ease-out-circ;
   }
 
   &-leave-active {
-    transition-timing-function: ease-out-cubic;
+    transition-timing-function: @ease-out-cubic;
     // trigger animation when element is removed
     position: absolute;
   }
@@ -287,7 +288,7 @@
   }
 
   &-move {
-    transition: @treeselect-transition-duration transform ease-out-quart;
+    transition: @treeselect-transition-duration transform @ease-out-quart;
   }
 }
 
@@ -348,7 +349,7 @@
   background: @treeselect-control-bg;
   transition-duration: @treeselect-transition-duration;
   transition-property: border-color, box-shadow, width, height, background-color, opacity;
-  transition-timing-function: ease-out-cubic;
+  transition-timing-function: @ease-out-cubic;
 
   .vue-treeselect:not(.vue-treeselect--disabled):not(.vue-treeselect--focused) &:hover {
     border-color: @treeselect-control-border-color-hover;
@@ -609,7 +610,7 @@
   .clickable();
 
   color: @treeselect-x-color;
-  animation: @treeselect-transition-duration vue-treeselect-animation-fade-in ease-out-circ;
+  animation: @treeselect-transition-duration vue-treeselect-animation-fade-in @ease-out-circ;
 
   &:hover {
     color: @treeselect-x-color-hover;
@@ -793,7 +794,7 @@
   border-style: solid;
   border-radius: @treeselect-border-radius-sm;
   position: relative;
-  transition: @treeselect-transition-duration all ease-out-circ;
+  transition: @treeselect-transition-duration all @ease-out-circ;
 }
 
 .vue-treeselect__check-mark,
