@@ -1458,7 +1458,7 @@ export default {
     verifyNodeShape(node) {
       warning(
         () => !(node.children === undefined && node.isBranch === true),
-        () => 'Are you meant to declares an unloaded branch node? ' +
+        () => 'Are you meant to declare an unloaded branch node? ' +
           '`isBranch: true` is no longer supported, please use `children: null` instead.'
       )
     },

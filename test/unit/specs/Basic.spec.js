@@ -628,7 +628,7 @@ describe('Basic', () => {
 
     expect(console.error).toHaveBeenCalledWith(
       '[Vue-Treeselect Warning]',
-      'Are you meant to declares an unloaded branch node? ' +
+      'Are you meant to declare an unloaded branch node? ' +
         '`isBranch: true` is no longer supported, please use `children: null` instead.'
     )
   })
