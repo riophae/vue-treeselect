@@ -920,14 +920,6 @@ export default {
       return this.forest.selectedNodeMap[node.id] === true
     },
 
-    checkIfBranchNode(node) {
-      warning(
-        () => node && node.isBranch,
-        // istanbul ignore next
-        () => `Expected a branch node, instead got: ${node}`
-      )
-    },
-
     stringifyValue(value) {
       return typeof value === 'string'
         ? value
@@ -1240,8 +1232,6 @@ export default {
     },
 
     toggleExpanded(node) {
-      this.checkIfBranchNode(node)
-
       if (this.localSearch.active) {
         node.isExpandedOnSearch = !node.isExpandedOnSearch
         if (node.isExpandedOnSearch) node.showAllChildrenOnSearch = true
