@@ -1441,6 +1441,8 @@ export default {
           callback()
         }, err => {
           callback(err)
+        }).catch(err => {
+          console.error(err)
         })
       }
     },
