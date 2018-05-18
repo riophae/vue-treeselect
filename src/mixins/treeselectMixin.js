@@ -769,7 +769,6 @@ export default {
       if (hasChanged) {
         this.forest.selectedNodeIds = newInternalValue
         this.completeSelectedNodeIdList()
-        this.buildForestState()
       }
     },
   },
@@ -801,7 +800,6 @@ export default {
         this.keepDataOfSelectedNodes(prevNodeMap)
         this.forest.normalizedOptions = this.normalize(NO_PARENT_NODE, rootOptions, prevNodeMap)
         this.completeSelectedNodeIdList()
-        this.buildForestState()
         this.forest.isLoaded = true
       } else {
         this.forest.normalizedOptions = []
@@ -895,11 +893,14 @@ export default {
       this.forest.selectedNodeIds = []
       this.forest.checkedStateMap = createMap()
       this.forest.selectedNodeMap = createMap()
+
       nodeIds.forEach(id => {
         if (this.forest.selectedNodeIds.indexOf(id) === -1) {
           this._selectNode(this.getNode(id), { ignoreDisabled: true })
         }
       })
+
+      this.buildForestState()
     },
 
     keepDataOfSelectedNodes(prevNodeMap) {
