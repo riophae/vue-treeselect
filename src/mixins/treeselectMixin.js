@@ -1101,12 +1101,12 @@ export default {
 
         if (isMatched) {
           this.localSearch.noResults = false
-          node.ancestors.forEach(ancestor => this.localSearch.countMap[ancestor.id].ALL_DESCENDANTS++)
-          if (node.isLeaf) node.ancestors.forEach(ancestor => this.localSearch.countMap[ancestor.id].LEAF_DESCENDANTS++)
+          node.ancestors.forEach(ancestor => this.localSearch.countMap[ancestor.id][ALL_DESCENDANTS]++)
+          if (node.isLeaf) node.ancestors.forEach(ancestor => this.localSearch.countMap[ancestor.id][LEAF_DESCENDANTS]++)
           if (node.parentNode !== NO_PARENT_NODE) {
-            this.localSearch.countMap[node.parentNode.id].ALL_CHILDREN += 1
+            this.localSearch.countMap[node.parentNode.id][ALL_CHILDREN] += 1
             // istanbul ignore else
-            if (node.isLeaf) this.localSearch.countMap[node.parentNode.id].LEAF_CHILDREN += 1
+            if (node.isLeaf) this.localSearch.countMap[node.parentNode.id][LEAF_CHILDREN] += 1
           }
         }
 
@@ -1337,15 +1337,12 @@ export default {
             }
           }
 
-          normalized.ancestors.forEach(ancestor => ancestor.count.ALL_DESCENDANTS++)
-          if (isLeaf) normalized.ancestors.forEach(ancestor => ancestor.count.LEAF_DESCENDANTS++)
-          if (parentNode !== NO_PARENT_NODE) {
-            parentNode.count.ALL_CHILDREN += 1
-            if (isLeaf) parentNode.count.LEAF_CHILDREN += 1
-          }
-
-          if (isDisabled) {
-            normalized.ancestors.forEach(ancestor => ancestor.hasDisabledDescendants = true)
+          normalized.ancestors.forEach(ancestor => ancestor.count[ALL_DESCENDANTS]++)
+          if (isLeaf) normalized.ancestors.forEach(ancestor => ancestor.count[LEAF_DESCENDANTS]++)
+          if (!isRootNode) {
+            parentNode.count[ALL_CHILDREN] += 1
+            if (isLeaf) parentNode.count[LEAF_CHILDREN] += 1
+            if (isDisabled) parentNode.hasDisabledDescendants = true
           }
 
           if (prevNodeMap && prevNodeMap[id]) {
