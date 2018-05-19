@@ -1,5 +1,4 @@
 import fuzzysearch from 'fuzzysearch'
-import debounce from 'lodash/debounce'
 
 import {
   warning,
@@ -11,12 +10,12 @@ import {
 
 import {
   UNCHECKED, INDETERMINATE, CHECKED,
-  LOAD_ROOT_OPTIONS, LOAD_CHILDREN_OPTIONS, /* ASYNC_SEARCH, */
+  LOAD_ROOT_OPTIONS, LOAD_CHILDREN_OPTIONS, ASYNC_SEARCH,
   NO_PARENT_NODE,
   ALL, BRANCH_PRIORITY, LEAF_PRIORITY, ALL_WITH_INDETERMINATE,
   ALL_CHILDREN, ALL_DESCENDANTS, LEAF_CHILDREN, LEAF_DESCENDANTS,
   ORDER_SELECTED, LEVEL, INDEX,
-  INPUT_DEBOUNCE_DELAY, MENU_BUFFER,
+  MENU_BUFFER,
 } from '../constants'
 
 function sortValueByIndex(a, b) {
@@ -56,6 +55,10 @@ function match(enableFuzzyMatch, needle, haystack) {
     : includes(haystack, needle)
 }
 
+function getErrorMessage(err) {
+  return err.message || String(err)
+}
+
 export default {
   provide() {
     return {
@@ -74,6 +77,14 @@ export default {
      * Whether the menu should be always open
      */
     alwaysOpen: {
+      type: Boolean,
+      default: false,
+    },
+
+    /**
+     * Whether to enable async search mode
+     */
+    async: {
       type: Boolean,
       default: false,
     },
@@ -129,6 +140,14 @@ export default {
     },
 
     /**
+     * Should cache results of every search request?
+     */
+    cacheOptions: {
+      type: Boolean,
+      default: true,
+    },
+
+    /**
      * Show an "×" button that resets value?
      */
     clearable: {
@@ -181,6 +200,15 @@ export default {
     },
 
     /**
+     * The default set of options to show before the user starts searching. Used for async search mode.
+     * When set to `true`, the results for search query as a empty string will be autoloaded.
+     * @type {boolean|Object[]}
+     */
+    defaultOptions: {
+      default: false,
+    },
+
+    /**
      * Whether pressing delete key removes the last item if there is no text input
      */
     deleteRemoves: {
@@ -216,14 +244,6 @@ export default {
      * Disable the fuzzy matching functionality?
      */
     disableFuzzyMatching: {
-      type: Boolean,
-      default: false,
-    },
-
-    /**
-     * Search in ancestor nodes too.
-     */
-    searchNested: {
       type: Boolean,
       default: false,
     },
@@ -461,6 +481,22 @@ export default {
     },
 
     /**
+     * Search in ancestor nodes too.
+     */
+    searchNested: {
+      type: Boolean,
+      default: false,
+    },
+
+    /**
+     * Text tip to prompt for async search
+     */
+    searchPromptText: {
+      type: String,
+      default: 'Type to search...',
+    },
+
+    /**
      * Whether to show a children count next to the label of each branch node
      */
     showCount: {
@@ -604,12 +640,8 @@ export default {
         countMap: createMap(),
       },
 
-      remoteSearch: {
-        // Has user entered any query to search async options?
-        active: false,
-        // States of async searching.
-        ...createAsyncOptionsStates(),
-      },
+      // <searchQuery, remoteSearchEntry> map.
+      remoteSearch: createMap(),
     }
   },
 
@@ -737,13 +769,63 @@ export default {
     shouldShowX() {
       return this.clearable && !this.disabled && this.hasUndisabledValue
     },
+    shouldShowControlArrow() {
+      if (!this.alwaysOpen) return true
+      // Even with `alwaysOpen: true`, sometimes the menu is still closed,
+      // e.g. when the control is disabled.
+      return !this.menu.isOpen
+    },
+    shouldShowMenu() {
+      return this.menu.isOpen
+    },
+    shouldShowOptionsList() {
+      if (this.async) {
+        const entry = this.getRemoteSearchEntry()
+        return entry.isLoaded && entry.options.length > 0
+      }
+      if (this.localSearch.active) return !this.localSearch.noResults
+      return this.forest.normalizedOptions.length > 0
+    },
+    shouldShowNoOptionsTip() {
+      if (this.async) return false
+      if (this.localSearch.active) return false
+      return this.rootOptionsStates.isLoaded && this.forest.normalizedOptions.length === 0
+    },
+    shouldShowNoResultsTip() {
+      if (this.async) {
+        if (this.trigger.searchQuery === '' && !this.defaultOptions) return false
+        const entry = this.getRemoteSearchEntry()
+        return entry.isLoaded && entry.options.length === 0
+      }
+      if (this.localSearch.active) return this.localSearch.noResults
+      return false
+    },
+    shouldShowLoadingOptionsTip() {
+      if (this.async) {
+        const entry = this.getRemoteSearchEntry()
+        return entry.isLoading
+      }
+      return this.rootOptionsStates.isLoading
+    },
+    shouldShowLoadingRootOptionsErrorTip() {
+      return this.rootOptionsStates.loadingError
+    },
+    shouldShowAsyncSearchLoadingErrorTiop() {
+      if (!this.async) return false
+      const entry = this.getRemoteSearchEntry()
+      return entry.loadingError
+    },
+    shouldShowSearchPromptTip() {
+      return this.async && this.trigger.searchQuery === '' && !this.defaultOptions
+    },
     /**
      * Should show children count when searching?
      * @type {boolean}
      */
     showCountOnSearchComputed() {
-      // Vue not allows set default prop value based on another prop value
-      // so use computed property as a workaround
+      // Vue doesn't allow setting default prop value based on another prop value.
+      // So use computed property as a workaround.
+      // https://github.com/vuejs/vue/issues/6358
       return typeof this.showCountOnSearch === 'boolean'
         ? this.showCountOnSearch
         : this.showCount
@@ -771,7 +853,7 @@ export default {
     },
 
     flat() {
-      this.initialize(this.options)
+      this.initialize()
     },
 
     internalValue() {
@@ -779,7 +861,7 @@ export default {
     },
 
     matchKeys() {
-      this.initialize(this.options)
+      this.initialize()
     },
 
     multiple(newValue) {
@@ -790,18 +872,24 @@ export default {
 
     options: {
       handler() {
+        if (this.async) return
         // re-initialize options when the `options` prop has changed
-        this.initialize(this.options)
+        this.initialize()
         this.rootOptionsStates.isLoaded = Array.isArray(this.options)
       },
       deep: true,
       immediate: true,
     },
 
-    'trigger.searchQuery': debounce(function onSearchQueryChange() {
-      this.handleSearchQueryChange()
+    'trigger.searchQuery'() {
+      if (this.async) {
+        this.handleRemoteSearch()
+      } else {
+        this.handleLocalSearch()
+      }
+
       this.$emit('search-change', this.trigger.searchQuery, this.getInstanceId())
-    }, INPUT_DEBOUNCE_DELAY, { leading: true }),
+    },
 
     value() {
       const nodeIdsFromValue = this.extractCheckedNodeIdsFromValue()
@@ -823,6 +911,11 @@ export default {
         () => '`autofocus` prop is deprecated. Use `autoFocus` instead.'
       )
 
+      warning(
+        () => this.async ? this.searchable : true,
+        () => 'For async search mode, the value of `searchable` prop must be true.'
+      )
+
       if (this.options == null && !this.loadOptions) {
         warning(
           () => false,
@@ -835,13 +928,17 @@ export default {
       this._blurOnSelect = false
     },
 
-    initialize(rootOptions) {
-      if (Array.isArray(rootOptions)) {
-        // In case we are reinitializing options, keep the old state tree temporarily.
+    initialize() {
+      const options = this.async
+        ? this.getRemoteSearchEntry().options
+        : this.options
+
+      if (Array.isArray(options)) {
+        // In case we are re-initializing options, keep the old state tree temporarily.
         const prevNodeMap = this.forest.nodeMap
         this.forest.nodeMap = createMap()
         this.keepDataOfSelectedNodes(prevNodeMap)
-        this.forest.normalizedOptions = this.normalize(NO_PARENT_NODE, rootOptions, prevNodeMap)
+        this.forest.normalizedOptions = this.normalize(NO_PARENT_NODE, options, prevNodeMap)
         // Cases that need fixing `selectedNodeIds`:
         //   1) Children options of a checked node have been delayed loaded,
         //      we should also mark these children as checked. (multi-select mode)
@@ -1138,22 +1235,21 @@ export default {
       }
     },
 
-    handleSearchQueryChange() {
-      if (this.trigger.searchQuery) {
-        this.handleSearch()
-      } else {
-        this.exitSearchMode()
+    handleLocalSearch() {
+      const { searchQuery } = this.trigger
+      const done = () => this.resetHighlightedOptionWhenNecessary(true)
+
+      if (!searchQuery) {
+        // exit search mode
+        this.localSearch.active = false
+        return done()
       }
 
-      this.resetHighlightedOptionWhenNecessary(true)
-    },
-
-    handleSearch() {
       // enter search mode
       this.localSearch.active = true
       this.localSearch.noResults = true
 
-      // reset state
+      // reset states
       this.traverseAllNodesDFS(node => {
         if (node.isBranch) {
           node.isExpandedOnSearch = false
@@ -1169,7 +1265,7 @@ export default {
         }
       })
 
-      const lowerCasedSearchQuery = this.trigger.searchQuery.trim().toLocaleLowerCase()
+      const lowerCasedSearchQuery = searchQuery.trim().toLocaleLowerCase()
       const splitSearchQuery = lowerCasedSearchQuery.replace(/\s+/g, ' ').split(' ')
       this.traverseAllNodesDFS(node => {
         if (this.searchNested && splitSearchQuery.length > 1) {
@@ -1201,10 +1297,71 @@ export default {
           node.parentNode.hasMatchedDescendants = true
         }
       })
+
+      done()
     },
 
-    exitSearchMode() {
-      this.localSearch.active = false
+    handleRemoteSearch() {
+      const { searchQuery } = this.trigger
+      const entry = this.getRemoteSearchEntry()
+      const done = () => {
+        this.initialize()
+        this.resetHighlightedOptionWhenNecessary(true)
+      }
+
+      if ((searchQuery === '' || this.cacheOptions) && entry.isLoaded) {
+        return done()
+      }
+
+      this.callLoadOptionsProp({
+        action: ASYNC_SEARCH,
+        args: { searchQuery },
+        isPending() {
+          return entry.isLoading
+        },
+        start: () => {
+          entry.isLoading = true
+          entry.isLoaded = false
+          entry.loadingError = ''
+        },
+        succeed: options => {
+          entry.isLoaded = true
+          entry.options = options
+          // When the request finishes, the search query may has changed.
+          if (this.trigger.searchQuery === searchQuery) done()
+        },
+        fail: err => {
+          entry.loadingError = getErrorMessage(err)
+        },
+        end: () => {
+          entry.isLoading = false
+        },
+      })
+    },
+
+    getRemoteSearchEntry() {
+      const { searchQuery } = this.trigger
+      const entry = this.remoteSearch[searchQuery] || {
+        ...createAsyncOptionsStates(),
+        options: [],
+      }
+
+      if (searchQuery === '') {
+        if (Array.isArray(this.defaultOptions)) {
+          entry.options = this.defaultOptions
+          entry.isLoaded = true
+          return entry
+        } else if (this.defaultOptions !== true) {
+          entry.isLoaded = true
+          return entry
+        }
+      }
+
+      if (!this.remoteSearch[searchQuery]) {
+        this.$set(this.remoteSearch, searchQuery, entry)
+      }
+
+      return entry
     },
 
     shouldExpand(node) {
@@ -1212,13 +1369,14 @@ export default {
     },
 
     shouldOptionBeIncludedInSearchResult(node) {
-      // this option is matched
+      // 1) This option is matched.
       if (node.isMatched) return true
-      // this option is not matched, but has matched descendant(s)
+      // 2) This option is not matched, but has matched descendant(s).
       if (node.isBranch && node.hasMatchedDescendants) return true
-      // this option's parent has no matched descendants,
-      // but after being expanded, all its children should be shown
+      // 3) This option's parent has no matched descendants,
+      //    but after being expanded, all its children should be shown.
       if (!node.isRootNode && node.parentNode.showAllChildrenOnSearch) return true
+      // 4) The default case.
       return false
     },
 
@@ -1285,13 +1443,16 @@ export default {
       this.setCurrentHighlightedOption(this.getNode(last))
     },
 
+    resetSearchQuery() {
+      this.trigger.searchQuery = ''
+    },
+
     closeMenu() {
       if (!this.menu.isOpen || (!this.disabled && this.alwaysOpen)) return
       this.saveMenuScrollPosition()
       this.menu.isOpen = false
       this.toggleClickOutsideEvent(false)
-      // reset search query after menu closes
-      this.trigger.searchQuery = ''
+      this.resetSearchQuery()
       this.$emit('close', this.getValue(), this.getInstanceId())
     },
 
@@ -1300,7 +1461,7 @@ export default {
       this.menu.isOpen = true
       this.$nextTick(this.adjustMenuOpenDirection)
       this.$nextTick(this.restoreMenuScrollPosition)
-      if (!this.options) this.loadRootOptions()
+      if (!this.options && !this.async) this.loadRootOptions()
       this.toggleClickOutsideEvent(true)
       this.resetHighlightedOptionWhenNecessary()
       this.$emit('open', this.getInstanceId())
@@ -1495,7 +1656,7 @@ export default {
           })
         },
         fail: err => {
-          this.rootOptionsStates.loadingError = err.message || String(err)
+          this.rootOptionsStates.loadingError = getErrorMessage(err)
         },
         end: () => {
           this.rootOptionsStates.isLoading = false
@@ -1504,9 +1665,10 @@ export default {
     },
 
     loadChildrenOptions(parentNode) {
+      // The options may be re-initialized anytime during the loading process.
+      // So `parentNode` can be stale and we use `getNode()` to avoid that.
+
       const { id, raw } = parentNode
-      // the options may be reinitialized anytime during the loading process
-      // so `parentNode` can be stale and we use `getNode()` to avoid that
 
       this.callLoadOptionsProp({
         action: LOAD_CHILDREN_OPTIONS,
@@ -1524,7 +1686,7 @@ export default {
           this.getNode(id).childrenStates.isLoaded = true
         },
         fail: err => {
-          this.getNode(id).childrenStates.loadingError = err.message || String(err)
+          this.getNode(id).childrenStates.loadingError = getErrorMessage(err)
         },
         end: () => {
           this.getNode(id).childrenStates.isLoading = false
@@ -1537,17 +1699,17 @@ export default {
         return
       }
 
-      const callback = once(err => {
+      start()
+
+      const callback = once((err, result) => {
         if (err) {
           fail(err)
         } else {
-          succeed()
+          succeed(result)
         }
 
         end()
       })
-
-      start()
       const result = this.loadOptions({
         id: this.getInstanceId(),
         instanceId: this.getInstanceId(),
@@ -1612,7 +1774,7 @@ export default {
       }
 
       if (this.localSearch.active && nextState && (this.single || this.clearOnSelect)) {
-        this.trigger.searchQuery = ''
+        this.resetSearchQuery()
       }
 
       if (this.single && this.closeOnSelect) {
@@ -1750,8 +1912,9 @@ export default {
 
   mounted() {
     if (this.autoFocus || this.autofocus) this.$refs.value.focusInput()
-    if (!this.options && this.autoLoadRootOptions) this.loadRootOptions()
+    if (!this.options && !this.async && this.autoLoadRootOptions) this.loadRootOptions()
     if (this.alwaysOpen) this.openMenu()
+    if (this.async && this.defaultOptions) this.handleRemoteSearch()
   },
 
   destroyed() {

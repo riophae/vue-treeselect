@@ -143,6 +143,25 @@ describe('Props', () => {
     })
   })
 
+  describe('async', () => {
+    it('must be with searchable=true', () => {
+      spyOn(console, 'error')
+
+      mount(Treeselect, {
+        propsData: {
+          async: true,
+          searchable: false,
+          loadOptions() { /* empty */ },
+        },
+      })
+
+      expect(console.error).toHaveBeenCalledWith(
+        '[Vue-Treeselect Warning]',
+        'For async search mode, the value of `searchable` prop must be true.'
+      )
+    })
+  })
+
   describe('autofocus', () => {
     it('should focus the search input on mount', () => {
       const wrapper = mount(Treeselect, {

@@ -18,6 +18,7 @@ module.exports = {
     'import/no-extraneous-dependencies': 0,
     'vue/attributes-order': 0,
     'multiline-comment-style': 0,
+    'no-confusing-arrow': 0,
     'no-console': 0,
     'no-extra-parens': 0,
     'no-warning-comments': 0,

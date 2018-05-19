@@ -1,9 +1,11 @@
 import { mount } from '@vue/test-utils'
+import sleep from 'yaku/lib/sleep'
 import Treeselect from '@src/components/Treeselect'
-import { typeSearchText, findOptionArrowByNodeId } from './shared'
+import { INPUT_DEBOUNCE_DELAY } from '@src/constants'
+import { typeSearchText, findMenu, findOptionArrowByNodeId } from './shared'
 
 describe('Searching', () => {
-  describe('basic', () => {
+  describe('local search', () => {
     it('exactly matching', async () => {
       const wrapper = mount(Treeselect, {
         propsData: {
@@ -423,6 +425,463 @@ describe('Searching', () => {
           lowerCased: { id: 'b' },
         }),
       })
+    })
+  })
+
+  describe('async search', () => {
+    it('basic', async () => {
+      let id = 0
+      const DELAY = 50
+      const wrapper = mount(Treeselect, {
+        sync: false,
+        propsData: {
+          async: true,
+          loadOptions({ action, searchQuery, callback }) {
+            if (action === 'ASYNC_SEARCH') {
+              setTimeout(() => {
+                callback(null, [ {
+                  id: id++,
+                  label: searchQuery,
+                } ])
+              }, DELAY)
+            }
+          },
+        },
+      })
+      const { vm } = wrapper
+
+      vm.openMenu()
+      await vm.$nextTick()
+      const menu = findMenu(wrapper)
+
+      expect(menu.text().trim()).toBe('Type to search...')
+
+      await typeSearchText(wrapper, 'a')
+      expect(menu.text().trim()).toBe('Loading...')
+      await sleep(DELAY)
+
+      expect(menu.text().trim()).toBe('a')
+      expect(vm.forest.normalizedOptions).toEqual([ jasmine.objectContaining({
+        id: 0,
+        label: 'a',
+      }) ])
+
+      await typeSearchText(wrapper, '')
+      expect(menu.text().trim()).toBe('Type to search...')
+
+      await typeSearchText(wrapper, 'b')
+      expect(menu.text().trim()).toBe('Loading...')
+      await sleep(DELAY)
+
+      expect(menu.text().trim()).toBe('b')
+      expect(vm.forest.normalizedOptions).toEqual([ jasmine.objectContaining({
+        id: 1,
+        label: 'b',
+      }) ])
+    })
+
+    describe('default options', () => {
+      it('when defaultOptions=option[]', async () => {
+        const wrapper = mount(Treeselect, {
+          sync: false,
+          propsData: {
+            async: true,
+            loadOptions({ action, searchQuery, callback }) {
+              if (action === 'ASYNC_SEARCH') {
+                callback(null, [ {
+                  id: searchQuery,
+                  label: searchQuery,
+                } ])
+              }
+            },
+            defaultOptions: [ {
+              id: 'default',
+              label: 'default',
+            } ],
+          },
+        })
+        const { vm } = wrapper
+
+        vm.openMenu()
+        await vm.$nextTick()
+        const menu = findMenu(wrapper)
+
+        expect(menu.text().includes('Type to search...')).toBe(false)
+        expect(menu.text().includes('default')).toBe(true)
+
+        await typeSearchText(wrapper, 'test')
+        expect(menu.text().includes('test')).toBe(true)
+
+        await typeSearchText(wrapper, '')
+        expect(menu.text().includes('default')).toBe(true)
+      })
+
+      it('when defaultOptions=true', async () => {
+        const DELAY = 20
+        const wrapper = mount(Treeselect, {
+          sync: false,
+          propsData: {
+            async: true,
+            loadOptions({ action, searchQuery, callback }) {
+              if (action === 'ASYNC_SEARCH') {
+                setTimeout(() => {
+                  const option = searchQuery === ''
+                    ? 'default'
+                    : searchQuery
+                  callback(null, [ {
+                    id: option,
+                    label: option,
+                  } ])
+                }, DELAY)
+              }
+            },
+            defaultOptions: true,
+          },
+        })
+        const { vm } = wrapper
+
+        expect(vm.remoteSearch['']).toEqual({
+          isLoaded: false,
+          isLoading: true,
+          loadingError: '',
+          options: [],
+        })
+
+        vm.openMenu()
+        await vm.$nextTick()
+        const menu = findMenu(wrapper)
+
+        expect(menu.text().trim()).toBe('Loading...')
+
+        await sleep(DELAY)
+        expect(menu.text().trim()).toBe('default')
+
+        await typeSearchText(wrapper, 'test')
+        expect(menu.text().trim()).toBe('Loading...')
+
+        await sleep(DELAY)
+        expect(menu.text().trim()).toBe('test')
+
+        await typeSearchText(wrapper, '')
+        expect(menu.text().trim()).toBe('default')
+      })
+
+      it('when defaultOptions=false', async () => {
+        const searchPromptText = '$SEARCH_PROMPT_TEXT$'
+        const wrapper = mount(Treeselect, {
+          sync: false,
+          propsData: {
+            async: true,
+            loadOptions({ action, searchQuery, callback }) {
+              if (action === 'ASYNC_SEARCH') {
+                callback(null, [ {
+                  id: searchQuery,
+                  label: searchQuery,
+                } ])
+              }
+            },
+            defaultOptions: false,
+            searchPromptText,
+          },
+        })
+        const { vm } = wrapper
+
+        vm.openMenu()
+        await vm.$nextTick()
+        const menu = findMenu(wrapper)
+
+        expect(menu.text().trim()).toBe(searchPromptText)
+
+        await typeSearchText(wrapper, 'keyword')
+        expect(menu.text().trim()).toBe('keyword')
+
+        await typeSearchText(wrapper, '')
+        expect(menu.text().trim()).toBe(searchPromptText)
+      })
+    })
+
+    it('handle loading error & recover from it', async () => {
+      const called = {}
+      const wrapper = mount(Treeselect, {
+        sync: false,
+        propsData: {
+          async: true,
+          loadOptions({ action, searchQuery, callback }) {
+            if (action === 'ASYNC_SEARCH') {
+              if (called[searchQuery]) {
+                callback(null, [ {
+                  id: searchQuery,
+                  label: searchQuery,
+                } ])
+              } else {
+                called[searchQuery] = true
+                callback(new Error('test error'))
+              }
+            }
+          },
+        },
+      })
+      const { vm } = wrapper
+
+      vm.openMenu()
+      await vm.$nextTick()
+      const menu = findMenu(wrapper)
+
+      await typeSearchText(wrapper, 'keyword')
+      expect(menu.text().trim().includes('test error')).toBe(true)
+
+      menu.find('.vue-treeselect__retry').trigger('click')
+      await vm.$nextTick()
+      expect(menu.text().trim().includes('keyword')).toBe(true)
+    })
+
+    it('multiple active requests in parallel', async () => {
+      const DELAY = 50
+      const wrapper = mount(Treeselect, {
+        sync: false,
+        propsData: {
+          async: true,
+          loadOptions({ action, searchQuery, callback }) {
+            if (action === 'ASYNC_SEARCH') {
+              setTimeout(() => {
+                callback(null, [ {
+                  id: searchQuery,
+                  label: searchQuery,
+                } ])
+              }, DELAY)
+            }
+          },
+        },
+      })
+      const { vm } = wrapper
+
+      vm.openMenu()
+      await vm.$nextTick()
+      const menu = findMenu(wrapper)
+
+      await typeSearchText(wrapper, 'a')
+      await sleep(DELAY / 2)
+      expect(vm.remoteSearch.a.isLoading).toBe(true)
+
+      await typeSearchText(wrapper, 'b')
+      await sleep(DELAY / 2)
+
+      // now results for keyword `a` should have been loaded
+      expect(vm.remoteSearch.a.isLoaded).toBe(true)
+      // but results for keyword `b` is still being loaded
+      expect(vm.remoteSearch.b.isLoading).toBe(true)
+      expect(menu.text().trim()).toBe('Loading...')
+
+      await sleep(DELAY / 2)
+      expect(vm.remoteSearch.b.isLoaded).toBe(true)
+      expect(menu.text().trim()).toBe('b')
+    })
+
+    it('should preserve information of selected options after search query changes (old options will not be in the list)', async () => {
+      const wrapper = mount(Treeselect, {
+        sync: false,
+        propsData: {
+          async: true,
+          multiple: true,
+          loadOptions({ action, searchQuery, callback }) {
+            if (action === 'ASYNC_SEARCH') {
+              callback(null, [ {
+                id: searchQuery,
+                label: searchQuery,
+              } ])
+            }
+          },
+        },
+      })
+      const { vm } = wrapper
+      const assertMultiValueItemLabels = labels => {
+        const actualLabels = wrapper.findAll('.vue-treeselect__multi-value-label').wrappers
+          .map(labelWrapper => labelWrapper.text().trim())
+        expect(actualLabels).toEqual(labels)
+      }
+
+      await typeSearchText(wrapper, 'a')
+      expect(vm.remoteSearch.a.isLoaded).toBe(true)
+
+      vm.select(vm.forest.nodeMap.a)
+      expect(vm.forest.selectedNodeIds).toEqual([ 'a' ])
+
+      await typeSearchText(wrapper, 'b')
+      expect(vm.remoteSearch.b.isLoaded).toBe(true)
+
+      vm.select(vm.forest.nodeMap.b)
+      await vm.$nextTick()
+      expect(vm.forest.selectedNodeIds).toEqual([ 'a', 'b' ])
+      expect(vm.forest.nodeMap.a).toEqual(jasmine.objectContaining({
+        id: 'a',
+        label: 'a',
+        isFallbackNode: true,
+      }))
+      assertMultiValueItemLabels([ 'a', 'b' ])
+
+      await typeSearchText(wrapper, 'a')
+      expect(vm.forest.nodeMap.b).toEqual(jasmine.objectContaining({
+        id: 'b',
+        label: 'b',
+        isFallbackNode: true,
+      }))
+      assertMultiValueItemLabels([ 'a', 'b' ])
+    })
+
+    describe('cache options', () => {
+      let calls, expectedCalls, wrapper
+      const typeAndAssert = async (searchText, shouldHit) => {
+        await typeSearchText(wrapper, searchText)
+        if (!shouldHit) expectedCalls.push(searchText)
+        expect(calls).toEqual(expectedCalls)
+      }
+
+      beforeEach(() => {
+        calls = []
+        expectedCalls = []
+        wrapper = mount(Treeselect, {
+          sync: false,
+          propsData: {
+            async: true,
+            loadOptions({ action, searchQuery, callback }) {
+              if (action === 'ASYNC_SEARCH') {
+                calls.push(searchQuery)
+                callback(null, [ {
+                  id: searchQuery,
+                  label: searchQuery,
+                } ])
+              }
+            },
+          },
+        })
+        expect(calls).toEqual([])
+      })
+
+      it('when cacheOptions=false', async () => {
+        wrapper.setProps({ cacheOptions: false })
+        await typeAndAssert('a', false)
+        await typeAndAssert('b', false)
+        await typeAndAssert('a', false)
+        await typeAndAssert('b', false)
+      })
+
+      it('when cacheOptions=true', async () => {
+        wrapper.setProps({ cacheOptions: true })
+        await typeAndAssert('a', false)
+        await typeAndAssert('b', false)
+        await typeAndAssert('a', true)
+        await typeAndAssert('b', true)
+      })
+
+      it('change value of cacheOptions', async () => {
+        wrapper.setProps({ cacheOptions: true })
+        await typeAndAssert('a', false)
+        await typeAndAssert('b', false)
+        await typeAndAssert('a', true)
+        await typeAndAssert('b', true)
+
+        wrapper.setProps({ cacheOptions: false })
+        await typeAndAssert('a', false)
+        await typeAndAssert('b', false)
+        await typeAndAssert('a', false)
+        await typeAndAssert('b', false)
+
+        wrapper.setProps({ cacheOptions: true })
+        await typeAndAssert('a', true)
+        await typeAndAssert('b', true)
+        await typeAndAssert('a', true)
+        await typeAndAssert('b', true)
+      })
+    })
+
+    it('should not create new one if there is an ongoing request even with cacheOptions=false', async () => {
+      const DELAY = INPUT_DEBOUNCE_DELAY * 2.5
+      const calls = []
+      const wrapper = mount(Treeselect, {
+        sync: false,
+        propsData: {
+          async: true,
+          cacheOptions: false,
+          loadOptions({ action, searchQuery, callback }) {
+            if (action === 'ASYNC_SEARCH') {
+              calls.push(searchQuery)
+              setTimeout(() => {
+                callback(null, [])
+              }, DELAY)
+            }
+          },
+        },
+      })
+      const { vm } = wrapper
+      let p
+
+      // T: 0
+      p = typeSearchText(wrapper, 'a')
+      await vm.$nextTick() // wait for the watcher of `vm.trigger.searchQuery`
+      expect(calls).toEqual([ 'a' ])
+      await p
+
+      // T: INPUT_DEBOUNCE_DELAY * 1
+      p = typeSearchText(wrapper, 'b')
+      await vm.$nextTick()
+      expect(calls).toEqual([ 'a', 'b' ])
+      await p
+
+      // T: INPUT_DEBOUNCE_DELAY * 2
+      p = typeSearchText(wrapper, 'a')
+      await vm.$nextTick()
+      expect(calls).toEqual([ 'a', 'b' ])
+      await p
+
+      // T: INPUT_DEBOUNCE_DELAY * 3
+      expect(vm.remoteSearch.a.isLoaded).toBe(true)
+      p = typeSearchText(wrapper, 'b')
+      await vm.$nextTick()
+      expect(calls).toEqual([ 'a', 'b' ])
+      await p
+
+      // T: INPUT_DEBOUNCE_DELAY * 4
+      expect(vm.remoteSearch.b.isLoaded).toBe(true)
+      p = typeSearchText(wrapper, 'a')
+      await vm.$nextTick()
+      expect(calls).toEqual([ 'a', 'b', 'a' ])
+      await p
+
+      // T: INPUT_DEBOUNCE_DELAY * 5
+      typeSearchText(wrapper, 'b')
+      await vm.$nextTick()
+      expect(calls).toEqual([ 'a', 'b', 'a', 'b' ])
+    })
+
+    it('should highlight first option after search query changes', async () => {
+      const DELAY = 10
+      const keywords = [ 'a', 'b', 'c' ]
+      const wrapper = mount(Treeselect, {
+        sync: false,
+        propsData: {
+          async: true,
+          loadOptions({ action, searchQuery, callback }) {
+            if (action === 'ASYNC_SEARCH') {
+              setTimeout(() => {
+                callback(null, [ 1, 2, 3 ].map(i => {
+                  const option = searchQuery + '-' + i
+                  return { id: option, label: option }
+                }))
+              }, DELAY)
+            }
+          },
+        },
+      })
+      const { vm } = wrapper
+
+      vm.openMenu()
+      await vm.$nextTick()
+
+      for (const keyword of keywords) {
+        await typeSearchText(wrapper, keyword)
+        await sleep(DELAY)
+        expect(vm.menu.current).toBe(keyword + '-1')
+      }
     })
   })
 })

@@ -27,38 +27,41 @@
       <div v-if="shouldShowX" class="vue-treeselect__x-container" :title="multiple ? clearAllText : clearValueText" @mousedown="handleMouseDownOnClear">
         <delete-icon class="vue-treeselect__x" />
       </div>
-      <div v-if="!menu.isOpen || !alwaysOpen" class="vue-treeselect__control-arrow-container" @mousedown="handleMouseDownOnArrow">
+      <div v-if="shouldShowControlArrow" class="vue-treeselect__control-arrow-container" @mousedown="handleMouseDownOnArrow">
         <arrow-icon :class="[ 'vue-treeselect__control-arrow', { 'vue-treeselect__control-arrow--rotated': menu.isOpen } ]" />
       </div>
     </div>
     <transition name="vue-treeselect__menu--transition">
-      <div v-if="menu.isOpen" class="vue-treeselect__menu" ref="menu" :style="{ maxHeight: menu.optimizedHeight + 'px' }">
-        <template v-if="options">
-          <tip v-if="localSearch.active && localSearch.noResults" type="no-results" icon="warning">{{ noResultsText }}</tip>
-          <tip v-else-if="forest.normalizedOptions.length === 0" type="no-options" icon="warning">{{ noOptionsText }}</tip>
-          <div v-else class="vue-treeselect__list">
-            <treeselect-option v-for="rootNode in forest.normalizedOptions" :node="rootNode" :key="rootNode.id">
-              <template slot="option-label" slot-scope="{ node, shouldShowCount, count, labelClassName, countClassName }">
-                <slot name="option-label" :node="node" :should-show-count="shouldShowCount" :count="count"
-                  :label-class-name="labelClassName" :count-class-name="countClassName">
-                  <label :class="labelClassName">
-                    {{ node.label }}
-                    <span v-if="shouldShowCount" :class="countClassName">({{ count }})</span>
-                  </label>
-                </slot>
-              </template>
-            </treeselect-option>
-          </div>
-        </template>
-        <template v-else>
-          <tip v-if="loading || rootOptionsStates.isLoading" type="loading" icon="loader">{{ loadingText }}</tip>
-          <tip v-else-if="rootOptionsStates.loadingError" type="error" icon="error">
-            {{ rootOptionsStates.loadingError }}
-            <a class="vue-treeselect__retry" @click="loadRootOptions" :title="retryTitle">
-              {{ retryText }}
-            </a>
-          </tip>
-        </template>
+      <div v-if="shouldShowMenu" class="vue-treeselect__menu" ref="menu" :style="{ maxHeight: menu.optimizedHeight + 'px' }">
+        <div v-if="shouldShowOptionsList" class="vue-treeselect__list">
+          <treeselect-option v-for="rootNode in forest.normalizedOptions" :node="rootNode" :key="rootNode.id">
+            <template slot="option-label" slot-scope="{ node, shouldShowCount, count, labelClassName, countClassName }">
+              <slot name="option-label" :node="node" :should-show-count="shouldShowCount" :count="count"
+                :label-class-name="labelClassName" :count-class-name="countClassName">
+                <label :class="labelClassName">
+                  {{ node.label }}
+                  <span v-if="shouldShowCount" :class="countClassName">({{ count }})</span>
+                </label>
+              </slot>
+            </template>
+          </treeselect-option>
+        </div>
+        <tip v-if="shouldShowNoResultsTip" type="no-results" icon="warning">{{ noResultsText }}</tip>
+        <tip v-if="shouldShowNoOptionsTip" type="no-options" icon="warning">{{ noOptionsText }}</tip>
+        <tip v-if="shouldShowLoadingOptionsTip" type="loading" icon="loader">{{ loadingText }}</tip>
+        <tip v-if="shouldShowLoadingRootOptionsErrorTip" type="error" icon="error">
+          {{ rootOptionsStates.loadingError }}
+          <a class="vue-treeselect__retry" @click="loadRootOptions" :title="retryTitle">
+            {{ retryText }}
+          </a>
+        </tip>
+        <tip v-if="shouldShowAsyncSearchLoadingErrorTiop" type="error" icon="error">
+          {{ getRemoteSearchEntry().loadingError }}
+          <a class="vue-treeselect__retry" @click="handleRemoteSearch()" :title="retryTitle">
+            {{ retryText }}
+          </a>
+        </tip>
+        <tip v-if="shouldShowSearchPromptTip" type="search-prompt" icon="warning">{{ searchPromptText }}</tip>
       </div>
     </transition>
   </div>

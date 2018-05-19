@@ -1,6 +1,11 @@
 import { mount } from '@vue/test-utils'
 import Treeselect from '@src/components/Treeselect'
-import { generateOptions, leftClick, findMenu, findOptionByNodeId } from './shared'
+import SearchInput from '@src/components/SearchInput'
+import {
+  generateOptions,
+  leftClick, typeSearchText,
+  findMenu, findOptionByNodeId,
+} from './shared'
 
 describe('Menu', () => {
   it('should blur the input & close the menu after clicking anywhere outside the component', () => {
@@ -110,5 +115,32 @@ describe('Menu', () => {
       vm.closeMenu()
       await vm.$nextTick()
     }
+  })
+
+  it('should reset the search box after closing menu', async () => {
+    const wrapper = mount(Treeselect, {
+      sync: false,
+      propsData: {
+        options: [],
+      },
+    })
+    const { vm } = wrapper
+    const searchInput = wrapper.find(SearchInput)
+
+    const assertInputValue = expected => {
+      expect(vm.trigger.searchQuery).toBe(expected)
+      expect(searchInput.vm.value).toBe(expected)
+      expect(searchInput.find('input[type="text"]').element.value).toBe(expected)
+    }
+
+    vm.openMenu()
+    await vm.$nextTick()
+
+    await typeSearchText(wrapper, 'a')
+    assertInputValue('a')
+
+    vm.closeMenu()
+    await vm.$nextTick()
+    assertInputValue('')
   })
 })

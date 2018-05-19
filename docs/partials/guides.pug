@@ -2,7 +2,7 @@
 
 +guide('Basic Features')
   :markdown-it
-    This example demonstrates the most commonly-used features of vue-treeselect. Try the fuzzy-searching functionality by typing a few letters.
+    This example demonstrates the most commonly-used features of vue-treeselect. Try the fuzzy matching functionality by typing a few letters.
   +demo('BasicFeatures')
   :markdown-it
     The first thing you need to learn is how to define options. There are two types of options: **a. folder options** that are foldable & may have children options, and **b. normal options** that aren't & don't. Here, I'd like to borrow the basic concepts from Computer Science and call the former as *branch nodes* & the latter as *leaf nodes*. These two kinds of nodes together compose the tree.
@@ -50,6 +50,11 @@
   :markdown-it
     It's also possible to have root level options to be delayed loaded. If no options have been initially registered (`options: null`), vue-treeselect will attempt to load root options by calling `loadOptions({ action, callback, instanceId })` after the component is mounted. In this example I have disabled the auto loading feature by setting `autoLoadRootOptions: false`, and root options will be loaded when the menu is opened.
   +demo('DelayedRootOptions')
+
++guide('Async Searching')
+  :markdown-it
+    vue-treeselect supports dynamically loading & changing the entire options list as the user types.
+  +demo('AsyncSearching')
 
 +guide('Flat Mode & Sort Values')
   :markdown-it

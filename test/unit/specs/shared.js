@@ -101,7 +101,8 @@ export async function typeSearchText(wrapper, text) {
   const $input = findInput(wrapper)
   $input.element.value = text
   $input.trigger('input')
-  await sleep(INPUT_DEBOUNCE_DELAY + 10)
+  expect(wrapper.vm.$refs.value.$refs.input.value).toBe(text)
+  await sleep(INPUT_DEBOUNCE_DELAY + 1)
   expect(wrapper.vm.trigger.searchQuery).toBe(text)
 }
 

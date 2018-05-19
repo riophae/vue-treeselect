@@ -1,6 +1,7 @@
 <script>
+  import debounce from 'lodash/debounce'
   import { deepExtend, includes } from '../utils'
-  import { MIN_INPUT_WIDTH, KEY_CODES } from '../constants'
+  import { MIN_INPUT_WIDTH, KEY_CODES, INPUT_DEBOUNCE_DELAY } from '../constants'
 
   const keysThatRequireMenuBeingOpen = [
     KEY_CODES.ENTER,
@@ -18,10 +19,11 @@
 
     data: () => ({
       inputWidth: MIN_INPUT_WIDTH,
+      value: '',
     }),
 
     computed: {
-      needsAutoSize() {
+      needAutoSize() {
         return (
           this.instance.searchable &&
           !this.instance.disabled &&
@@ -30,12 +32,32 @@
       },
     },
 
+    watch: {
+      'instance.trigger.searchQuery'(newValue) {
+        this.value = newValue
+      },
+    },
+
     updated() {
       // istanbul ignore else
-      if (this.needsAutoSize) this.updateInputWidth()
+      if (this.needAutoSize) this.updateInputWidth()
+    },
+
+    created() {
+      this.debouncedCallback = debounce(
+        this.updateSearchQuery,
+        INPUT_DEBOUNCE_DELAY,
+        { leading: true, trailing: true },
+      )
     },
 
     methods: {
+      clear() {
+        this.onInput({
+          target: { value: '' },
+        })
+      },
+
       focus() {
         if (!this.instance.disabled) {
           this.$refs.input && this.$refs.input.focus()
@@ -65,7 +87,15 @@
       },
 
       onInput(evt) {
-        this.instance.trigger.searchQuery = evt.target.value
+        const { value } = evt.target
+        this.value = value
+
+        if (value) {
+          this.debouncedCallback()
+        } else {
+          this.debouncedCallback.cancel()
+          this.updateSearchQuery()
+        }
       },
 
       // 用 keyUp 事件存在一个问题，删除输入框最后一个字符也会导致取消选中最后一项
@@ -83,7 +113,7 @@
 
         switch (key) {
         case KEY_CODES.BACKSPACE: {
-          if (this.instance.backspaceRemoves && !this.instance.trigger.searchQuery.length) {
+          if (this.instance.backspaceRemoves && !this.value.length) {
             this.instance.removeLastValue()
           }
           break
@@ -96,8 +126,8 @@
           break
         }
         case KEY_CODES.ESCAPE: {
-          if (this.instance.trigger.searchQuery.length) {
-            this.instance.trigger.searchQuery = ''
+          if (this.value.length) {
+            this.clear()
           } else if (this.instance.menu.isOpen) {
             this.instance.closeMenu()
           } else if (this.instance.escapeClearsValue) {
@@ -145,7 +175,7 @@
           break
         }
         case KEY_CODES.DELETE: {
-          if (this.instance.deleteRemoves && !this.instance.trigger.searchQuery.length) {
+          if (this.instance.deleteRemoves && !this.value.length) {
             this.instance.removeLastValue()
           }
           break
@@ -159,7 +189,7 @@
 
       onMouseDown(evt) {
         // istanbul ignore next
-        if (this.instance.trigger.searchQuery.length) {
+        if (this.value.length) {
           // Prevent it from bubbling to the top level and triggering `preventDefault()`
           // to make the textbox unselectable
           evt.stopPropagation()
@@ -174,7 +204,7 @@
 
         if (this.instance.searchable && !this.instance.disabled) {
           children.push(this.renderInput(h))
-          if (this.needsAutoSize) children.push(this.renderSizer(h))
+          if (this.needAutoSize) children.push(this.renderSizer(h))
         }
 
         if (!this.instance.searchable) {
@@ -209,10 +239,10 @@
             required: this.instance.required && !this.instance.hasValue,
           },
           domProps: {
-            value: this.instance.trigger.searchQuery,
+            value: this.value,
           },
           style: {
-            width: this.needsAutoSize ? `${this.inputWidth}px` : null,
+            width: this.needAutoSize ? `${this.inputWidth}px` : null,
           },
           on: {
             focus: this.onFocus,
@@ -229,7 +259,7 @@
         return h('div', {
           class: 'vue-treeselect__sizer',
           domProps: {
-            textContent: this.instance.trigger.searchQuery,
+            textContent: this.value,
           },
           ref: 'sizer',
         })
@@ -240,6 +270,10 @@
           MIN_INPUT_WIDTH,
           this.$refs.sizer.scrollWidth + 15,
         )
+      },
+
+      updateSearchQuery() {
+        this.instance.trigger.searchQuery = this.value
       },
     },
 

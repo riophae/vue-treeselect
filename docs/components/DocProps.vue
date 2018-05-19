@@ -36,6 +36,11 @@
         defaultValue: code('false'),
         description: 'Whether the menu should be always open.',
       }, {
+        name: 'async',
+        type: 'Boolean',
+        defaultValue: code('true'),
+        description: `Whether to enable ${link('#async-searching', 'async search mode')}.`,
+      }, {
         name: 'autoFocus',
         type: 'Boolean',
         defaultValue: code('false'),
@@ -60,6 +65,11 @@
         type: 'Boolean',
         defaultValue: code('false'),
         description: 'Show branch nodes before leaf nodes.',
+      }, {
+        name: 'cacheOptions',
+        type: 'Boolean',
+        defaultValue: code('true'),
+        description: `Whether to cache results of each search request for ${link('#async-searching', 'async search mode')}.`,
       }, {
         name: 'clearable',
         type: 'Boolean',
@@ -90,6 +100,11 @@
         type: 'Number',
         defaultValue: code('0'),
         description: `How many levels of branch nodes should be automatically expanded when loaded. Set ${code('Infinity')} to make all branch nodes expanded by default.`,
+      }, {
+        name: 'defaultOptions',
+        type: `Boolean | ${code('node[]')}`,
+        defaultValue: code('false'),
+        description: `The default set of options to show before the user starts searching. Used for ${link('#async-searching', 'async search mode')}. When set to ${code('true')}, the results for search query as a empty string will be autoloaded.`,
       }, {
         name: 'deleteRemoves',
         type: 'Boolean',
@@ -161,9 +176,10 @@
         defaultValue: NO_DEFAULT_VALUE,
         description: [
           `Used for dynamically loading options. See ${link('#delayed-loading')} for detailed information.`,
-          `Possible values of ${code('action')}: ${code('"LOAD_ROOT_OPTIONS"')} or ${code('"LOAD_CHILDREN_OPTIONS"')}.`,
+          `Possible values of ${code('action')}: ${code('"LOAD_ROOT_OPTIONS"')}, ${code('"LOAD_CHILDREN_OPTIONS"')} or ${code('"ASYNC_SEARCH"')}.`,
           `${code('callback')} - a function that accepts an optional ${code('error')} argument`,
           `${code('parentNode')} - only presents when loading children options`,
+          `${code('searchQuery')} - only presents when searching async options`,
           `${code('instanceId')} - eqauls to the value of ${code('instanceId')} prop you passed to vue-treeselect`,
         ].join('<br>'),
       }, {
@@ -256,6 +272,11 @@
         type: 'Boolean',
         defaultValue: code('false'),
         description: `Set ${code('true')} if the search query should search in all ancestor nodes too. See ${link('#nested-search')} for example.`,
+      }, {
+        name: 'searchPromptText',
+        type: 'String',
+        defaultValue: code('"Type to search..."'),
+        description: `Text tip to prompt for async search. Used for ${link('#async-searching', 'async search mode')}.`,
       }, {
         name: 'showCount',
         type: 'Boolean',
