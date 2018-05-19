@@ -235,11 +235,19 @@ export default {
     },
 
     /**
+     * Deprecated. Use `instanceId` prop instead.
+     * @type {string|number}
+    */
+    id: {
+      default: null,
+    },
+
+    /**
      * Will be passed with all events as second param.
      * Useful for identifying events origin.
      * @type {string|number}
     */
-    id: {
+    instanceId: {
       default: null,
     },
 
@@ -290,7 +298,7 @@ export default {
 
     /**
      * Used for dynamically loading options.
-     * @type {function({action: string, callback: (function((Error|string)=): void), parentNode: node=, id}): void}
+     * @type {function({action: string, callback: (function((Error|string)=): void), parentNode: node=, instanceId}): void}
      */
     loadOptions: {
       type: Function,
@@ -345,7 +353,7 @@ export default {
 
     /**
      * Used for normalizing source data
-     * @type {function(node): node}
+     * @type {function(node, instanceId): node}
      */
     normalizer: {
       type: Function,
@@ -745,7 +753,7 @@ export default {
     },
 
     internalValue() {
-      this.$emit('input', this.getValue(), this.id)
+      this.$emit('input', this.getValue(), this.getInstanceId())
     },
 
     multiple(newValue) {
@@ -759,7 +767,7 @@ export default {
 
     'trigger.searchQuery': debounce(function onSearchQueryChange() {
       this.handleSearchQueryChange()
-      this.$emit('search-change', this.trigger.searchQuery, this.id)
+      this.$emit('search-change', this.trigger.searchQuery, this.getInstanceId())
     }, INPUT_DEBOUNCE_DELAY),
 
     value() {
@@ -776,7 +784,12 @@ export default {
   methods: {
     verifyProps() {
       warning(
-        () => this.autofocus === false,
+        () => this.id == null,
+        () => '`id` prop is deprecated. Use `instanceId` instead.'
+      )
+
+      warning(
+        () => !this.autofocus,
         () => '`autofocus` prop is deprecated. Use `autoFocus` instead.'
       )
 
@@ -804,6 +817,10 @@ export default {
       } else {
         this.forest.normalizedOptions = []
       }
+    },
+
+    getInstanceId() {
+      return this.instanceId == null ? this.id : this.instanceId
     },
 
     getValue() {
@@ -1209,7 +1226,7 @@ export default {
       this.toggleClickOutsideEvent(false)
       // reset search query after menu closes
       this.trigger.searchQuery = ''
-      this.$emit('close', this.getValue(), this.id)
+      this.$emit('close', this.getValue(), this.getInstanceId())
     },
 
     openMenu() {
@@ -1220,7 +1237,7 @@ export default {
       if (!this.forest.isLoaded) this.loadRootOptions()
       this.toggleClickOutsideEvent(true)
       this.resetHighlightedOptionWhenNecessary()
-      this.$emit('open', this.id)
+      this.$emit('open', this.getInstanceId())
     },
 
     toggleMenu() {
@@ -1267,7 +1284,7 @@ export default {
     },
 
     enhancedNormalizer(raw) {
-      return assign({}, raw, this.normalizer(raw, this.id))
+      return assign({}, raw, this.normalizer(raw, this.getInstanceId()))
     },
 
     normalize(parentNode, nodes, prevNodeMap) {
@@ -1434,7 +1451,13 @@ export default {
       })
 
       start()
-      const result = this.loadOptions({ id: this.id, action, ...args, callback })
+      const result = this.loadOptions({
+        id: this.getInstanceId(),
+        instanceId: this.getInstanceId(),
+        action,
+        ...args,
+        callback,
+      })
 
       if (isPromise(result)) {
         result.then(() => {
@@ -1485,9 +1508,9 @@ export default {
       this.buildForestState()
 
       if (state) {
-        this.$emit('select', node.raw, this.id)
+        this.$emit('select', node.raw, this.getInstanceId())
       } else {
-        this.$emit('deselect', node.raw, this.id)
+        this.$emit('deselect', node.raw, this.getInstanceId())
       }
 
       if (this.localSearch.active && state && (this.single || this.clearOnSelect)) {

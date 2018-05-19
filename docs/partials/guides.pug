@@ -45,7 +45,7 @@
 
       1. Declare an *unloaded* branch node by setting `children: null`
       2. Add `loadOptions` prop
-      3. Whenever an unloaded branch node gets expanded, `loadOptions({ action, parentNode, callback, id })` will be called, then you can perform the job requesting data from a remote server
+      3. Whenever an unloaded branch node gets expanded, `loadOptions({ action, parentNode, callback, instanceId })` will be called, then you can perform the job requesting data from a remote server
   +demo('DelayedLoading')
   :markdown-it
     It's also possible to have root level options to be delayed loaded. If no options have been initially registered (`options: null`), vue-treeselect will attempt to load root options by calling `loadOptions({ action, callback, id })` after the component is mounted. In this example I have disabled the auto loading feature by setting `autoLoadRootOptions: false`, and root options will be loaded when the menu is opened.

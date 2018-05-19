@@ -373,7 +373,7 @@ describe('Dynamical Loading', () => {
       const loadOptions = jasmine.createSpy('loadOptions')
       const { vm: vm1 } = mount(Treeselect, {
         propsData: {
-          id: 1,
+          instanceId: 1,
           loadOptions,
           options: [ {
             id: 'branch',
@@ -384,7 +384,7 @@ describe('Dynamical Loading', () => {
       })
       const { vm: vm2 } = mount(Treeselect, {
         propsData: {
-          id: 2,
+          instanceId: 2,
           loadOptions,
           options: [ {
             id: 'branch',
@@ -399,6 +399,7 @@ describe('Dynamical Loading', () => {
       await vm1.$nextTick()
       expect(loadOptions.calls.argsFor(0)).toEqual([ {
         id: 1,
+        instanceId: 1,
         action: 'LOAD_CHILDREN_OPTIONS',
         parentNode: jasmine.any(Object),
         callback: jasmine.any(Function),
@@ -409,6 +410,7 @@ describe('Dynamical Loading', () => {
       await vm2.$nextTick()
       expect(loadOptions.calls.argsFor(1)).toEqual([ {
         id: 2,
+        instanceId: 2,
         action: 'LOAD_CHILDREN_OPTIONS',
         parentNode: jasmine.any(Object),
         callback: jasmine.any(Function),
@@ -734,7 +736,7 @@ describe('Dynamical Loading', () => {
       const loadOptions = jasmine.createSpy('loadOptions')
       const { vm: vm1 } = mount(Treeselect, {
         propsData: {
-          id: 1,
+          instanceId: 1,
           loadOptions,
           options: null,
           autoLoadRootOptions: false,
@@ -742,7 +744,7 @@ describe('Dynamical Loading', () => {
       })
       const { vm: vm2 } = mount(Treeselect, {
         propsData: {
-          id: 2,
+          instanceId: 2,
           loadOptions,
           options: null,
           autoLoadRootOptions: false,
@@ -752,6 +754,7 @@ describe('Dynamical Loading', () => {
       vm1.openMenu()
       expect(loadOptions.calls.argsFor(0)).toEqual([ {
         id: 1,
+        instanceId: 1,
         action: 'LOAD_ROOT_OPTIONS',
         callback: jasmine.any(Function),
       } ])
@@ -759,6 +762,7 @@ describe('Dynamical Loading', () => {
       vm2.openMenu()
       expect(loadOptions.calls.argsFor(1)).toEqual([ {
         id: 2,
+        instanceId: 2,
         action: 'LOAD_ROOT_OPTIONS',
         callback: jasmine.any(Function),
       } ])

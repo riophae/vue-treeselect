@@ -24,27 +24,27 @@
     data: () => ({
       events: [ {
         name: 'open',
-        attributes: makeArgNameList([ 'id' ]),
+        attributes: makeArgNameList([ 'instanceId' ]),
         description: 'Emitted when the menu opens.',
       }, {
         name: 'close',
-        attributes: makeArgNameList([ 'value', 'id' ]),
+        attributes: makeArgNameList([ 'value', 'instanceId' ]),
         description: 'Emitted when the menu closes.',
       }, {
         name: 'input',
-        attributes: makeArgNameList([ 'value', 'id' ]),
+        attributes: makeArgNameList([ 'value', 'instanceId' ]),
         description: 'Emitted after value changes.',
       }, {
         name: 'select',
-        attributes: makeArgNameList([ 'node', 'id' ]),
+        attributes: makeArgNameList([ 'node', 'instanceId' ]),
         description: 'Emitted after selecting an option.',
       }, {
         name: 'deselect',
-        attributes: makeArgNameList([ 'node', 'id' ]),
+        attributes: makeArgNameList([ 'node', 'instanceId' ]),
         description: 'Emitted after deselecting an option.',
       }, {
         name: 'search-change',
-        attributes: makeArgNameList([ 'searchQuery', 'id' ]),
+        attributes: makeArgNameList([ 'searchQuery', 'instanceId' ]),
         description: 'Emitted after the search query changes.',
       } ],
     }),

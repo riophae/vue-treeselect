@@ -566,7 +566,7 @@ describe('Props', () => {
       const loadOptions = jasmine.createSpy('loadOptions')
       const wrapper = mount(Treeselect, {
         propsData: {
-          id: 'test',
+          instanceId: 'test',
           options: [ {
             id: 'a',
             label: 'a',
@@ -590,6 +590,7 @@ describe('Props', () => {
       expect(loadOptions.calls.count()).toBe(1)
       expect(loadOptions).toHaveBeenCalledWith({
         id: 'test',
+        instanceId: 'test',
         action: 'LOAD_CHILDREN_OPTIONS',
         parentNode: a.raw,
         callback: jasmine.any(Function),
@@ -852,6 +853,24 @@ describe('Props', () => {
     })
   })
 
+  describe('id', () => {
+    it('deprecated', () => {
+      spyOn(console, 'error')
+
+      mount(Treeselect, {
+        propsData: {
+          id: 'test',
+          options: [],
+        },
+      })
+
+      expect(console.error).toHaveBeenCalledWith(
+        '[Vue-Treeselect Warning]',
+        '`id` prop is deprecated. Use `instanceId` instead.',
+      )
+    })
+  })
+
   describe('limit', () => {
     it('when limit=Infinity', () => {
       const wrapper = mount(Treeselect, {
@@ -975,13 +994,13 @@ describe('Props', () => {
     })
 
     it('multiple instances share the same `normalizer` function', () => {
-      const normalizer = (node, id) => ({
-        id: id + '-' + node.key,
+      const normalizer = (node, instanceId) => ({
+        id: instanceId + '-' + node.key,
         label: node.name,
       })
       const { vm: vm1 } = mount(Treeselect, {
         propsData: {
-          id: 1,
+          instanceId: 1,
           options: [ {
             key: 'a',
             name: 'a',
@@ -991,7 +1010,7 @@ describe('Props', () => {
       })
       const { vm: vm2 } = mount(Treeselect, {
         propsData: {
-          id: 2,
+          instanceId: 2,
           options: [ {
             key: 'a',
             name: 'a',

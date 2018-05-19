@@ -19,12 +19,8 @@
       options: null,
     }),
     methods: {
-      async loadOptions({ action/*, callback, id */ }) {
-        // If you have multiple instances of vue-treeselect that
-        // shares the same `loadRootOptions` function,
-        // you can use the `id` argument (which is the `id` prop you passed)
-        // to identify the origin.
-
+      // You can either use callback or return a Promise
+      async loadOptions({ action/*, callback */ }) {
         if (action === LOAD_ROOT_OPTIONS) {
           if (called) {
             await sleep(2000)

@@ -31,7 +31,7 @@
     }),
 
     methods: {
-      loadOptions({ action, parentNode, callback/*, id */ }) {
+      loadOptions({ action, parentNode, callback }) {
         // Typically, do the AJAX stuff here.
         // Once the server has responded,
         // assign children options to the parent node & call the callback.

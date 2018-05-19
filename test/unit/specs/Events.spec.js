@@ -26,7 +26,7 @@ describe('Events', () => {
       wrapper = mount(Treeselect, {
         propsData: {
           options: [ a ],
-          id: 'test',
+          instanceId: 'test',
           multiple: true,
           value: [ 'ab' ],
         },

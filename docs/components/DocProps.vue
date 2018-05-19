@@ -126,7 +126,7 @@
         defaultValue: code('false'),
         description: `Whether to enable flat mode or not. See ${link('#flat-mode-and-sort-values')} for detailed information.`,
       }, {
-        name: 'id',
+        name: 'instanceId',
         type: 'String | Number',
         defaultValue: code('null'),
         description: 'Will be passed with all events as second param. Useful for identifying events origin.',
@@ -157,14 +157,14 @@
         description: 'Text displayed when a branch node is loading its children options.',
       }, {
         name: 'loadOptions',
-        type: `Fn(${makePropList([ 'action', 'callback', 'parentNode?', 'id' ])}) 🡒 (${code('void')} | Promise)`,
+        type: `Fn(${makePropList([ 'action', 'callback', 'parentNode?', 'instanceId' ])}) 🡒 (${code('void')} | Promise)`,
         defaultValue: NO_DEFAULT_VALUE,
         description: [
           `Used for dynamically loading options. See ${link('#delayed-loading')} for detailed information.`,
           `Possible values of ${code('action')}: ${code('"LOAD_ROOT_OPTIONS"')} or ${code('"LOAD_CHILDREN_OPTIONS"')}.`,
           `${code('callback')} - a function that accepts an optional ${code('error')} argument`,
           `${code('parentNode')} - only presents when loading children options`,
-          `${code('id')} - eqauls to the value of ${code('id')} prop you passed to vue-treeselect`,
+          `${code('instanceId')} - eqauls to the value of ${code('instanceId')} prop you passed to vue-treeselect`,
         ].join('<br>'),
       }, {
         name: 'maxHeight',
@@ -198,7 +198,7 @@
         description: 'Text displayed when there are no matching search results.',
       }, {
         name: 'normalizer',
-        type: `Fn${makeArgNameList([ 'node', 'id' ])} 🡒 ${code('node')}`,
+        type: `Fn${makeArgNameList([ 'node', 'instanceId' ])} 🡒 ${code('node')}`,
         defaultValue: code('node => node'),
         description: `Used for normalizing source data. See ${link('#customize-key-names')} for detailed information.`,
       }, {
