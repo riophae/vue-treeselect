@@ -10,7 +10,7 @@ exports.assetsPath = _path => {
 }
 
 exports.styleLoaders = (options = {}) => {
-  const loaders = [ {
+  const loaders = [ 'cache-loader', {
     loader: 'css-loader',
     options: {
       importLoaders: 1,
@@ -28,6 +28,7 @@ exports.styleLoaders = (options = {}) => {
     },
   } ]
 
+  // These should go before `cache-loader`.
   if (options.extract) {
     loaders.unshift(MiniCssExtractPlugin.loader)
   } else {
@@ -37,5 +38,23 @@ exports.styleLoaders = (options = {}) => {
   return {
     test: /\.less$/,
     use: loaders,
+  }
+}
+
+exports.withCacheLoader = (rule, opts = {}) => {
+  if (opts.disableCacheInTest && process.env.NODE_ENV === 'testing') {
+    return rule
+  }
+
+  const { loader, options, use, ...rest } = rule
+  const loaders = Array.isArray(use)
+    ? use
+    : typeof loader === 'string' && !options
+      ? [ loader ]
+      : [ { loader, options } ]
+
+  return {
+    use: [ 'cache-loader', ...loaders ],
+    ...rest,
   }
 }

@@ -1,5 +1,9 @@
 // This is the webpack config used for unit tests.
 
+if (!process.env.NODE_ENV) {
+  process.env.NODE_ENV = JSON.parse(require('../config/test.env').NODE_ENV)
+}
+
 const webpack = require('webpack')
 const merge = require('webpack-merge')
 const utils = require('./utils')

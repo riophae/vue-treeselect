@@ -2,6 +2,7 @@ const path = require('path')
 const webpack = require('webpack')
 const { VueLoaderPlugin } = require('vue-loader')
 const config = require('../config')
+const { withCacheLoader } = require('./utils')
 
 function resolve(dir) {
   return path.join(__dirname, '..', dir)
@@ -41,7 +42,7 @@ module.exports = {
           formatter: require('eslint-friendly-formatter'),
         },
       },
-      {
+      withCacheLoader({
         test: /\.vue$/,
         loader: 'vue-loader',
         options: {
@@ -49,20 +50,22 @@ module.exports = {
             preserveWhitespace: false,
           },
         },
-      },
-      {
+      }),
+      withCacheLoader({
         test: /\.js$/,
         loader: 'babel-loader',
         include: [ resolve('src'), resolve('docs'), resolve('test') ],
-      },
-      {
+      }, {
+        disableCacheInTest: true,
+      }),
+      withCacheLoader({
         test: /\.pug$/,
         loader: 'pug-loader',
         include: [ resolve('src'), resolve('docs') ],
         options: {
           pretty: true,
         },
-      },
+      }),
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
         loader: 'url-loader',

@@ -4,6 +4,7 @@
 *error.log*
 
 .eslintcache
+.cache-loader
 
 node_modules/
 yarn.lock
