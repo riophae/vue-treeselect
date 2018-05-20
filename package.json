@@ -54,7 +54,7 @@
     "eslint": "^4.18.2",
     "eslint-config-riophae": "^0.0.6",
     "eslint-friendly-formatter": "^4.0.0",
-    "eslint-import-resolver-webpack": "^0.9.0",
+    "eslint-import-resolver-webpack": "^0.10.0",
     "eslint-loader": "^2.0.0",
     "eslint-plugin-import": "^2.10.0",
     "eslint-plugin-vue": "^4.3.0",
@@ -91,10 +91,10 @@
     "rimraf": "^2.6.2",
     "shallow-equal": "^1.0.0",
     "shelljs": "^0.8.1",
-    "size-limit": "^0.17.0",
+    "size-limit": "^0.18.0",
     "strip-indent": "^2.0.0",
     "stylelint": "^9.1.2",
-    "stylelint-config-xo-space": "^0.7.0",
+    "stylelint-config-xo-space": "^0.8.0",
     "uglifyjs-webpack-plugin": "^1.2.4",
     "url-loader": "^1.0.1",
     "vue": "^2.2.0",
@@ -126,15 +126,5 @@
     "control",
     "input",
     "ui"
-  ],
-  "size-limit": [
-    {
-      "path": "dist/vue-treeselect.min.js",
-      "limit": "11 KB"
-    },
-    {
-      "path": "dist/vue-treeselect.min.css",
-      "limit": "7 KB"
-    }
   ]
 }
