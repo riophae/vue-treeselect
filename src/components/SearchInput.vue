@@ -77,6 +77,7 @@
         // https://stackoverflow.com/questions/4471582/javascript-keycode-vs-which
         const key = 'which' in evt ? evt.which : /* istanbul ignore next */ evt.keyCode
         if (!this.instance.menu.isOpen && keysThatRequireMenuBeingOpen.indexOf(key) !== -1) {
+          evt.preventDefault()
           return this.instance.openMenu()
         }
 
