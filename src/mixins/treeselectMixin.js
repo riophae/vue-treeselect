@@ -1183,7 +1183,6 @@ export default {
     resetHighlightedOptionWhenNecessary(forceReset = false) {
       if (forceReset || this.menu.current == null || !this.shouldShowOptionInMenu(this.getNode(this.menu.current))) {
         this.setCurrentHighlightedOption(this.firstVisibleOption)
-        this.setMenuScrollPosition(0)
       }
     },
 
@@ -1192,7 +1191,6 @@ export default {
 
       const first = this.visibleOptionIds[0]
       this.setCurrentHighlightedOption(this.getNode(first))
-      this.setMenuScrollPosition(0)
     },
 
     highlightPrevOption() {
@@ -1216,7 +1214,6 @@ export default {
 
       const last = getLast(this.visibleOptionIds)
       this.setCurrentHighlightedOption(this.getNode(last))
-      this.setMenuScrollPosition(Infinity)
     },
 
     closeMenu() {
@@ -1465,6 +1462,7 @@ export default {
         }, err => {
           callback(err)
         }).catch(err => {
+          // istanbul ignore next
           console.error(err)
         })
       }
@@ -1610,21 +1608,12 @@ export default {
       this.select(lastSelectedNode) // deselect
     },
 
-    setMenuScrollPosition(pos) {
-      if (this.$refs.menu) {
-        if (pos === Infinity) pos = this.$refs.menu.scrollHeight
-        this.$refs.menu.scrollTop = pos
-      } else {
-        this.menu.lastScrollPosition = pos
-      }
-    },
-
     saveMenuScrollPosition() {
       if (this.$refs.menu) this.menu.lastScrollPosition = this.$refs.menu.scrollTop
     },
 
     restoreMenuScrollPosition() {
-      if (this.$refs.menu) this.setMenuScrollPosition(this.menu.lastScrollPosition)
+      if (this.$refs.menu) this.$refs.menu.scrollTop = this.menu.lastScrollPosition
     },
 
     adjustMenuOpenDirection() {
