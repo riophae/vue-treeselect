@@ -1472,7 +1472,7 @@ describe('Props', () => {
         expect(options.length).toBe(4)
         options.wrappers.forEach(option => {
           const { node } = option.vm
-          expect(node.isMatched).toBe(expectedMatchedNodeIds.indexOf(node.id) !== -1)
+          expect(node.isMatched).toBe(expectedMatchedNodeIds.includes(node.id))
         })
       })
     })

@@ -153,6 +153,10 @@ export function getLast(arr) {
   return arr[arr.length - 1]
 }
 
+export function includes(arr, elem) {
+  return arr.indexOf(elem) !== -1
+}
+
 export function find(arr, predicate, ctx) {
   for (let i = 0, len = arr.length; i < len; i++) {
     if (predicate.call(ctx, arr[i], i, arr)) return arr[i]

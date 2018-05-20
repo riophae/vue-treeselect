@@ -1,5 +1,5 @@
 <script>
-  import { deepExtend } from '../utils'
+  import { deepExtend, includes } from '../utils'
   import { MIN_INPUT_WIDTH, KEY_CODES } from '../constants'
 
   const keysThatRequireMenuBeingOpen = [
@@ -76,7 +76,7 @@
         // https://css-tricks.com/snippets/javascript/javascript-keycodes/
         // https://stackoverflow.com/questions/4471582/javascript-keycode-vs-which
         const key = 'which' in evt ? evt.which : /* istanbul ignore next */ evt.keyCode
-        if (!this.instance.menu.isOpen && keysThatRequireMenuBeingOpen.indexOf(key) !== -1) {
+        if (!this.instance.menu.isOpen && includes(keysThatRequireMenuBeingOpen, key)) {
           evt.preventDefault()
           return this.instance.openMenu()
         }

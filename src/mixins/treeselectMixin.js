@@ -6,7 +6,7 @@ import {
   isPromise, once,
   identity, constant, createMap,
   assign,
-  quickDiff, getLast, find, removeFromArray,
+  quickDiff, getLast, includes, find, removeFromArray,
 } from '../utils'
 
 import {
@@ -453,7 +453,7 @@ export default {
       default: ALL_CHILDREN,
       validator(value) {
         const acceptableValues = [ ALL_CHILDREN, ALL_DESCENDANTS, LEAF_CHILDREN, LEAF_DESCENDANTS ]
-        return acceptableValues.indexOf(value) !== -1
+        return includes(acceptableValues, value)
       },
     },
 
@@ -476,7 +476,7 @@ export default {
       default: ORDER_SELECTED,
       validator(value) {
         const acceptableValues = [ ORDER_SELECTED, LEVEL, INDEX ]
-        return acceptableValues.indexOf(value) !== -1
+        return includes(acceptableValues, value)
       },
     },
 
@@ -508,7 +508,7 @@ export default {
       default: BRANCH_PRIORITY,
       validator(value) {
         const acceptableValues = [ ALL, BRANCH_PRIORITY, LEAF_PRIORITY, ALL_WITH_INDETERMINATE ]
-        return acceptableValues.indexOf(value) !== -1
+        return includes(acceptableValues, value)
       },
     },
 
@@ -912,7 +912,7 @@ export default {
       this.forest.selectedNodeMap = createMap()
 
       nodeIds.forEach(id => {
-        if (this.forest.selectedNodeIds.indexOf(id) === -1) {
+        if (!includes(this.forest.selectedNodeIds, id)) {
           this._selectNode(this.getNode(id), { ignoreDisabled: true })
         }
       })
@@ -1107,11 +1107,11 @@ export default {
         let isMatched
         if (this.searchNested && splitSearchQuery.length > 1) {
           isMatched = splitSearchQuery.every(
-            filterValue => node.nestedSearchLabel.indexOf(filterValue) !== -1,
+            filterValue => includes(node.nestedSearchLabel, filterValue),
           )
         } else {
           isMatched = this.disableFuzzyMatching
-            ? node.lowerCasedLabel.indexOf(lowerCasedSearchQuery) !== -1
+            ? includes(node.lowerCasedLabel, lowerCasedSearchQuery)
             : fuzzysearch(lowerCasedSearchQuery, node.lowerCasedLabel)
         }
         node.isMatched = isMatched
