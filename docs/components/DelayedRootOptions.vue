@@ -20,7 +20,7 @@
     }),
     methods: {
       // You can either use callback or return a Promise
-      async loadOptions({ action/*, callback */ }) {
+      async loadOptions({ action/*, callback*/ }) {
         if (action === LOAD_ROOT_OPTIONS) {
           if (called) {
             await sleep(2000)
