@@ -64,6 +64,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    appendToBody: {
+      type: Boolean,
+      default: false,
+    },
 
     /**
      * Deprecated. Use `autoFocus` instead.
@@ -540,10 +544,21 @@ export default {
         current: null,
         // the scroll position before last menu close
         lastScrollPosition: 0,
-        // menu height
-        optimizedHeight: 0,
+        // menu size
+        size: {
+          'max-height': 0,
+          width: 'auto',
+        },
         // which direction to open the menu
         prefferedOpenDirection: 'below',
+        // menu position
+        pos: {
+          position: 'absolute',
+          top: 'auto',
+          right: '0',
+          bottom: 'auto',
+          left: '0',
+        },
       },
 
       forest: {
@@ -1230,6 +1245,7 @@ export default {
       if (this.disabled || this.menu.isOpen) return
       this.menu.isOpen = true
       this.$nextTick(this.adjustMenuOpenDirection)
+      this.$nextTick(this.adjustMenuOpenPosition)
       this.$nextTick(this.restoreMenuScrollPosition)
       if (!this.forest.isLoaded) this.loadRootOptions()
       this.toggleClickOutsideEvent(true)
@@ -1615,7 +1631,23 @@ export default {
     restoreMenuScrollPosition() {
       if (this.$refs.menu) this.$refs.menu.scrollTop = this.menu.lastScrollPosition
     },
+    adjustMenuOpenPosition() {
+      if (this.appendToBody) {
+        document.body.appendChild(this.$refs.menu)
+        const rect = this.$el.getBoundingClientRect()
+        this.menu.pos = {
+          position: 'fixed',
+          left: `${rect.left}px`,
+        }
+        this.menu.size.width = `${rect.right - rect.left - 2}px`
 
+        if (this.menu.prefferedOpenDirection === 'below') {
+          this.menu.pos.top = `${rect.top + 36}px`
+        } else {
+          this.menu.pos.bottom = `${rect.top}px`
+        }
+      }
+    },
     adjustMenuOpenDirection() {
       // istanbul ignore next
       if (typeof window === 'undefined') return
@@ -1624,7 +1656,8 @@ export default {
       const spaceAbove = rect.top
       const spaceBelow = window.innerHeight - rect.bottom
       const hasEnoughSpaceBelow = spaceBelow > this.maxHeight
-      const isInViewport = rect.top > 0 && (window.innerHeight - rect.top) > MENU_BUFFER
+      const isInViewport = rect.top > 0 && (window.innerHeight - rect.top) >
+        MENU_BUFFER
 
       switch (true) {
       case hasEnoughSpaceBelow:
@@ -1633,12 +1666,14 @@ export default {
       case this.openDirection === 'below':
       case this.openDirection === 'bottom':
         this.menu.prefferedOpenDirection = 'below'
-        this.menu.optimizedHeight = Math.max(Math.min(spaceBelow - MENU_BUFFER, this.maxHeight), this.maxHeight)
+        this.menu.size['max-height'] =
+          `${Math.max(Math.min(spaceBelow - MENU_BUFFER, this.maxHeight), this.maxHeight)}px`
         break
 
       default:
         this.menu.prefferedOpenDirection = 'above'
-        this.menu.optimizedHeight = Math.min(spaceAbove - MENU_BUFFER, this.maxHeight)
+        this.menu.size['max-height'] =
+          `${Math.min(spaceAbove - MENU_BUFFER, this.maxHeight)}px`
       }
     },
   },
