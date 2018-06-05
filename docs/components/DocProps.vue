@@ -36,6 +36,11 @@
         defaultValue: code('false'),
         description: 'Whether the menu should be always open.',
       }, {
+        name: 'appendToBody',
+        type: 'Boolean',
+        defaultValue: code('false'),
+        description: 'Whether the menu should be move to the end of html body.',
+      }, {
         name: 'autoFocus',
         type: 'Boolean',
         defaultValue: code('false'),
