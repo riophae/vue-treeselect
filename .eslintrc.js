@@ -18,6 +18,7 @@ module.exports = {
     'import/no-extraneous-dependencies': 0,
     'vue/attributes-order': 0,
     indent: 0, // not working well with .vue files so disable it
+    'linebreak-style': ["error", "windows"],
     'multiline-comment-style': 0,
     'no-console': 0,
     'no-extra-parens': 0,
