@@ -68,7 +68,10 @@ export default {
       type: Boolean,
       default: false,
     },
-
+    zIndex: {
+      type: Number,
+      default: 999,
+    },
     /**
      * Deprecated. Use `autoFocus` instead.
      */

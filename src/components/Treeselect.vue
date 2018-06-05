@@ -32,7 +32,7 @@
       </div>
     </div>
     <transition name="vue-treeselect__menu--transition">
-      <div v-if="menu.isOpen" class="vue-treeselect__menu" :class="[appendToBody?`vue-treeselect__menu-body-${menu.prefferedOpenDirection}`:'']" ref="menu" :style="Object.assign({},menu.size,menu.pos)">
+      <div v-if="menu.isOpen" class="vue-treeselect__menu" :class="[appendToBody?`vue-treeselect__menu-body-${menu.prefferedOpenDirection}`:'']" ref="menu" :style="Object.assign({'z-index':zIndex},menu.size,menu.pos)">
         <template v-if="forest.isLoaded">
           <tip v-if="localSearch.active && localSearch.noResults" type="no-results" icon="warning">{{ noResultsText }}</tip>
           <tip v-else-if="forest.normalizedOptions.length === 0" type="no-options" icon="warning">{{ noOptionsText }}</tip>
