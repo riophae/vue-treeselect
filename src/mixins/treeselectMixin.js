@@ -1663,11 +1663,11 @@ export default {
           left: `${rect.left}px`,
         }
         this.menu.size.width = `${rect.right - rect.left - 2}px`
-
         if (this.menu.prefferedOpenDirection === 'below') {
-          this.menu.pos.top = `${rect.top + 36}px`
+          this.menu.pos.top = `${rect.bottom}px`
         } else {
-          this.menu.pos.bottom = `${rect.top}px`
+          const viewPortH = Math.min(document.documentElement.clientHeight, window.innerHeight || 0)
+          this.menu.pos.bottom = `${viewPortH - rect.top}px`
         }
       }
     },
