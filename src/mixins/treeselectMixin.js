@@ -1015,6 +1015,26 @@ export default {
       }
     },
 
+    toggleScrollEvent(enabled) {
+      if (this.appendToBody) {
+        if (enabled) {
+          document.addEventListener('scroll', this.adjustMenuOpenPosition, false)
+        } else {
+          document.removeEventListener('scroll', this.adjustMenuOpenPosition, false)
+        }
+      }
+    },
+
+    toggleResizeEvent(enabled) {
+      if (this.appendToBody) {
+        if (enabled) {
+          window.addEventListener('resize', this.adjustMenuOpenPosition, false)
+        } else {
+          window.removeEventListener('resize', this.adjustMenuOpenPosition, false)
+        }
+      }
+    },
+
     focusInput() {
       this.$refs.value.focusInput()
     },
@@ -1083,7 +1103,7 @@ export default {
 
     handleClickOutside(evt) {
       /* istanbul ignore else */
-      if (this.$refs.wrapper && !this.$refs.wrapper.contains(evt.target)) {
+      if (this.$refs.wrapper && !this.$refs.wrapper.contains(evt.target) && (!this.appendToBody || !this.$refs.menu.contains(evt.target))) {
         this.blurInput()
         this.closeMenu()
       }
@@ -1635,7 +1655,7 @@ export default {
       if (this.$refs.menu) this.$refs.menu.scrollTop = this.menu.lastScrollPosition
     },
     adjustMenuOpenPosition() {
-      if (this.appendToBody) {
+      if (this.appendToBody && this.$refs.menu) {
         document.body.appendChild(this.$refs.menu)
         const rect = this.$el.getBoundingClientRect()
         this.menu.pos = {
@@ -1693,10 +1713,19 @@ export default {
     if (this.autoFocus || this.autofocus) this.$refs.value.focusInput()
     if (!this.forest.isLoaded && this.autoLoadRootOptions) this.loadRootOptions()
     if (this.alwaysOpen) this.openMenu()
+    if (this.appendToBody) {
+      this.toggleScrollEvent(true)
+      this.toggleResizeEvent(true)
+    }
   },
 
   destroyed() {
     // istanbul ignore next
     this.toggleClickOutsideEvent(false)
+    if (this.appendToBody) {
+      this.toggleScrollEvent(false)
+      this.toggleResizeEvent(false)
+    }
   },
+
 }
