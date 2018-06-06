@@ -2,7 +2,6 @@
   <div>
     <treeselect
       name="demo"
-      :append-to-body="true"
       :multiple="multiple"
       :clearable="clearable"
       :searchable="searchable"
