@@ -1043,6 +1043,13 @@ export default {
       this.$refs.value.blurInput()
     },
 
+    handleMenuMouseDown: onlyOnLeftClick(function handleMouseDown(evt) {
+      if (this.appendToBody) {
+        evt.preventDefault()
+        evt.stopPropagation()
+      }
+    }),
+
     handleMouseDown: onlyOnLeftClick(function handleMouseDown(evt) {
       evt.preventDefault()
       evt.stopPropagation()
