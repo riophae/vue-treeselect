@@ -1654,6 +1654,12 @@ export default {
     restoreMenuScrollPosition() {
       if (this.$refs.menu) this.$refs.menu.scrollTop = this.menu.lastScrollPosition
     },
+    menuStyle() {
+      return assign({
+        'z-index': this.zIndex,
+      }, this.menu.size, this.menu.pos)
+    },
+
     adjustMenuOpenPosition() {
       if (this.appendToBody && this.$refs.menu) {
         document.body.appendChild(this.$refs.menu)
