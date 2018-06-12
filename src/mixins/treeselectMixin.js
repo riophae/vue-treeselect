@@ -1171,13 +1171,15 @@ export default {
       return true
     },
 
-    setCurrentHighlightedOption(node) {
+    setCurrentHighlightedOption(node, scroll = true) {
       if (!node) return
 
       this.menu.current = node.id
 
-      const $option = this.$el.querySelector(`.vue-treeselect__option[data-id="${node.id}"]`)
-      if ($option) scrollIntoView(this.$refs.menu, $option)
+      if (scroll) {
+        const $option = this.$el.querySelector(`.vue-treeselect__option[data-id="${node.id}"]`)
+        if ($option) scrollIntoView(this.$refs.menu, $option)
+      }
     },
 
     resetHighlightedOptionWhenNecessary(forceReset = false) {

@@ -61,7 +61,7 @@ export default {
     }),
 
     setCurrentHighlightedOption() {
-      this.instance.setCurrentHighlightedOption(this.node)
+      this.instance.setCurrentHighlightedOption(this.node, false)
     },
   },
 }
