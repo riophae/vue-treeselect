@@ -40,13 +40,13 @@
       gtag('config', 'UA-108169693-1');
     </script>
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600|Dosis:300,500">
-  <link href="static/css/app.4527066c460771fe08e3.css" rel="stylesheet"></head>
+  <link href="static/css/app.6101894c8bc723963e91.css" rel="stylesheet"></head>
   <body>
     <div id="app">
       <header class="site-header">
         <div class="container" id="header">
           <div class="site-header-logo"><a class="site-header-logo-link" href="https://vue-treeselect.js.org/">Vue<span class="site-header-logo-component-name">Treeselect</span></a></div>
-          <nav class="site-header-nav"><a class="site-header-nav-item" href="https://github.com/riophae/vue-treeselect/releases">v0.0.28</a><span class="site-header-nav-item"><a class="github-button" href="https://github.com/riophae/vue-treeselect" data-show-count="true" aria-label="Star riophae/vue-treeselect on GitHub">Star</a></span></nav>
+          <nav class="site-header-nav"><a class="site-header-nav-item" href="https://github.com/riophae/vue-treeselect/releases">v0.0.29</a><span class="site-header-nav-item"><a class="github-button" href="https://github.com/riophae/vue-treeselect" data-show-count="true" aria-label="Star riophae/vue-treeselect on GitHub">Star</a></span></nav>
         </div>
       </header>
       <div class="container">
@@ -96,13 +96,11 @@
             </h1>
             <section><p><a href="https://github.com/riophae/vue-treeselect">vue-treeselect</a> is a multi-select component with nested options for <a href="https://www.vuejs.org">Vue.js 2</a>, featuring:</p>
 <ul>
-<li>Single select</li>
-<li>Multiple select</li>
+<li>Single &amp; multiple select with nested options support</li>
 <li>Fuzzy searching</li>
 <li>Delayed loading (load data of deep level options only when needed)</li>
 <li>Autocomplete</li>
 <li>Keyboard support (navigate using <kbd>Arrow Up</kbd> &amp; <kbd>Arrow Down</kbd> keys, select option using <kbd>Enter</kbd> key, etc.)</li>
-<li>Vuex support</li>
 <li>Rich options &amp; highly customizable</li>
 <li>Supports <a href="https://github.com/riophae/vue-treeselect#browser-compatibility">a wide range of browsers</a></li>
 </ul>
@@ -374,7 +372,7 @@ export default {
 <ol>
 <li>Declare an <em>unloaded</em> branch node by setting <code>children: null</code></li>
 <li>Add <code>loadOptions</code> prop</li>
-<li>Whenever an unloaded branch node gets expanded, <code>loadOptions({ action, parentNode, callback, id })</code> will be called, then you can perform the job requesting data from a remote server</li>
+<li>Whenever an unloaded branch node gets expanded, <code>loadOptions({ action, parentNode, callback, instanceId })</code> will be called, then you can perform the job requesting data from a remote server</li>
 </ol>
 
               <demo>
@@ -409,7 +407,7 @@ export default {
   }),
 
   methods: {
-    loadOptions({ action, parentNode, callback/*, id */ }) {
+    loadOptions({ action, parentNode, callback }) {
       // Typically, do the AJAX stuff here.
       // Once the server has responded,
       // assign children options to the parent node &amp; call the callback.
@@ -448,7 +446,7 @@ export default {
   },
 }
 </code></template>
-              </demo><p>It's also possible to have root level options to be delayed loaded. If no options have been initially registered (<code>options: null</code>), vue-treeselect will attempt to load root options by calling <code>loadOptions({ action, callback, id })</code> after the component is mounted. In this example I have disabled the auto loading feature by setting <code>autoLoadRootOptions: false</code>, and root options will be loaded when the menu is opened.</p>
+              </demo><p>It's also possible to have root level options to be delayed loaded. If no options have been initially registered (<code>options: null</code>), vue-treeselect will attempt to load root options by calling <code>loadOptions({ action, callback, instanceId })</code> after the component is mounted. In this example I have disabled the auto loading feature by setting <code>autoLoadRootOptions: false</code>, and root options will be loaded when the menu is opened.</p>
 
               <demo>
                 <delayed-root-options slot="demo"></delayed-root-options>
@@ -470,12 +468,8 @@ export default {
     options: null,
   }),
   methods: {
-    async loadOptions({ action/*, callback, id */ }) {
-      // If you have multiple instances of vue-treeselect that
-      // shares the same `loadRootOptions` function,
-      // you can use the `id` argument (which is the `id` prop you passed)
-      // to identify the origin.
-
+    // You can either use callback or return a Promise
+    async loadOptions({ action/*, callback*/ }) {
       if (action === LOAD_ROOT_OPTIONS) {
         if (called) {
           await sleep(2000)
@@ -800,10 +794,7 @@ export default {
         name: 'aa',
       } ],
     } ],
-    normalizer(node/*, id */) {
-      // there is an extra `id` argument,
-      // which could be useful if you have multiple instances
-      // of vue-treeselect that share the same `normalizer` function
+    normalizer(node) {
       return {
         id: node.key,
         label: node.name,
@@ -854,7 +845,7 @@ export default {
             <section>
               <h2 id="vuex-support" data-section>Vuex Support<a class="anchor" href="#vuex-support">
                   <anchor></anchor></a>
-              </h2><p>In all previous examples, we used <code>v-model</code> to sync value between application state and vue-treeselect, a.k.a two-way data binding. If you are using Vuex, we could make use of <code>:value</code> and <code>@input</code>, since <code>v-model</code> is just a syntax sugur for them in Vue 2.</p>
+              </h2><p>In all previous examples, we used <code>v-model</code> to sync value between application state and vue-treeselect, a.k.a two-way data binding. If you are using Vuex, we could make use of <code>:value</code> and <code>@input</code>, since <code>v-model</code> is just a syntax sugar for them in Vue 2.</p>
 <p>Concretely speaking, we can bind <code>getter</code> to <code>:value</code> to make vue-treeselect reflect any changes in your Vuex state, and bind <code>action</code> or <code>mutation</code> to <code>@input</code> to update your Vuex state whenever the value changes.</p>
 
               <demo>
@@ -940,5 +931,5 @@ export default {
     </div>
     <script src="https://buttons.github.io/buttons.js" async defer="defer"></script>
     <script src="static/prism.min.js"></script>
-  <script type="text/javascript" src="static/js/app.a51222be2e638c3834a8.js"></script></body>
+  <script type="text/javascript" src="static/js/app.e1982b33116151fc93ee.js"></script></body>
 </html>
