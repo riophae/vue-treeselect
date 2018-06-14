@@ -50,7 +50,7 @@ describe('Basic', () => {
       expect(a).toEqual({
         id: jasmine.any(String),
         label: jasmine.any(String),
-        lowerCasedLabel: jasmine.any(String),
+        lowerCased: jasmine.any(Object),
         nestedSearchLabel: jasmine.any(String),
         isLeaf: jasmine.any(Boolean),
         isBranch: jasmine.any(Boolean),
@@ -82,7 +82,7 @@ describe('Basic', () => {
       expect(aa).toEqual({
         id: jasmine.any(String),
         label: jasmine.any(String),
-        lowerCasedLabel: jasmine.any(String),
+        lowerCased: jasmine.any(Object),
         nestedSearchLabel: jasmine.any(String),
         isLeaf: jasmine.any(Boolean),
         isBranch: jasmine.any(Boolean),
@@ -112,7 +112,7 @@ describe('Basic', () => {
       expect(vm.forest.nodeMap.a.label).toBe('a')
     })
 
-    it('lowerCasedLabel', () => {
+    it('lowerCased', () => {
       const wrapper = mount(Treeselect, {
         propsData: {
           options: [ {
@@ -124,7 +124,7 @@ describe('Basic', () => {
       const { vm } = wrapper
 
       expect(vm.forest.nodeMap.a.label).toBe('A')
-      expect(vm.forest.nodeMap.a.lowerCasedLabel).toBe('a')
+      expect(vm.forest.nodeMap.a.lowerCased).toEqual({ label: 'a' })
     })
 
     describe('isDisabled', () => {

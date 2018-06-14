@@ -260,4 +260,94 @@ describe('Searching', () => {
       })
     })
   })
+
+  describe('match more properties', () => {
+    async function typeAndAssert(wrapper, searchText, idListOfNodesThatShouldBeMatched) {
+      await typeSearchText(wrapper, searchText)
+      const { nodeMap } = wrapper.vm.forest
+      expect(nodeMap).toEqual(Object.keys(nodeMap).reduce((prev, id) => ({
+        ...prev,
+        [id]: jasmine.objectContaining({ isMatched: idListOfNodesThatShouldBeMatched.includes(id) })
+      }), {}))
+    }
+
+    it('match more properties than only `label`', async () => {
+      const wrapper = mount(Treeselect, {
+        propsData: {
+          matchKeys: [ 'label', 'value' ],
+          searchable: true,
+          options: [ {
+            id: 'a',
+            label: 'a',
+            value: '1',
+            extra: 'x',
+          }, {
+            id: 'b',
+            label: 'b',
+            value: '2',
+            extra: 'y',
+          } ],
+        },
+      })
+
+      await typeAndAssert(wrapper, 'a', [ 'a' ])
+      await typeAndAssert(wrapper, 'b', [ 'b' ])
+      await typeAndAssert(wrapper, '1', [ 'a' ])
+      await typeAndAssert(wrapper, '2', [ 'b' ])
+      await typeAndAssert(wrapper, 'x', [])
+      await typeAndAssert(wrapper, 'y', [])
+    })
+
+    it('should properly handle value of types other than string', async () => {
+      const specialValues = [
+        1, NaN,
+        null, undefined,
+        {}, [],
+        () => { /* empty */ },
+      ]
+      const wrapper = mount(Treeselect, {
+        propsData: {
+          matchKeys: [ 'value' ],
+          searchable: true,
+          options: specialValues.map((value, index) => ({
+            id: String(index),
+            label: String(index),
+            value,
+          })),
+        },
+      })
+
+      await typeAndAssert(wrapper, '1', [ '0' ])
+      await typeAndAssert(wrapper, 'NaN', [])
+      await typeAndAssert(wrapper, 'null', [])
+      await typeAndAssert(wrapper, 'undefined', [])
+      await typeAndAssert(wrapper, 'object', [])
+      await typeAndAssert(wrapper, '{}', [])
+      await typeAndAssert(wrapper, '[]', [])
+      await typeAndAssert(wrapper, 'function', [])
+    })
+
+    it('with `normalizer` prop', async () => {
+      const wrapper = mount(Treeselect, {
+        propsData: {
+          // here we leave the `matchKeys` prop to its default value `[ 'label' ]`
+          searchable: true,
+          normalizer: node => ({
+            id: node.key,
+            label: node.name,
+          }),
+          options: [ {
+            key: 'a',
+            name: 'a',
+          }, {
+            key: 'b',
+            name: 'b',
+          } ],
+        },
+      })
+
+      await typeAndAssert(wrapper, 'a', [ 'a' ])
+      await typeAndAssert(wrapper, 'b', [ 'b' ])
+    })
+  })
 })

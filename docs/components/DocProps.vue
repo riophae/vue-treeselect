@@ -167,6 +167,11 @@
           `${code('instanceId')} - eqauls to the value of ${code('instanceId')} prop you passed to vue-treeselect`,
         ].join('<br>'),
       }, {
+        name: 'matchKeys',
+        type: 'String[]',
+        defaultValue: code('[ "label" ]'),
+        description: `Which keys of a ${code('node')} object to filter on.`,
+      }, {
         name: 'maxHeight',
         type: 'Number',
         defaultValue: code('300'),
