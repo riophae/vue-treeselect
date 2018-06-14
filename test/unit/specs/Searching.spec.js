@@ -267,7 +267,7 @@ describe('Searching', () => {
       const { nodeMap } = wrapper.vm.forest
       expect(nodeMap).toEqual(Object.keys(nodeMap).reduce((prev, id) => ({
         ...prev,
-        [id]: jasmine.objectContaining({ isMatched: idListOfNodesThatShouldBeMatched.includes(id) })
+        [id]: jasmine.objectContaining({ isMatched: idListOfNodesThatShouldBeMatched.includes(id) }),
       }), {}))
     }
 
