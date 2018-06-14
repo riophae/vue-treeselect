@@ -20,7 +20,7 @@
 
 ### Getting Started
 
-It's recommended to install vue-treeselect from npm, and build your app using a bundler like [webpack](https://webpack.js.org/).
+It's recommended to install vue-treeselect via npm, and build your app using a bundler like [webpack](https://webpack.js.org/).
 
 ```bash
 npm install --save @riophae/vue-treeselect
@@ -73,7 +73,7 @@ This example shows how to integrate vue-treeselect with your [Vue SFCs](https://
 </script>
 ```
 
-If you just don't want to use webpack or other bundlers, you can also simply include the standalone UMD build in your page. In this way, you need to make sure Vue is included before vue-treeselect.
+If you just don't want to use webpack or other bundlers, you can also simply include the standalone UMD build in your page. In this way, make sure Vue as a dependency is included before vue-treeselect.
 
 ```html
 <html>
@@ -81,8 +81,8 @@ If you just don't want to use webpack or other bundlers, you can also simply inc
     <!-- include Vue 2.x -->
     <script src="https://cdn.jsdelivr.net/npm/vue@^2"></script>
     <!-- include vue-treeselect & its styles. you can change the version tag to better suit your need. -->
-    <script src="https://cdn.jsdelivr.net/npm/@riophae/vue-treeselect@0.0.28/dist/vue-treeselect.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@riophae/vue-treeselect@0.0.28/dist/vue-treeselect.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@riophae/vue-treeselect@0.0.29/dist/vue-treeselect.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@riophae/vue-treeselect@0.0.29/dist/vue-treeselect.min.css">
   </head>
   <body>
     <div id="app">

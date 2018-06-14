@@ -11,9 +11,9 @@
       <tr v-for="prop in props" :key="prop[0]">
         <td><strong>{{ prop.name }}</strong></td>
         <td class="type">
-          <strong>Type:</strong> <span v-html="prop.type" />
+          <strong>Type: </strong><span v-html="prop.type" />
           <br>
-          <strong>Default:</strong> <span v-html="prop.defaultValue" />
+          <strong>Default: </strong><span v-html="prop.defaultValue" />
         </td>
         <td v-html="prop.description" />
       </tr>
@@ -49,7 +49,7 @@
         name: 'backspaceRemoves',
         type: 'Boolean',
         defaultValue: code('true'),
-        description: 'Whether pressing backspace key removes the last item if there is no text input.',
+        description: 'Whether <kbd>Backspace</kbd> removes the last item if there is no text input.',
       }, {
         name: 'beforeClearAll',
         type: entities.encodeHTML(`Fn${makeArgNameList([])} 🡒 (Boolean | Promise<Boolean>)`),
@@ -94,7 +94,7 @@
         name: 'deleteRemoves',
         type: 'Boolean',
         defaultValue: code('true'),
-        description: 'Whether pressing delete key removes the last item if there is no text input.',
+        description: 'Whether <kbd>Delete</kbd> removes the last item if there is no text input.',
       }, {
         name: 'delimiter',
         type: 'String',
@@ -114,12 +114,12 @@
         name: 'disableFuzzyMatching',
         type: 'Boolean',
         defaultValue: code('false'),
-        description: `The fuzzy matching functionality is enabled by default. Set to ${code('true')} to disable it.`,
+        description: `Set to ${code('true')} to disable the fuzzy matching functionality, which is enabled by default.`,
       }, {
         name: 'escapeClearsValue',
         type: 'Boolean',
         defaultValue: code('true'),
-        description: 'Whether escape clears the value when the menu is closed.',
+        description: 'Whether <kbd>Esc</kbd> clears the value when the menu is closed.',
       }, {
         name: 'flat',
         type: 'Boolean',
@@ -134,7 +134,7 @@
         name: 'joinValues',
         type: 'Boolean',
         defaultValue: code('false'),
-        description: 'Joins multiple values into a single form field with the delimiter (legacy mode).',
+        description: `Joins multiple values into a single form field with the ${code('delimiter')} (legacy mode).`,
       }, {
         name: 'limit',
         type: 'Number',
@@ -205,7 +205,7 @@
         name: 'openDirection',
         type: 'String',
         defaultValue: code('"auto"'),
-        description: `By default the menu will open whereever there is more space once there is not enough space below to open at ${code('maxHeight')}. Use this prop to force the menu to always open in specified direction. Acceptable values: ${code('"below"')}, ${code('"bottom"')}, ${code('"above"')} or ${code('"top"')}.`,
+        description: `By default the menu will open whereever there is more space once there is not enough space below to open at ${code('maxHeight')}. Use this prop to force the menu to always open in specified direction. <br>Acceptable values: ${code('"below"')}, ${code('"bottom"')}, ${code('"above"')} or ${code('"top"')}.`,
       }, {
         name: 'openOnClick',
         type: 'Boolean',
@@ -260,7 +260,7 @@
         name: 'showCountOf',
         type: 'String',
         defaultValue: code('"ALL_CHILDREN"'),
-        description: `Used in pairs with ${code('showCount')} specifying which count number should be displayed. Acceptable values: ${code('"ALL_CHILDREN"')}, ${code('"ALL_DESCENDANTS"')}, ${code('"LEAF_CHILDREN"')} or ${code('"LEAF_DESCENDANTS"')}.`,
+        description: `Used in conjunction with ${code('showCount')} to specify which type of count number should be displayed. <br>Acceptable values: ${code('"ALL_CHILDREN"')}, ${code('"ALL_DESCENDANTS"')}, ${code('"LEAF_CHILDREN"')} or ${code('"LEAF_DESCENDANTS"')}.`,
       }, {
         name: 'showCountOnSearch',
         type: 'Boolean',
@@ -270,7 +270,7 @@
         name: 'sortValueBy',
         type: 'String',
         defaultValue: code('"ORDER_SELECTED"'),
-        description: `In which order the selected options should be displayed. Acceptable values: ${code('"ORDER_SELECTED"')}, ${code('"LEVEL"')} or ${code('"INDEX"')}. See ${link('#flat-mode-and-sort-values')} for example.`,
+        description: `In which order the selected options should be displayed in trigger & sorted in ${code('value')} array. Use only when ${code(':multiple="true"')}. See ${link('#flat-mode-and-sort-values')} for example. <br>Acceptable values: ${code('"ORDER_SELECTED"')}, ${code('"LEVEL"')} or ${code('"INDEX"')}.`,
       }, {
         name: 'tabIndex',
         type: 'Number',
@@ -278,19 +278,19 @@
         description: 'Tab index of the control.',
       }, {
         name: 'value',
-        type: 'Array',
+        type: `${code('id')} | ${code('node')} | ${code('id[]')} | ${code('node[]')}`,
         defaultValue: NO_DEFAULT_VALUE,
-        description: `An array of node ids or node objects as the initial field value. The format depends on the ${code('valueFormat')} prop.`,
+        description: `The value of the control. <br>Should be ${code('id')} or ${code('node')} object when ${code(':multiple="false"')}, or an array of ${code('id')} or ${code('node')} object when ${code(':multiple="true"')}. Its format depends on the ${code('valueFormat')} prop. <br>For most cases, just use ${code('v-model')} instead.`,
       }, {
         name: 'valueConsistsOf',
         type: 'String',
         defaultValue: code('"BRANCH_PRIORITY"'),
-        description: `Which kind of nodes should be included in the value array in multi-select mode. Acceptable values: ${code('"ALL"')}, ${code('"BRANCH_PRIORITY"')}, ${code('"LEAF_PRIORITY"')} or ${code('"ALL_WITH_INDETERMINATE"')}. See ${link('#prevent-value-combining')} for example.`,
+        description: `Which kind of nodes should be included in the ${code('value')} array in multi-select mode. See ${link('#prevent-value-combining')} for example. <br>Acceptable values: ${code('"ALL"')}, ${code('"BRANCH_PRIORITY"')}, ${code('"LEAF_PRIORITY"')} or ${code('"ALL_WITH_INDETERMINATE"')}.`,
       }, {
         name: 'valueFormat',
         type: 'String',
         defaultValue: code('"id"'),
-        description: `Format of ${code('value')} prop. Acceptable values: ${code('"id"')} or ${code('"object"')}.`,
+        description: `Format of ${code('value')} prop. <br>Note that, when set to ${code('"object"')}, only ${code('id')} & ${code('label')} properties are required in each ${code('node')} object in ${code('value')}. <br>Acceptable values: ${code('"id"')} or ${code('"object"')}.`,
       } ],
     }),
   }

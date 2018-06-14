@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>Available properties of <code>node</code> object.</p>
+    <p>Available properties of a <code>node</code> object.</p>
     <table class="striped">
       <thead>
         <tr>
@@ -23,7 +23,7 @@
         <tr>
           <td><strong>children</strong></td>
           <td class="type"><code>node[]</code> | <code>null</code></td>
-          <td>Declares a branch node. Set to empty array for no children options. Set to <code>null</code> for <a href="#delayed-loading">delayed loading</a>.</td>
+          <td>Declares a branch node. You can:<br><b>1)</b> Set to an array of children options consisting of <b>a.</b> leaf nodes, <b>b.</b> branch nodes, or <b>c.</b> a mixture of these two. <i>or</i><br><b>2)</b> Set to empty array for no children options. <i>or</i><br><b>3)</b> Set to <code>null</code> to declares an <i>unloaded branch node</i> for <a href="#delayed-loading">delayed loading</a>. You can reassign an array (regardless of whether it's empty or not) later in <code>loadOptions()</code> to register these children options, and mark this branch node as <i>loaded</i>.</td>
         </tr>
         <tr>
           <td><strong>isDisabled</strong></td>
@@ -33,10 +33,11 @@
         <tr>
           <td><strong>isDefaultExpanded</strong></td>
           <td class="type">Boolean</td>
-          <td>Whether the branch option should be expanded by default.</td>
+          <td>Whether this folder option should be expanded by default.</td>
         </tr>
       </tbody>
     </table>
-    <p class="tip">You can add more properties than the listed ones.</p>
+    <p class="tip">The value of <code>label</code>, <code>children</code> or <code>isDisabled</code> can be reassigned anytime.</p>
+    <p class="tip">Add more properties than the listed ones IS okay. You can even use these extra properties in your custom template by accessing <code>node.raw.xxx</code>.</p>
   </div>
 </template>

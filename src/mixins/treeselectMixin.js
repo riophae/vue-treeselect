@@ -252,7 +252,7 @@ export default {
     },
 
     /**
-     * Joins multiple values into a single form field with the delimiter (legacy mode)
+     * Joins multiple values into a single form field with the `delimiter` (legacy mode)
     */
     joinValues: {
       type: Boolean,
@@ -441,7 +441,7 @@ export default {
     },
 
     /**
-     * Used in pairs with `showCount` specifying what count should be displayed.
+     * Used in conjunction with `showCount` to specify which type of count number should be displayed.
      * Acceptable values:
      *   - "ALL_CHILDREN"
      *   - "ALL_DESCENDANTS"
@@ -465,7 +465,8 @@ export default {
     showCountOnSearch: null,
 
     /**
-     * In which order the selected options should be displayed.
+     * In which order the selected options should be displayed in trigger & sorted in `value` array.
+     * Used for multi-select mode only.
      * Acceptable values:
      *   - "ORDER_SELECTED"
      *   - "LEVEL"
@@ -489,14 +490,16 @@ export default {
     },
 
     /**
-     * An array of node ids or node objects as the initial field value.
-     * The format depends on the ${v('valueFormat')} prop.
+     * The value of the control.
+     * Should be `id` or `node` object for single-select mode, or an array of `id` or `node` object for multi-select mode.
+     * Its format depends on the `valueFormat` prop.
+     * For most cases, just use `v-model` instead.
      * @type {?Array}
      */
     value: null,
 
     /**
-     * Which kind of nodes should be included in the value array in multi-select mode
+     * Which kind of nodes should be included in the `value` array in multi-select mode
      * Acceptable values:
      *   - "ALL" - Any node that is checked will be included in the `value` array
      *   - "BRANCH_PRIORITY" (default) - If a branch node is checked, all its descendants will be excluded in the `value` array
@@ -513,7 +516,8 @@ export default {
     },
 
     /**
-     * Format of `value` prop
+     * Format of `value` prop.
+     * Note that, when set to `"object"`, only `id` & `label` properties are required in each `node` object in `value` prop.
      * Acceptable values:
      *   - "id"
      *   - "object"
