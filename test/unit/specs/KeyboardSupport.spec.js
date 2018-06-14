@@ -371,6 +371,71 @@ describe('Keyboard Support', () => {
       expect(vm.menu.current).toBe('b')
       moveAround(wrapper, [ 'b', 'bb' ])
     })
+
+    it('keyboard navigation & delayed loading', async () => {
+      const DELAY = 10
+      const wrapper = mount(Treeselect, {
+        propsData: {
+          options: [ {
+            id: 'a',
+            label: 'a',
+            children: null,
+          }, {
+            id: 'b',
+            label: 'b',
+          } ],
+          loadOptions({ action, parentNode, callback }) {
+            if (action === 'LOAD_CHILDREN_OPTIONS') {
+              setTimeout(() => {
+                parentNode.children = [ {
+                  id: 'aa',
+                  label: 'aa',
+                } ]
+                callback(null)
+              }, DELAY)
+            }
+          },
+        },
+      })
+      const { vm } = wrapper
+
+      vm.openMenu()
+      await vm.$nextTick()
+
+      expect(vm.menu.current).toBe('a')
+
+      pressArrowDown(wrapper)
+      expect(vm.menu.current).toBe('b')
+
+      pressArrowDown(wrapper)
+      expect(vm.menu.current).toBe('a')
+
+      pressArrowRight(wrapper)
+      await vm.$nextTick()
+      expect(vm.forest.nodeMap.a.isPending).toBe(true)
+
+      pressArrowDown(wrapper)
+      expect(vm.menu.current).toBe('b')
+
+      pressArrowUp(wrapper)
+      expect(vm.menu.current).toBe('a')
+
+      await sleep(DELAY)
+      expect(vm.forest.nodeMap.a.isLoaded).toBe(true)
+      expect(vm.forest.nodeMap.a.children).toBeArrayOfSize(1)
+
+      pressArrowDown(wrapper)
+      expect(vm.menu.current).toBe('aa')
+
+      pressArrowDown(wrapper)
+      expect(vm.menu.current).toBe('b')
+
+      pressArrowUp(wrapper)
+      expect(vm.menu.current).toBe('aa')
+
+      pressArrowUp(wrapper)
+      expect(vm.menu.current).toBe('a')
+    })
   })
 
   describe('(arrow right + arrow left) keys', () => {

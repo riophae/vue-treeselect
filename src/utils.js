@@ -73,6 +73,10 @@ export function scrollIntoView(scrollingEl, focusedEl) {
  * Language helpers
  */
 
+export function isNaN(x) {
+  return x !== x
+}
+
 export function isPromise(x) {
   // https://github.com/then/is-promise/blob/master/index.js
   return (
@@ -153,8 +157,8 @@ export function getLast(arr) {
   return arr[arr.length - 1]
 }
 
-export function includes(arr, elem) {
-  return arr.indexOf(elem) !== -1
+export function includes(arrOrStr, elem) {
+  return arrOrStr.indexOf(elem) !== -1
 }
 
 export function find(arr, predicate, ctx) {

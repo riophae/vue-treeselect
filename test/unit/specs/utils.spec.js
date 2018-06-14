@@ -66,11 +66,29 @@ describe('Utils', () => {
     })
   })
 
-  describe('noop', () => {
-    const { noop } = utils
+  describe('isNaN', () => {
+    const { isNaN } = utils
 
-    it('does nothing', () => {
-      noop()
+    it('check if value is NaN', () => {
+      expect(isNaN(NaN)).toBe(true)
+      expect(isNaN(0)).toBe(false)
+      expect(isNaN(-1)).toBe(false)
+      expect(isNaN(1)).toBe(false)
+      expect(isNaN('NaN')).toBe(false)
+    })
+  })
+
+  describe('isPromise', () => {
+    const { isPromise } = utils
+
+    it('check Promise instance', () => {
+      expect(isPromise(Promise.resolve())).toBe(true)
+      expect(isPromise(Promise.reject())).toBe(true)
+    })
+
+    it('duck typing', () => {
+      const p = { then() { /* empty */ } }
+      expect(isPromise(p)).toBe(true)
     })
   })
 
@@ -85,6 +103,14 @@ describe('Utils', () => {
         expect(fn()).toBe(1)
         expect(n).toBe(1)
       }
+    })
+  })
+
+  describe('noop', () => {
+    const { noop } = utils
+
+    it('does nothing', () => {
+      noop()
     })
   })
 

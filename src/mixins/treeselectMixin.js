@@ -3,7 +3,7 @@ import fuzzysearch from 'fuzzysearch'
 import {
   warning,
   debounce, onlyOnLeftClick, scrollIntoView,
-  isPromise, once,
+  isNaN, isPromise, once,
   identity, constant, createMap,
   assign,
   quickDiff, getLast, includes, find, removeFromArray,
@@ -41,6 +41,19 @@ function createAsyncOptionsStates() {
     isLoading: false,
     loadingError: '',
   }
+}
+
+function stringifyOptionPropValue(value) {
+  if (typeof value === 'string') return value
+  if (typeof value === 'number' && !isNaN(value)) return value + ''
+  // istanbul ignore next
+  return ''
+}
+
+function match(enableFuzzyMatch, needle, haystack) {
+  return enableFuzzyMatch
+    ? fuzzysearch(needle, haystack)
+    : includes(haystack, needle)
 }
 
 export default {
@@ -123,7 +136,7 @@ export default {
     },
 
     /**
-     * Show an "×" icon that resets value?
+     * Show an "×" button that resets value?
      */
     clearable: {
       type: Boolean,
@@ -131,7 +144,7 @@ export default {
     },
 
     /**
-     * Title for the "×" icon when multiple: true
+     * Title for the "×" button when multiple: true
      */
     clearAllText: {
       type: String,
@@ -149,7 +162,7 @@ export default {
     },
 
     /**
-     * Title for the "×" icon
+     * Title for the "×" button
      */
     clearValueText: {
       type: String,
@@ -259,7 +272,7 @@ export default {
     },
 
     /**
-     * Joins multiple values into a single form field with the delimiter (legacy mode)
+     * Joins multiple values into a single form field with the `delimiter` (legacy mode)
     */
     joinValues: {
       type: Boolean,
@@ -309,6 +322,14 @@ export default {
      */
     loadOptions: {
       type: Function,
+    },
+
+    /**
+     * Which node properties to filter on
+     */
+    matchKeys: {
+      type: Array,
+      default: constant([ 'label' ]),
     },
 
     /**
@@ -368,7 +389,14 @@ export default {
     },
 
     /**
-     * Fixed opening direction
+     * By default the menu will open whereever there is more space once there is not enough space below to open at `maxHeight`.
+     * Use this prop to force the menu to always open to specified direction.
+     * Acceptable values:
+     *   - `"auto"`
+     *   - `"below"`
+     *   - `"bottom"`
+     *   - `"above"`
+     *   - `"top"`
      */
     openDirection: {
       type: String,
@@ -448,7 +476,7 @@ export default {
     },
 
     /**
-     * Used in pairs with `showCount` specifying what count should be displayed.
+     * Used in conjunction with `showCount` to specify which type of count number should be displayed.
      * Acceptable values:
      *   - "ALL_CHILDREN"
      *   - "ALL_DESCENDANTS"
@@ -472,7 +500,8 @@ export default {
     showCountOnSearch: null,
 
     /**
-     * In which order the selected options should be displayed.
+     * In which order the selected options should be displayed in trigger & sorted in `value` array.
+     * Used for multi-select mode only.
      * Acceptable values:
      *   - "ORDER_SELECTED"
      *   - "LEVEL"
@@ -496,14 +525,16 @@ export default {
     },
 
     /**
-     * An array of node ids or node objects as the initial field value.
-     * The format depends on the ${v('valueFormat')} prop.
+     * The value of the control.
+     * Should be `id` or `node` object for single-select mode, or an array of `id` or `node` object for multi-select mode.
+     * Its format depends on the `valueFormat` prop.
+     * For most cases, just use `v-model` instead.
      * @type {?Array}
      */
     value: null,
 
     /**
-     * Which kind of nodes should be included in the value array in multi-select mode
+     * Which kind of nodes should be included in the `value` array in multi-select mode
      * Acceptable values:
      *   - "ALL" - Any node that is checked will be included in the `value` array
      *   - "BRANCH_PRIORITY" (default) - If a branch node is checked, all its descendants will be excluded in the `value` array
@@ -520,7 +551,8 @@ export default {
     },
 
     /**
-     * Format of `value` prop
+     * Format of `value` prop.
+     * Note that, when set to `"object"`, only `id` & `label` properties are required in each `node` object in `value` prop.
      * Acceptable values:
      *   - "id"
      *   - "object"
@@ -566,7 +598,7 @@ export default {
 
       forest: {
         // normalized options
-        normalized: [],
+        normalizedOptions: [],
         // <id, node> map for quick look-up
         nodeMap: createMap(),
         // <id, checkedState> map, used for multi-select mode
@@ -673,8 +705,12 @@ export default {
       return this.internalValue.map(this.getNode).slice(0, this.limit)
     },
     /**
-     * Id list of options displayed in the menu
-     * @type {Object[]}
+     * Id list of options displayed in the menu. Options that are considered NOT visible:
+     *   - descendants of a collapsed branch node
+     *   - in local search mode, options that are not matched, unless
+     *       - it's a branch node and has matched descendants
+     *       - it's a leaf node and its parent node is explicitly set to show all children
+     * @type {id[]}
      */
     visibleOptionIds() {
       const visibleOptionIds = []
@@ -715,7 +751,7 @@ export default {
       return this.internalValue.length > this.limit
     },
     /**
-     * Should the "×" icon be shown?
+     * Should the "×" button be shown?
      * @type {boolean}
      */
     shouldShowX() {
@@ -766,12 +802,15 @@ export default {
     },
 
     flat() {
-      // re-initialize options
-      this.initialize(this.options)
+      this.initialize()
     },
 
     internalValue() {
       this.$emit('input', this.getValue(), this.getInstanceId())
+    },
+
+    matchKeys() {
+      this.initialize()
     },
 
     multiple(newValue) {
@@ -823,13 +862,13 @@ export default {
       this._blurOnSelect = false
     },
 
-    initialize(rootOptions) {
-      if (Array.isArray(rootOptions)) {
+    initialize() {
+      if (Array.isArray(this.options)) {
         // In case we are reinitializing options, keep the old state tree temporarily.
         const prevNodeMap = this.forest.nodeMap
         this.forest.nodeMap = createMap()
         this.keepDataOfSelectedNodes(prevNodeMap)
-        this.forest.normalizedOptions = this.normalize(NO_PARENT_NODE, rootOptions, prevNodeMap)
+        this.forest.normalizedOptions = this.normalize(NO_PARENT_NODE, this.options, prevNodeMap)
         this.completeSelectedNodeIdList()
         this.forest.isLoaded = true
       } else {
@@ -1136,6 +1175,7 @@ export default {
         if (node.isBranch) {
           node.isExpandedOnSearch = false
           node.showAllChildrenOnSearch = false
+          node.isMatched = false
           node.hasMatchedDescendants = false
           this.$set(this.localSearch.countMap, node.id, {
             [ALL_CHILDREN]: 0,
@@ -1149,19 +1189,17 @@ export default {
       const lowerCasedSearchQuery = this.trigger.searchQuery.trim().toLocaleLowerCase()
       const splitSearchQuery = lowerCasedSearchQuery.replace(/\s+/g, ' ').split(' ')
       this.traverseAllNodesDFS(node => {
-        let isMatched
         if (this.searchNested && splitSearchQuery.length > 1) {
-          isMatched = splitSearchQuery.every(
-            filterValue => includes(node.nestedSearchLabel, filterValue),
+          node.isMatched = splitSearchQuery.every(filterValue =>
+            match(false, filterValue, node.nestedSearchLabel)
           )
         } else {
-          isMatched = this.disableFuzzyMatching
-            ? includes(node.lowerCasedLabel, lowerCasedSearchQuery)
-            : fuzzysearch(lowerCasedSearchQuery, node.lowerCasedLabel)
+          node.isMatched = this.matchKeys.some(matchKey =>
+            match(!this.disableFuzzyMatching, lowerCasedSearchQuery, node.lowerCased[matchKey])
+          )
         }
-        node.isMatched = isMatched
 
-        if (isMatched) {
+        if (node.isMatched) {
           this.localSearch.noResults = false
           node.ancestors.forEach(ancestor => this.localSearch.countMap[ancestor.id][ALL_DESCENDANTS]++)
           if (node.isLeaf) node.ancestors.forEach(ancestor => this.localSearch.countMap[ancestor.id][LEAF_DESCENDANTS]++)
@@ -1173,7 +1211,7 @@ export default {
         }
 
         if (
-          (isMatched || (node.isBranch && node.isExpandedOnSearch)) &&
+          (node.isMatched || (node.isBranch && node.isExpandedOnSearch)) &&
           node.parentNode !== NO_PARENT_NODE
         ) {
           node.parentNode.isExpandedOnSearch = true
@@ -1345,10 +1383,12 @@ export default {
           const isBranch = Array.isArray(children) || children === null
           const isLeaf = !isBranch
           const isDisabled = !!node.isDisabled || (!this.flat && !isRootNode && parentNode.isDisabled)
-          const lowerCasedLabel = label.toLocaleLowerCase()
+          const lowerCased = this.matchKeys.reduce((prev, key) => assign(prev, {
+            [key]: stringifyOptionPropValue(node[key]).toLocaleLowerCase(),
+          }), {})
           const nestedSearchLabel = isRootNode
-            ? lowerCasedLabel
-            : parentNode.nestedSearchLabel + ' ' + lowerCasedLabel
+            ? lowerCased.label
+            : parentNode.nestedSearchLabel + ' ' + lowerCased.label
 
           const normalized = this.$set(this.forest.nodeMap, id, createMap())
           this.$set(normalized, 'id', id)
@@ -1357,7 +1397,7 @@ export default {
           this.$set(normalized, 'ancestors', isRootNode ? [] : parentNode.ancestors.concat(parentNode))
           this.$set(normalized, 'index', (isRootNode ? [] : parentNode.index).concat(index))
           this.$set(normalized, 'parentNode', parentNode)
-          this.$set(normalized, 'lowerCasedLabel', lowerCasedLabel)
+          this.$set(normalized, 'lowerCased', lowerCased)
           this.$set(normalized, 'nestedSearchLabel', nestedSearchLabel)
           this.$set(normalized, 'isDisabled', isDisabled)
           this.$set(normalized, 'isMatched', false)
@@ -1719,9 +1759,9 @@ export default {
   created() {
     this.verifyProps()
     this.resetFlags()
-    this.initialize(this.options)
+    this.initialize()
     // re-initialize options when the `options` prop has changed
-    this.$watch('options', () => this.initialize(this.options), { deep: true })
+    this.$watch('options', () => this.initialize(), { deep: true })
   },
 
   mounted() {

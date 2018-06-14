@@ -295,7 +295,7 @@ describe('Props', () => {
       vm = wrapper.vm
     })
 
-    it('should show "×" icon', () => {
+    it('should show "×" button', () => {
       expect(wrapper.contains('.vue-treeselect__x')).toBe(true)
     })
 
@@ -323,7 +323,7 @@ describe('Props', () => {
   })
 
   describe('clearAllText', () => {
-    it('should be the title of "×" icon when multiple=true', () => {
+    it('should be the title of "×" button when multiple=true', () => {
       const wrapper = mount(Treeselect, {
         propsData: {
           clearable: true,
@@ -409,7 +409,7 @@ describe('Props', () => {
   })
 
   describe('clearValueText', () => {
-    it('should be the title of "×" icon when multiple=false', () => {
+    it('should be the title of "×" button when multiple=false', () => {
       const wrapper = mount(Treeselect, {
         propsData: {
           clearable: true,
