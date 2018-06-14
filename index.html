@@ -111,7 +111,7 @@
                 <anchor></anchor></a>
             </h1>
             <section>
-              <p>It's recommended to install vue-treeselect from npm, and build your app using a bundler like <a href="https://webpack.js.org/">webpack</a>.</p>
+              <p>It's recommended to install vue-treeselect via npm, and build your app using a bundler like <a href="https://webpack.js.org/">webpack</a>.</p>
 <pre><code class="language-bash">npm install --save @riophae/vue-treeselect
 </code></pre>
               <p>This example shows how to integrate vue-treeselect with your <a href="https://vuejs.org/v2/guide/single-file-components.html">Vue SFCs</a>.</p>
@@ -158,14 +158,14 @@
   }
 &lt;/script&gt;
 </code></pre>
-<p>If you just don't want to use webpack or other bundlers, you can also simply include the standalone UMD build in your page. In this way, you need to make sure Vue is included before vue-treeselect.</p>
+<p>If you just don't want to use webpack or other bundlers, you can also simply include the standalone UMD build in your page. In this way, make sure Vue as a dependency is included before vue-treeselect.</p>
 <pre><code class="language-html">&lt;html&gt;
   &lt;head&gt;
     &lt;!-- include Vue 2.x --&gt;
     &lt;script src=&quot;https://cdn.jsdelivr.net/npm/vue@^2&quot;&gt;&lt;/script&gt;
     &lt;!-- include vue-treeselect &amp; its styles. you can change the version tag to better suit your need. --&gt;
-    &lt;script src=&quot;https://cdn.jsdelivr.net/npm/@riophae/vue-treeselect@0.0.28/dist/vue-treeselect.min.js&quot;&gt;&lt;/script&gt;
-    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@riophae/vue-treeselect@0.0.28/dist/vue-treeselect.min.css&quot;&gt;
+    &lt;script src=&quot;https://cdn.jsdelivr.net/npm/@riophae/vue-treeselect@0.0.29/dist/vue-treeselect.min.js&quot;&gt;&lt;/script&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@riophae/vue-treeselect@0.0.29/dist/vue-treeselect.min.css&quot;&gt;
   &lt;/head&gt;
   &lt;body&gt;
     &lt;div id=&quot;app&quot;&gt;
@@ -268,7 +268,7 @@
   }),
 }
 </code></template>
-              </demo><p>The first thing you need to learn is how to define options. There are two types of options: <strong>(a) folder options</strong> that are foldable &amp; may have children options, and <strong>(b) normal options</strong> that aren't &amp; don't. Here, I'd like to borrow the basic concepts from Computer Science and call the former as <strong>branch nodes</strong> and the latter as <strong>leaf nodes</strong>. These two kinds of nodes together compose the tree.</p>
+              </demo><p>The first thing you need to learn is how to define options. There are two types of options: <strong>a. folder options</strong> that are foldable &amp; may have children options, and <strong>b. normal options</strong> that aren't &amp; don't. Here, I'd like to borrow the basic concepts from Computer Science and call the former as <em>branch nodes</em> &amp; the latter as <em>leaf nodes</em>. These two kinds of nodes together compose the tree.</p>
 <p>Defining leaf nodes is quite simple:</p>
 <pre><code class="language-js">{
   id: '&lt;id&gt;', // used to identify the option within the tree so it's value must be unique across all options
@@ -931,5 +931,5 @@ export default {
     </div>
     <script src="https://buttons.github.io/buttons.js" async defer="defer"></script>
     <script src="static/prism.min.js"></script>
-  <script type="text/javascript" src="static/js/app.e1982b33116151fc93ee.js"></script></body>
+  <script type="text/javascript" src="static/js/app.364f2bdda77144111e87.js"></script></body>
 </html>
