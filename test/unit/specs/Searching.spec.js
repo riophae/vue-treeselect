@@ -349,5 +349,41 @@ describe('Searching', () => {
       await typeAndAssert(wrapper, 'a', [ 'a' ])
       await typeAndAssert(wrapper, 'b', [ 'b' ])
     })
+
+    it('should reinitialize options after the value of `matchKeys` prop changes', () => {
+      const wrapper = mount(Treeselect, {
+        propsData: {
+          searchable: true,
+          matchKeys: [ 'label' ],
+          options: [ {
+            id: 'A',
+            label: 'x',
+          }, {
+            id: 'b',
+            label: 'Y',
+          } ],
+        },
+      })
+      const { vm } = wrapper
+
+      expect(vm.forest.nodeMap).toEqual({
+        A: jasmine.objectContaining({
+          lowerCased: { label: 'x' },
+        }),
+        b: jasmine.objectContaining({
+          lowerCased: { label: 'y' },
+        }),
+      })
+
+      wrapper.setProps({ matchKeys: [ 'id' ] })
+      expect(vm.forest.nodeMap).toEqual({
+        A: jasmine.objectContaining({
+          lowerCased: { id: 'a' },
+        }),
+        b: jasmine.objectContaining({
+          lowerCased: { id: 'b' },
+        }),
+      })
+    })
   })
 })
