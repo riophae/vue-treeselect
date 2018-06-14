@@ -580,7 +580,7 @@ export default {
 
       forest: {
         // normalized options
-        normalized: [],
+        normalizedOptions: [],
         // <id, node> map for quick look-up
         nodeMap: createMap(),
         // <id, checkedState> map, used for multi-select mode
@@ -687,8 +687,12 @@ export default {
       return this.internalValue.map(this.getNode).slice(0, this.limit)
     },
     /**
-     * Id list of options displayed in the menu
-     * @type {Object[]}
+     * Id list of options displayed in the menu. Options that are considered NOT visible:
+     *   - descendants of a collapsed branch node
+     *   - in local search mode, options that are not matched, unless
+     *       - it's a branch node and has matched descendants
+     *       - it's a leaf node and its parent node is explicitly set to show all children
+     * @type {id[]}
      */
     visibleOptionIds() {
       const visibleOptionIds = []
