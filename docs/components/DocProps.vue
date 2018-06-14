@@ -64,12 +64,12 @@
         name: 'clearable',
         type: 'Boolean',
         defaultValue: code('true'),
-        description: 'Whether to show an "×" icon that resets value.',
+        description: 'Whether to show an "×" button that resets value.',
       }, {
         name: 'clearAllText',
         type: 'String',
         defaultValue: code('"Clear all"'),
-        description: `Title for the "×" icon when ${code(':multiple="true"')}.`,
+        description: `Title for the "×" button when ${code(':multiple="true"')}.`,
       }, {
         name: 'clearOnSelect',
         type: 'Boolean',
@@ -79,7 +79,7 @@
         name: 'clearValueText',
         type: 'String',
         defaultValue: code('"Clear value"'),
-        description: 'Title for the "×" icon.',
+        description: 'Title for the "×" button.',
       }, {
         name: 'closeOnSelect',
         type: 'Boolean',
@@ -205,17 +205,17 @@
         name: 'openDirection',
         type: 'String',
         defaultValue: code('"auto"'),
-        description: `By default the menu will open whereever there is more space once there is not enough space below to open at ${code('maxHeight')}. Use this prop to force the menu to always open in specified direction. <br>Acceptable values: ${code('"below"')}, ${code('"bottom"')}, ${code('"above"')} or ${code('"top"')}.`,
+        description: `By default the menu will open whereever there is more space once there is not enough space below to open at ${code('maxHeight')}. Use this prop to force the menu to always open to specified direction. <br>Acceptable values: ${code('"auto"')}, ${code('"below"')}, ${code('"bottom"')}, ${code('"above"')} or ${code('"top"')}.`,
       }, {
         name: 'openOnClick',
         type: 'Boolean',
         defaultValue: code('true'),
-        description: `Whether to automatically open the menu when the control is clicked`,
+        description: `Whether to automatically open the menu when the control is clicked.`,
       }, {
         name: 'openOnFocus',
         type: 'Boolean',
         defaultValue: code('false'),
-        description: `Whether to automatically open the menu when the control is focused`,
+        description: `Whether to automatically open the menu when the control is focused.`,
       }, {
         name: 'options',
         type: code('node[]'),

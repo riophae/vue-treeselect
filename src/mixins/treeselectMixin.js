@@ -116,7 +116,7 @@ export default {
     },
 
     /**
-     * Show an "×" icon that resets value?
+     * Show an "×" button that resets value?
      */
     clearable: {
       type: Boolean,
@@ -124,7 +124,7 @@ export default {
     },
 
     /**
-     * Title for the "×" icon when multiple: true
+     * Title for the "×" button when multiple: true
      */
     clearAllText: {
       type: String,
@@ -142,7 +142,7 @@ export default {
     },
 
     /**
-     * Title for the "×" icon
+     * Title for the "×" button
      */
     clearValueText: {
       type: String,
@@ -361,7 +361,14 @@ export default {
     },
 
     /**
-     * Fixed opening direction
+     * By default the menu will open whereever there is more space once there is not enough space below to open at `maxHeight`.
+     * Use this prop to force the menu to always open to specified direction.
+     * Acceptable values:
+     *   - `"auto"`
+     *   - `"below"`
+     *   - `"bottom"`
+     *   - `"above"`
+     *   - `"top"`
      */
     openDirection: {
       type: String,
@@ -701,7 +708,7 @@ export default {
       return this.internalValue.length > this.limit
     },
     /**
-     * Should the "×" icon be shown?
+     * Should the "×" button be shown?
      * @type {boolean}
      */
     shouldShowX() {
