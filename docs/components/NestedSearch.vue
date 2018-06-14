@@ -72,7 +72,7 @@
           id: 'bk-cola',
           label: 'Coca-Cola®',
         }, {
-          id: 'm-oreo-chocolate-shake',
+          id: 'bk-oreo-chocolate-shake',
           label: 'OREO® Chocolate Shake',
         } ],
       } ],
