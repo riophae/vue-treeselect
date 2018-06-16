@@ -97,6 +97,16 @@
     :markdown-it(inline=true)
       Note that, fuzzy search feature is disabled for this mode to avoid mismatching.
 
++guide('Out Of Container')
+  :markdown-it
+    Sometimes vue-treeselect be place in some container(div,or other component) that with css overflow:hidden.If the menu prop `maxHeight` large then those container,it will be truncated(not complete display).
+
+    In this case, you can provide a prop called `appendToBoby`,then the menu will be move to the end of html body to resolve this issue.
+  +demo('OutOfContainer')
+  p.tip
+    :markdown-it(inline=true)
+      `appendToBoby` may lead to the menu with a lower stack order(z-index,default:999) globally,in conjunction with another prop called `zIndex`(try to increase) can resolve this problem
+
 +guide('Customize Key Names')
   :markdown-it
     If your data of options is loaded via AJAX and have a different data structure than what vue-treeselect asks, e.g. your data has `name` property but vue-treeselect needs `label`, you may want to customize the key names. In this case, you can provide a function prop called `normalizer` which will be passed every node in the tree during data initialization. Use this function to create and return the transformed object.

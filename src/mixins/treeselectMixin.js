@@ -77,7 +77,14 @@ export default {
       type: Boolean,
       default: false,
     },
-
+    appendToBody: {
+      type: Boolean,
+      default: false,
+    },
+    zIndex: {
+      type: Number,
+      default: 999,
+    },
     /**
      * Deprecated. Use `autoFocus` instead.
      */
@@ -572,10 +579,21 @@ export default {
         current: null,
         // the scroll position before last menu close
         lastScrollPosition: 0,
-        // menu height
-        optimizedHeight: 0,
+        // menu size
+        size: {
+          'max-height': 0,
+          width: 'auto',
+        },
         // which direction to open the menu
         prefferedOpenDirection: 'below',
+        // menu position
+        pos: {
+          position: 'absolute',
+          top: 'auto',
+          right: '0',
+          bottom: 'auto',
+          left: '0',
+        },
       },
 
       forest: {
@@ -1036,6 +1054,26 @@ export default {
       }
     },
 
+    toggleScrollEvent(enabled) {
+      if (this.appendToBody) {
+        if (enabled) {
+          document.addEventListener('scroll', this.adjustMenuOpenPosition, false)
+        } else {
+          document.removeEventListener('scroll', this.adjustMenuOpenPosition, false)
+        }
+      }
+    },
+
+    toggleResizeEvent(enabled) {
+      if (this.appendToBody) {
+        if (enabled) {
+          window.addEventListener('resize', this.adjustMenuOpenPosition, false)
+        } else {
+          window.removeEventListener('resize', this.adjustMenuOpenPosition, false)
+        }
+      }
+    },
+
     focusInput() {
       this.$refs.value.focusInput()
     },
@@ -1043,6 +1081,13 @@ export default {
     blurInput() {
       this.$refs.value.blurInput()
     },
+
+    handleMenuMouseDown: onlyOnLeftClick(function handleMouseDown(evt) {
+      if (this.appendToBody) {
+        evt.preventDefault()
+        evt.stopPropagation()
+      }
+    }),
 
     handleMouseDown: onlyOnLeftClick(function handleMouseDown(evt) {
       evt.preventDefault()
@@ -1104,7 +1149,7 @@ export default {
 
     handleClickOutside(evt) {
       /* istanbul ignore else */
-      if (this.$refs.wrapper && !this.$refs.wrapper.contains(evt.target)) {
+      if (this.$refs.wrapper && !this.$refs.wrapper.contains(evt.target) && (!this.appendToBody || !this.$refs.menu.contains(evt.target))) {
         this.blurInput()
         this.closeMenu()
       }
@@ -1270,6 +1315,7 @@ export default {
       if (this.disabled || this.menu.isOpen) return
       this.menu.isOpen = true
       this.$nextTick(this.adjustMenuOpenDirection)
+      this.$nextTick(this.adjustMenuOpenPosition)
       this.$nextTick(this.restoreMenuScrollPosition)
       if (!this.forest.isLoaded) this.loadRootOptions()
       this.toggleClickOutsideEvent(true)
@@ -1657,7 +1703,29 @@ export default {
     restoreMenuScrollPosition() {
       if (this.$refs.menu) this.$refs.menu.scrollTop = this.menu.lastScrollPosition
     },
+    menuStyle() {
+      return assign({
+        'z-index': this.zIndex,
+      }, this.menu.size, this.menu.pos)
+    },
 
+    adjustMenuOpenPosition() {
+      if (this.appendToBody && this.$refs.menu) {
+        document.body.appendChild(this.$refs.menu)
+        const rect = this.$el.getBoundingClientRect()
+        this.menu.pos = {
+          position: 'fixed',
+          left: `${rect.left}px`,
+        }
+        this.menu.size.width = `${rect.right - rect.left - 2}px`
+        if (this.menu.prefferedOpenDirection === 'below') {
+          this.menu.pos.top = `${rect.bottom}px`
+        } else {
+          const viewPortH = Math.min(document.documentElement.clientHeight, window.innerHeight || 0)
+          this.menu.pos.bottom = `${viewPortH - rect.top}px`
+        }
+      }
+    },
     adjustMenuOpenDirection() {
       // istanbul ignore next
       if (typeof window === 'undefined') return
@@ -1666,7 +1734,8 @@ export default {
       const spaceAbove = rect.top
       const spaceBelow = window.innerHeight - rect.bottom
       const hasEnoughSpaceBelow = spaceBelow > this.maxHeight
-      const isInViewport = rect.top > 0 && (window.innerHeight - rect.top) > MENU_BUFFER
+      const isInViewport = rect.top > 0 && (window.innerHeight - rect.top) >
+        MENU_BUFFER
 
       switch (true) {
       case hasEnoughSpaceBelow:
@@ -1675,12 +1744,14 @@ export default {
       case this.openDirection === 'below':
       case this.openDirection === 'bottom':
         this.menu.prefferedOpenDirection = 'below'
-        this.menu.optimizedHeight = Math.max(Math.min(spaceBelow - MENU_BUFFER, this.maxHeight), this.maxHeight)
+        this.menu.size['max-height'] =
+          `${Math.max(Math.min(spaceBelow - MENU_BUFFER, this.maxHeight), this.maxHeight)}px`
         break
 
       default:
         this.menu.prefferedOpenDirection = 'above'
-        this.menu.optimizedHeight = Math.min(spaceAbove - MENU_BUFFER, this.maxHeight)
+        this.menu.size['max-height'] =
+          `${Math.min(spaceAbove - MENU_BUFFER, this.maxHeight)}px`
       }
     },
   },
@@ -1697,10 +1768,19 @@ export default {
     if (this.autoFocus || this.autofocus) this.$refs.value.focusInput()
     if (!this.forest.isLoaded && this.autoLoadRootOptions) this.loadRootOptions()
     if (this.alwaysOpen) this.openMenu()
+    if (this.appendToBody) {
+      this.toggleScrollEvent(true)
+      this.toggleResizeEvent(true)
+    }
   },
 
   destroyed() {
     // istanbul ignore next
     this.toggleClickOutsideEvent(false)
+    if (this.appendToBody) {
+      this.toggleScrollEvent(false)
+      this.toggleResizeEvent(false)
+    }
   },
+
 }

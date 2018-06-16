@@ -659,10 +659,6 @@
   .vertical-padding(@treeselect-menu-padding-y);
 
   display: block;
-  position: absolute;
-  right: 0;
-  left: 0;
-  z-index: 999;
   overflow-x: hidden;
   overflow-y: auto;
   border: 1px solid @treeselect-control-border-color-active;
@@ -670,14 +666,24 @@
   line-height: @treeselect-menu-line-height;
   // https://css-tricks.com/snippets/css/momentum-scrolling-on-ios-overflow-elements/
   -webkit-overflow-scrolling: touch;
-
+  &.vue-treeselect__menu-body-below {
+    .border-radius-bottom(@treeselect-border-radius-lg);
+    margin-top: (-@treeselect-control-border-width);
+    border-top-color: @treeselect-control-menu-divider-color;
+    box-shadow: @treeselect-menu-box-shadow;
+  }
   .vue-treeselect--open-below & {
     .border-radius-bottom(@treeselect-border-radius-lg);
-
     top: 100%;
     margin-top: (-@treeselect-control-border-width);
     border-top-color: @treeselect-control-menu-divider-color;
     box-shadow: @treeselect-menu-box-shadow;
+  }
+
+  &.vue-treeselect__menu-body-above {
+    .border-radius-top(@treeselect-border-radius-lg);
+    margin-bottom: (-@treeselect-control-border-width);
+    border-bottom-color: @treeselect-control-menu-divider-color;
   }
 
   .vue-treeselect--open-above & {
