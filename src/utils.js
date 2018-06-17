@@ -20,25 +20,20 @@ export const warning = process.env.NODE_ENV === 'production'
 
 // a simplified version of debounce from underscore
 export function debounce(func, wait = 100) {
-  let timeout, args, context, timestamp
+  let timeout, context, args
 
-  function later() {
-    const diff = Date.now() - timestamp
-
-    if (diff < wait && diff >= 0) {
-      timeout = setTimeout(later, wait - diff)
-    } else {
-      timeout = null
-      func.apply(context, args)
-      context = args = null
-    }
+  const later = () => {
+    timeout = null
+    func.apply(context, args)
   }
 
   return function debounced(..._args) {
+    const callNow = !timeout
+    if (timeout) clearTimeout(timeout)
     context = this // eslint-disable-line consistent-this
     args = _args
-    timestamp = Date.now()
-    if (!timeout) timeout = setTimeout(later, wait)
+    timeout = setTimeout(later, wait)
+    if (callNow) func.apply(this, args)
   }
 }
 
