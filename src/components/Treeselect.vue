@@ -33,7 +33,7 @@
     </div>
     <transition name="vue-treeselect__menu--transition">
       <div v-if="menu.isOpen" class="vue-treeselect__menu" ref="menu" :style="{ maxHeight: menu.optimizedHeight + 'px' }">
-        <template v-if="forest.isLoaded">
+        <template v-if="options">
           <tip v-if="localSearch.active && localSearch.noResults" type="no-results" icon="warning">{{ noResultsText }}</tip>
           <tip v-else-if="forest.normalizedOptions.length === 0" type="no-options" icon="warning">{{ noOptionsText }}</tip>
           <div v-else class="vue-treeselect__list">
@@ -51,9 +51,9 @@
           </div>
         </template>
         <template v-else>
-          <tip v-if="loading || forest.isLoading" type="loading" icon="loader">{{ loadingText }}</tip>
-          <tip v-else-if="forest.loadingError" type="error" icon="error">
-            {{ forest.loadingError }}
+          <tip v-if="loading || rootOptionsStates.isLoading" type="loading" icon="loader">{{ loadingText }}</tip>
+          <tip v-else-if="rootOptionsStates.loadingError" type="error" icon="error">
+            {{ rootOptionsStates.loadingError }}
             <a class="vue-treeselect__retry" @click="loadRootOptions" :title="retryTitle">
               {{ retryText }}
             </a>

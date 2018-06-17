@@ -412,7 +412,7 @@ describe('Keyboard Support', () => {
 
       pressArrowRight(wrapper)
       await vm.$nextTick()
-      expect(vm.forest.nodeMap.a.isPending).toBe(true)
+      expect(vm.forest.nodeMap.a.childrenStates.isLoading).toBe(true)
 
       pressArrowDown(wrapper)
       expect(vm.menu.current).toBe('b')
@@ -421,7 +421,7 @@ describe('Keyboard Support', () => {
       expect(vm.menu.current).toBe('a')
 
       await sleep(DELAY)
-      expect(vm.forest.nodeMap.a.isLoaded).toBe(true)
+      expect(vm.forest.nodeMap.a.childrenStates.isLoaded).toBe(true)
       expect(vm.forest.nodeMap.a.children).toBeArrayOfSize(1)
 
       pressArrowDown(wrapper)

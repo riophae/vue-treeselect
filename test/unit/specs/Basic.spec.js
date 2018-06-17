@@ -58,8 +58,11 @@ describe('Basic', () => {
         isExpanded: jasmine.any(Boolean),
         isMatched: jasmine.any(Boolean),
         isDisabled: jasmine.any(Boolean),
-        isLoaded: jasmine.any(Boolean),
-        isPending: jasmine.any(Boolean),
+        childrenStates: {
+          isLoaded: jasmine.any(Boolean),
+          isLoading: jasmine.any(Boolean),
+          loadingError: jasmine.any(String),
+        },
         hasMatchedDescendants: jasmine.any(Boolean),
         hasDisabledDescendants: jasmine.any(Boolean),
         isExpandedOnSearch: jasmine.any(Boolean),
@@ -69,7 +72,6 @@ describe('Basic', () => {
         index: jasmine.any(Array),
         children: jasmine.any(Array),
         level: jasmine.any(Number),
-        loadingChildrenError: jasmine.any(String),
         count: {
           ALL_CHILDREN: jasmine.any(Number),
           ALL_DESCENDANTS: jasmine.any(Number),
@@ -256,7 +258,7 @@ describe('Basic', () => {
       expect(aa.hasDisabledDescendants).toBe(false)
     })
 
-    it('isLeaf & isBranch & isLoaded', () => {
+    it('isLeaf & isBranch & childrenStates', () => {
       const wrapper = mount(Treeselect, {
         propsData: {
           options: [ {
@@ -289,14 +291,22 @@ describe('Basic', () => {
         isLeaf: false,
         isBranch: true,
         children: [],
-        isLoaded: true,
+        childrenStates: {
+          isLoaded: true,
+          isLoading: false,
+          loadingError: '',
+        },
       }))
 
       expect(c).toEqual(jasmine.objectContaining({
         isLeaf: false,
         isBranch: true,
         children: [],
-        isLoaded: false,
+        childrenStates: {
+          isLoaded: false,
+          isLoading: false,
+          loadingError: '',
+        },
       }))
     })
 

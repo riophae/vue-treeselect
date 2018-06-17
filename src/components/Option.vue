@@ -31,7 +31,7 @@
     </div>
     <transition name="vue-treeselect__list--transition">
       <div v-if="shouldExpand" class="vue-treeselect__list">
-        <template v-if="node.isLoaded">
+        <template v-if="node.childrenStates.isLoaded">
           <template v-if="node.children.length">
             <vue-treeselect--option v-for="childNode in node.children" :node="childNode" :key="childNode.id">
               <template slot="option-label" slot-scope="{ node, shouldShowCount, count, labelClassName, countClassName }">
@@ -42,9 +42,9 @@
           </template>
           <tip v-else type="no-children" icon="warning">{{ instance.noChildrenText }}</tip>
         </template>
-        <tip v-else-if="node.isPending" type="loading" icon="loader">{{ instance.loadingText }}</tip>
-        <tip v-else-if="node.loadingChildrenError" type="error" icon="error">
-          {{ node.loadingChildrenError }}
+        <tip v-else-if="node.childrenStates.isLoading" type="loading" icon="loader">{{ instance.loadingText }}</tip>
+        <tip v-else-if="node.childrenStates.loadingError" type="error" icon="error">
+          {{ node.childrenStates.loadingError }}
           <a class="vue-treeselect__retry" @click="instance.loadChildrenOptions(node)" :title="instance.retryTitle">
             {{ instance.retryText }}
           </a>

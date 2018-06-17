@@ -591,9 +591,10 @@ export default {
         // <id, true> map for fast checking:
         // if (forest.selectedNodeIds.indexOf(id) !== -1) forest.selectedNodeMap[id] === true
         selectedNodeMap: createMap(),
-        // states of async root options
-        ...createAsyncOptionsStates(),
       },
+
+      // States of root options
+      rootOptionsStates: createAsyncOptionsStates(),
 
       localSearch: {
         // has user entered any query to search local options?
@@ -715,9 +716,6 @@ export default {
      * @type {boolean}
      */
     hasVisibleOptions() {
-      if (!this.forest.isLoaded) {
-        return false
-      }
       if (!this.forest.normalizedOptions.length) {
         return false
       }
@@ -785,7 +783,7 @@ export default {
     },
 
     flat() {
-      this.initialize()
+      this.initialize(this.options)
     },
 
     internalValue() {
@@ -793,7 +791,7 @@ export default {
     },
 
     matchKeys() {
-      this.initialize()
+      this.initialize(this.options)
     },
 
     multiple(newValue) {
@@ -845,15 +843,14 @@ export default {
       this._blurOnSelect = false
     },
 
-    initialize() {
-      if (Array.isArray(this.options)) {
+    initialize(rootOptions) {
+      if (Array.isArray(rootOptions)) {
         // In case we are reinitializing options, keep the old state tree temporarily.
         const prevNodeMap = this.forest.nodeMap
         this.forest.nodeMap = createMap()
         this.keepDataOfSelectedNodes(prevNodeMap)
-        this.forest.normalizedOptions = this.normalize(NO_PARENT_NODE, this.options, prevNodeMap)
+        this.forest.normalizedOptions = this.normalize(NO_PARENT_NODE, rootOptions, prevNodeMap)
         this.completeSelectedNodeIdList()
-        this.forest.isLoaded = true
       } else {
         this.forest.normalizedOptions = []
       }
@@ -1272,7 +1269,7 @@ export default {
       this.menu.isOpen = true
       this.$nextTick(this.adjustMenuOpenDirection)
       this.$nextTick(this.restoreMenuScrollPosition)
-      if (!this.forest.isLoaded) this.loadRootOptions()
+      if (!this.options) this.loadRootOptions()
       this.toggleClickOutsideEvent(true)
       this.resetHighlightedOptionWhenNecessary()
       this.$emit('open', this.getInstanceId())
@@ -1364,8 +1361,10 @@ export default {
           if (isBranch) {
             const isLoaded = Array.isArray(children)
 
-            this.$set(normalized, 'isLoaded', isLoaded)
-            this.$set(normalized, 'isPending', false)
+            this.$set(normalized, 'childrenStates', {
+              ...createAsyncOptionsStates(),
+              isLoaded,
+            })
             this.$set(normalized, 'isExpanded', typeof isDefaultExpanded === 'boolean'
               ? isDefaultExpanded
               : level < this.defaultExpandLevel)
@@ -1373,7 +1372,6 @@ export default {
             this.$set(normalized, 'hasDisabledDescendants', false)
             this.$set(normalized, 'isExpandedOnSearch', false)
             this.$set(normalized, 'showAllChildrenOnSearch', false)
-            this.$set(normalized, 'loadingChildrenError', '')
             this.$set(normalized, 'count', {
               [ALL_CHILDREN]: 0,
               [ALL_DESCENDANTS]: 0,
@@ -1428,20 +1426,20 @@ export default {
       this.callLoadOptionsProp({
         action: LOAD_ROOT_OPTIONS,
         isPending: () => {
-          return this.forest.isLoading
+          return this.rootOptionsStates.isLoading
         },
         start: () => {
-          this.forest.isLoading = true
-          this.forest.loadingError = ''
+          this.rootOptionsStates.isLoading = true
+          this.rootOptionsStates.loadingError = ''
         },
         succeed: () => {
-          this.forest.isLoaded = true
+          this.rootOptionsStates.isLoaded = true
         },
         fail: err => {
-          this.forest.loadingError = err.message || String(err)
+          this.rootOptionsStates.loadingError = err.message || String(err)
         },
         end: () => {
-          this.forest.isLoading = false
+          this.rootOptionsStates.isLoading = false
         },
       })
     },
@@ -1457,20 +1455,20 @@ export default {
           parentNode: raw,
         },
         isPending: () => {
-          return this.getNode(id).isPending
+          return this.getNode(id).childrenStates.isLoading
         },
         start: () => {
-          this.getNode(id).isPending = true
-          this.getNode(id).loadingChildrenError = ''
+          this.getNode(id).childrenStates.isLoading = true
+          this.getNode(id).childrenStates.loadingError = ''
         },
         succeed: () => {
-          this.getNode(id).isLoaded = true
+          this.getNode(id).childrenStates.isLoaded = true
         },
         fail: err => {
-          this.getNode(id).loadingChildrenError = err.message || String(err)
+          this.getNode(id).childrenStates.loadingError = err.message || String(err)
         },
         end: () => {
-          this.getNode(id).isPending = false
+          this.getNode(id).childrenStates.isLoading = false
         },
       })
     },
@@ -1689,14 +1687,19 @@ export default {
   created() {
     this.verifyProps()
     this.resetFlags()
-    this.initialize()
     // re-initialize options when the `options` prop has changed
-    this.$watch('options', () => this.initialize(), { deep: true })
+    this.$watch('options', () => {
+      this.initialize(this.options)
+      this.rootOptionsStates.isLoaded = Array.isArray(this.options)
+    }, {
+      deep: true,
+      immediate: true,
+    })
   },
 
   mounted() {
     if (this.autoFocus || this.autofocus) this.$refs.value.focusInput()
-    if (!this.forest.isLoaded && this.autoLoadRootOptions) this.loadRootOptions()
+    if (!this.options && this.autoLoadRootOptions) this.loadRootOptions()
     if (this.alwaysOpen) this.openMenu()
   },
 
