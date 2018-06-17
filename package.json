@@ -31,7 +31,8 @@
   "pre-commit": "lint",
   "dependencies": {
     "easings-css": "^1.0.0",
-    "fuzzysearch": "^1.0.3"
+    "fuzzysearch": "^1.0.3",
+    "lodash": "^4.0.0"
   },
   "devDependencies": {
     "@vue/test-utils": "1.0.0-beta.16",

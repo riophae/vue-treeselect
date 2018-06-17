@@ -1,8 +1,9 @@
 import fuzzysearch from 'fuzzysearch'
+import debounce from 'lodash/debounce'
 
 import {
   warning,
-  debounce, onlyOnLeftClick, scrollIntoView,
+  onlyOnLeftClick, scrollIntoView,
   isNaN, isPromise, once,
   identity, constant, createMap,
   assign,
@@ -807,7 +808,7 @@ export default {
     'trigger.searchQuery': debounce(function onSearchQueryChange() {
       this.handleSearchQueryChange()
       this.$emit('search-change', this.trigger.searchQuery, this.getInstanceId())
-    }, INPUT_DEBOUNCE_DELAY),
+    }, INPUT_DEBOUNCE_DELAY, { leading: true }),
 
     value() {
       const newInternalValue = this.extractCheckedNodeIdsFromValue()

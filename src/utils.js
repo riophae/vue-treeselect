@@ -18,25 +18,6 @@ export const warning = process.env.NODE_ENV === 'production'
  * Dom utilites
  */
 
-// a simplified version of debounce from underscore
-export function debounce(func, wait = 100) {
-  let timeout, context, args
-
-  const later = () => {
-    timeout = null
-    func.apply(context, args)
-  }
-
-  return function debounced(..._args) {
-    const callNow = !timeout
-    if (timeout) clearTimeout(timeout)
-    context = this // eslint-disable-line consistent-this
-    args = _args
-    timeout = setTimeout(later, wait)
-    if (callNow) func.apply(this, args)
-  }
-}
-
 export function onlyOnLeftClick(mouseDownHandler) {
   return function onMouseDown(evt, ...args) {
     if (evt.type === 'mousedown' && evt.button === 0) {
