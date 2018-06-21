@@ -3,7 +3,7 @@
     <transition-group tag="div" class="vue-treeselect__multi-value" name="vue-treeselect__multi-value-item--transition" appear>
       <template v-for="node in instance.visibleValue">
         <div class="vue-treeselect__multi-value-item-container" :key="'value-' + node.id">
-          <div :class="[ 'vue-treeselect__multi-value-item', { 'vue-treeselect__multi-value-item-disabled': node.isDisabled } ]" @mousedown="handleMouseDownOnValueItem($event, node)">
+          <div :class="[ 'vue-treeselect__multi-value-item', { 'vue-treeselect__multi-value-item-disabled': node.isDisabled }, { 'vue-treeselect__multi-value-item-new': node.isNew } ]" @mousedown="handleMouseDownOnValueItem($event, node)">
             <span class="vue-treeselect__multi-value-label">{{ node.label }}</span>
             <span class="vue-treeselect__icon vue-treeselect__value-remove"><delete-icon /></span>
           </div>

@@ -31,6 +31,11 @@
           <td>Used for disabling item selection. See <a href="#disable-item-selection">here</a> for detailed information.</td>
         </tr>
         <tr>
+          <td><strong>isNew</strong></td>
+          <td class="type">Boolean</td>
+          <td>Used for giving new nodes a different color.</td>
+        </tr>
+        <tr>
           <td><strong>isDefaultExpanded</strong></td>
           <td class="type">Boolean</td>
           <td>Whether this folder option should be expanded by default.</td>
