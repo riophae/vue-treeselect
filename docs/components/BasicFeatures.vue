@@ -20,6 +20,7 @@
         children: [ {
           id: 'apple',
           label: 'Apple 🍎',
+          isNew: true,
         }, {
           id: 'grapes',
           label: 'Grapes 🍇',

@@ -43,10 +43,12 @@
 @treeselect-multi-value-font-size: @treeselect-font-size-sm;
 @treeselect-multi-value-font-color: @palette-Light-Blue-600;
 @treeselect-multi-value-item-bg: @palette-Blue-50;
+@treeselect-multi-value-item-bg-new: @palette-Green-50;
 @treeselect-multi-value-item-border-width: 1px;
 @treeselect-multi-value-item-border-color: transparent;
 @treeselect-multi-value-font-color-hover: @treeselect-multi-value-font-color;
 @treeselect-multi-value-item-bg-hover: @treeselect-multi-value-item-bg;
+@treeselect-multi-value-item-bg-new-hover: @treeselect-multi-value-item-bg-new;
 @treeselect-multi-value-font-color-disabled: @palette-Grey-600;
 @treeselect-multi-value-item-bg-disabled: @palette-Grey-100;
 @treeselect-multi-value-item-font-color-control-disabled: #555;
@@ -450,7 +452,7 @@
   font-size: @treeselect-multi-value-font-size;
   vertical-align: top; // stylelint-disable-line plugin/declaration-block-no-ignored-properties
 
-  .vue-treeselect:not(.vue-treeselect--disabled) &:not(.vue-treeselect__multi-value-item-disabled):hover {
+  .vue-treeselect:not(.vue-treeselect--disabled) &:not(.vue-treeselect__multi-value-item-disabled):hover &:not(.vue-treeselect__multi-value-item-new) &:not(.vue-treeselect__multi-value-item-new):hover {
     .clickable();
 
     background: @treeselect-multi-value-item-bg-hover;
@@ -470,6 +472,13 @@
     background: @treeselect-multi-value-item-bg-control-disabled;
     border-color: @treeselect-multi-value-item-border-color-control-disabled;
     color: @treeselect-multi-value-item-font-color-control-disabled;
+  }
+
+  &.vue-treeselect__multi-value-item-new {
+    background: @treeselect-multi-value-item-bg-new;
+    &:hover {
+      background: @treeselect-multi-value-item-bg-new;
+    }
   }
 }
 

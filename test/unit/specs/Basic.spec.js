@@ -58,6 +58,7 @@ describe('Basic', () => {
         isExpanded: jasmine.any(Boolean),
         isMatched: jasmine.any(Boolean),
         isDisabled: jasmine.any(Boolean),
+        isNew: jasmine.any(Boolean),
         childrenStates: {
           isLoaded: jasmine.any(Boolean),
           isLoading: jasmine.any(Boolean),
@@ -91,6 +92,7 @@ describe('Basic', () => {
         isRootNode: jasmine.any(Boolean),
         isMatched: jasmine.any(Boolean),
         isDisabled: jasmine.any(Boolean),
+        isNew: jasmine.any(Boolean),
         parentNode: jasmine.any(Object),
         ancestors: jasmine.any(Array),
         index: jasmine.any(Array),
@@ -549,6 +551,7 @@ describe('Basic', () => {
         isLeaf: true,
         isBranch: false,
         isDisabled: false,
+        isNew: false,
         index: [ -1 ],
         level: 0,
         raw: {
