@@ -366,8 +366,7 @@
     background-color: @treeselect-control-bg-disabled;
   }
 
-  .vue-treeselect--open &,
-  .vue-treeselect:not(.vue-treeselect--disabled) &:hover {
+  .vue-treeselect--open & {
     border-color: @treeselect-control-border-color-active;
   }
 
@@ -441,6 +440,8 @@
 }
 
 .vue-treeselect__multi-value-item {
+  .clickable();
+
   display: inline-table;
   background: @treeselect-multi-value-item-bg;
   // table elements don't have margin, so we set at the container element
@@ -489,8 +490,6 @@
 }
 
 .vue-treeselect__value-remove {
-  .clickable();
-
   color: @treeselect-multi-value-remove-color;
   padding-left: @treeselect-multi-value-padding-x;
   border-left: 1px solid @treeselect-multi-value-divider-color;
