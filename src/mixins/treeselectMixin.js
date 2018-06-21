@@ -1336,7 +1336,7 @@ export default {
           const isBranch = Array.isArray(children) || children === null
           const isLeaf = !isBranch
           const isDisabled = !!node.isDisabled || (!this.flat && !isRootNode && parentNode.isDisabled)
-          const isNew = node.isNew
+          const isNew = !!node.isNew
           const lowerCased = this.matchKeys.reduce((prev, key) => assign(prev, {
             [key]: stringifyOptionPropValue(node[key]).toLocaleLowerCase(),
           }), {})
