@@ -803,6 +803,16 @@ export default {
       }
     },
 
+    options: {
+      handler() {
+        // re-initialize options when the `options` prop has changed
+        this.initialize(this.options)
+        this.rootOptionsStates.isLoaded = Array.isArray(this.options)
+      },
+      deep: true,
+      immediate: true,
+    },
+
     'trigger.searchQuery': debounce(function onSearchQueryChange() {
       this.handleSearchQueryChange()
       this.$emit('search-change', this.trigger.searchQuery, this.getInstanceId())
@@ -1690,14 +1700,6 @@ export default {
   created() {
     this.verifyProps()
     this.resetFlags()
-    // re-initialize options when the `options` prop has changed
-    this.$watch('options', () => {
-      this.initialize(this.options)
-      this.rootOptionsStates.isLoaded = Array.isArray(this.options)
-    }, {
-      deep: true,
-      immediate: true,
-    })
   },
 
   mounted() {
