@@ -1,6 +1,7 @@
 # vue-treeselect
 [![npm](https://img.shields.io/npm/v/@riophae/vue-treeselect.svg)](https://www.npmjs.com/package/@riophae/vue-treeselect) [![CircleCI](https://img.shields.io/circleci/project/github/riophae/vue-treeselect/master.svg)](https://circleci.com/gh/riophae/vue-treeselect/tree/master) [![Codecov](https://codecov.io/gh/riophae/vue-treeselect/branch/master/graph/badge.svg)](https://codecov.io/gh/riophae/vue-treeselect?branch=master)
 ![npm monthly downloads](https://img.shields.io/npm/dm/@riophae/vue-treeselect.svg)
+![jsDelivr monthly hits](https://data.jsdelivr.com/v1/package/npm/@riophae/vue-treeselect/badge?style=rounded)
 
 > A multi-select component with nested options for Vue.js
 
