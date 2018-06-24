@@ -1,6 +1,6 @@
 module.exports = {
   root: true,
-  extends: [ 'eslint-config-riophae/vue' ],
+  extends: [ 'riophae/vue' ],
   globals: {
     PKG_VERSION: true,
   },
@@ -17,7 +17,6 @@ module.exports = {
     'import/no-named-as-default': 0,
     'import/no-extraneous-dependencies': 0,
     'vue/attributes-order': 0,
-    indent: 0, // not working well with .vue files so disable it
     'multiline-comment-style': 0,
     'no-console': 0,
     'no-extra-parens': 0,
