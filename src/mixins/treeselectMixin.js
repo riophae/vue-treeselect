@@ -6,7 +6,6 @@ import {
   onlyOnLeftClick, scrollIntoView,
   isNaN, isPromise, once,
   identity, constant, createMap,
-  assign,
   quickDiff, getLast, includes, find, removeFromArray,
 } from '../utils'
 
@@ -973,9 +972,10 @@ export default {
       // It could be useful for async search mode.
       this.forest.selectedNodeIds.forEach(id => {
         if (!prevNodeMap[id]) return
-        const fallbackNode = assign({}, prevNodeMap[id], {
+        const fallbackNode = {
+          ...prevNodeMap[id],
           isFallbackNode: true,
-        })
+        }
         this.$set(this.forest.nodeMap, id, fallbackNode)
       })
     },
@@ -1330,7 +1330,10 @@ export default {
     },
 
     enhancedNormalizer(raw) {
-      return assign({}, raw, this.normalizer(raw, this.getInstanceId()))
+      return {
+        ...raw,
+        ...this.normalizer(raw, this.getInstanceId()),
+      }
     },
 
     normalize(parentNode, nodes, prevNodeMap) {
@@ -1347,7 +1350,8 @@ export default {
           const isLeaf = !isBranch
           const isDisabled = !!node.isDisabled || (!this.flat && !isRootNode && parentNode.isDisabled)
           const isNew = !!node.isNew
-          const lowerCased = this.matchKeys.reduce((prev, key) => assign(prev, {
+          const lowerCased = this.matchKeys.reduce((prev, key) => ({
+            ...prev,
             [key]: stringifyOptionPropValue(node[key]).toLocaleLowerCase(),
           }), {})
           const nestedSearchLabel = isRootNode
@@ -1418,8 +1422,7 @@ export default {
             if (prev.isBranch && normalized.isBranch) {
               normalized.isExpanded = prev.isExpanded
               normalized.isExpandedOnSearch = prev.isExpandedOnSearch
-              normalized.isPending = prev.isPending
-              normalized.loadingChildrenError = prev.loadingChildrenError
+              normalized.childrenStates = { ...prev.childrenStates }
             }
           }
 

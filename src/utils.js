@@ -101,23 +101,6 @@ function copy(obj, key, value) {
   }
 }
 
-function hasOwn(obj, key) {
-  return Object.prototype.hasOwnProperty.call(obj, key)
-}
-
-export function assign(target, ...sources) {
-  for (let i = 0; i < sources.length; i++) {
-    const source = sources[i]
-    for (const key in source) {
-      // istanbul ignore else
-      if (hasOwn(source, key)) {
-        target[key] = source[key]
-      }
-    }
-  }
-  return target
-}
-
 export function deepExtend(target, source) {
   if (isPlainObject(source)) {
     const keys = Object.keys(source)
