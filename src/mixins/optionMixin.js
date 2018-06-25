@@ -38,15 +38,6 @@ export default {
     },
   },
 
-  watch: {
-    shouldExpand(newValue) {
-      if (newValue === true && !this.node.isLoaded) {
-        // load children when expanded
-        this.instance.loadChildrenOptions(this.node)
-      }
-    },
-  },
-
   methods: {
     handleMouseDownOnOption: onlyOnLeftClick(function handleMouseDownOnOptionArrow() {
       if (this.node.isBranch && this.instance.disableBranchNodes) {

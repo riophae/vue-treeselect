@@ -48,7 +48,7 @@ describe('Dynamical Loading', () => {
   })
 
   describe('Loading children options', () => {
-    it('expanding an unloaded branch node should trigger loading its children options', async () => {
+    it('expanding an unloaded branch node should trigger loading its children options', () => {
       const loadOptions = jasmine.createSpy()
       const wrapper = mount(Treeselect, {
         propsData: {
@@ -62,11 +62,8 @@ describe('Dynamical Loading', () => {
       })
       const { vm } = wrapper
 
-      vm.openMenu()
-
       expect(vm.forest.nodeMap.a.isExpanded).toBe(false) // collapsed by default
       vm.toggleExpanded(vm.forest.nodeMap.a) // expand it
-      await vm.$nextTick()
       expect(loadOptions).toHaveBeenCalled()
     })
 
@@ -108,16 +105,16 @@ describe('Dynamical Loading', () => {
       expect(vm.forest.nodeMap.a.childrenStates.isLoaded).toBe(false)
       // expand it
       vm.toggleExpanded(vm.forest.nodeMap.a)
-      await vm.$nextTick()
       expect(spyForLoadOptions).toHaveBeenCalled()
       expect(vm.forest.nodeMap.a.childrenStates.isLoading).toBe(true)
+      await vm.$nextTick()
       childrenOptionList = findChildrenOptionListByNodeId(wrapper, 'a')
       // show loading spinner
       expect(childrenOptionList.contains('.vue-treeselect__loading-tip')).toBe(true)
 
       // wait for `callback()` to be called
       await sleep(DELAY)
-      // options should be reinitilaized
+      // options should has been reinitilaized
       expect(vm.forest.nodeMap.a.children).toBeNonEmptyArray()
       expect(vm.forest.nodeMap.a.childrenStates.isLoaded).toBe(true)
       expect(vm.forest.nodeMap.a.childrenStates.isLoading).toBe(false)
@@ -165,7 +162,6 @@ describe('Dynamical Loading', () => {
       // 1st try
       optionArrowContainer = findOptionArrowContainerByNodeId(wrapper, 'a')
       leftClick(optionArrowContainer) // expand
-      await vm.$nextTick()
       expect(spyForLoadOptions.calls.count()).toBe(1)
       await sleep(DELAY)
       childrenOptionList = findChildrenOptionListByNodeId(wrapper, 'a')
@@ -224,18 +220,13 @@ describe('Dynamical Loading', () => {
       })
       const { vm } = wrapper
 
-      vm.openMenu()
-
       vm.toggleExpanded(vm.forest.nodeMap.a)
-      await vm.$nextTick()
       expect(spyForLoadOptions.calls.count()).toBe(1)
 
       await sleep(DELAY / 2)
       expect(vm.forest.nodeMap.a.childrenStates.isLoading).toBe(true)
       vm.toggleExpanded(vm.forest.nodeMap.a) // collapse
-      await vm.$nextTick()
       vm.toggleExpanded(vm.forest.nodeMap.a) // re-expand
-      await vm.$nextTick()
       expect(spyForLoadOptions.calls.count()).toBe(1) // but not triggers another loading
 
       await sleep(DELAY / 2)
@@ -288,9 +279,6 @@ describe('Dynamical Loading', () => {
       })
       const { vm } = wrapper
 
-      vm.openMenu()
-      await vm.$nextTick()
-
       vm.select(vm.forest.nodeMap.a)
       expect(vm.internalValue).toEqual([ 'a' ])
       expect(vm.forest.selectedNodeIds).toEqual([ 'a' ])
@@ -299,9 +287,9 @@ describe('Dynamical Loading', () => {
       })
 
       vm.toggleExpanded(vm.forest.nodeMap.a)
-      await vm.$nextTick()
       expect(called).toBe(1)
       expect(vm.internalValue).toEqual([ 'a' ])
+      await vm.$nextTick()
       expect(vm.forest.selectedNodeIds).toEqual([ 'a', 'aa', 'ab' ])
       expect(vm.forest.checkedStateMap).toEqual({
         a: CHECKED,
@@ -310,9 +298,9 @@ describe('Dynamical Loading', () => {
       })
 
       vm.toggleExpanded(vm.forest.nodeMap.aa)
-      await vm.$nextTick()
       expect(called).toBe(2)
       expect(vm.internalValue).toEqual([ 'a' ])
+      await vm.$nextTick()
       expect(vm.forest.selectedNodeIds).toEqual([ 'a', 'aa', 'ab', 'aaa', 'aab' ])
       expect(vm.forest.checkedStateMap).toEqual({
         a: CHECKED,
@@ -350,8 +338,6 @@ describe('Dynamical Loading', () => {
       const { vm } = wrapper
       const getValueText = () => wrapper.find('.vue-treeselect__single-value').text().trim()
 
-      vm.openMenu()
-
       expect(vm.forest.nodeMap.aa).toEqual(jasmine.objectContaining({
         id: 'aa',
         label: 'aa (unknown)',
@@ -360,7 +346,6 @@ describe('Dynamical Loading', () => {
       expect(getValueText()).toBe('aa (unknown)')
 
       vm.toggleExpanded(vm.forest.nodeMap.a)
-      await vm.$nextTick()
       await sleep(DELAY)
       expect(vm.forest.nodeMap.aa).toEqual(jasmine.objectContaining({
         id: 'aa',
@@ -369,7 +354,7 @@ describe('Dynamical Loading', () => {
       expect(getValueText()).toBe('aa')
     })
 
-    it('multiple instances share the same `loadOptions` function', async () => {
+    it('multiple instances share the same `loadOptions` function', () => {
       const loadOptions = jasmine.createSpy('loadOptions')
       const { vm: vm1 } = mount(Treeselect, {
         propsData: {
@@ -394,9 +379,7 @@ describe('Dynamical Loading', () => {
         },
       })
 
-      vm1.openMenu()
       vm1.toggleExpanded(vm1.forest.nodeMap.branch)
-      await vm1.$nextTick()
       expect(loadOptions.calls.argsFor(0)).toEqual([ {
         id: 1,
         instanceId: 1,
@@ -405,9 +388,7 @@ describe('Dynamical Loading', () => {
         callback: jasmine.any(Function),
       } ])
 
-      vm2.openMenu()
       vm2.toggleExpanded(vm2.forest.nodeMap.branch)
-      await vm2.$nextTick()
       expect(loadOptions.calls.argsFor(1)).toEqual([ {
         id: 2,
         instanceId: 2,
@@ -417,7 +398,7 @@ describe('Dynamical Loading', () => {
       } ])
     })
 
-    it('callback can be executed only once', async () => {
+    it('callback can be executed only once', () => {
       const loadOptions = jasmine.createSpy('loadOptions', ({ parentNode, callback }) => {
         parentNode.children = []
         callback()
@@ -435,10 +416,7 @@ describe('Dynamical Loading', () => {
       })
       const { vm } = wrapper
 
-      vm.openMenu()
-
       vm.toggleExpanded(vm.forest.nodeMap.a)
-      await vm.$nextTick()
       expect(loadOptions).toHaveBeenCalled()
       expect(vm.forest.nodeMap.a.childrenStates.loadingError).toBe('')
     })
@@ -466,17 +444,12 @@ describe('Dynamical Loading', () => {
       })
       const { vm } = wrapper
 
-      vm.openMenu()
-
       vm.toggleExpanded(vm.forest.nodeMap.a) // expand
-      await vm.$nextTick()
       await sleep(DELAY)
       expect(vm.forest.nodeMap.a.childrenStates.loadingError).toBe('test')
 
       vm.toggleExpanded(vm.forest.nodeMap.a) // collapse
-      await vm.$nextTick()
       vm.toggleExpanded(vm.forest.nodeMap.a) // re-expand
-      await vm.$nextTick()
       await sleep(DELAY)
       expect(vm.forest.nodeMap.a.childrenStates.isLoaded).toBe(true)
     })
@@ -489,11 +462,10 @@ describe('Dynamical Loading', () => {
         children: null,
       } ]
       let spy
-      const expand = async fn => {
+      const expand = fn => {
         spy = fn
         // expand the branch node and vue-treeselect will call `loadOptions` prop
         vm.toggleExpanded(vm.forest.nodeMap.a)
-        await vm.$nextTick()
       }
       const wrapper = mount(Treeselect, {
         propsData: {
@@ -507,9 +479,6 @@ describe('Dynamical Loading', () => {
       })
       const { vm } = wrapper
 
-      vm.openMenu()
-      await vm.$nextTick()
-
       // the branch node `a` is initially unloaded
       expect(vm.forest.nodeMap.a.childrenStates).toEqual({
         isLoaded: false,
@@ -518,7 +487,7 @@ describe('Dynamical Loading', () => {
       })
 
       // expand the branch node `a` and load its children
-      await expand((parentNode, callback) => {
+      expand((parentNode, callback) => {
         parentNode.children = [ {
           id: 'aa',
           label: 'aa',
@@ -543,7 +512,7 @@ describe('Dynamical Loading', () => {
       })
 
       // re-expand the branch node `a` and this time we simulate a loading error
-      await expand((parentNode, callback) => {
+      expand((parentNode, callback) => {
         callback(new Error('test'))
       })
       expect(vm.forest.nodeMap.a.childrenStates).toEqual({
@@ -638,7 +607,7 @@ describe('Dynamical Loading', () => {
       vm.openMenu()
       await vm.$nextTick()
 
-      const menu = vm.$refs.menu
+      const { menu } = vm.$refs
       expect(vm.rootOptionsStates.isLoading).toBe(true)
       // should show a loading tip
       expect(menu.firstElementChild.className).toEqual(jasmine.stringMatching('vue-treeselect__loading-tip'))

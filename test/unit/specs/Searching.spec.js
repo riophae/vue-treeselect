@@ -167,10 +167,10 @@ describe('Searching', () => {
       })
 
       it('expand a branch node should show all its children', async () => {
-        vm.toggleExpanded(vm.forest.nodeMap.branch)
-        await vm.$nextTick()
         expect(vm.menu.isOpen).toBe(true)
+        vm.toggleExpanded(vm.forest.nodeMap.branch)
         expect(vm.forest.nodeMap.branch.isExpandedOnSearch).toBe(true)
+        await vm.$nextTick()
         expect(wrapper.contains('.vue-treeselect__option[data-id="aa"]')).toBe(true)
         expect(wrapper.contains('.vue-treeselect__option[data-id="ab"]')).toBe(true)
         expect(wrapper.contains('.vue-treeselect__option[data-id="ac"]')).toBe(true)

@@ -1295,11 +1295,18 @@ export default {
     },
 
     toggleExpanded(node) {
+      let nextState
+
       if (this.localSearch.active) {
-        node.isExpandedOnSearch = !node.isExpandedOnSearch
+        nextState = node.isExpandedOnSearch = !node.isExpandedOnSearch
         if (node.isExpandedOnSearch) node.showAllChildrenOnSearch = true
       } else {
-        node.isExpanded = !node.isExpanded
+        nextState = node.isExpanded = !node.isExpanded
+      }
+
+      if (nextState && !node.isLoaded) {
+        // load children when expanded
+        this.loadChildrenOptions(node)
       }
     },
 

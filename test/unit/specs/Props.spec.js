@@ -1050,7 +1050,7 @@ describe('Props', () => {
       }))
     })
 
-    it('with `loadOptions` prop', async () => {
+    it('with `loadOptions` prop', () => {
       const wrapper = mount(Treeselect, {
         propsData: {
           options: [ {
@@ -1079,10 +1079,7 @@ describe('Props', () => {
       })
       const { vm } = wrapper
 
-      vm.openMenu()
-
       vm.toggleExpanded(vm.forest.nodeMap.a)
-      await vm.$nextTick()
       expect(vm.forest.nodeMap.a.children).toBeNonEmptyArray()
     })
   })
