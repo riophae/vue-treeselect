@@ -491,6 +491,7 @@ describe('Dynamical Loading', () => {
       let spy
       const expand = async fn => {
         spy = fn
+        // expand the branch node and vue-treeselect will call `loadOptions` prop
         vm.toggleExpanded(vm.forest.nodeMap.a)
         await vm.$nextTick()
       }
@@ -509,12 +510,14 @@ describe('Dynamical Loading', () => {
       vm.openMenu()
       await vm.$nextTick()
 
+      // the branch node `a` is initially unloaded
       expect(vm.forest.nodeMap.a.childrenStates).toEqual({
         isLoaded: false,
         isLoading: false,
         loadingError: '',
       })
 
+      // expand the branch node `a` and load its children
       await expand((parentNode, callback) => {
         parentNode.children = [ {
           id: 'aa',
@@ -528,8 +531,10 @@ describe('Dynamical Loading', () => {
         loadingError: '',
       })
 
+      // reset branch node `a` to unloaded state by setting `children: null`
       options[0].children = null
       await vm.$nextTick()
+      // the branch node `a` will be automatically collapsed by vue-treeselect
       expect(vm.forest.nodeMap.a.isExpanded).toBe(false)
       expect(vm.forest.nodeMap.a.childrenStates).toEqual({
         isLoaded: false,
@@ -537,6 +542,7 @@ describe('Dynamical Loading', () => {
         loadingError: '',
       })
 
+      // re-expand the branch node `a` and this time we simulate a loading error
       await expand((parentNode, callback) => {
         callback(new Error('test'))
       })
@@ -546,7 +552,8 @@ describe('Dynamical Loading', () => {
         loadingError: 'test',
       })
 
-      // this is no-op
+      // reset the branch node `a` again, but this time it's no-op since the
+      // branch node `a` is already at unloaded state
       options[0].children = null
       await vm.$nextTick()
       expect(vm.forest.nodeMap.a.isExpanded).toBe(true)

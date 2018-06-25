@@ -1417,7 +1417,7 @@ export default {
             if (isDisabled) parentNode.hasDisabledDescendants = true
           }
 
-          // preserve states
+          // preserve previous states
           if (prevNodeMap && prevNodeMap[id]) {
             const prev = prevNodeMap[id]
             if (prev.isBranch && normalized.isBranch) {
@@ -1427,7 +1427,9 @@ export default {
               // if `isLoaded` was true, but NOT now, we consider
               // this branch node to be reset to unloaded state by the user of this component
               if (prev.childrenStates.isLoaded && !normalized.childrenStates.isLoaded) {
+                // make sure the node is collapsed, then the user can load its children again (by expanding)
                 normalized.isExpanded = false
+                // we have reset `childrenStates` and don't want to preserve states here
               } else {
                 normalized.childrenStates = { ...prev.childrenStates }
               }
