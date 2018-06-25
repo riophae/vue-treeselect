@@ -1417,12 +1417,20 @@ export default {
             if (isDisabled) parentNode.hasDisabledDescendants = true
           }
 
+          // preserve states
           if (prevNodeMap && prevNodeMap[id]) {
             const prev = prevNodeMap[id]
             if (prev.isBranch && normalized.isBranch) {
               normalized.isExpanded = prev.isExpanded
               normalized.isExpandedOnSearch = prev.isExpandedOnSearch
-              normalized.childrenStates = { ...prev.childrenStates }
+              // #97
+              // if `isLoaded` was true, but NOT now, we consider
+              // this branch node to be reset to unloaded state by the user of this component
+              if (prev.childrenStates.isLoaded && !normalized.childrenStates.isLoaded) {
+                normalized.isExpanded = false
+              } else {
+                normalized.childrenStates = { ...prev.childrenStates }
+              }
             }
           }
 

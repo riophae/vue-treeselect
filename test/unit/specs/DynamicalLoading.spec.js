@@ -480,6 +480,82 @@ describe('Dynamical Loading', () => {
       await sleep(DELAY)
       expect(vm.forest.nodeMap.a.childrenStates.isLoaded).toBe(true)
     })
+
+    // #97
+    it('allows resetting a branch node to unloaded state by setting back `children: null`', async () => {
+      const options = [ {
+        id: 'a',
+        label: 'a',
+        children: null,
+      } ]
+      let spy
+      const expand = async fn => {
+        spy = fn
+        vm.toggleExpanded(vm.forest.nodeMap.a)
+        await vm.$nextTick()
+      }
+      const wrapper = mount(Treeselect, {
+        propsData: {
+          options,
+          loadOptions({ action, parentNode, callback }) {
+            if (action === 'LOAD_CHILDREN_OPTIONS') {
+              spy(parentNode, callback)
+            }
+          },
+        },
+      })
+      const { vm } = wrapper
+
+      vm.openMenu()
+      await vm.$nextTick()
+
+      expect(vm.forest.nodeMap.a.childrenStates).toEqual({
+        isLoaded: false,
+        isLoading: false,
+        loadingError: '',
+      })
+
+      await expand((parentNode, callback) => {
+        parentNode.children = [ {
+          id: 'aa',
+          label: 'aa',
+        } ]
+        callback()
+      })
+      expect(vm.forest.nodeMap.a.childrenStates).toEqual({
+        isLoaded: true,
+        isLoading: false,
+        loadingError: '',
+      })
+
+      options[0].children = null
+      await vm.$nextTick()
+      expect(vm.forest.nodeMap.a.isExpanded).toBe(false)
+      expect(vm.forest.nodeMap.a.childrenStates).toEqual({
+        isLoaded: false,
+        isLoading: false,
+        loadingError: '',
+      })
+
+      await expand((parentNode, callback) => {
+        callback(new Error('test'))
+      })
+      expect(vm.forest.nodeMap.a.childrenStates).toEqual({
+        isLoaded: false,
+        isLoading: false,
+        loadingError: 'test',
+      })
+
+      // this is no-op
+      options[0].children = null
+      await vm.$nextTick()
+      expect(vm.forest.nodeMap.a.isExpanded).toBe(true)
+      expect(vm.forest.nodeMap.a.childrenStates).toEqual({
+        isLoaded: false,
+        isLoading: false,
+        loadingError: 'test',
+      })
+    })
   })
 
   describe('Loading root options', () => {
