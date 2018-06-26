@@ -247,7 +247,9 @@ describe('Dynamical Loading', () => {
           flat: false,
           valueFormat: 'id',
           valueConsistsOf: 'BRANCH_PRIORITY',
-          loadOptions({ parentNode, callback }) {
+          loadOptions({ action, parentNode, callback }) {
+            expect(action).toBe('LOAD_CHILDREN_OPTIONS')
+
             called++
 
             if (parentNode.id === 'a') {
@@ -288,8 +290,8 @@ describe('Dynamical Loading', () => {
 
       vm.toggleExpanded(vm.forest.nodeMap.a)
       expect(called).toBe(1)
-      expect(vm.internalValue).toEqual([ 'a' ])
       await vm.$nextTick()
+      expect(vm.internalValue).toEqual([ 'a' ])
       expect(vm.forest.selectedNodeIds).toEqual([ 'a', 'aa', 'ab' ])
       expect(vm.forest.checkedStateMap).toEqual({
         a: CHECKED,

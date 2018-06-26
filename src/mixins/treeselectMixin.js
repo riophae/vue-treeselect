@@ -794,12 +794,9 @@ export default {
     },
 
     multiple(newValue) {
-      // istanbul ignore else
-      if (newValue) {
-        // needs to rebuild the state when switching from
-        // single-select mode to multi-select mode
-        this.buildForestState()
-      }
+      // needs to rebuild the state when switching from
+      // single-select mode to multi-select mode
+      if (newValue) this.buildForestState()
     },
 
     options: {
@@ -818,13 +815,10 @@ export default {
     }, INPUT_DEBOUNCE_DELAY, { leading: true }),
 
     value() {
-      const newInternalValue = this.extractCheckedNodeIdsFromValue()
-      const hasChanged = quickDiff(newInternalValue, this.internalValue)
+      const nodeIdsFromValue = this.extractCheckedNodeIdsFromValue()
+      const hasChanged = quickDiff(nodeIdsFromValue, this.internalValue)
 
-      if (hasChanged) {
-        this.forest.selectedNodeIds = newInternalValue
-        this.completeSelectedNodeIdList()
-      }
+      if (hasChanged) this.fixSelectedNodeIds(nodeIdsFromValue)
     },
   },
 
@@ -859,7 +853,9 @@ export default {
         this.forest.nodeMap = createMap()
         this.keepDataOfSelectedNodes(prevNodeMap)
         this.forest.normalizedOptions = this.normalize(NO_PARENT_NODE, rootOptions, prevNodeMap)
-        this.completeSelectedNodeIdList()
+        // In case children options of a checked node have been loaded,
+        // we should also mark these children as checked.
+        this.fixSelectedNodeIds(this.internalValue)
       } else {
         this.forest.normalizedOptions = []
       }
@@ -952,18 +948,48 @@ export default {
       return matched || defaultNode
     },
 
-    completeSelectedNodeIdList() {
-      const nodeIds = this.forest.selectedNodeIds.slice()
-      this.forest.selectedNodeIds = []
-      this.forest.checkedStateMap = createMap()
-      this.forest.selectedNodeMap = createMap()
+    fixSelectedNodeIds(prevValueArray) {
+      let nextSelectedNodeIds = []
 
-      nodeIds.forEach(id => {
-        if (!includes(this.forest.selectedNodeIds, id)) {
-          this._selectNode(this.getNode(id), { ignoreDisabled: true })
+      // istanbul ignore else
+      if (this.flat || this.single || this.valueConsistsOf === ALL) {
+        nextSelectedNodeIds = prevValueArray
+      } else if (this.valueConsistsOf === BRANCH_PRIORITY) {
+        prevValueArray.forEach(nodeId => {
+          nextSelectedNodeIds.push(nodeId)
+          const node = this.getNode(nodeId)
+          if (node.isBranch) this.traverseDescendantsBFS(node, descendant => {
+            nextSelectedNodeIds.push(descendant.id)
+          })
+        })
+      } else if (this.valueConsistsOf === LEAF_PRIORITY) {
+        const map = createMap()
+        const queue = prevValueArray.slice()
+        while (queue.length) {
+          const nodeId = queue.shift()
+          const node = this.getNode(nodeId)
+          nextSelectedNodeIds.push(nodeId)
+          if (node.isRootNode) continue
+          if (!(node.parentNode.id in map)) map[node.parentNode.id] = node.parentNode.children.length
+          if (--map[node.parentNode.id] === 0) queue.push(node.parentNode.id)
         }
-      })
+      } else if (this.valueConsistsOf === ALL_WITH_INDETERMINATE) {
+        const map = createMap()
+        const queue = prevValueArray.filter(nodeId => {
+          const node = this.getNode(nodeId)
+          return node.isLeaf || node.children.length === 0
+        })
+        while (queue.length) {
+          const nodeId = queue.shift()
+          const node = this.getNode(nodeId)
+          nextSelectedNodeIds.push(nodeId)
+          if (node.isRootNode) continue
+          if (!(node.parentNode.id in map)) map[node.parentNode.id] = node.parentNode.children.length
+          if (--map[node.parentNode.id] === 0) queue.push(node.parentNode.id)
+        }
+      }
 
+      this.forest.selectedNodeIds = nextSelectedNodeIds
       this.buildForestState()
     },
 
@@ -1021,17 +1047,17 @@ export default {
     },
 
     traverseAllNodesByIndex(callback) {
-      const traverse = parentNode => {
+      const walk = parentNode => {
         parentNode.children.forEach(child => {
           if (callback(child) !== false && child.isBranch) {
-            traverse(child)
+            walk(child)
           }
         })
       }
 
       // To simplify the code logic of traversal,
       // we create a fake root node that holds all the root options.
-      traverse({
+      walk({
         isBranch: true,
         children: this.forest.normalizedOptions,
       })
@@ -1608,23 +1634,23 @@ export default {
       }
     },
 
-    _selectNode(node, { ignoreDisabled = false } = {}) {
+    _selectNode(node) {
       if (this.single || this.flat || this.disableBranchNodes) {
         this.addValue(node)
         return
       }
 
-      if (node.isLeaf || (node.isBranch && (!node.hasDisabledDescendants || ignoreDisabled))) {
+      if (node.isLeaf || (node.isBranch && !node.hasDisabledDescendants)) {
         this.addValue(node)
       }
 
       if (node.isBranch) {
         this.traverseDescendantsBFS(node, descendant => {
-          if (!descendant.isDisabled || ignoreDisabled) this.addValue(descendant)
+          if (!descendant.isDisabled) this.addValue(descendant)
         })
       }
 
-      if (node.isLeaf || (node.isBranch && (!node.hasDisabledDescendants || ignoreDisabled))) {
+      if (node.isLeaf || (node.isBranch && !node.hasDisabledDescendants)) {
         let curr = node
         while ((curr = curr.parentNode) !== NO_PARENT_NODE) {
           if (curr.children.every(this.isSelected)) this.addValue(curr)
