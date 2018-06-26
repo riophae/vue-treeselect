@@ -380,7 +380,7 @@ describe('Basic', () => {
 
       expect(a.ancestors).toEqual([])
       expect(aa.ancestors).toEqual([ a ])
-      expect(aaa.ancestors).toEqual([ a, aa ])
+      expect(aaa.ancestors).toEqual([ aa, a ])
 
       expect(a.level).toBe(0)
       expect(aa.level).toBe(1)

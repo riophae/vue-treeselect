@@ -645,10 +645,16 @@ export default {
           return node.children.length === 0
         })
       } else if (this.valueConsistsOf === ALL_WITH_INDETERMINATE) {
-        internalValue = Object.keys(this.forest.checkedStateMap).filter(id => {
-          const checkedState = this.forest.checkedStateMap[id]
-          return checkedState === CHECKED || checkedState === INDETERMINATE
+        const indeterminateNodeIds = []
+        internalValue = this.forest.selectedNodeIds.slice()
+        this.selectedNodes.forEach(selectedNode => {
+          selectedNode.ancestors.forEach(ancestor => {
+            if (includes(indeterminateNodeIds, ancestor.id)) return
+            if (includes(internalValue, ancestor.id)) return
+            indeterminateNodeIds.push(ancestor.id)
+          })
         })
+        internalValue.push(...indeterminateNodeIds)
       }
 
       if (this.sortValueBy === LEVEL) {
@@ -1395,7 +1401,7 @@ export default {
           this.$set(normalized, 'id', id)
           this.$set(normalized, 'label', label)
           this.$set(normalized, 'level', level)
-          this.$set(normalized, 'ancestors', isRootNode ? [] : parentNode.ancestors.concat(parentNode))
+          this.$set(normalized, 'ancestors', isRootNode ? [] : [ parentNode ].concat(parentNode.ancestors))
           this.$set(normalized, 'index', (isRootNode ? [] : parentNode.index).concat(index))
           this.$set(normalized, 'parentNode', parentNode)
           this.$set(normalized, 'lowerCased', lowerCased)

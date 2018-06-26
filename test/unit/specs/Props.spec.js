@@ -1816,13 +1816,13 @@ describe('Props', () => {
       it('when valueConsistsOf=ALL_WITH_INDETERMINATE', () => {
         wrapper.setProps({ valueConsistsOf: ALL_WITH_INDETERMINATE })
 
-        expect(vm.internalValue).toEqual([ 'a', 'aa', 'aaa', 'aab' ])
+        expect(vm.internalValue).toEqual([ 'aa', 'aaa', 'aab', 'a' ])
         vm.select(vm.forest.nodeMap.ab)
-        expect(vm.internalValue).toEqual([ 'a', 'aa', 'aaa', 'aab', 'ab', 'aba', 'abb' ])
+        expect(vm.internalValue).toEqual([ 'aa', 'aaa', 'aab', 'ab', 'aba', 'abb', 'a' ])
         vm.select(vm.forest.nodeMap.b)
-        expect(vm.internalValue).toEqual([ 'a', 'aa', 'aaa', 'aab', 'ab', 'aba', 'abb', 'b' ])
+        expect(vm.internalValue).toEqual([ 'aa', 'aaa', 'aab', 'ab', 'aba', 'abb', 'b', 'a' ])
         vm.select(vm.forest.nodeMap.ac)
-        expect(vm.internalValue).toEqual([ 'a', 'aa', 'aaa', 'aab', 'ab', 'aba', 'abb', 'ac', 'b' ])
+        expect(vm.internalValue).toEqual([ 'aa', 'aaa', 'aab', 'ab', 'aba', 'abb', 'b', 'ac', 'a' ])
       })
     })
 
@@ -2170,7 +2170,7 @@ describe('Props', () => {
           })
 
           wrapper.setProps({ value: [ 'ab' ] })
-          expect(vm.internalValue).toEqual([ 'a', 'ab' ])
+          expect(vm.internalValue).toEqual([ 'ab', 'a' ])
           expect(vm.forest.selectedNodeIds).toEqual([ 'ab' ])
           expect(vm.forest.checkedStateMap).toEqual({
             a: INDETERMINATE,
@@ -2183,7 +2183,7 @@ describe('Props', () => {
           })
 
           wrapper.setProps({ value: [ 'aa', 'aaa', 'a' ] })
-          expect(vm.internalValue).toEqual([ 'a', 'aa', 'aaa' ])
+          expect(vm.internalValue).toEqual([ 'aaa', 'aa', 'a' ])
           expect(vm.forest.selectedNodeIds).toEqual([ 'aaa' ])
           expect(vm.forest.checkedStateMap).toEqual({
             a: INDETERMINATE,
@@ -2196,7 +2196,7 @@ describe('Props', () => {
           })
 
           wrapper.setProps({ value: [ 'a', 'aa', 'aaa', 'aab' ] })
-          expect(vm.internalValue).toEqual([ 'a', 'aa', 'aaa', 'aab' ])
+          expect(vm.internalValue).toEqual([ 'aaa', 'aab', 'aa', 'a' ])
           expect(vm.forest.selectedNodeIds).toEqual([ 'aaa', 'aab', 'aa' ])
           expect(vm.forest.checkedStateMap).toEqual({
             a: INDETERMINATE,
