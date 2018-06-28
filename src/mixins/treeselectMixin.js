@@ -859,8 +859,12 @@ export default {
         this.forest.nodeMap = createMap()
         this.keepDataOfSelectedNodes(prevNodeMap)
         this.forest.normalizedOptions = this.normalize(NO_PARENT_NODE, rootOptions, prevNodeMap)
-        // In case children options of a checked node have been loaded,
-        // we should also mark these children as checked.
+        // Cases that need fix `selectedNodeIds`:
+        //   1) Children options of a checked node have been delayed loaded,
+        //      we should also mark these children as checked. (multi-select mode)
+        //   2) Root options have been delayed loaded, we need to initialize states
+        //      of these nodes. (multi-select mode)
+        //   3) Async search mode.
         this.fixSelectedNodeIds(this.internalValue)
       } else {
         this.forest.normalizedOptions = []
