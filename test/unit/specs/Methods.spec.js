@@ -1,5 +1,6 @@
 import { mount } from '@vue/test-utils'
 import Treeselect from '@riophae/vue-treeselect/components/Treeselect'
+import { typeSearchText } from './shared'
 
 describe('Methods', () => {
   describe('toggleExpanded()', () => {
@@ -266,5 +267,65 @@ describe('Methods', () => {
 
   it('setCurrentHighlightedOption()', () => {
     // TODO
+  })
+
+  describe('resetCurrentHighlightedOption()', () => {
+    let wrapper, vm
+
+    beforeEach(() => {
+      wrapper = mount(Treeselect, {
+        propsData: {
+          options: [ {
+            id: 'a',
+            label: 'a',
+          }, {
+            id: 'b',
+            label: 'b',
+            children: [ {
+              id: 'ba',
+              label: 'ba',
+            }, {
+              id: 'bb',
+              label: 'bb',
+            } ],
+          } ],
+        },
+      })
+      vm = wrapper.vm
+    })
+
+    it('when current=null', () => {
+      expect(vm.menu.current).toBe(null)
+      vm.resetHighlightedOptionWhenNecessary()
+      expect(vm.menu.current).toBe('a')
+    })
+
+    it('when forceReset=true', () => {
+      vm.setCurrentHighlightedOption(vm.forest.nodeMap.b)
+      expect(vm.menu.current).toBe('b')
+      vm.resetHighlightedOptionWhenNecessary()
+      expect(vm.menu.current).toBe('b')
+      vm.resetHighlightedOptionWhenNecessary(true)
+      expect(vm.menu.current).toBe('a')
+    })
+
+    it('when current highlighted option not present in the list', async () => {
+      vm.openMenu()
+      await vm.$nextTick()
+
+      expect(vm.menu.current).toBe('a')
+
+      await typeSearchText(wrapper, 'bb')
+      expect(vm.visibleOptionIds).toEqual([ 'b', 'bb' ])
+      expect(vm.menu.current).toBe('b')
+
+      vm.setCurrentHighlightedOption(vm.forest.nodeMap.bb)
+      expect(vm.menu.current).toBe('bb')
+
+      await typeSearchText(wrapper, 'a')
+      // the previous highlighted option `bb` is not present in the list now
+      expect(vm.visibleOptionIds).toEqual([ 'a', 'b', 'ba' ])
+      expect(vm.menu.current).toBe('a')
+    })
   })
 })

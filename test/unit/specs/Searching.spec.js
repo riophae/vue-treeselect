@@ -180,6 +180,45 @@ describe('Searching', () => {
         expect(wrapper.contains('.vue-treeselect__option[data-id="aca"]')).toBe(true)
       })
     })
+
+    it('should highlight first option after search query changes', async () => {
+      const wrapper = mount(Treeselect, {
+        propsData: {
+          options: [ {
+            id: 'a',
+            label: 'a',
+          }, {
+            id: 'b',
+            label: 'b',
+            children: [ {
+              id: 'ba',
+              label: 'ba',
+            }, {
+              id: 'bb',
+              label: 'bb',
+            } ],
+          } ],
+        },
+      })
+      const { vm } = wrapper
+
+      vm.openMenu()
+      await vm.$nextTick()
+
+      expect(vm.menu.current).toBe('a')
+
+      await typeSearchText(wrapper, 'b')
+      expect(vm.menu.current).toBe('b')
+
+      await typeSearchText(wrapper, 'a')
+      expect(vm.menu.current).toBe('a')
+
+      await typeSearchText(wrapper, 'bb')
+      expect(vm.menu.current).toBe('b')
+
+      await typeSearchText(wrapper, '')
+      expect(vm.menu.current).toBe('a')
+    })
   })
 
   describe('fuzzy search', () => {

@@ -5,7 +5,7 @@
       'vue-treeselect__option--selected': instance.isSelected(node),
       'vue-treeselect__option--highlight': node.isHighlighted,
       'vue-treeselect__option--matched': instance.localSearch.active && node.isMatched,
-      'vue-treeselect__option--hide': !instance.shouldShowOptionInMenu(node, false),
+      'vue-treeselect__option--hide': !instance.shouldShowOptionInMenu(node),
     } ]" @mouseenter.self="setCurrentHighlightedOption" :data-id="node.id">
       <div v-if="shouldShowArrorPlaceholder" class="vue-treeselect__option-arrow-placeholder">&nbsp;</div>
       <div v-else-if="node.isBranch" class="vue-treeselect__option-arrow-container" @mousedown="handleMouseDownOnOptionArrow">

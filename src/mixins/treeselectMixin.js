@@ -721,13 +721,7 @@ export default {
      * @type {boolean}
      */
     hasVisibleOptions() {
-      if (!this.forest.normalizedOptions.length) {
-        return false
-      }
-      if (this.localSearch.active) {
-        return this.forest.normalizedOptions.some(option => this.shouldOptionBeIncludedInSearchResult(option))
-      }
-      return true
+      return this.visibleOptionIds.length !== 0
     },
     /**
      * Whether has passed the defined limit or not
@@ -760,17 +754,6 @@ export default {
      */
     hasBranchNodes() {
       return this.forest.normalizedOptions.some(rootNode => rootNode.isBranch)
-    },
-    /**
-     * The first option that should be displayed in the menu
-     * @type {Object?}
-     */
-    firstVisibleOption() {
-      if (!this.forest.normalizedOptions.length) return null
-      if (this.localSearch.active) return find(this.forest.normalizedOptions, node => {
-        return this.shouldOptionBeIncludedInSearchResult(node)
-      })
-      return this.forest.normalizedOptions[0]
     },
     /* eslint-enable valid-jsdoc */
   },
@@ -1228,10 +1211,6 @@ export default {
       return this.localSearch.active ? node.isExpandedOnSearch : node.isExpanded
     },
 
-    isAllAncestorsExpanded(node) {
-      return node.ancestors.every(ancestor => this.shouldExpand(ancestor))
-    },
-
     shouldOptionBeIncludedInSearchResult(node) {
       // this option is matched
       if (node.isMatched) return true
@@ -1243,11 +1222,7 @@ export default {
       return false
     },
 
-    shouldShowOptionInMenu(node, checkIfCollapsed = true) {
-      if (checkIfCollapsed && !node.isRootNode && !this.isAllAncestorsExpanded(node)) {
-        // this option belongs to a collapsed folder option
-        return false
-      }
+    shouldShowOptionInMenu(node) {
       if (this.localSearch.active && !this.shouldOptionBeIncludedInSearchResult(node)) {
         return false
       }
@@ -1255,8 +1230,6 @@ export default {
     },
 
     setCurrentHighlightedOption(node, scroll = true) {
-      if (!node) return
-
       const prev = this.menu.current
       if (prev != null && prev in this.forest.nodeMap) {
         this.forest.nodeMap[prev].isHighlighted = false
@@ -1271,8 +1244,14 @@ export default {
     },
 
     resetHighlightedOptionWhenNecessary(forceReset = false) {
-      if (forceReset || this.menu.current == null || !this.shouldShowOptionInMenu(this.getNode(this.menu.current))) {
-        this.setCurrentHighlightedOption(this.firstVisibleOption)
+      const { current } = this.menu
+
+      if (
+        forceReset || current == null ||
+        !(current in this.forest.nodeMap) ||
+        !this.shouldShowOptionInMenu(this.getNode(current))
+      ) {
+        this.highlightFirstOption()
       }
     },
 
@@ -1340,7 +1319,7 @@ export default {
 
       if (this.localSearch.active) {
         nextState = node.isExpandedOnSearch = !node.isExpandedOnSearch
-        if (node.isExpandedOnSearch) node.showAllChildrenOnSearch = true
+        if (nextState) node.showAllChildrenOnSearch = true
       } else {
         nextState = node.isExpanded = !node.isExpanded
       }
@@ -1509,6 +1488,10 @@ export default {
         },
         succeed: () => {
           this.rootOptionsStates.isLoaded = true
+          // wait for `options` being reinitialized
+          this.$nextTick(() => {
+            this.resetHighlightedOptionWhenNecessary(true)
+          })
         },
         fail: err => {
           this.rootOptionsStates.loadingError = err.message || String(err)

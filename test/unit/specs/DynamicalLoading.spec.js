@@ -879,5 +879,47 @@ describe('Dynamical Loading', () => {
       await sleep(DELAY)
       expect(vm.rootOptionsStates.isLoaded).toBe(true)
     })
+
+    it('should highlight first option after loading root options', async () => {
+      const DELAY = 10
+      const app = new Vue({
+        components: { Treeselect },
+        data: {
+          options: null,
+          loadOptions({ action, callback }) {
+            if (action === 'LOAD_ROOT_OPTIONS') {
+              setTimeout(() => {
+                app.options = [ 'a', 'b', 'c' ].map(option => ({
+                  id: option,
+                  label: option,
+                }))
+                callback()
+              }, DELAY)
+            }
+          },
+        },
+        template: `
+          <div>
+            <treeselect
+              :options="options"
+              :load-options="loadOptions"
+              :auto-load-root-options= "false"
+              />
+          </div>
+        `,
+      }).$mount()
+      const vm = app.$children[0]
+
+      vm.openMenu()
+      await vm.$nextTick()
+
+      expect(vm.rootOptionsStates.isLoading).toBe(true)
+
+      await sleep(DELAY)
+      expect(vm.forest.normalizedOptions).toBeNonEmptyArray()
+
+      expect(vm.menu.current).toBe('a')
+      expect(vm.forest.nodeMap.a.isHighlighted).toBe(true)
+    })
   })
 })
