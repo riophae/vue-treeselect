@@ -73,12 +73,15 @@ describe('Menu', () => {
 
     vm.openMenu()
     expect(vm.menu.current).toBe('a')
+    expect(vm.forest.nodeMap.a.isHighlighted).toBe(true)
 
     findOptionByNodeId(wrapper, 'b').trigger('mouseenter')
     expect(vm.menu.current).toBe('b')
+    expect(vm.forest.nodeMap.b.isHighlighted).toBe(true)
 
     findOptionByNodeId(wrapper, 'a').trigger('mouseenter')
     expect(vm.menu.current).toBe('a')
+    expect(vm.forest.nodeMap.a.isHighlighted).toBe(true)
   })
 
   it('retain scroll position on menu reopen', async () => {

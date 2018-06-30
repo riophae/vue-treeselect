@@ -1257,7 +1257,12 @@ export default {
     setCurrentHighlightedOption(node, scroll = true) {
       if (!node) return
 
+      const prev = this.menu.current
+      if (prev != null && prev in this.forest.nodeMap) {
+        this.forest.nodeMap[prev].isHighlighted = false
+      }
       this.menu.current = node.id
+      node.isHighlighted = true
 
       if (scroll) {
         const $option = this.$el.querySelector(`.vue-treeselect__option[data-id="${node.id}"]`)
@@ -1413,6 +1418,7 @@ export default {
           this.$set(normalized, 'isDisabled', isDisabled)
           this.$set(normalized, 'isNew', isNew)
           this.$set(normalized, 'isMatched', false)
+          this.$set(normalized, 'isHighlighted', false)
           this.$set(normalized, 'isBranch', isBranch)
           this.$set(normalized, 'isLeaf', isLeaf)
           this.$set(normalized, 'isRootNode', isRootNode)

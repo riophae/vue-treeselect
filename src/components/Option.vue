@@ -3,7 +3,7 @@
     <div :class="[ 'vue-treeselect__option', {
       'vue-treeselect__option--disabled': node.isDisabled,
       'vue-treeselect__option--selected': instance.isSelected(node),
-      'vue-treeselect__option--highlight': instance.menu.current === node.id,
+      'vue-treeselect__option--highlight': node.isHighlighted,
       'vue-treeselect__option--matched': instance.localSearch.active && node.isMatched,
       'vue-treeselect__option--hide': !instance.shouldShowOptionInMenu(node, false),
     } ]" @mouseenter.self="setCurrentHighlightedOption" :data-id="node.id">

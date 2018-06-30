@@ -47,7 +47,7 @@ describe('Basic', () => {
         aa: jasmine.any(Object),
       })
 
-      expect(a).toEqual({
+      const leafProperties = {
         id: jasmine.any(String),
         label: jasmine.any(String),
         lowerCased: jasmine.any(Object),
@@ -55,10 +55,20 @@ describe('Basic', () => {
         isLeaf: jasmine.any(Boolean),
         isBranch: jasmine.any(Boolean),
         isRootNode: jasmine.any(Boolean),
-        isExpanded: jasmine.any(Boolean),
         isMatched: jasmine.any(Boolean),
+        isHighlighted: jasmine.any(Boolean),
         isDisabled: jasmine.any(Boolean),
         isNew: jasmine.any(Boolean),
+        parentNode: jasmine.any(Object),
+        ancestors: jasmine.any(Array),
+        index: jasmine.any(Array),
+        level: jasmine.any(Number),
+        raw: jasmine.any(Object),
+      }
+
+      expect(a).toEqual({
+        ...leafProperties,
+        isExpanded: jasmine.any(Boolean),
         childrenStates: {
           isLoaded: jasmine.any(Boolean),
           isLoading: jasmine.any(Boolean),
@@ -69,36 +79,16 @@ describe('Basic', () => {
         isExpandedOnSearch: jasmine.any(Boolean),
         showAllChildrenOnSearch: jasmine.any(Boolean),
         parentNode: null,
-        ancestors: jasmine.any(Array),
-        index: jasmine.any(Array),
         children: jasmine.any(Array),
-        level: jasmine.any(Number),
         count: {
           ALL_CHILDREN: jasmine.any(Number),
           ALL_DESCENDANTS: jasmine.any(Number),
           LEAF_CHILDREN: jasmine.any(Number),
           LEAF_DESCENDANTS: jasmine.any(Number),
         },
-        raw: jasmine.any(Object),
       })
 
-      expect(aa).toEqual({
-        id: jasmine.any(String),
-        label: jasmine.any(String),
-        lowerCased: jasmine.any(Object),
-        nestedSearchLabel: jasmine.any(String),
-        isLeaf: jasmine.any(Boolean),
-        isBranch: jasmine.any(Boolean),
-        isRootNode: jasmine.any(Boolean),
-        isMatched: jasmine.any(Boolean),
-        isDisabled: jasmine.any(Boolean),
-        isNew: jasmine.any(Boolean),
-        parentNode: jasmine.any(Object),
-        ancestors: jasmine.any(Array),
-        index: jasmine.any(Array),
-        level: jasmine.any(Number),
-        raw: jasmine.any(Object),
-      })
+      expect(aa).toEqual(leafProperties)
     })
 
     it('id & label', () => {
