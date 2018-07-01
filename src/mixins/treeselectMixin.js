@@ -1452,7 +1452,7 @@ export default {
               normalized.isExpanded = prev.isExpanded
               normalized.isExpandedOnSearch = prev.isExpandedOnSearch
               // #97
-              // if `isLoaded` was true, but NOT now, we consider
+              // if `isLoaded` was true, but IS NOT now, we consider
               // this branch node to be reset to unloaded state by the user of this component
               if (prev.childrenStates.isLoaded && !normalized.childrenStates.isLoaded) {
                 // make sure the node is collapsed, then the user can load its children again (by expanding)
@@ -1505,7 +1505,7 @@ export default {
     loadChildrenOptions(parentNode) {
       const { id, raw } = parentNode
       // the options may be reinitialized anytime during the loading process
-      // so `parentNode` can be expired and we use `getNode()` to avoid that
+      // so `parentNode` can be stale and we use `getNode()` to avoid that
 
       this.callLoadOptionsProp({
         action: LOAD_CHILDREN_OPTIONS,
@@ -1592,11 +1592,11 @@ export default {
         this.clear()
       }
 
-      const state = this.multiple && !this.flat
+      const nextState = this.multiple && !this.flat
         ? this.forest.checkedStateMap[node.id] === UNCHECKED
         : !this.isSelected(node)
 
-      if (state) {
+      if (nextState) {
         this._selectNode(node)
       } else {
         this._deselectNode(node)
@@ -1604,13 +1604,13 @@ export default {
 
       this.buildForestState()
 
-      if (state) {
+      if (nextState) {
         this.$emit('select', node.raw, this.getInstanceId())
       } else {
         this.$emit('deselect', node.raw, this.getInstanceId())
       }
 
-      if (this.localSearch.active && state && (this.single || this.clearOnSelect)) {
+      if (this.localSearch.active && nextState && (this.single || this.clearOnSelect)) {
         this.trigger.searchQuery = ''
       }
 
