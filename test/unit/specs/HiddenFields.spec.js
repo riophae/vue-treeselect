@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils'
-import Treeselect from '@riophae/vue-treeselect/components/Treeselect'
+import Treeselect from '@src/components/Treeselect'
 
 describe('Hidden Fields', () => {
   let wrapper
@@ -25,14 +25,14 @@ describe('Hidden Fields', () => {
     expect(getHiddenFields().length).not.toBe(0)
   })
 
-  it('single-select', () => {
+  it('single-select mode', () => {
     wrapper.setProps({ name: 'single', value: 'value' })
     const hiddenFields = getHiddenFields()
     expect(hiddenFields.length).toBe(1)
     expect(hiddenFields.at(0).html()).toBe('<input type="hidden" name="single" value="value">')
   })
 
-  it('multi-select', () => {
+  it('multi-select mode', () => {
     wrapper.setProps({ name: 'multiple', multiple: true, value: [ 1, 2, 3 ] })
     const hiddenFields = getHiddenFields()
     expect(hiddenFields.length).toBe(3)

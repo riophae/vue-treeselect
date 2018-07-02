@@ -1,4 +1,4 @@
-import { onlyOnLeftClick } from '../utils'
+import { onLeftClick } from '../utils'
 
 export default {
   computed: {
@@ -17,7 +17,7 @@ export default {
       this.$refs.input.blur()
     },
 
-    handleMouseDownOnValueItem: onlyOnLeftClick(function handleMouseDownOnValueItem(evt, node) {
+    handleMouseDownOnValueItem: onLeftClick(function handleMouseDownOnValueItem(evt, node) {
       this.instance.select(node) // deselect
     }),
   },

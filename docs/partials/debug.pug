@@ -1,0 +1,10 @@
+if process.env.NODE_ENV !== 'production'
+  +section('Debug')
+
+  +guide('Performance Test')
+    :markdown-it
+      Checkpoints:
+        - Opening & closing the menu should be fast
+        - Hovering the mouse over the list should be smooth
+        - Select & deselect option should feel slappy
+    +demo('PerformanceTest')

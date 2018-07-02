@@ -1,9 +1,9 @@
 import { mount } from '@vue/test-utils'
-import Treeselect from '@riophae/vue-treeselect/components/Treeselect'
+import Treeselect from '@src/components/Treeselect'
 import { leftClick } from './shared'
 
 describe('Control', () => {
-  it('should toggle the menu when arrow is clicked', () => {
+  it('should toggle the menu when the arrow is clicked', () => {
     const wrapper = mount(Treeselect, {
       attachToDocument: true,
       propsData: {

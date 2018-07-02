@@ -1,12 +1,12 @@
 import Vue from 'vue'
 import { mount } from '@vue/test-utils'
 import sleep from 'yaku/lib/sleep'
-import Treeselect from '@riophae/vue-treeselect/components/Treeselect'
-import TreeselectOption from '@riophae/vue-treeselect/components/Option'
+import Treeselect from '@src/components/Treeselect'
+import TreeselectOption from '@src/components/Option'
 import {
   UNCHECKED, CHECKED, INDETERMINATE,
   ALL, BRANCH_PRIORITY, LEAF_PRIORITY, ALL_WITH_INDETERMINATE,
-} from '@riophae/vue-treeselect/constants'
+} from '@src/constants'
 import {
   generateOptions,
   leftClick,

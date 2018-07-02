@@ -1,6 +1,6 @@
 import sleep from 'yaku/lib/sleep'
-import TreeselectOption from '@riophae/vue-treeselect/components/Option'
-import { INPUT_DEBOUNCE_DELAY } from '@riophae/vue-treeselect/constants'
+import TreeselectOption from '@src/components/Option'
+import { INPUT_DEBOUNCE_DELAY } from '@src/constants'
 
 function createArray(len, fn) {
   const arr = []

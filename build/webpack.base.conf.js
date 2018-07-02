@@ -27,8 +27,13 @@ module.exports = {
       resolve('node_modules'),
     ],
     alias: {
+      // use the development version & full build of Vue
+      // see: https://vuejs.org/v2/guide/installation.html#Explanation-of-Different-Builds
       vue$: 'vue/dist/vue',
+      // for consistent docs
       '@riophae/vue-treeselect': resolve('src'),
+      // for shorter import path in tests
+      '@src': resolve('src'),
     },
   },
   module: {

@@ -3,7 +3,7 @@ import debounce from 'lodash/debounce'
 
 import {
   warning,
-  onlyOnLeftClick, scrollIntoView,
+  onLeftClick, scrollIntoView,
   isNaN, isPromise, once,
   identity, constant, createMap,
   quickDiff, getLast, includes, find, removeFromArray,
@@ -559,55 +559,55 @@ export default {
   data() {
     return {
       trigger: {
-        // is the control focused?
+        // Is the control focused?
         isFocused: false,
-        // user entered search query - value of the input
+        // User entered search query - value of the input.
         searchQuery: '',
       },
 
       menu: {
-        // is the menu opened?
+        // Is the menu opened?
         isOpen: false,
-        // id of current highlighted option
+        // Id of current highlighted option.
         current: null,
-        // the scroll position before last menu close
+        // The scroll position before last menu close.
         lastScrollPosition: 0,
-        // menu height
+        // Menu height.
         optimizedHeight: 0,
-        // which direction to open the menu
+        // Which direction to open the menu.
         prefferedOpenDirection: 'below',
       },
 
       forest: {
-        // normalized options
+        // Normalized options.
         normalizedOptions: [],
-        // <id, node> map for quick look-up
+        // <id, node> map for quick look-up.
         nodeMap: createMap(),
-        // <id, checkedState> map, used for multi-select mode
+        // <id, checkedState> map, used for multi-select mode.
         checkedStateMap: createMap(),
-        // id list of all selected options
+        // Id list of all selected options.
         selectedNodeIds: this.extractCheckedNodeIdsFromValue(),
         // <id, true> map for fast checking:
-        // if (forest.selectedNodeIds.indexOf(id) !== -1) forest.selectedNodeMap[id] === true
+        //   if (forest.selectedNodeIds.indexOf(id) !== -1) forest.selectedNodeMap[id] === true
         selectedNodeMap: createMap(),
       },
 
-      // States of root options
+      // States of root options.
       rootOptionsStates: createAsyncOptionsStates(),
 
       localSearch: {
-        // has user entered any query to search local options?
+        // Has user entered any query to search local options?
         active: false,
-        // has any options matched the search query?
+        // Has any options matched the search query?
         noResults: true,
-        // <id, countObject> map for counting matched children/descendants
+        // <id, countObject> map for counting matched children/descendants.
         countMap: createMap(),
       },
 
       remoteSearch: {
-        // has user entered any query to search async options?
+        // Has user entered any query to search async options?
         active: false,
-        // states of async searching
+        // States of async searching.
         ...createAsyncOptionsStates(),
       },
     }
@@ -842,7 +842,7 @@ export default {
         this.forest.nodeMap = createMap()
         this.keepDataOfSelectedNodes(prevNodeMap)
         this.forest.normalizedOptions = this.normalize(NO_PARENT_NODE, rootOptions, prevNodeMap)
-        // Cases that need fix `selectedNodeIds`:
+        // Cases that need fixing `selectedNodeIds`:
         //   1) Children options of a checked node have been delayed loaded,
         //      we should also mark these children as checked. (multi-select mode)
         //   2) Root options have been delayed loaded, we need to initialize states
@@ -905,8 +905,7 @@ export default {
         raw,
       }
 
-      this.$set(this.forest.nodeMap, id, fallbackNode)
-      return fallbackNode
+      return this.$set(this.forest.nodeMap, id, fallbackNode)
     },
 
     extractCheckedNodeIdsFromValue() {
@@ -991,11 +990,11 @@ export default {
       // It could be useful for async search mode.
       this.forest.selectedNodeIds.forEach(id => {
         if (!prevNodeMap[id]) return
-        const fallbackNode = {
+        const node = {
           ...prevNodeMap[id],
           isFallbackNode: true,
         }
-        this.$set(this.forest.nodeMap, id, fallbackNode)
+        this.$set(this.forest.nodeMap, id, node)
       })
     },
 
@@ -1050,10 +1049,7 @@ export default {
 
       // To simplify the code logic of traversal,
       // we create a fake root node that holds all the root options.
-      walk({
-        isBranch: true,
-        children: this.forest.normalizedOptions,
-      })
+      walk({ children: this.forest.normalizedOptions })
     },
 
     toggleClickOutsideEvent(enabled) {
@@ -1072,7 +1068,7 @@ export default {
       this.$refs.value.blurInput()
     },
 
-    handleMouseDown: onlyOnLeftClick(function handleMouseDown(evt) {
+    handleMouseDown: onLeftClick(function handleMouseDown(evt) {
       evt.preventDefault()
       evt.stopPropagation()
 
@@ -1093,7 +1089,7 @@ export default {
       this.resetFlags()
     }),
 
-    handleMouseDownOnClear: onlyOnLeftClick(function handleMouseDownOnClear(evt) {
+    handleMouseDownOnClear: onLeftClick(function handleMouseDownOnClear(evt) {
       // We don't use async/await here because we don't want
       // to rely on Babel polyfill or regenerator runtime.
       // See: https://babeljs.io/docs/plugins/transform-regenerator/
@@ -1113,25 +1109,29 @@ export default {
       }
 
       if (isPromise(result)) {
-        // the handler will be called async
+        // The handler will be called async.
         result.then(handler)
       } else {
-        // keep the same behavior here
+        // Keep the same behavior here.
         setTimeout(() => handler(result), 0)
+        // Also, note that IE9 requires:
+        //   setTimeout(() => fn(...args), delay)
+        // Instead of:
+        //   setTimeout(fn, delay, ...args)
       }
     }),
 
-    handleMouseDownOnArrow: onlyOnLeftClick(function handleMouseDownOnArrow(evt) {
+    handleMouseDownOnArrow: onLeftClick(function handleMouseDownOnArrow(evt) {
       evt.preventDefault()
       evt.stopPropagation()
 
-      // focus the input or prevent blurring
+      // Focus the input or prevent blurring.
       this.focusInput()
       this.toggleMenu()
     }),
 
     handleClickOutside(evt) {
-      /* istanbul ignore else */
+      // istanbul ignore else
       if (this.$refs.wrapper && !this.$refs.wrapper.contains(evt.target)) {
         this.blurInput()
         this.closeMenu()
@@ -1445,19 +1445,20 @@ export default {
             if (isDisabled) parentNode.hasDisabledDescendants = true
           }
 
-          // preserve previous states
+          // Preserve previous states.
           if (prevNodeMap && prevNodeMap[id]) {
             const prev = prevNodeMap[id]
             if (prev.isBranch && normalized.isBranch) {
               normalized.isExpanded = prev.isExpanded
               normalized.isExpandedOnSearch = prev.isExpandedOnSearch
               // #97
-              // if `isLoaded` was true, but IS NOT now, we consider
-              // this branch node to be reset to unloaded state by the user of this component
+              // If `isLoaded` was true, but IS NOT now, we consider this branch node
+              // to be reset to unloaded state by the user of this component.
               if (prev.childrenStates.isLoaded && !normalized.childrenStates.isLoaded) {
-                // make sure the node is collapsed, then the user can load its children again (by expanding)
+                // Make sure the node is collapsed, then the user can load its
+                // children again (by expanding).
                 normalized.isExpanded = false
-                // we have reset `childrenStates` and don't want to preserve states here
+                // We have reset `childrenStates` and don't want to preserve states here.
               } else {
                 normalized.childrenStates = { ...prev.childrenStates }
               }
@@ -1488,7 +1489,7 @@ export default {
         },
         succeed: () => {
           this.rootOptionsStates.isLoaded = true
-          // wait for `options` being reinitialized
+          // Wait for `options` being re-initialized.
           this.$nextTick(() => {
             this.resetHighlightedOptionWhenNecessary(true)
           })

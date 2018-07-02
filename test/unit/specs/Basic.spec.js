@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import { mount } from '@vue/test-utils'
 import sleep from 'yaku/lib/sleep'
-import Treeselect from '@riophae/vue-treeselect/components/Treeselect'
-import TreeselectOption from '@riophae/vue-treeselect/components/Option'
+import Treeselect from '@src/components/Treeselect'
+import TreeselectOption from '@src/components/Option'
 
 describe('Basic', () => {
   describe('nodeMap', () => {
@@ -39,15 +39,7 @@ describe('Basic', () => {
           } ],
         },
       })
-      const { vm } = wrapper
-      const { a, aa } = vm.forest.nodeMap
-
-      expect(vm.forest.nodeMap).toEqual({
-        a: jasmine.any(Object),
-        aa: jasmine.any(Object),
-      })
-
-      const leafProperties = {
+      const leafNodeShape = {
         id: jasmine.any(String),
         label: jasmine.any(String),
         lowerCased: jasmine.any(Object),
@@ -65,9 +57,8 @@ describe('Basic', () => {
         level: jasmine.any(Number),
         raw: jasmine.any(Object),
       }
-
-      expect(a).toEqual({
-        ...leafProperties,
+      const branchNodeShape = {
+        ...leafNodeShape,
         isExpanded: jasmine.any(Boolean),
         childrenStates: {
           isLoaded: jasmine.any(Boolean),
@@ -86,9 +77,12 @@ describe('Basic', () => {
           LEAF_CHILDREN: jasmine.any(Number),
           LEAF_DESCENDANTS: jasmine.any(Number),
         },
-      })
+      }
 
-      expect(aa).toEqual(leafProperties)
+      expect(wrapper.vm.forest.nodeMap).toEqual({
+        a: branchNodeShape,
+        aa: leafNodeShape,
+      })
     })
 
     it('id & label', () => {

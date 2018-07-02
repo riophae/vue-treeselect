@@ -18,7 +18,7 @@ export const warning = process.env.NODE_ENV === 'production'
  * Dom utilites
  */
 
-export function onlyOnLeftClick(mouseDownHandler) {
+export function onLeftClick(mouseDownHandler) {
   return function onMouseDown(evt, ...args) {
     if (evt.type === 'mousedown' && evt.button === 0) {
       mouseDownHandler.call(this, evt, ...args)
@@ -34,10 +34,7 @@ export function scrollIntoView(scrollingEl, focusedEl) {
 
   if (focusedRect.bottom + overScroll > scrollingReact.bottom) {
     scrollingEl.scrollTop = Math.min(
-      focusedEl.offsetTop +
-        focusedEl.clientHeight -
-        scrollingEl.offsetHeight +
-        overScroll,
+      focusedEl.offsetTop + focusedEl.clientHeight - scrollingEl.offsetHeight + overScroll,
       scrollingEl.scrollHeight
     )
   } else if (focusedRect.top - overScroll < scrollingReact.top) {
@@ -53,8 +50,8 @@ export function isNaN(x) {
   return x !== x
 }
 
+// https://github.com/then/is-promise/blob/master/index.js
 export function isPromise(x) {
-  // https://github.com/then/is-promise/blob/master/index.js
   return (
     x != null &&
     (typeof x === 'object' || typeof x === 'function') &&
@@ -63,12 +60,12 @@ export function isPromise(x) {
 }
 
 export function once(fn) {
-  let val
-  return (...args) => {
-    if (fn.called) return val
+  const wrapper = (...args) => {
+    if (fn.called) return wrapper.val
     fn.called = true
-    return val = fn(...args)
+    return wrapper.val = fn(...args)
   }
+  return wrapper
 }
 
 export function noop() {

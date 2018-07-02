@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils'
-import Treeselect from '@riophae/vue-treeselect/components/Treeselect'
+import Treeselect from '@src/components/Treeselect'
 import { findInput, typeSearchText } from './shared'
 
 describe('Search Input', () => {

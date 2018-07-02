@@ -1,4 +1,4 @@
-import * as utils from '@riophae/vue-treeselect/utils'
+import * as utils from '@src/utils'
 
 describe('Utils', () => {
   describe('warning', () => {
@@ -20,8 +20,8 @@ describe('Utils', () => {
     })
   })
 
-  describe('onlyOnLeftClick', () => {
-    const { onlyOnLeftClick } = utils
+  describe('onLeftClick', () => {
+    const { onLeftClick } = utils
     let spy
 
     beforeEach(() => {
@@ -33,7 +33,7 @@ describe('Utils', () => {
         type: 'mousedown',
         button: 0,
       }
-      onlyOnLeftClick(spy)(eventObj)
+      onLeftClick(spy)(eventObj)
       expect(spy).toHaveBeenCalledWith(eventObj)
     })
 
@@ -42,7 +42,7 @@ describe('Utils', () => {
         type: 'mouseup',
         button: 0,
       }
-      onlyOnLeftClick(spy)(eventObj)
+      onLeftClick(spy)(eventObj)
       expect(spy).not.toHaveBeenCalled()
     })
 
@@ -51,7 +51,7 @@ describe('Utils', () => {
         type: 'mousedown',
         button: 1,
       }
-      onlyOnLeftClick(spy)(eventObj)
+      onLeftClick(spy)(eventObj)
       expect(spy).not.toHaveBeenCalled()
     })
 
@@ -61,7 +61,7 @@ describe('Utils', () => {
         button: 0,
       }
       const extraArg = {}
-      onlyOnLeftClick(spy)(eventObj, extraArg)
+      onLeftClick(spy)(eventObj, extraArg)
       expect(spy).toHaveBeenCalledWith(eventObj, extraArg)
     })
   })

@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils'
-import Treeselect from '@riophae/vue-treeselect/components/Treeselect'
-import { UNCHECKED, INDETERMINATE, CHECKED } from '@riophae/vue-treeselect/constants'
+import Treeselect from '@src/components/Treeselect'
+import { UNCHECKED, INDETERMINATE, CHECKED } from '@src/constants'
 import { leftClick, findLabelContainerByNodeId } from './shared'
 
 describe('Single-select', () => {
