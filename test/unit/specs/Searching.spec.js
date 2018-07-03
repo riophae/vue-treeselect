@@ -795,7 +795,20 @@ describe('Searching', () => {
     })
 
     it('should not create new one if there is an ongoing request even with cacheOptions=false', async () => {
-      const DELAY = INPUT_DEBOUNCE_DELAY * 2.5
+      const DELAY = INPUT_DEBOUNCE_DELAY * 10
+      const run = async schedules => {
+        const start = Date.now()
+        const d = 4
+        schedules.forEach(s => s[0] *= DELAY)
+
+        while (schedules.length) {
+          const [ t, fn ] = schedules.shift()
+          const [ next ] = schedules[0] || []
+          while (Date.now() - start <= t) await sleep(d)
+          if (next && Date.now() - start >= next) throw new Error(`time error @ ${t}`)
+          await fn()
+        }
+      }
       const calls = []
       const wrapper = mount(Treeselect, {
         sync: false,
@@ -807,50 +820,56 @@ describe('Searching', () => {
               calls.push(searchQuery)
               setTimeout(() => {
                 callback(null, [])
-              }, DELAY)
+              }, DELAY * 0.9)
             }
           },
         },
       })
       const { vm } = wrapper
-      let p
 
-      // T: 0
-      p = typeSearchText(wrapper, 'a')
-      await vm.$nextTick() // wait for the watcher of `vm.trigger.searchQuery`
-      expect(calls).toEqual([ 'a' ])
-      await p
-
-      // T: INPUT_DEBOUNCE_DELAY * 1
-      p = typeSearchText(wrapper, 'b')
-      await vm.$nextTick()
-      expect(calls).toEqual([ 'a', 'b' ])
-      await p
-
-      // T: INPUT_DEBOUNCE_DELAY * 2
-      p = typeSearchText(wrapper, 'a')
-      await vm.$nextTick()
-      expect(calls).toEqual([ 'a', 'b' ])
-      await p
-
-      // T: INPUT_DEBOUNCE_DELAY * 3
-      expect(vm.remoteSearch.a.isLoaded).toBe(true)
-      p = typeSearchText(wrapper, 'b')
-      await vm.$nextTick()
-      expect(calls).toEqual([ 'a', 'b' ])
-      await p
-
-      // T: INPUT_DEBOUNCE_DELAY * 4
-      expect(vm.remoteSearch.b.isLoaded).toBe(true)
-      p = typeSearchText(wrapper, 'a')
-      await vm.$nextTick()
-      expect(calls).toEqual([ 'a', 'b', 'a' ])
-      await p
-
-      // T: INPUT_DEBOUNCE_DELAY * 5
-      typeSearchText(wrapper, 'b')
-      await vm.$nextTick()
-      expect(calls).toEqual([ 'a', 'b', 'a', 'b' ])
+      await run([
+        [ 0, async () => {
+          const p = typeSearchText(wrapper, 'a')
+          await vm.$nextTick()
+          expect(calls).toEqual([ 'a' ])
+          return p
+        } ],
+        [ 1 / 3, async () => {
+          const p = typeSearchText(wrapper, 'b')
+          await vm.$nextTick()
+          expect(calls).toEqual([ 'a', 'b' ])
+          return p
+        } ],
+        [ 2 / 3, async () => {
+          expect(vm.remoteSearch.a.isLoading).toBe(true)
+          const p = typeSearchText(wrapper, 'a')
+          await vm.$nextTick()
+          expect(calls).toEqual([ 'a', 'b' ])
+          return p
+        } ],
+        [ 1, async () => {
+          expect(vm.remoteSearch.a.isLoaded).toBe(true)
+          expect(vm.remoteSearch.b.isLoading).toBe(true)
+          const p = typeSearchText(wrapper, 'b')
+          await vm.$nextTick()
+          expect(calls).toEqual([ 'a', 'b' ])
+          return p
+        } ],
+        [ 4 / 3, async () => {
+          expect(vm.remoteSearch.b.isLoaded).toBe(true)
+          const p = typeSearchText(wrapper, 'a')
+          await vm.$nextTick()
+          expect(calls).toEqual([ 'a', 'b', 'a' ])
+          return p
+        } ],
+        [ 5 / 3, async () => {
+          const p = typeSearchText(wrapper, 'b')
+          await vm.$nextTick()
+          expect(calls).toEqual([ 'a', 'b', 'a', 'b' ])
+          return p
+        } ],
+        [ 2, () => 'done' ],
+      ])
     })
 
     it('should highlight first option after search query changes', async () => {
