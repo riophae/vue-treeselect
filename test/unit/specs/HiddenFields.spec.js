@@ -62,7 +62,6 @@ describe('Hidden Fields', () => {
     wrapper.setProps({ name: 'disabled', value: 'value', disabled: true })
     await wrapper.vm.$nextTick()
     const hiddenFields = getHiddenFields()
-    expect(hiddenFields.length).toBe(1)
-    expect(hiddenFields.at(0).html()).toBe('<input type="hidden" name="disabled" value="value" disabled="disabled">')
+    expect(hiddenFields.length).toBe(0)
   })
 })

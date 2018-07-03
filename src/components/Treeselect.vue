@@ -14,7 +14,7 @@
     } ]"
     @mousedown="handleMouseDown"
     ref="wrapper">
-    <template v-if="name && hasValue">
+    <template v-if="name && !disabled && hasValue">
       <HiddenField v-if="single" :stringified-value="stringifyValue(internalValue[0])" />
       <HiddenField v-else-if="joinValues" :stringified-value="internalValue.map(stringifyValue).join(delimiter)" />
       <template v-else>
