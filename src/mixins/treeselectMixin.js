@@ -846,6 +846,10 @@ export default {
       else this.closeMenu()
     },
 
+    branchNodesFirst() {
+      this.initialize()
+    },
+
     disabled(newValue) {
       // force close the menu after disabling the control
       if (newValue && this.menu.isOpen) this.closeMenu()

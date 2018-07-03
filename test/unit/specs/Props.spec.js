@@ -300,6 +300,46 @@ describe('Props', () => {
       expect(vm.forest.normalizedOptions.map(node => node.id)).toEqual([ 'b', 'a', 'c' ])
       expect(vm.forest.nodeMap.b.children.map(node => node.id)).toEqual([ 'bb', 'ba', 'bc' ])
     })
+
+    it('index', () => {
+      const wrapper = mount(Treeselect, {
+        propsData: {
+          options: [ {
+            id: 'a',
+            label: 'a',
+          }, {
+            id: 'b',
+            label: 'b',
+            children: [ {
+              id: 'ba',
+              label: 'ba',
+            }, {
+              id: 'bb',
+              label: 'bb',
+              children: [],
+            } ],
+          } ],
+        },
+      })
+      const { vm } = wrapper
+
+      // TODO
+      // wrapper.setProps({ branchNodesFirst: true })
+      // expect(vm.forest.nodeMap).toEqual({
+      //   a: jasmine.objectContaining({ index: [ 1 ] }),
+      //   b: jasmine.objectContaining({ index: [ 0 ] }),
+      //   ba: jasmine.objectContaining({ index: [ 0, 1 ] }),
+      //   bb: jasmine.objectContaining({ index: [ 0, 0 ] }),
+      // })
+
+      wrapper.setProps({ branchNodesFirst: false })
+      expect(vm.forest.nodeMap).toEqual({
+        a: jasmine.objectContaining({ index: [ 0 ] }),
+        b: jasmine.objectContaining({ index: [ 1 ] }),
+        ba: jasmine.objectContaining({ index: [ 1, 0 ] }),
+        bb: jasmine.objectContaining({ index: [ 1, 1 ] }),
+      })
+    })
   })
 
   describe('clearable', () => {
