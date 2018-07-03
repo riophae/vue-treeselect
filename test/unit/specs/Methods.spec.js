@@ -259,7 +259,15 @@ describe('Methods', () => {
         })
 
         it('when valueConsistsOf=ALL_WITH_INDETERMINATE', () => {
-          // TODO
+          // TODO: the order is still strange
+          wrapper.setProps({ valueConsistsOf: 'ALL_WITH_INDETERMINATE' })
+          expect(vm.internalValue).toEqual([ 'a', 'aa', 'ab', 'aaa', 'aab' ])
+          vm.removeLastValue()
+          expect(vm.internalValue).toEqual([ 'ab', 'aaa', 'a', 'aa' ])
+          vm.removeLastValue()
+          expect(vm.internalValue).toEqual([ 'ab', 'a' ])
+          vm.removeLastValue()
+          expect(vm.internalValue).toEqual([])
         })
       })
     })

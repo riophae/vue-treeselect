@@ -29,7 +29,7 @@ npm install --save @riophae/vue-treeselect
 
 This example shows how to integrate vue-treeselect with your [Vue SFCs](https://vuejs.org/v2/guide/single-file-components.html).
 
-```html
+```vue
 <!-- Vue SFC -->
 <template>
   <div id="app">
