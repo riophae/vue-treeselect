@@ -36,6 +36,11 @@
         defaultValue: code('false'),
         description: 'Whether the menu should be always open.',
       }, {
+        name: 'appendToBody',
+        type: 'Boolean',
+        defaultValue: code('false'),
+        description: `Append the menu to ${code('<body />')}.`,
+      }, {
         name: 'async',
         type: 'Boolean',
         defaultValue: code('true'),

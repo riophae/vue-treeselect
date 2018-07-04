@@ -11,6 +11,7 @@
       :clear-on-select="clearOnSelect"
       :close-on-select="closeOnSelect"
       :always-open="alwaysOpen"
+      :append-to-body="appendToBody"
       :options="options"
       :limit="3"
       :max-height="200"
@@ -33,6 +34,7 @@
     </p>
     <p>
       <label><input type="checkbox" v-model="alwaysOpen">Always open</label>
+      <label><input type="checkbox" v-model="appendToBody">Append to body</label>
     </p>
   </div>
 </template>
@@ -51,6 +53,7 @@
       clearOnSelect: true,
       closeOnSelect: false,
       alwaysOpen: false,
+      appendToBody: false,
       value: [ 'a' ],
       options: generateOptions(2, 3),
     }),

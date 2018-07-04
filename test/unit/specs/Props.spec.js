@@ -8,6 +8,7 @@ import {
   ALL, BRANCH_PRIORITY, LEAF_PRIORITY, ALL_WITH_INDETERMINATE,
 } from '@src/constants'
 import {
+  $,
   generateOptions,
   leftClick,
   typeSearchText,
@@ -140,6 +141,110 @@ describe('Props', () => {
       wrapper.setProps({ alwaysOpen: false })
       expect(vm.menu.isOpen).toBe(false)
       expect(wrapper.contains('.vue-treeselect__control-arrow-container')).toBe(true)
+    })
+  })
+
+  describe('appendToBody', () => {
+    const findPortal = () => $('body > .vue-treeselect__portal')
+
+    beforeEach(() => {
+      expect(findPortal()).toBe(null)
+    })
+
+    afterEach(() => {
+      const portal = findPortal()
+      if (portal) portal.remove()
+    })
+
+    it('basic', async () => {
+      const wrapper = mount(Treeselect, {
+        sync: false,
+        propsData: {
+          appendToBody: true,
+          options: [],
+        },
+        attachToDocument: true,
+      })
+      const { vm } = wrapper
+
+      vm.openMenu()
+      await vm.$nextTick()
+
+      const portal = findPortal()
+      expect(portal.classList).toContain('vue-treeselect')
+      expect(portal.firstElementChild.classList).toContain('vue-treeselect__menu')
+    })
+
+    it('should remove portal when component gets destroyed', async () => {
+      const wrapper = mount(Treeselect, {
+        sync: false,
+        propsData: {
+          appendToBody: true,
+          options: [],
+        },
+        attachToDocument: true,
+      })
+
+      const { vm } = wrapper
+
+      vm.openMenu()
+      await vm.$nextTick()
+
+      expect(findPortal()).toBeTruthy()
+
+      await wrapper.destroy()
+
+      expect(findPortal()).toBe(null)
+    })
+
+    it('should remove portal when set back to `appendToBody: false`', async () => {
+      const wrapper = mount(Treeselect, {
+        sync: false,
+        propsData: {
+          appendToBody: false,
+          options: [],
+        },
+        attachToDocument: true,
+      })
+
+      expect(findPortal()).toBe(null)
+
+      await wrapper.setProps({ appendToBody: true })
+      expect(findPortal()).toBeTruthy()
+
+      await wrapper.setProps({ appendToBody: false })
+      expect(findPortal()).toBe(null)
+
+      await wrapper.setProps({ appendToBody: true })
+      expect(findPortal()).toBeTruthy()
+    })
+
+    it('portaled menu should be functional', async () => {
+      const wrapper = mount(Treeselect, {
+        sync: false,
+        propsData: {
+          appendToBody: true,
+          options: [ {
+            id: 'a',
+            label: 'a',
+          } ],
+        },
+        attachToDocument: true,
+      })
+      const { vm } = wrapper
+
+      vm.openMenu()
+      await vm.$nextTick()
+
+      const portal = findPortal()
+      const label = $('.vue-treeselect__label', portal)
+      expect(label.textContent.trim()).toBe('a')
+
+      const event = document.createEvent('Event')
+      event.initEvent('mousedown', true, true)
+      event.button = 0
+      label.dispatchEvent(event)
+      expect(vm.internalValue).toEqual([ 'a' ])
     })
   })
 

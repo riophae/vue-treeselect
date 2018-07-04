@@ -2,6 +2,10 @@ import sleep from 'yaku/lib/sleep'
 import TreeselectOption from '@src/components/Option'
 import { INPUT_DEBOUNCE_DELAY } from '@src/constants'
 
+export function $(selector, context = document) {
+  return context.querySelector(selector)
+}
+
 function createArray(len, fn) {
   const arr = []
   let i = 0

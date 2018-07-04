@@ -85,6 +85,14 @@ export default {
     },
 
     /**
+     * Append the menu to <body />?
+     */
+    appendToBody: {
+      type: Boolean,
+      default: false,
+    },
+
+    /**
      * Whether to enable async search mode.
      */
     async: {

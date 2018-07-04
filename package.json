@@ -30,6 +30,7 @@
   },
   "pre-commit": "lint",
   "dependencies": {
+    "dom-align": "^1.8.0",
     "easings-css": "^1.0.0",
     "fuzzysearch": "^1.0.3",
     "google-material-color": "^1.3.1",
@@ -99,6 +100,7 @@
     "stylelint-config-xo-space": "^0.8.0",
     "uglifyjs-webpack-plugin": "^1.2.4",
     "url-loader": "^1.0.1",
+    "vodal": "^2.3.3",
     "vue": "^2.2.0",
     "vue-loader": "^15.0.1",
     "vue-style-loader": "^4.0.2",

@@ -36,7 +36,7 @@ exports.styleLoaders = (options = {}) => {
   }
 
   return {
-    test: /\.less$/,
+    test: /\.(css|less)$/,
     use: loaders,
   }
 }
