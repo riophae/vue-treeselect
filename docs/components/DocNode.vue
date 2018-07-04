@@ -23,7 +23,7 @@
         <tr>
           <td><strong>children</strong></td>
           <td class="type"><code>node[]</code> | <code>null</code></td>
-          <td>Declares a branch node. You can:<br><b>1)</b> Set to an array of children options consisting of <b>a.</b> leaf nodes, <b>b.</b> branch nodes, or <b>c.</b> a mixture of these two. <i>or</i><br><b>2)</b> Set to empty array for no children options. <i>or</i><br><b>3)</b> Set to <code>null</code> to declares an <i>unloaded branch node</i> for <a href="#delayed-loading">delayed loading</a>. You can reassign an array (regardless of whether it's empty or not) later in <code>loadOptions()</code> to register these children options, and mark this branch node as <i>loaded</i>.</td>
+          <td>Declares a branch node. You can:<br><b>1)</b> Set to an array of children options consisting of <b>a.</b> leaf nodes, <b>b.</b> branch nodes, or <b>c.</b> a mixture of these two. <i>or</i><br><b>2)</b> Set to empty array for no children options. <i>or</i><br><b>3)</b> Set to <code>null</code> to declare an <i>unloaded branch node</i> for <a href="#delayed-loading">delayed loading</a>. You can reassign an array (regardless of whether it's empty or not) later in <code>loadOptions()</code> to register these children options, and mark this branch node as <i>loaded</i>. <br />If you want to declare a leaf node, set <code>children: undefined</code> or simply omit this property.</td>
         </tr>
         <tr>
           <td><strong>isDisabled</strong></td>

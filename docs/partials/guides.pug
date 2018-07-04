@@ -5,7 +5,7 @@
     This example demonstrates the most commonly-used features of vue-treeselect. Try the fuzzy matching functionality by typing a few letters.
   +demo('BasicFeatures')
   :markdown-it
-    The first thing you need to learn is how to define options. There are two types of options: **a. folder options** that are foldable & may have children options, and **b. normal options** that aren't & don't. Here, I'd like to borrow the basic concepts from Computer Science and call the former as *branch nodes* & the latter as *leaf nodes*. These two kinds of nodes together compose the tree.
+    The first thing you need to learn is how to define options. There are two types of options: **a. folder options** that are foldable & *may* have children options, and **b. normal options** that aren't & don't. Here, I'd like to borrow the basic concepts from Computer Science and call the former as *branch nodes* & the latter as *leaf nodes*. These two kinds of nodes together compose the tree.
 
     Defining leaf nodes is quite simple:
 
@@ -32,7 +32,9 @@
     }
     ```
 
-    Then you can pass an array of these nodes as the `options` prop. For information on more properties you can use in a `node` object, see [below](#node).
+    Then you can pass an array of these nodes as the `options` prop. Note that, even if you assign an empty array to the `children` property, it's still considered to be a branch node. This is likely different from what you've learnt from Computer Science, in which a node with no children is commonly known as a leaf node.
+
+    For information on all available properties in a `node` object, see [below](#node).
 
 +subsection('More Features')
   :markdown-it
@@ -53,7 +55,7 @@
 
 +subsection('Async Searching')
   :markdown-it
-    vue-treeselect supports dynamically loading & changing the entire options list as the user types.
+    vue-treeselect supports dynamically loading & changing the entire options list as the user types. By default, vue-treeselect will cache the result of each AJAX request, thus the user could wait less.
   +demo('AsyncSearching')
 
 +subsection('Flat Mode & Sort Values')
@@ -111,7 +113,7 @@
   :markdown-it
     You can customize the label of each option. vue-treeselect utilizes Vue's [scoped slot](https://vuejs.org/v2/guide/components.html#Scoped-Slots) feature and provides some props you should use in your customized template:
 
-    - `node` - a normalized node object
+    - `node` - a normalized node object (note that, this is differnt from what you return from `normalizer()` prop)
     - `count` & `shouldShowCount` - the count number and a boolean indicates whether the count should be displayed
     - `labelClassName` & `countClassName` - CSS classnames for making the style correct
   +demo('CustomizeOptionLabel')
