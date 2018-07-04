@@ -31,14 +31,11 @@ mixin section(name)
 
 mixin subsection(name)
   - toc[toc.length - 1].subs.push(name)
-  h2(id=kebabCase(name) data-section)
-    =name
-    a.anchor(href='#' + kebabCase(name))
-      anchor
-
-mixin guide(name)
   section
-    +subsection(name)
+    h2(id=kebabCase(name) data-section)
+      =name
+      a.anchor(href='#' + kebabCase(name))
+        anchor
     block
 
 mixin demo(name)
