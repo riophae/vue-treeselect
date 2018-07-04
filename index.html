@@ -4,14 +4,14 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
     <title>Vue-Treeselect</title>
-    <meta name="description" content="A multi-select component with nested options for Vue.js">
+    <meta name="description" content="A multi-select component with nested options support for Vue.js">
     <meta property="og:title" content="Vue-Treeselect">
     <meta property="og:site_name" content="Vue-Treeselect">
     <meta property="og:url" content="https://vue-treeselect.js.org/">
-    <meta property="og:description" content="A multi-select component with nested options for Vue.js">
+    <meta property="og:description" content="A multi-select component with nested options support for Vue.js">
     <meta property="og:image" content="https://vue-treeselect.js.org/static/vue-logo.png">
     <meta property="twitter:title" content="Vue-Treeselect">
-    <meta property="twitter:description" content="A multi-select component with nested options for Vue.js">
+    <meta property="twitter:description" content="A multi-select component with nested options support for Vue.js">
     <meta property="twitter:image" content="https://vue-treeselect.js.org/static/vue-logo.png">
     <link rel="apple-touch-icon" sizes="57x57" href="/static/images/icons/apple-icon-57x57.png">
     <link rel="apple-touch-icon" sizes="60x60" href="/static/images/icons/apple-icon-60x60.png">
@@ -40,13 +40,13 @@
       gtag('config', 'UA-108169693-1');
     </script>
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600|Dosis:300,500">
-  <link href="static/css/app.4626098b5aa142dc58b4.css" rel="stylesheet"></head>
+  <link href="static/css/app.8b3dd35a066e7d1c88f2.css" rel="stylesheet"></head>
   <body>
     <div id="app">
       <header class="site-header">
         <div class="container" id="header">
           <div class="site-header-logo"><a class="site-header-logo-link" href="https://vue-treeselect.js.org/">Vue<span class="site-header-logo-component-name">Treeselect</span></a></div>
-          <nav class="site-header-nav"><a class="site-header-nav-item" href="https://github.com/riophae/vue-treeselect/releases">v0.0.30</a><span class="site-header-nav-item"><a class="github-button" href="https://github.com/riophae/vue-treeselect" data-show-count="true" aria-label="Star riophae/vue-treeselect on GitHub">Star</a></span></nav>
+          <nav class="site-header-nav"><a class="site-header-nav-item" href="https://github.com/riophae/vue-treeselect/releases">v0.0.31</a><span class="site-header-nav-item"><a class="github-button" href="https://github.com/riophae/vue-treeselect" data-show-count="true" aria-label="Star riophae/vue-treeselect on GitHub">Star</a></span></nav>
         </div>
       </header>
       <div class="container">
@@ -69,6 +69,7 @@
     <li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'basic-features' }"><a href="#basic-features">Basic Features</a></li>
     <li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'more-features' }"><a href="#more-features">More Features</a></li>
     <li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'delayed-loading' }"><a href="#delayed-loading">Delayed Loading</a></li>
+    <li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'async-searching' }"><a href="#async-searching">Async Searching</a></li>
     <li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'flat-mode-and-sort-values' }"><a href="#flat-mode-and-sort-values">Flat Mode &amp; Sort Values</a></li>
     <li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'prevent-value-combining' }"><a href="#prevent-value-combining">Prevent Value Combining</a></li>
     <li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'disable-branch-nodes' }"><a href="#disable-branch-nodes">Disable Branch Nodes</a></li>
@@ -94,12 +95,12 @@
             <h1 id="introduction">Introduction<a class="anchor" href="#introduction">
                 <anchor></anchor></a>
             </h1>
-            <section><p><a href="https://github.com/riophae/vue-treeselect">vue-treeselect</a> is a multi-select component with nested options for <a href="https://www.vuejs.org">Vue.js 2</a>, featuring:</p>
+            <section><p><a href="https://github.com/riophae/vue-treeselect">vue-treeselect</a> is a multi-select component with nested options support for <a href="https://www.vuejs.org">Vue.js</a>.</p>
 <ul>
 <li>Single &amp; multiple select with nested options support</li>
-<li>Fuzzy searching</li>
+<li>Autocomplete &amp; fuzzy matching</li>
+<li>Async searching</li>
 <li>Delayed loading (load data of deep level options only when needed)</li>
-<li>Autocomplete</li>
 <li>Keyboard support (navigate using <kbd>Arrow Up</kbd> &amp; <kbd>Arrow Down</kbd> keys, select option using <kbd>Enter</kbd> key, etc.)</li>
 <li>Rich options &amp; highly customizable</li>
 <li>Supports <a href="https://github.com/riophae/vue-treeselect#browser-compatibility">a wide range of browsers</a></li>
@@ -115,7 +116,7 @@
 <pre><code class="language-bash">npm install --save @riophae/vue-treeselect
 </code></pre>
               <p>This example shows how to integrate vue-treeselect with your <a href="https://vuejs.org/v2/guide/single-file-components.html">Vue SFCs</a>.</p>
-<pre><code class="language-html">&lt;!-- Vue SFC --&gt;
+<pre><code class="language-vue">&lt;!-- Vue SFC --&gt;
 &lt;template&gt;
   &lt;div id=&quot;app&quot;&gt;
     &lt;treeselect v-model=&quot;value&quot; :multiple=&quot;true&quot; :options=&quot;options&quot; /&gt;
@@ -164,8 +165,8 @@
     &lt;!-- include Vue 2.x --&gt;
     &lt;script src=&quot;https://cdn.jsdelivr.net/npm/vue@^2&quot;&gt;&lt;/script&gt;
     &lt;!-- include vue-treeselect &amp; its styles. you can change the version tag to better suit your need. --&gt;
-    &lt;script src=&quot;https://cdn.jsdelivr.net/npm/@riophae/vue-treeselect@0.0.30/dist/vue-treeselect.min.js&quot;&gt;&lt;/script&gt;
-    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@riophae/vue-treeselect@0.0.30/dist/vue-treeselect.min.css&quot;&gt;
+    &lt;script src=&quot;https://cdn.jsdelivr.net/npm/@riophae/vue-treeselect@0.0.31/dist/vue-treeselect.min.js&quot;&gt;&lt;/script&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@riophae/vue-treeselect@0.0.31/dist/vue-treeselect.min.css&quot;&gt;
   &lt;/head&gt;
   &lt;body&gt;
     &lt;div id=&quot;app&quot;&gt;
@@ -212,7 +213,7 @@
             <section>
               <h2 id="basic-features" data-section>Basic Features<a class="anchor" href="#basic-features">
                   <anchor></anchor></a>
-              </h2><p>This example demonstrates the most commonly-used features of vue-treeselect. Try the fuzzy-searching functionality by typing a few letters.</p>
+              </h2><p>This example demonstrates the most commonly-used features of vue-treeselect. Try the fuzzy matching functionality by typing a few letters.</p>
 
               <demo>
                 <basic-features slot="demo"></basic-features>
@@ -491,6 +492,39 @@ export default {
               </demo>
             </section>
             <section>
+              <h2 id="async-searching" data-section>Async Searching<a class="anchor" href="#async-searching">
+                  <anchor></anchor></a>
+              </h2><p>vue-treeselect supports dynamically loading &amp; changing the entire options list as the user types.</p>
+
+              <demo>
+                <async-searching slot="demo"></async-searching>
+                <template slot="html"><code v-pre>&lt;treeselect
+  :multiple=&quot;true&quot;
+  :async=&quot;true&quot;
+  :load-options=&quot;loadOptions&quot;
+  /&gt;
+</code></template>
+                <template slot="javascript"><code v-pre>import { ASYNC_SEARCH } from '@riophae/vue-treeselect'
+
+export default {
+  methods: {
+    loadOptions({ action, searchQuery, callback }) {
+      if (action === ASYNC_SEARCH) {
+        setTimeout(() =&gt; {
+          const options = [ 1, 2, 3, 4, 5 ].map(i =&gt; ({
+            id: `${searchQuery}-${i}`,
+            label: `${searchQuery}-${i}`,
+          }))
+          callback(null, options)
+        }, 2000)
+      }
+    },
+  },
+}
+</code></template>
+              </demo>
+            </section>
+            <section>
               <h2 id="flat-mode-and-sort-values" data-section>Flat Mode &amp; Sort Values<a class="anchor" href="#flat-mode-and-sort-values">
                   <anchor></anchor></a>
               </h2><p>In all previous examples, we used the default non-flat mode of vue-treeselect, which means:</p>
@@ -573,7 +607,7 @@ export default {
 </code></template>
                 <template slot="javascript"><code v-pre>export default {
   data: () =&gt; ({
-    value: [],
+    value: [ 'team-i' ],
     valueConsistsOf: 'BRANCH_PRIORITY',
     options: [ {
       id: 'company',
@@ -932,5 +966,5 @@ export default {
     </div>
     <script src="https://buttons.github.io/buttons.js" async defer="defer"></script>
     <script src="static/prism.min.js"></script>
-  <script type="text/javascript" src="static/js/app.285690cfde151d155a98.js"></script></body>
+  <script type="text/javascript" src="static/js/app.8decc149648b43a4f3f0.js"></script></body>
 </html>
