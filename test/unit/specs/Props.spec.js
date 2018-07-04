@@ -954,6 +954,25 @@ describe('Props', () => {
     })
   })
 
+  describe('instanceId', () => {
+    it('default value', () => {
+      const createInstance = () => {
+        const wrapper = mount(Treeselect, {
+          propsData: {
+            options: [],
+          },
+        })
+        return wrapper.vm
+      }
+      const vm1 = createInstance()
+      const vm2 = createInstance()
+
+      expect(vm1.instanceId).toStartWith('@riophae/vue-treeselect/')
+      expect(vm2.instanceId).toStartWith('@riophae/vue-treeselect/')
+      expect(vm1.instanceId).not.toBe(vm2.instanceId)
+    })
+  })
+
   describe('limit', () => {
     it('when limit=Infinity', () => {
       const wrapper = mount(Treeselect, {

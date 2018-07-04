@@ -59,6 +59,8 @@ function getErrorMessage(err) {
   return err.message || String(err)
 }
 
+let instanceId = 0
+
 export default {
   provide() {
     return {
@@ -282,7 +284,7 @@ export default {
      * @type {string|number}
     */
     instanceId: {
-      default: null,
+      default: () => `@riophae/vue-treeselect/${instanceId++}`,
     },
 
     /**
