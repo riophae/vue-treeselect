@@ -297,24 +297,24 @@
 .vue-treeselect__menu--transition {
   &-enter-active,
   &-leave-active {
-    /* to be overriden */
+    // to be overriden
   }
 
   &-enter,
   &-leave-to {
-    /* to be overriden */
+    // to be overriden
   }
 }
 
 .vue-treeselect__list--transition {
   &-enter-active,
   &-leave-active {
-    /* to be overriden */
+    // to be overriden
   }
 
   &-enter,
   &-leave-to {
-    /* to be overriden */
+    // to be overriden
   }
 }
 
@@ -390,9 +390,9 @@
   position: relative;
 
   .vue-treeselect--searchable:not(.vue-treeselect--disabled) & {
-    // the real input is small and not covering the whole control
-    // show an I-shape cursor to give user a hint that
-    // clicking anywhere in the control will make the input focused
+    // The real input is small and not covering the whole control.
+    // We show an I-shape cursor to give user a hint that
+    // clicking anywhere in the control will make the input focused.
     .inputtable();
   }
 }
@@ -444,7 +444,7 @@
 
   display: inline-table;
   background: @treeselect-multi-value-item-bg;
-  // table elements don't have margin, so we set at the container element
+  // Table elements don't have margin, so we set at the container element.
   padding: @treeselect-multi-value-margin-y @treeselect-multi-value-margin-x;
   border: @treeselect-multi-value-item-border-width solid @treeselect-multi-value-item-border-color;
   border-radius: @treeselect-border-radius-sm;
@@ -819,9 +819,9 @@
 .vue-treeselect__minus-mark {
   width: image-width(@treeselect-checkbox-indeterminate-icon);
   height: image-height(@treeselect-checkbox-indeterminate-icon);
-  // svg icons are rendered differently in different browsers thus unacceptable
-  // png provides the best consistency with a drawback that
-  // its color can't be controlled by CSS
+  // Svg icons are rendered differently in different browsers thus unacceptable.
+  // Png provides the best consistency with a drawback that
+  // its color can't be controlled by CSS.
   .retina(@treeselect-checkbox-indeterminate-icon, 3);
   background-size: image-size(@treeselect-checkbox-indeterminate-icon);
 
@@ -839,7 +839,7 @@
   height: image-height(@treeselect-checkbox-checked-icon);
   .retina(@treeselect-checkbox-checked-icon, 3);
   background-size: image-size(@treeselect-checkbox-checked-icon);
-  // set initial height to 1px
+  // Set initial height to 1px.
   transform: scaleY(1 / unit(image-height(@treeselect-checkbox-checked-icon)));
 
   .vue-treeselect__checkbox--checked > & {
