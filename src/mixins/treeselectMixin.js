@@ -9,9 +9,9 @@ import {
 } from '../utils'
 
 import {
+  NO_PARENT_NODE,
   UNCHECKED, INDETERMINATE, CHECKED,
   LOAD_ROOT_OPTIONS, LOAD_CHILDREN_OPTIONS, ASYNC_SEARCH,
-  NO_PARENT_NODE,
   ALL, BRANCH_PRIORITY, LEAF_PRIORITY, ALL_WITH_INDETERMINATE,
   ALL_CHILDREN, ALL_DESCENDANTS, LEAF_CHILDREN, LEAF_DESCENDANTS,
   ORDER_SELECTED, LEVEL, INDEX,
@@ -29,9 +29,9 @@ function sortValueByIndex(a, b) {
 }
 
 function sortValueByLevel(a, b) {
-  return a.level !== b.level
-    ? a.level - b.level
-    : sortValueByIndex(a, b)
+  return a.level === b.level
+    ? sortValueByIndex(a, b)
+    : a.level - b.level
 }
 
 function createAsyncOptionsStates() {
@@ -62,10 +62,11 @@ function getErrorMessage(err) {
 export default {
   provide() {
     return {
-      // enable access to the instance of root component of vue-treeselect across hierarchy
+      // Enable access to the instance of root component of vue-treeselect
+      // across hierarchy.
       instance: this,
 
-      // constants
+      // Constants.
       UNCHECKED,
       INDETERMINATE,
       CHECKED,
@@ -1183,7 +1184,7 @@ export default {
       if (this._blurOnSelect) {
         this.blurInput()
       } else {
-        // focus the input or prevent blurring
+        // Focus the input or prevent blurring.
         this.focusInput()
       }
 
@@ -1244,16 +1245,16 @@ export default {
       const done = () => this.resetHighlightedOptionWhenNecessary(true)
 
       if (!searchQuery) {
-        // exit search mode
+        // Exit sync search mode.
         this.localSearch.active = false
         return done()
       }
 
-      // enter search mode
+      // Enter sync search mode.
       this.localSearch.active = true
       this.localSearch.noResults = true
 
-      // reset states
+      // Reset states.
       this.traverseAllNodesDFS(node => {
         if (node.isBranch) {
           node.isExpandedOnSearch = false
@@ -1332,6 +1333,7 @@ export default {
           entry.isLoaded = true
           entry.options = options
           // When the request finishes, the search query may has changed.
+          // We only show these options if they are for the current search query.
           if (this.trigger.searchQuery === searchQuery) done()
         },
         fail: err => {
@@ -1490,7 +1492,6 @@ export default {
       }
 
       if (nextState && !node.isLoaded) {
-        // load children when expanded
         this.loadChildrenOptions(node)
       }
     },
