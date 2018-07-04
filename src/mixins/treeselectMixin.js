@@ -662,7 +662,7 @@ export default {
       let internalValue
 
       // istanbul ignore else
-      if (this.single || this.flat || this.valueConsistsOf === ALL) {
+      if (this.single || this.flat || this.disableBranchNodes || this.valueConsistsOf === ALL) {
         internalValue = this.forest.selectedNodeIds.slice()
       } else if (this.valueConsistsOf === BRANCH_PRIORITY) {
         internalValue = this.forest.selectedNodeIds.filter(id => {
@@ -1045,7 +1045,7 @@ export default {
       let nextSelectedNodeIds = []
 
       // istanbul ignore else
-      if (this.flat || this.single || this.valueConsistsOf === ALL) {
+      if (this.single || this.flat || this.disableBranchNodes || this.valueConsistsOf === ALL) {
         nextSelectedNodeIds = prevValueArray
       } else if (this.valueConsistsOf === BRANCH_PRIORITY) {
         prevValueArray.forEach(nodeId => {
@@ -1511,11 +1511,13 @@ export default {
         this.selectedNodes.forEach(selectedNode => {
           checkedStateMap[selectedNode.id] = CHECKED
 
-          if (!this.flat) selectedNode.ancestors.forEach(ancestorNode => {
-            if (!this.isSelected(ancestorNode)) {
-              checkedStateMap[ancestorNode.id] = INDETERMINATE
-            }
-          })
+          if (!this.flat && !this.disableBranchNodes) {
+            selectedNode.ancestors.forEach(ancestorNode => {
+              if (!this.isSelected(ancestorNode)) {
+                checkedStateMap[ancestorNode.id] = INDETERMINATE
+              }
+            })
+          }
         })
       }
       this.forest.checkedStateMap = checkedStateMap

@@ -790,12 +790,33 @@ describe('Props', () => {
         expect(vm.menu.isOpen).toBe(true)
       })
 
-      it('should not auto-select ancestor nodes like flat-mode', () => {
+      it('should not auto-select ancestor nodes like flat mode', () => {
         wrapper.setProps({ multiple: true })
 
         vm.select(vm.forest.nodeMap.leaf)
-        expect(vm.isSelected(vm.forest.nodeMap.leaf)).toBe(true)
-        expect(vm.isSelected(vm.forest.nodeMap.branch)).toBe(false)
+        expect(vm.forest.checkedStateMap).toEqual({ branch: UNCHECKED, leaf: CHECKED })
+        expect(vm.forest.selectedNodeMap).toEqual({ leaf: true })
+        expect(vm.forest.selectedNodeIds).toEqual([ 'leaf' ])
+        expect(vm.internalValue).toEqual([ 'leaf' ])
+      })
+
+      describe('combined with valueConsistsOf (multi-select mode)', () => {
+        const types = [ 'ALL', 'BRANCH_PRIORITY', 'LEAF_PRIORITY', 'ALL_WITH_INDETERMINATE' ]
+
+        types.forEach(valueConsistsOf => {
+          it(`when valueConsistsOf=${valueConsistsOf}`, () => {
+            wrapper.setProps({
+              multiple: true,
+              valueConsistsOf,
+              value: [ 'leaf' ],
+            })
+
+            expect(vm.forest.checkedStateMap).toEqual({ branch: UNCHECKED, leaf: CHECKED })
+            expect(vm.forest.selectedNodeMap).toEqual({ leaf: true })
+            expect(vm.forest.selectedNodeIds).toEqual([ 'leaf' ])
+            expect(vm.internalValue).toEqual([ 'leaf' ])
+          })
+        })
       })
     })
   })
