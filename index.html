@@ -40,7 +40,7 @@
       gtag('config', 'UA-108169693-1');
     </script>
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600|Dosis:300,500">
-  <link href="static/css/app.8b3dd35a066e7d1c88f2.css" rel="stylesheet"></head>
+  <link href="static/css/app.f3466886c2ed9e2d4d60.css" rel="stylesheet"></head>
   <body>
     <div id="app">
       <header class="site-header">
@@ -270,7 +270,7 @@
   }),
 }
 </code></template>
-              </demo><p>The first thing you need to learn is how to define options. There are two types of options: <strong>a. folder options</strong> that are foldable &amp; may have children options, and <strong>b. normal options</strong> that aren't &amp; don't. Here, I'd like to borrow the basic concepts from Computer Science and call the former as <em>branch nodes</em> &amp; the latter as <em>leaf nodes</em>. These two kinds of nodes together compose the tree.</p>
+              </demo><p>The first thing you need to learn is how to define options. There are two types of options: <strong>a. folder options</strong> that are foldable &amp; <em>may</em> have children options, and <strong>b. normal options</strong> that aren't &amp; don't. Here, I'd like to borrow the basic concepts from Computer Science and call the former as <em>branch nodes</em> &amp; the latter as <em>leaf nodes</em>. These two kinds of nodes together compose the tree.</p>
 <p>Defining leaf nodes is quite simple:</p>
 <pre><code class="language-js">{
   id: '&lt;id&gt;', // used to identify the option within the tree so it's value must be unique across all options
@@ -290,7 +290,8 @@
   ],
 }
 </code></pre>
-<p>Then you can pass an array of these nodes as the <code>options</code> prop. For information on more properties you can use in a <code>node</code> object, see <a href="#node">below</a>.</p>
+<p>Then you can pass an array of these nodes as the <code>options</code> prop. Note that, even if you assign an empty array to the <code>children</code> property, it's still considered to be a branch node. This is likely different from what you've learnt from Computer Science, in which a node with no children is commonly known as a leaf node.</p>
+<p>For information on all available properties in a <code>node</code> object, see <a href="#node">below</a>.</p>
 
             </section>
             <section>
@@ -494,7 +495,7 @@ export default {
             <section>
               <h2 id="async-searching" data-section>Async Searching<a class="anchor" href="#async-searching">
                   <anchor></anchor></a>
-              </h2><p>vue-treeselect supports dynamically loading &amp; changing the entire options list as the user types.</p>
+              </h2><p>vue-treeselect supports dynamically loading &amp; changing the entire options list as the user types. By default, vue-treeselect will cache the result of each AJAX request, thus the user could wait less.</p>
 
               <demo>
                 <async-searching slot="demo"></async-searching>
@@ -846,7 +847,7 @@ export default {
                   <anchor></anchor></a>
               </h2><p>You can customize the label of each option. vue-treeselect utilizes Vue's <a href="https://vuejs.org/v2/guide/components.html#Scoped-Slots">scoped slot</a> feature and provides some props you should use in your customized template:</p>
 <ul>
-<li><code>node</code> - a normalized node object</li>
+<li><code>node</code> - a normalized node object (note that, this is differnt from what you return from <code>normalizer()</code> prop)</li>
 <li><code>count</code> &amp; <code>shouldShowCount</code> - the count number and a boolean indicates whether the count should be displayed</li>
 <li><code>labelClassName</code> &amp; <code>countClassName</code> - CSS classnames for making the style correct</li>
 </ul>
@@ -966,5 +967,5 @@ export default {
     </div>
     <script src="https://buttons.github.io/buttons.js" async defer="defer"></script>
     <script src="static/prism.min.js"></script>
-  <script type="text/javascript" src="static/js/app.8decc149648b43a4f3f0.js"></script></body>
+  <script type="text/javascript" src="static/js/app.01314865e8743707e835.js"></script></body>
 </html>
