@@ -1802,10 +1802,10 @@ export default {
       }
     },
 
+    // This is meant to be called only by `select()`.
     _selectNode(node) {
       if (this.single || this.flat || this.disableBranchNodes) {
-        this.addValue(node)
-        return
+        return this.addValue(node)
       }
 
       if (node.isLeaf || (node.isBranch && !node.hasDisabledDescendants)) {
@@ -1827,10 +1827,10 @@ export default {
       }
     },
 
+    // This is meant to be called only by `select()`.
     _deselectNode(node) {
       if (this.single || this.flat || this.disableBranchNodes) {
-        this.removeValue(node)
-        return
+        return this.removeValue(node)
       }
 
       let hasUncheckedSomeDescendants = false
