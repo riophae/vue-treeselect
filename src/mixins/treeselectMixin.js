@@ -563,7 +563,7 @@ export default {
     value: null,
 
     /**
-     * Which kind of nodes should be included in the `value` array in multi-select mode
+     * Which kind of nodes should be included in the `value` array in multi-select mode.
      * Acceptable values:
      *   - "ALL" - Any node that is checked will be included in the `value` array
      *   - "BRANCH_PRIORITY" (default) - If a branch node is checked, all its descendants will be excluded in the `value` array
@@ -606,7 +606,7 @@ export default {
         isOpen: false,
         // Id of current highlighted option.
         current: null,
-        // The scroll position before last menu close.
+        // The scroll position before last menu closing.
         lastScrollPosition: 0,
         // Menu height.
         optimizedHeight: 0,
@@ -648,8 +648,8 @@ export default {
   computed: {
     /* eslint-disable valid-jsdoc */
     /**
-     * Normalized options that has been selected
-     * @type {Object[]}
+     * Normalized nodes that have been selected
+     * @type {node[]}
      */
     selectedNodes() {
       return this.forest.selectedNodeIds.map(this.getNode)
@@ -712,7 +712,7 @@ export default {
       return this.hasValue && this.internalValue.map(this.getNode).some(node => !node.isDisabled)
     },
     /**
-     * Whether is single-select mode or not
+     * Single-select mode?
      * @type {boolean}
      */
     single() {
@@ -726,9 +726,9 @@ export default {
       return this.internalValue.map(this.getNode).slice(0, this.limit)
     },
     /**
-     * Id list of options displayed in the menu. Options that are considered NOT visible:
+     * Id list of nodes displayed in the menu. Nodes that are considered NOT visible:
      *   - descendants of a collapsed branch node
-     *   - in local search mode, options that are not matched, unless
+     *   - in local search mode, nodes that are not matched, unless
      *       - it's a branch node and has matched descendants
      *       - it's a leaf node and its parent node is explicitly set to show all children
      * @type {id[]}
@@ -740,7 +740,7 @@ export default {
         if (!this.localSearch.active || this.shouldOptionBeIncludedInSearchResult(node)) {
           visibleOptionIds.push(node.id)
         }
-        // skip the traversal of descendants of a branch node if it's not expanded
+        // Skip the traversal of descendants of a branch node if it's not expanded.
         if (node.isBranch && !this.shouldExpand(node)) {
           return false
         }
@@ -749,7 +749,7 @@ export default {
       return visibleOptionIds
     },
     /**
-     * Has any options should be displayed in the menu?
+     * Has any option should be displayed in the menu?
      * @type {boolean}
      */
     hasVisibleOptions() {
