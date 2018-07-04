@@ -143,8 +143,8 @@
       }, {
         name: 'instanceId',
         type: 'String | Number',
-        defaultValue: code('null'),
-        description: 'Will be passed with all events as second param. Useful for identifying events origin.',
+        defaultValue: code('"@riophae/vue-treeselect/*"'),
+        description: 'Will be passed with all events as last param. Useful for identifying events origin.',
       }, {
         name: 'joinValues',
         type: 'Boolean',

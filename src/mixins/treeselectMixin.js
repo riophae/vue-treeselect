@@ -279,12 +279,12 @@ export default {
     },
 
     /**
-     * Will be passed with all events as second param.
+     * Will be passed with all events as last param.
      * Useful for identifying events origin.
-     * @type {string|number}
     */
     instanceId: {
       default: () => `@riophae/vue-treeselect/${instanceId++}`,
+      type: [ String, Number ],
     },
 
     /**
