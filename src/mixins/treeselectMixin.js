@@ -283,7 +283,8 @@ export default {
      * Useful for identifying events origin.
     */
     instanceId: {
-      default: () => `@riophae/vue-treeselect/${instanceId++}`,
+      // Add two trailing "$" to distinguish from explictly specified ids.
+      default: () => `${instanceId++}$$`,
       type: [ String, Number ],
     },
 
