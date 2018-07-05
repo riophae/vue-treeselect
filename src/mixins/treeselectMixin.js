@@ -864,8 +864,11 @@ export default {
       this.initialize()
     },
 
-    internalValue() {
-      this.$emit('input', this.getValue(), this.getInstanceId())
+    internalValue(newValue, oldValue) {
+      const hasChanged = quickDiff(newValue, oldValue)
+      if (hasChanged) {
+        this.$emit('input', this.getValue(), this.getInstanceId())
+      }
     },
 
     matchKeys() {
