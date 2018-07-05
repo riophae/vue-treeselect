@@ -21,11 +21,6 @@ module.exports = {
   },
   resolve: {
     extensions: [ '.js', '.vue', '.json' ],
-    modules: [
-      resolve('src'),
-      resolve('docs'),
-      resolve('node_modules'),
-    ],
     alias: {
       // use the development version & full build of Vue
       // see: https://vuejs.org/v2/guide/installation.html#Explanation-of-Different-Builds
