@@ -77,7 +77,7 @@ export default {
 
   props: {
     /**
-     * Whether the menu should be always open
+     * Whether the menu should be always open.
      */
     alwaysOpen: {
       type: Boolean,
@@ -85,7 +85,7 @@ export default {
     },
 
     /**
-     * Whether to enable async search mode
+     * Whether to enable async search mode.
      */
     async: {
       type: Boolean,
@@ -117,7 +117,7 @@ export default {
     },
 
     /**
-     * Whether pressing backspace key removes the last item if there is no text input
+     * Whether pressing backspace key removes the last item if there is no text input.
      */
     backspaceRemoves: {
       type: Boolean,
@@ -159,7 +159,7 @@ export default {
     },
 
     /**
-     * Title for the "×" button when multiple: true
+     * Title for the "×" button when `multiple: true`.
      */
     clearAllText: {
       type: String,
@@ -177,7 +177,7 @@ export default {
     },
 
     /**
-     * Title for the "×" button
+     * Title for the "×" button.
      */
     clearValueText: {
       type: String,
@@ -205,14 +205,14 @@ export default {
     /**
      * The default set of options to show before the user starts searching. Used for async search mode.
      * When set to `true`, the results for search query as a empty string will be autoloaded.
-     * @type {boolean|Object[]}
+     * @type {boolean|node[]}
      */
     defaultOptions: {
       default: false,
     },
 
     /**
-     * Whether pressing delete key removes the last item if there is no text input
+     * Whether pressing delete key removes the last item if there is no text input.
      */
     deleteRemoves: {
       type: Boolean,
@@ -220,7 +220,7 @@ export default {
     },
 
     /**
-     * Delimiter to use to join multiple values for the hidden field value
+     * Delimiter to use to join multiple values for the hidden field value.
      */
     delimiter: {
       type: String,
@@ -252,7 +252,7 @@ export default {
     },
 
     /**
-     * Whether escape clears the value when the menu is closed
+     * Whether escape clears the value when the menu is closed.
      */
     escapeClearsValue: {
       type: Boolean,
@@ -279,7 +279,7 @@ export default {
     },
 
     /**
-     * Will be passed with all events as last param.
+     * Will be passed with all events as the last param.
      * Useful for identifying events origin.
     */
     instanceId: {
@@ -289,7 +289,7 @@ export default {
     },
 
     /**
-     * Joins multiple values into a single form field with the `delimiter` (legacy mode)
+     * Joins multiple values into a single form field with the `delimiter` (legacy mode).
     */
     joinValues: {
       type: Boolean,
@@ -306,7 +306,7 @@ export default {
     },
 
     /**
-     * Function that processes the message shown when selected elements pass the defined limit
+     * Function that processes the message shown when selected elements pass the defined limit.
      * @type {function(number): string}
      */
     limitText: {
@@ -326,7 +326,7 @@ export default {
     },
 
     /**
-     * Text displayed when a branch node is loading its children options
+     * Text displayed when loading options.
      */
     loadingText: {
       type: String,
@@ -342,7 +342,7 @@ export default {
     },
 
     /**
-     * Which node properties to filter on
+     * Which node properties to filter on.
      */
     matchKeys: {
       type: Array,
@@ -350,7 +350,7 @@ export default {
     },
 
     /**
-     * Sets `maxHeight` style value of the menu
+     * Sets `maxHeight` style value of the menu.
      */
     maxHeight: {
       type: Number,
@@ -358,7 +358,7 @@ export default {
     },
 
     /**
-     * Set `true` to allow selecting multiple options (a.k.a., multi-select mode)
+     * Set `true` to allow selecting multiple options (a.k.a., multi-select mode).
      */
     multiple: {
       type: Boolean,
@@ -366,14 +366,14 @@ export default {
     },
 
     /**
-     * Generates a hidden <input /> tag with this field name for html forms
+     * Generates a hidden <input /> tag with this field name for html forms.
      */
     name: {
       type: String,
     },
 
     /**
-     * Text displayed when a branch node has no children options
+     * Text displayed when a branch node has no children.
      */
     noChildrenText: {
       type: String,
@@ -381,7 +381,7 @@ export default {
     },
 
     /**
-     * Text displayed when there are no available options
+     * Text displayed when there are no available options.
      */
     noOptionsText: {
       type: String,
@@ -389,7 +389,7 @@ export default {
     },
 
     /**
-     * Text displayed when there are no matching search results
+     * Text displayed when there are no matching search results.
      */
     noResultsText: {
       type: String,
@@ -397,7 +397,7 @@ export default {
     },
 
     /**
-     * Used for normalizing source data
+     * Used for normalizing source data.
      * @type {function(node, instanceId): node}
      */
     normalizer: {
@@ -421,7 +421,7 @@ export default {
     },
 
     /**
-     * Whether to automatically open the menu when the control is clicked
+     * Whether to automatically open the menu when the control is clicked.
      */
     openOnClick: {
       type: Boolean,
@@ -429,7 +429,7 @@ export default {
     },
 
     /**
-     * Whether to automatically open the menu when the control is focused
+     * Whether to automatically open the menu when the control is focused.
      */
     openOnFocus: {
       type: Boolean,
@@ -437,8 +437,8 @@ export default {
     },
 
     /**
-     * Array of available options
-     * @type {Object[]}
+     * Array of available options.
+     * @type {node[]}
      */
     options: {
       type: Array,
@@ -453,7 +453,7 @@ export default {
     },
 
     /**
-     * Applies HTML5 required attribute when needed
+     * Applies HTML5 required attribute when needed.
      */
     required: {
       type: Boolean,
@@ -461,7 +461,7 @@ export default {
     },
 
     /**
-     * Text displayed asking user whether to retry loading children options
+     * Text displayed asking user whether to retry loading children options.
      */
     retryText: {
       type: String,
@@ -469,7 +469,7 @@ export default {
     },
 
     /**
-     * Title for the retry button
+     * Title for the retry button.
      */
     retryTitle: {
       type: String,
@@ -493,7 +493,7 @@ export default {
     },
 
     /**
-     * Text tip to prompt for async search
+     * Text tip to prompt for async search.
      */
     searchPromptText: {
       type: String,
@@ -501,7 +501,7 @@ export default {
     },
 
     /**
-     * Whether to show a children count next to the label of each branch node
+     * Whether to show a children count next to the label of each branch node.
      */
     showCount: {
       type: Boolean,
@@ -550,7 +550,7 @@ export default {
     },
 
     /**
-     * Tab index of the control
+     * Tab index of the control.
      */
     tabIndex: {
       type: Number,
@@ -652,14 +652,14 @@ export default {
   computed: {
     /* eslint-disable valid-jsdoc */
     /**
-     * Normalized nodes that have been selected
+     * Normalized nodes that have been selected.
      * @type {node[]}
      */
     selectedNodes() {
       return this.forest.selectedNodeIds.map(this.getNode)
     },
     /**
-     * Id list of selected nodes with `sortValueBy` prop applied
+     * Id list of selected nodes with `sortValueBy` prop applied.
      * @type {nodeId[]}
      */
     internalValue() {
@@ -723,11 +723,11 @@ export default {
       return !this.multiple
     },
     /**
-     * Options displayed in the control
+     * Options displayed in the control.
      * @type {Object[]}
      */
     visibleValue() {
-      return this.internalValue.map(this.getNode).slice(0, this.limit)
+      return this.internalValue.slice(0, this.limit).map(this.getNode)
     },
     /**
      * Id list of nodes displayed in the menu. Nodes that are considered NOT visible:
@@ -760,7 +760,7 @@ export default {
       return this.visibleOptionIds.length !== 0
     },
     /**
-     * Whether has passed the defined limit or not
+     * Whether has passed the defined limit or not.
      * @type {boolean}
      */
     hasExceededLimit() {

@@ -143,8 +143,8 @@
       }, {
         name: 'instanceId',
         type: 'String | Number',
-        defaultValue: code('"@riophae/vue-treeselect/*"'),
-        description: 'Will be passed with all events as last param. Useful for identifying events origin.',
+        defaultValue: code('"<auto-incrementing number>$$"'),
+        description: 'Will be passed with all events as the last param. Useful for identifying events origin.',
       }, {
         name: 'joinValues',
         type: 'Boolean',
@@ -169,7 +169,7 @@
         name: 'loadingText',
         type: 'String',
         defaultValue: code('"Loading..."'),
-        description: 'Text displayed when a branch node is loading its children options.',
+        description: 'Text displayed when loading options.',
       }, {
         name: 'loadOptions',
         type: `Fn(${makePropList([ 'action', 'callback', 'parentNode?', 'instanceId' ])}) 🡒 (${code('void')} | Promise)`,
@@ -206,7 +206,7 @@
         name: 'noChildrenText',
         type: 'String',
         defaultValue: code('"No sub-options."'),
-        description: 'Text displayed when a branch node has no children options.',
+        description: 'Text displayed when a branch node has no children.',
       }, {
         name: 'noOptionsText',
         type: 'String',
