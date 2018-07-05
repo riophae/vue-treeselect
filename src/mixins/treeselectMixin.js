@@ -866,9 +866,10 @@ export default {
 
     internalValue(newValue, oldValue) {
       const hasChanged = quickDiff(newValue, oldValue)
-      if (hasChanged) {
-        this.$emit('input', this.getValue(), this.getInstanceId())
-      }
+      // #122
+      // Vue would trigger this watcher when `newValue` and `oldValue` are shallow-equal.
+      // We emit the `input` event only when the value actually changes.
+      if (hasChanged) this.$emit('input', this.getValue(), this.getInstanceId())
     },
 
     matchKeys() {
@@ -876,15 +877,15 @@ export default {
     },
 
     multiple(newValue) {
-      // needs to rebuild the state when switching from
-      // single-select mode to multi-select mode
+      // We need to rebuild the state when switching from single-select mode
+      // to multi-select mode.
       if (newValue) this.buildForestState()
     },
 
     options: {
       handler() {
         if (this.async) return
-        // re-initialize options when the `options` prop has changed
+        // Re-initialize options when the `options` prop has changed.
         this.initialize()
         this.rootOptionsStates.isLoaded = Array.isArray(this.options)
       },
@@ -905,7 +906,6 @@ export default {
     value() {
       const nodeIdsFromValue = this.extractCheckedNodeIdsFromValue()
       const hasChanged = quickDiff(nodeIdsFromValue, this.internalValue)
-
       if (hasChanged) this.fixSelectedNodeIds(nodeIdsFromValue)
     },
   },
@@ -1048,14 +1048,14 @@ export default {
       return matched || defaultNode
     },
 
-    fixSelectedNodeIds(prevValueArray) {
+    fixSelectedNodeIds(nodeIdListOfPrevValue) {
       let nextSelectedNodeIds = []
 
       // istanbul ignore else
       if (this.single || this.flat || this.disableBranchNodes || this.valueConsistsOf === ALL) {
-        nextSelectedNodeIds = prevValueArray
+        nextSelectedNodeIds = nodeIdListOfPrevValue
       } else if (this.valueConsistsOf === BRANCH_PRIORITY) {
-        prevValueArray.forEach(nodeId => {
+        nodeIdListOfPrevValue.forEach(nodeId => {
           nextSelectedNodeIds.push(nodeId)
           const node = this.getNode(nodeId)
           if (node.isBranch) this.traverseDescendantsBFS(node, descendant => {
@@ -1064,7 +1064,7 @@ export default {
         })
       } else if (this.valueConsistsOf === LEAF_PRIORITY) {
         const map = createMap()
-        const queue = prevValueArray.slice()
+        const queue = nodeIdListOfPrevValue.slice()
         while (queue.length) {
           const nodeId = queue.shift()
           const node = this.getNode(nodeId)
@@ -1075,7 +1075,7 @@ export default {
         }
       } else if (this.valueConsistsOf === ALL_WITH_INDETERMINATE) {
         const map = createMap()
-        const queue = prevValueArray.filter(nodeId => {
+        const queue = nodeIdListOfPrevValue.filter(nodeId => {
           const node = this.getNode(nodeId)
           return node.isLeaf || node.children.length === 0
         })
@@ -1089,7 +1089,12 @@ export default {
         }
       }
 
-      this.forest.selectedNodeIds = nextSelectedNodeIds
+      const hasChanged = quickDiff(this.forest.selectedNodeIds, nextSelectedNodeIds)
+      // If `nextSelectedNodeIds` doesn't actually differ from old `selectedNodeIds`,
+      // we don't make the assignment to avoid triggering its watchers which may cause
+      // unnecessary calculations.
+      if (hasChanged) this.forest.selectedNodeIds = nextSelectedNodeIds
+
       this.buildForestState()
     },
 
