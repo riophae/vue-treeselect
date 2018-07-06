@@ -1691,6 +1691,10 @@ export default {
       this.callLoadOptionsProp({
         action: LOAD_CHILDREN_OPTIONS,
         args: {
+          // We always pass the raw node instead of the normalized node to any
+          // callback provided by the user of this component.
+          // Because the shape of the raw node is more likely to be closing to
+          // what the back-end API service of the application needs.
           parentNode: raw,
         },
         isPending: () => {
