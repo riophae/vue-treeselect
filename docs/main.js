@@ -1,3 +1,4 @@
+import 'script-loader!../static/prism.min.js'
 import 'regenerator-runtime/runtime'
 import 'yaku/lib/global'
 import Vue from 'vue'
