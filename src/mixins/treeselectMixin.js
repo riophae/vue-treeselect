@@ -1263,9 +1263,9 @@ export default {
 
       // Enter sync search mode.
       this.localSearch.active = true
-      this.localSearch.noResults = true
 
       // Reset states.
+      this.localSearch.noResults = true
       this.traverseAllNodesDFS(node => {
         if (node.isBranch) {
           node.isExpandedOnSearch = false
