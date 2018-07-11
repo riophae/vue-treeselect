@@ -30,6 +30,9 @@ const webpackConfig = merge(base, {
       }),
     ],
   },
+  externals: {
+    vue: 'Vue',
+  },
   devtool: config.bundle.prod.productionSourceMap ? '#source-map' : false,
   plugins: [
     new MiniCssExtractPlugin({
