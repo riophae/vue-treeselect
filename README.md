@@ -1,5 +1,5 @@
 # vue-treeselect
-[![npm](https://img.shields.io/npm/v/@riophae/vue-treeselect.svg)](https://www.npmjs.com/package/@riophae/vue-treeselect) [![CircleCI](	https://badgen.now.sh/circleci/github/riophae/vue-treeselect)](https://circleci.com/gh/riophae/vue-treeselect/tree/master) [![Codecov](https://codecov.io/gh/riophae/vue-treeselect/branch/master/graph/badge.svg)](https://codecov.io/gh/riophae/vue-treeselect?branch=master)
+[![npm](https://badgen.now.sh/npm/v/@riophae/vue-treeselect)](https://www.npmjs.com/package/@riophae/vue-treeselect) [![CircleCI](	https://badgen.now.sh/circleci/github/riophae/vue-treeselect)](https://circleci.com/gh/riophae/vue-treeselect/tree/master) [![Codecov](https://codecov.io/gh/riophae/vue-treeselect/branch/master/graph/badge.svg)](https://codecov.io/gh/riophae/vue-treeselect?branch=master)
 ![npm monthly downloads](https://badgen.now.sh/npm/dm/@riophae/vue-treeselect)
 ![jsDelivr monthly hits](https://data.jsdelivr.com/v1/package/npm/@riophae/vue-treeselect/badge?style=rounded)
 
