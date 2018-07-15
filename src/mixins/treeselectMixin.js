@@ -602,6 +602,14 @@ export default {
       type: String,
       default: 'id',
     },
+
+    /**
+     * z-index of the menu.
+     */
+    zIndex: {
+      type: [ Number, String ],
+      default: 999,
+    },
   },
 
   data() {
@@ -722,6 +730,12 @@ export default {
      */
     hasUndisabledValue() {
       return this.hasValue && this.internalValue.map(this.getNode).some(node => !node.isDisabled)
+    },
+    menuStyle() {
+      return {
+        maxHeight: this.menu.optimizedHeight + 'px',
+        zIndex: this.appendToBody ? null : this.zIndex,
+      }
     },
     /**
      * Single-select mode?

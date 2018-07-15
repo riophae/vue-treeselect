@@ -33,7 +33,7 @@
     </div>
     <portal>
       <transition name="vue-treeselect__menu--transition">
-        <div v-if="shouldShowMenu" class="vue-treeselect__menu" ref="menu" @mousedown="handleMouseDown" :style="{ maxHeight: menu.optimizedHeight + 'px' }">
+        <div v-if="shouldShowMenu" class="vue-treeselect__menu" ref="menu" @mousedown="handleMouseDown" :style="menuStyle">
           <div v-if="shouldShowOptionsList" class="vue-treeselect__list">
             <treeselect-option v-for="rootNode in forest.normalizedOptions" :node="rootNode" :key="rootNode.id">
               <template slot="option-label" slot-scope="{ node, shouldShowCount, count, labelClassName, countClassName }">

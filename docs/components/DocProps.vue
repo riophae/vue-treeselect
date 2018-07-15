@@ -322,6 +322,11 @@
         type: 'String',
         defaultValue: code('"id"'),
         description: `Format of ${code('value')} prop. <br>Note that, when set to ${code('"object"')}, only ${code('id')} & ${code('label')} properties are required in each ${code('node')} object in ${code('value')}. <br>Acceptable values: ${code('"id"')} or ${code('"object"')}.`,
+      }, {
+        name: 'zIndex',
+        type: 'Number | String',
+        defaultValue: code('999'),
+        description: `${(code('z-index'))} of the menu.`,
       } ],
     }),
   }

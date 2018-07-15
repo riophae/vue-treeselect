@@ -14,6 +14,7 @@ import {
   typeSearchText,
   findInputContainer,
   findInput,
+  findMenu,
   findOptionByNodeId,
   findLabelContainerByNodeId,
 } from './shared'
@@ -245,6 +246,47 @@ describe('Props', () => {
       event.button = 0
       label.dispatchEvent(event)
       expect(vm.internalValue).toEqual([ 'a' ])
+    })
+
+    it('should set `z-index` on menu when appendToBody=false', async () => {
+      const wrapper = mount(Treeselect, {
+        sync: false,
+        propsData: {
+          zIndex: 1,
+          appendToBody: false,
+          options: [],
+        },
+        attachToDocument: true,
+      })
+      const { vm } = wrapper
+
+      vm.openMenu()
+      await vm.$nextTick()
+
+      const menu = findMenu(wrapper)
+      expect(menu.element.style.zIndex).toBe('1')
+    })
+
+    it('should set `z-index` on portal when appendToBody=true', async () => {
+      const wrapper = mount(Treeselect, {
+        sync: false,
+        propsData: {
+          zIndex: 1,
+          appendToBody: true,
+          options: [],
+        },
+        attachToDocument: true,
+      })
+      const { vm } = wrapper
+
+      vm.openMenu()
+      await vm.$nextTick()
+
+      const portal = findPortal(wrapper)
+      expect(portal.style.zIndex).toBe('1')
+
+      const menu = $('.vue-treeselect__menu', portal)
+      expect(menu.style.zIndex).toBe('')
     })
   })
 
@@ -2623,5 +2665,29 @@ describe('Props', () => {
         })
       })
     })
+  })
+
+  it('zIndex', async () => {
+    const wrapper = mount(Treeselect, {
+      sync: false,
+      propsData: {
+        zIndex: 1,
+        options: [],
+      },
+      attachToDocument: true,
+    })
+    const { vm } = wrapper
+
+    vm.openMenu()
+    await vm.$nextTick()
+
+    const menu = findMenu(wrapper)
+
+    expect(menu.element.style.zIndex).toBe('1')
+
+    wrapper.setProps({ zIndex: 2 })
+    await vm.$nextTick()
+
+    expect(menu.element.style.zIndex).toBe('2')
   })
 })

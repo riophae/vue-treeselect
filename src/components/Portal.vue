@@ -3,7 +3,9 @@
   import domAlign from 'dom-align'
 
   let placeholderEl
-  const Portal = {
+  const PortalTarget = {
+    name: 'vue-treeselect--portal-target',
+
     inject: [ 'instance' ],
 
     methods: {
@@ -35,14 +37,14 @@
     },
 
     created() {
-      this.portalCreated = false
-      this.portal = null
+      this.portalTargetCreated = false
+      this.portalTarget = null
     },
 
     updated() {
       if (this.enablePortal) {
-        if (this.portalCreated) {
-          this.portal.$forceUpdate()
+        if (this.portalTargetCreated) {
+          this.portalTarget.$forceUpdate()
         } else {
           this.install()
         }
@@ -57,32 +59,33 @@
 
     methods: {
       install() {
-        this.portalCreated = true
+        this.portalTargetCreated = true
 
         const el = document.createElement('div')
         document.body.appendChild(el)
 
-        this.portal = new Vue({
-          ...Portal,
+        this.portalTarget = new Vue({
+          ...PortalTarget,
           el,
           parent: this.instance,
           render: h => {
             // Make sure `vue-treeselect__portal` goes after any other classes.
             const className = [ this.instance.$el.className, 'vue-treeselect__portal' ].join(' ')
-            return h('div', { class: className }, this.$slots.default)
+            const style = { zIndex: this.instance.zIndex }
+            return h('div', { class: className, style }, this.$slots.default)
           },
         })
       },
 
       teardown() {
-        if (!this.portalCreated) return
-        this.portalCreated = false
+        if (!this.portalTargetCreated) return
+        this.portalTargetCreated = false
 
-        document.body.removeChild(this.portal.$el)
-        this.portal.$el.innerHTML = ''
+        document.body.removeChild(this.portalTarget.$el)
+        this.portalTarget.$el.innerHTML = ''
 
-        this.portal.$destroy()
-        this.portal = null
+        this.portalTarget.$destroy()
+        this.portalTarget = null
       },
     },
 
