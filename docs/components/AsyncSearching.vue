@@ -9,17 +9,21 @@
 <script>
   import { ASYNC_SEARCH } from '@riophae/vue-treeselect'
 
+  const simulateAsyncOperation = fn => {
+    setTimeout(fn, 2000)
+  }
+
   export default {
     methods: {
       loadOptions({ action, searchQuery, callback }) {
         if (action === ASYNC_SEARCH) {
-          setTimeout(() => {
+          simulateAsyncOperation(() => {
             const options = [ 1, 2, 3, 4, 5 ].map(i => ({
               id: `${searchQuery}-${i}`,
               label: `${searchQuery}-${i}`,
             }))
             callback(null, options)
-          }, 2000)
+          })
         }
       },
     },

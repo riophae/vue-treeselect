@@ -11,13 +11,19 @@
 <script>
   import { LOAD_CHILDREN_OPTIONS } from '@riophae/vue-treeselect'
 
+  // We just use `setTimeout()` here to simulate an async operation
+  // instead of requesting a real API server for demo purpose.
+  const simulateAsyncOperation = fn => {
+    setTimeout(fn, 2000)
+  }
+
   export default {
     data: () => ({
       value: null,
       options: [ {
         id: 'success',
         label: 'With children',
-        // declare an unloaded branch node
+        // Declare an unloaded branch node.
         children: null,
       }, {
         id: 'no-children',
@@ -35,32 +41,30 @@
         // Typically, do the AJAX stuff here.
         // Once the server has responded,
         // assign children options to the parent node & call the callback.
-        // We just use `setTimeout()` here to simulate an async operation
-        // instead of requesting a real API server for demo purpose.
 
         if (action === LOAD_CHILDREN_OPTIONS) {
           switch (parentNode.id) {
           case 'success': {
-            setTimeout(() => {
+            simulateAsyncOperation(() => {
               parentNode.children = [ {
                 id: 'child',
                 label: 'Child option',
               } ]
               callback()
-            }, 2000)
+            })
             break
           }
           case 'no-children': {
-            setTimeout(() => {
+            simulateAsyncOperation(() => {
               parentNode.children = []
               callback()
-            }, 2000)
+            })
             break
           }
           case 'failure': {
-            setTimeout(() => {
+            simulateAsyncOperation(() => {
               callback(new Error('Failed to load options: network error.'))
-            }, 2000)
+            })
             break
           }
           default: /* empty */
