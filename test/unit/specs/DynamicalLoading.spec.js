@@ -173,7 +173,7 @@ describe('Dynamical Loading', () => {
 
       // 2nd try - click on retry
       const retry = wrapper.find('.vue-treeselect__retry')
-      retry.element.click()
+      leftClick(retry)
       expect(spyForLoadOptions.calls.count()).toBe(2)
       // should reset state
       expect(vm.forest.nodeMap.a.childrenStates.isLoading).toBe(true)
@@ -609,7 +609,7 @@ describe('Dynamical Loading', () => {
       vm.openMenu()
       await vm.$nextTick()
 
-      const { menu } = vm.$refs
+      const menu = vm.getMenu()
       expect(vm.rootOptionsStates.isLoading).toBe(true)
       // should show a loading tip
       expect(menu.firstElementChild.className).toEqual(jasmine.stringMatching('vue-treeselect__loading-tip'))
@@ -680,7 +680,7 @@ describe('Dynamical Loading', () => {
       expect(vm.rootOptionsStates.isLoading).toBe(false)
       expect(vm.rootOptionsStates.loadingError).toBe(ERROR_MESSAGE)
       expect(vm.rootOptionsStates.isLoaded).toBe(false)
-      menu = vm.$refs.menu
+      menu = vm.getMenu()
       expect(menu.firstElementChild.className).toEqual(jasmine.stringMatching('vue-treeselect__error-tip'))
       expect(menu.querySelector('.vue-treeselect__error-tip-text').textContent.includes(ERROR_MESSAGE)).toBe(true)
 
@@ -692,7 +692,7 @@ describe('Dynamical Loading', () => {
       await sleep(DELAY)
       expect(vm.rootOptionsStates.isLoading).toBe(false)
       expect(vm.rootOptionsStates.isLoaded).toBe(true)
-      menu = vm.$refs.menu
+      menu = vm.getMenu()
       expect(menu.querySelector('.vue-treeselect__error-tip')).toBe(null)
       // options should be registered
       expect(Object.keys(vm.forest.nodeMap)).toEqual([ 'a', 'aa', 'b' ])

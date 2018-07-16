@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils'
 import Treeselect from '@src/components/Treeselect'
-import SearchInput from '@src/components/SearchInput'
+import Input from '@src/components/Input'
 import {
   generateOptions,
   leftClick, typeSearchText,
@@ -62,7 +62,7 @@ describe('Menu', () => {
     expect(a.isExpanded).toBe(false)
   })
 
-  it('should highlight the option when the cursor hovering over it', () => {
+  it('should highlight the option when the cursor hovering over it', async () => {
     const wrapper = mount(Treeselect, {
       propsData: {
         options: [ {
@@ -77,6 +77,8 @@ describe('Menu', () => {
     const { vm } = wrapper
 
     vm.openMenu()
+    await vm.$nextTick()
+
     expect(vm.menu.current).toBe('a')
     expect(vm.forest.nodeMap.a.isHighlighted).toBe(true)
 
@@ -125,12 +127,12 @@ describe('Menu', () => {
       },
     })
     const { vm } = wrapper
-    const searchInput = wrapper.find(SearchInput)
+    const input = wrapper.find(Input)
 
     const assertInputValue = expected => {
       expect(vm.trigger.searchQuery).toBe(expected)
-      expect(searchInput.vm.value).toBe(expected)
-      expect(searchInput.find('input[type="text"]').element.value).toBe(expected)
+      expect(input.vm.value).toBe(expected)
+      expect(input.find('input[type="text"]').element.value).toBe(expected)
     }
 
     vm.openMenu()

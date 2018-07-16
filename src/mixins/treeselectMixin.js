@@ -56,7 +56,7 @@ function match(enableFuzzyMatch, needle, haystack) {
 }
 
 function getErrorMessage(err) {
-  return err.message || String(err)
+  return err.message || /* istanbul ignore next */String(err)
 }
 
 let instanceId = 0
@@ -67,11 +67,6 @@ export default {
       // Enable access to the instance of root component of vue-treeselect
       // across hierarchy.
       instance: this,
-
-      // Constants.
-      UNCHECKED,
-      INDETERMINATE,
-      CHECKED,
     }
   },
 
@@ -731,25 +726,12 @@ export default {
     hasUndisabledValue() {
       return this.hasValue && this.internalValue.map(this.getNode).some(node => !node.isDisabled)
     },
-    menuStyle() {
-      return {
-        maxHeight: this.menu.optimizedHeight + 'px',
-        zIndex: this.appendToBody ? null : this.zIndex,
-      }
-    },
     /**
      * Single-select mode?
      * @type {boolean}
      */
     single() {
       return !this.multiple
-    },
-    /**
-     * Options displayed in the control.
-     * @type {Object[]}
-     */
-    visibleValue() {
-      return this.internalValue.slice(0, this.limit).map(this.getNode)
     },
     /**
      * Id list of nodes displayed in the menu. Nodes that are considered NOT visible:
@@ -780,69 +762,6 @@ export default {
      */
     hasVisibleOptions() {
       return this.visibleOptionIds.length !== 0
-    },
-    /**
-     * Whether has passed the defined limit or not.
-     * @type {boolean}
-     */
-    hasExceededLimit() {
-      return this.internalValue.length > this.limit
-    },
-    /**
-     * Should the "×" button be shown?
-     * @type {boolean}
-     */
-    shouldShowX() {
-      return this.clearable && !this.disabled && this.hasUndisabledValue
-    },
-    shouldShowControlArrow() {
-      if (!this.alwaysOpen) return true
-      // Even with `alwaysOpen: true`, sometimes the menu is still closed,
-      // e.g. when the control is disabled.
-      return !this.menu.isOpen
-    },
-    shouldShowMenu() {
-      return this.menu.isOpen
-    },
-    shouldShowOptionsList() {
-      if (this.async) {
-        const entry = this.getRemoteSearchEntry()
-        return entry.isLoaded && entry.options.length > 0
-      }
-      if (this.localSearch.active) return !this.localSearch.noResults
-      return this.forest.normalizedOptions.length > 0
-    },
-    shouldShowNoOptionsTip() {
-      if (this.async) return false
-      if (this.localSearch.active) return false
-      return this.rootOptionsStates.isLoaded && this.forest.normalizedOptions.length === 0
-    },
-    shouldShowNoResultsTip() {
-      if (this.async) {
-        if (this.trigger.searchQuery === '' && !this.defaultOptions) return false
-        const entry = this.getRemoteSearchEntry()
-        return entry.isLoaded && entry.options.length === 0
-      }
-      if (this.localSearch.active) return this.localSearch.noResults
-      return false
-    },
-    shouldShowLoadingOptionsTip() {
-      if (this.async) {
-        const entry = this.getRemoteSearchEntry()
-        return entry.isLoading
-      }
-      return this.rootOptionsStates.isLoading
-    },
-    shouldShowLoadingRootOptionsErrorTip() {
-      return this.rootOptionsStates.loadingError
-    },
-    shouldShowAsyncSearchLoadingErrorTiop() {
-      if (!this.async) return false
-      const entry = this.getRemoteSearchEntry()
-      return entry.loadingError
-    },
-    shouldShowSearchPromptTip() {
-      return this.async && this.trigger.searchQuery === '' && !this.defaultOptions
     },
     /**
      * Should show children count when searching?
@@ -901,6 +820,7 @@ export default {
     multiple(newValue) {
       // We need to rebuild the state when switching from single-select mode
       // to multi-select mode.
+      // istanbul ignore else
       if (newValue) this.buildForestState()
     },
 
@@ -1138,12 +1058,6 @@ export default {
       return this.forest.selectedNodeMap[node.id] === true
     },
 
-    stringifyValue(value) {
-      return typeof value === 'string'
-        ? value
-        : (value !== null && JSON.stringify(value)) || ''
-    },
-
     traverseDescendantsBFS(parentNode, callback) {
       // istanbul ignore if
       if (!parentNode.isBranch) return
@@ -1195,12 +1109,20 @@ export default {
       }
     },
 
+    getValueContainer() {
+      return this.$refs.control.$refs['value-container']
+    },
+
+    getInput() {
+      return this.getValueContainer().$refs.input
+    },
+
     focusInput() {
-      this.$refs.value.focusInput()
+      this.getInput().focus()
     },
 
     blurInput() {
-      this.$refs.value.blurInput()
+      this.getInput().blur()
     },
 
     handleMouseDown: onLeftClick(function handleMouseDown(evt) {
@@ -1209,7 +1131,7 @@ export default {
 
       if (this.disabled) return
 
-      const isClickedOnValueContainer = this.$refs.value.$el.contains(evt.target)
+      const isClickedOnValueContainer = this.getValueContainer().$el.contains(evt.target)
       if (isClickedOnValueContainer && !this.menu.isOpen && (this.openOnClick || this.trigger.isFocused)) {
         this.openMenu()
       }
@@ -1222,47 +1144,6 @@ export default {
       }
 
       this.resetFlags()
-    }),
-
-    handleMouseDownOnClear: onLeftClick(function handleMouseDownOnClear(evt) {
-      // We don't use async/await here because we don't want
-      // to rely on Babel polyfill or regenerator runtime.
-      // See: https://babeljs.io/docs/plugins/transform-regenerator/
-      // We also don't want to assume there is a global `Promise` class,
-      // since we are targeting to support IE9 without the need of any polyfill.
-
-      evt.stopPropagation()
-      evt.preventDefault()
-
-      const result = this.beforeClearAll()
-      const handler = shouldClear => {
-        if (shouldClear) {
-          this.clear()
-        }
-
-        this.focusInput()
-      }
-
-      if (isPromise(result)) {
-        // The handler will be called async.
-        result.then(handler)
-      } else {
-        // Keep the same behavior here.
-        setTimeout(() => handler(result), 0)
-        // Also, note that IE9 requires:
-        //   setTimeout(() => fn(...args), delay)
-        // Instead of:
-        //   setTimeout(fn, delay, ...args)
-      }
-    }),
-
-    handleMouseDownOnArrow: onLeftClick(function handleMouseDownOnArrow(evt) {
-      evt.preventDefault()
-      evt.stopPropagation()
-
-      // Focus the input or prevent blurring.
-      this.focusInput()
-      this.toggleMenu()
     }),
 
     handleClickOutside(evt) {
@@ -1426,6 +1307,11 @@ export default {
       return true
     },
 
+    getMenu() {
+      const ref = this.appendToBody ? this.$refs.portal.portalTarget : this
+      return ref.$refs.menu.$el
+    },
+
     setCurrentHighlightedOption(node, scroll = true) {
       const prev = this.menu.current
       if (prev != null && prev in this.forest.nodeMap) {
@@ -1435,8 +1321,9 @@ export default {
       node.isHighlighted = true
 
       if (this.menu.isOpen && scroll) {
-        const $option = this.$el.querySelector(`.vue-treeselect__option[data-id="${node.id}"]`)
-        if ($option) scrollIntoView(this.$refs.menu, $option)
+        const $menu = this.getMenu()
+        const $option = $menu.querySelector(`.vue-treeselect__option[data-id="${node.id}"]`)
+        if ($option) scrollIntoView($menu, $option)
       }
     },
 
@@ -1499,10 +1386,10 @@ export default {
       if (this.disabled || this.menu.isOpen) return
       this.menu.isOpen = true
       this.$nextTick(this.adjustMenuOpenDirection)
+      this.$nextTick(this.resetHighlightedOptionWhenNecessary)
       this.$nextTick(this.restoreMenuScrollPosition)
       if (!this.options && !this.async) this.loadRootOptions()
       this.toggleClickOutsideEvent(true)
-      this.resetHighlightedOptionWhenNecessary()
       this.$emit('open', this.getInstanceId())
     },
 
@@ -1915,11 +1802,15 @@ export default {
     },
 
     saveMenuScrollPosition() {
-      if (this.$refs.menu) this.menu.lastScrollPosition = this.$refs.menu.scrollTop
+      const $menu = this.getMenu()
+      // istanbul ignore else
+      if ($menu) this.menu.lastScrollPosition = $menu.scrollTop
     },
 
     restoreMenuScrollPosition() {
-      if (this.$refs.menu) this.$refs.menu.scrollTop = this.menu.lastScrollPosition
+      const $menu = this.getMenu()
+      // istanbul ignore else
+      if ($menu) $menu.scrollTop = this.menu.lastScrollPosition
     },
 
     adjustMenuOpenDirection() {

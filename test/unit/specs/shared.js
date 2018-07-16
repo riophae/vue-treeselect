@@ -1,5 +1,5 @@
 import sleep from 'yaku/lib/sleep'
-import TreeselectOption from '@src/components/Option'
+import Option from '@src/components/Option'
 import { INPUT_DEBOUNCE_DELAY } from '@src/constants'
 
 export function $(selector, context = document) {
@@ -105,7 +105,7 @@ export async function typeSearchText(wrapper, text) {
   const $input = findInput(wrapper)
   $input.element.value = text
   $input.trigger('input')
-  expect(wrapper.vm.$refs.value.$refs.input.value).toBe(text)
+  expect(wrapper.vm.$refs.control.$refs['value-container'].$refs.input.value).toBe(text)
   await sleep(INPUT_DEBOUNCE_DELAY + 1)
   expect(wrapper.vm.trigger.searchQuery).toBe(text)
 }
@@ -143,7 +143,7 @@ export function findLabelContainerByNodeId(wrapper, nodeId) {
 }
 
 export function findChildrenOptionListByNodeId(wrapper, nodeId) {
-  return wrapper.findAll(TreeselectOption).wrappers
+  return wrapper.findAll(Option).wrappers
     .find(optionWrapper => optionWrapper.vm.node.id === nodeId)
     .find('.vue-treeselect__list')
 }

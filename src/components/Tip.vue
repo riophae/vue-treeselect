@@ -1,13 +1,8 @@
-<template>
-  <div :class="`vue-treeselect__tip vue-treeselect__${type}-tip`">
-    <div class="vue-treeselect__icon-container"><span :class="`vue-treeselect__icon-${icon}`" /></div>
-    <span :class="`vue-treeselect__tip-text vue-treeselect__${type}-tip-text`"><slot /></span>
-  </div>
-</template>
-
 <script>
   export default {
     name: 'vue-treeselect--tip',
+    functional: true,
+
     props: {
       type: {
         type: String,
@@ -17,6 +12,21 @@
         type: String,
         required: true,
       },
+    },
+
+    render(_, context) {
+      const { props, children } = context
+
+      return (
+        <div class={`vue-treeselect__tip vue-treeselect__${props.type}-tip`}>
+          <div class="vue-treeselect__icon-container">
+            <span class={`vue-treeselect__icon-${props.icon}`} />
+          </div>
+          <span class={`vue-treeselect__tip-text vue-treeselect__${props.type}-tip-text`}>
+            {children}
+          </span>
+        </div>
+      )
     },
   }
 </script>

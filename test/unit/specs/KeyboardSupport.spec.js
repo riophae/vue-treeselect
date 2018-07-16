@@ -89,7 +89,7 @@ describe('Keyboard Support', () => {
   describe('enter key', () => {
     let wrapper, vm
 
-    beforeEach(() => {
+    beforeEach(async () => {
       wrapper = mount(Treeselect, {
         propsData: {
           alwaysOpen: true,
@@ -111,6 +111,8 @@ describe('Keyboard Support', () => {
         },
       })
       vm = wrapper.vm
+
+      await vm.$nextTick()
 
       expect(vm.menu.isOpen).toBe(true)
       expect(vm.menu.current).toBe('a')
@@ -303,7 +305,7 @@ describe('Keyboard Support', () => {
       expect(cycleToTop && cycleToBottom).toBe(true)
     }
 
-    it('keyboard navigation', () => {
+    it('keyboard navigation', async () => {
       const wrapper = mount(Treeselect, {
         propsData: {
           defaultExpandLevel: Infinity,
@@ -341,6 +343,8 @@ describe('Keyboard Support', () => {
       const { vm } = wrapper
 
       vm.openMenu()
+      await vm.$nextTick()
+
       expect(vm.menu.current).toBe('a')
       moveAround(wrapper, [ 'a', 'aa', 'ab', 'aba', 'abb', 'b', 'ba', 'baa' ])
     })
@@ -361,6 +365,8 @@ describe('Keyboard Support', () => {
       const { vm } = wrapper
 
       vm.openMenu()
+      await vm.$nextTick()
+
       expect(vm.menu.current).toBe('a')
 
       await typeSearchText(wrapper, 'a')
@@ -441,7 +447,7 @@ describe('Keyboard Support', () => {
   describe('(arrow right + arrow left) keys', () => {
     let wrapper, vm
 
-    beforeEach(() => {
+    beforeEach(async () => {
       wrapper = mount(Treeselect, {
         propsData: {
           options: [ {
@@ -464,6 +470,8 @@ describe('Keyboard Support', () => {
       vm = wrapper.vm
 
       vm.openMenu()
+      await vm.$nextTick()
+
       expect(vm.menu.current).toBe('a')
     })
 

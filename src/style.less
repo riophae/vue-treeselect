@@ -231,6 +231,10 @@
  * Helpers
  */
 
+.vue-treeselect-helper-hide {
+  display: none;
+}
+
 .vue-treeselect-helper-zoom-effect-off {
   transform: none !important; // stylelint-disable-line declaration-no-important
 }
@@ -335,21 +339,6 @@
   svg {
     fill: currentColor;
   }
-}
-
-
-/**
- * Portal
- */
-
-.vue-treeselect__portal {
-  position: absolute;
-  display: block;
-  height: 0;
-  padding: 0;
-  margin: 0;
-  overflow: visible;
-  box-sizing: border-box;
 }
 
 
@@ -918,6 +907,7 @@
 }
 
 .vue-treeselect__count {
+  margin-left: @treeselect-padding;
   font-weight: 400;
   opacity: 0.6;
 }
@@ -938,6 +928,7 @@
   .vue-treeselect__error-tip & {
     .clickable();
 
+    margin-left: @treeselect-padding;
     font-style: normal;
     font-weight: 600;
     text-decoration: none;
@@ -1043,4 +1034,24 @@
     background: @treeselect-loader-color-light;
     animation-delay: -(@treeselect-loader-animation-duration / 2);
   }
+}
+
+
+/**
+ * Menu Portal
+ */
+
+.vue-treeselect__menu-placeholder {
+  display: none;
+}
+
+.vue-treeselect__portal-target {
+  position: absolute;
+  display: block;
+  height: 0;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  overflow: visible;
+  box-sizing: border-box;
 }

@@ -45,6 +45,36 @@ describe('Methods', () => {
     expect(vm.trigger.isFocused).toBe(false)
   })
 
+  describe('getMenu()', () => {
+    const createInstance = async appendToBody => {
+      const wrapper = mount(Treeselect, {
+        propsData: {
+          appendToBody,
+          options: [],
+        },
+        attachToDocument: true,
+      })
+      const { vm } = wrapper
+
+      vm.openMenu()
+      await vm.$nextTick()
+
+      return vm
+    }
+
+    it('when appendToBody=false', async () => {
+      const vm = await createInstance(false)
+      expect(vm.getMenu().classList).toContain('vue-treeselect__menu')
+      vm.$destroy()
+    })
+
+    it('when appendToBody=true', async () => {
+      const vm = await createInstance(true)
+      expect(vm.getMenu().classList).toContain('vue-treeselect__menu')
+      vm.$destroy()
+    })
+  })
+
   describe('openMenu()', () => {
     let wrapper
 

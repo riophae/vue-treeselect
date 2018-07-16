@@ -2,7 +2,7 @@ import Vue from 'vue'
 import { mount } from '@vue/test-utils'
 import sleep from 'yaku/lib/sleep'
 import Treeselect from '@src/components/Treeselect'
-import TreeselectOption from '@src/components/Option'
+import Option from '@src/components/Option'
 
 describe('Basic', () => {
   describe('nodeMap', () => {
@@ -817,7 +817,7 @@ describe('Basic', () => {
 
     wrapper.vm.openMenu()
 
-    const optionsWrappers = wrapper.findAll(TreeselectOption).wrappers
+    const optionsWrappers = wrapper.findAll(Option).wrappers
     const a = optionsWrappers.find(optionWrapper => optionWrapper.vm.node.id === 'a')
       .find('.vue-treeselect__option')
     const aa = optionsWrappers.find(optionWrapper => optionWrapper.vm.node.id === 'aa')

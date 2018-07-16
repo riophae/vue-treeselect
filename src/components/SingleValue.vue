@@ -1,22 +1,25 @@
-<template>
-  <div class="vue-treeselect__value-container">
-    <div v-if="instance.hasValue && !instance.trigger.searchQuery" class="vue-treeselect__single-value">
-      {{ instance.selectedNodes[0].label }}
-    </div>
-    <placeholder v-else-if="!instance.trigger.searchQuery" />
-    <search-input key="input" ref="input" />
-  </div>
-</template>
-
 <script>
-  import valueMixin from '../mixins/valueMixin'
+  import Input from './Input'
   import Placeholder from './Placeholder'
-  import SearchInput from './SearchInput'
 
   export default {
     name: 'vue-treeselect--single-value',
-    components: { Placeholder, SearchInput },
-    mixins: [ valueMixin ],
     inject: [ 'instance' ],
+
+    render() {
+      const { instance } = this
+      const shouldShowValue = instance.hasValue && !instance.trigger.searchQuery
+      const { renderValueContainer } = this.$parent
+
+      return renderValueContainer([
+        shouldShowValue && (
+          <div class="vue-treeselect__single-value">
+            { instance.selectedNodes[0].label }
+          </div>
+        ),
+        <Placeholder />,
+        <Input ref="input" />,
+      ])
+    },
   }
 </script>

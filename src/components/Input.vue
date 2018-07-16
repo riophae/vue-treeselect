@@ -24,11 +24,19 @@
 
     computed: {
       needAutoSize() {
+        const { instance } = this
+
         return (
-          this.instance.searchable &&
-          !this.instance.disabled &&
-          this.instance.multiple
+          instance.searchable &&
+          !instance.disabled &&
+          instance.multiple
         )
+      },
+
+      inputStyle() {
+        return {
+          width: this.needAutoSize ? `${this.inputWidth}px` : null,
+        }
       },
     },
 
@@ -59,7 +67,9 @@
       },
 
       focus() {
-        if (!this.instance.disabled) {
+        const { instance } = this
+
+        if (!instance.disabled) {
           this.$refs.input && this.$refs.input.focus()
         }
       },
@@ -69,25 +79,29 @@
       },
 
       onFocus() {
-        this.instance.trigger.isFocused = true
+        const { instance } = this
+
+        instance.trigger.isFocused = true
         // istanbul ignore else
-        if (this.instance.openOnFocus) this.instance.openMenu()
+        if (instance.openOnFocus) instance.openMenu()
       },
 
       onBlur() {
+        const { instance } = this
+
         // #15
         // istanbul ignore next
-        if (document.activeElement === this.instance.$refs.menu) {
-          this.focus()
-          return
+        if (document.activeElement === instance.$refs.menu) {
+          return this.focus()
         }
 
-        this.instance.trigger.isFocused = false
-        this.instance.closeMenu()
+        instance.trigger.isFocused = false
+        instance.closeMenu()
       },
 
       onInput(evt) {
         const { value } = evt.target
+
         this.value = value
 
         if (value) {
@@ -100,89 +114,91 @@
 
       // 用 keyUp 事件存在一个问题，删除输入框最后一个字符也会导致取消选中最后一项
       onKeyDown(evt) {
-        if (evt.ctrlKey || evt.shiftKey || evt.altKey || evt.metaKey)
-          return
-
+        const { instance } = this
         // https://css-tricks.com/snippets/javascript/javascript-keycodes/
         // https://stackoverflow.com/questions/4471582/javascript-keycode-vs-which
         const key = 'which' in evt ? evt.which : /* istanbul ignore next */ evt.keyCode
-        if (!this.instance.menu.isOpen && includes(keysThatRequireMenuBeingOpen, key)) {
+
+        if (evt.ctrlKey || evt.shiftKey || evt.altKey || evt.metaKey)
+          return
+
+        if (!instance.menu.isOpen && includes(keysThatRequireMenuBeingOpen, key)) {
           evt.preventDefault()
-          return this.instance.openMenu()
+          return instance.openMenu()
         }
 
         switch (key) {
         case KEY_CODES.BACKSPACE: {
-          if (this.instance.backspaceRemoves && !this.value.length) {
-            this.instance.removeLastValue()
+          if (instance.backspaceRemoves && !this.value.length) {
+            instance.removeLastValue()
           }
           break
         }
         case KEY_CODES.ENTER: {
           evt.preventDefault()
-          const current = this.instance.getNode(this.instance.menu.current)
-          if (current.isBranch && this.instance.disableBranchNodes) return
-          this.instance.select(current)
+          const current = instance.getNode(instance.menu.current)
+          if (current.isBranch && instance.disableBranchNodes) return
+          instance.select(current)
           break
         }
         case KEY_CODES.ESCAPE: {
           if (this.value.length) {
             this.clear()
-          } else if (this.instance.menu.isOpen) {
-            this.instance.closeMenu()
-          } else if (this.instance.escapeClearsValue) {
-            this.instance.clear()
+          } else if (instance.menu.isOpen) {
+            instance.closeMenu()
+          } else if (instance.escapeClearsValue) {
+            instance.clear()
           }
           break
         }
         case KEY_CODES.END: {
           evt.preventDefault()
-          this.instance.highlightLastOption()
+          instance.highlightLastOption()
           break
         }
         case KEY_CODES.HOME: {
           evt.preventDefault()
-          this.instance.highlightFirstOption()
+          instance.highlightFirstOption()
           break
         }
         case KEY_CODES.ARROW_LEFT: {
-          const current = this.instance.getNode(this.instance.menu.current)
-          if (current.isBranch && this.instance.shouldExpand(current)) {
+          const current = instance.getNode(instance.menu.current)
+          if (current.isBranch && instance.shouldExpand(current)) {
             evt.preventDefault()
-            this.instance.toggleExpanded(current)
-          } else if (!current.isRootNode && (current.isLeaf || (current.isBranch && !(this.instance.shouldExpand(current))))) {
+            instance.toggleExpanded(current)
+          } else if (!current.isRootNode && (current.isLeaf || (current.isBranch && !(instance.shouldExpand(current))))) {
             evt.preventDefault()
-            this.instance.setCurrentHighlightedOption(current.parentNode)
+            instance.setCurrentHighlightedOption(current.parentNode)
           }
           break
         }
         case KEY_CODES.ARROW_UP: {
           evt.preventDefault()
-          this.instance.highlightPrevOption()
+          instance.highlightPrevOption()
           break
         }
         case KEY_CODES.ARROW_RIGHT: {
-          const current = this.instance.getNode(this.instance.menu.current)
-          if (current.isBranch && !this.instance.shouldExpand(current)) {
+          const current = instance.getNode(instance.menu.current)
+          if (current.isBranch && !instance.shouldExpand(current)) {
             evt.preventDefault()
-            this.instance.toggleExpanded(current)
+            instance.toggleExpanded(current)
           }
           break
         }
         case KEY_CODES.ARROW_DOWN: {
           evt.preventDefault()
-          this.instance.highlightNextOption()
+          instance.highlightNextOption()
           break
         }
         case KEY_CODES.DELETE: {
-          if (this.instance.deleteRemoves && !this.value.length) {
-            this.instance.removeLastValue()
+          if (instance.deleteRemoves && !this.value.length) {
+            instance.removeLastValue()
           }
           break
         }
         default: {
           // istanbul ignore else
-          this.instance.openMenu()
+          instance.openMenu()
         }
         }
       },
@@ -196,18 +212,17 @@
         }
       },
 
-      renderInputContainer(h) {
-        const props = {
-          class: 'vue-treeselect__input-container',
-        }
+      renderInputContainer() {
+        const { instance } = this
+        const props = {}
         const children = []
 
-        if (this.instance.searchable && !this.instance.disabled) {
-          children.push(this.renderInput(h))
-          if (this.needAutoSize) children.push(this.renderSizer(h))
+        if (instance.searchable && !instance.disabled) {
+          children.push(this.renderInput())
+          if (this.needAutoSize) children.push(this.renderSizer())
         }
 
-        if (!this.instance.searchable) {
+        if (!instance.searchable) {
           deepExtend(props, {
             on: {
               focus: this.onFocus,
@@ -218,51 +233,46 @@
           })
         }
 
-        if (!this.instance.searchable && !this.instance.disabled) {
+        if (!instance.searchable && !instance.disabled) {
           deepExtend(props, {
             attrs: {
-              tabIndex: this.instance.tabIndex,
+              tabIndex: instance.tabIndex,
             },
           })
         }
 
-        return h('div', props, children)
+        return (
+          <div class="vue-treeselect__input-container" {...props}>
+            {children}
+          </div>
+        )
       },
 
-      renderInput(h) {
-        return h('input', {
-          class: 'vue-treeselect__input',
-          attrs: {
-            type: 'text',
-            autocomplete: 'off',
-            tabIndex: this.instance.tabIndex,
-            required: this.instance.required && !this.instance.hasValue,
-          },
-          domProps: {
-            value: this.value,
-          },
-          style: {
-            width: this.needAutoSize ? `${this.inputWidth}px` : null,
-          },
-          on: {
-            focus: this.onFocus,
-            input: this.onInput,
-            blur: this.onBlur,
-            keydown: this.onKeyDown,
-            mousedown: this.onMouseDown,
-          },
-          ref: 'input',
-        })
+      renderInput() {
+        const { instance } = this
+
+        return (
+          <input ref="input"
+            class="vue-treeselect__input"
+            type="text"
+            autocomplete="off"
+            tabIndex={instance.tabIndex}
+            required={instance.required && !instance.hasValue}
+            value={this.value}
+            style={this.inputStyle}
+            onFocus={this.onFocus}
+            onInput={this.onInput}
+            onBlur={this.onBlur}
+            onKeydown={this.onKeyDown}
+            onMousedown={this.onMouseDown}
+          />
+        )
       },
 
-      renderSizer(h) {
-        return h('div', {
-          class: 'vue-treeselect__sizer',
-          domProps: {
-            textContent: this.value,
-          },
-          ref: 'sizer',
-        })
+      renderSizer() {
+        return (
+          <div ref="sizer" class="vue-treeselect__sizer">{this.value}</div>
+        )
       },
 
       updateInputWidth() {
@@ -273,12 +283,14 @@
       },
 
       updateSearchQuery() {
-        this.instance.trigger.searchQuery = this.value
+        const { instance } = this
+
+        instance.trigger.searchQuery = this.value
       },
     },
 
-    render(h) {
-      return this.renderInputContainer(h)
+    render() {
+      return this.renderInputContainer()
     },
   }
 </script>

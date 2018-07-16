@@ -1,6 +1,7 @@
 module.exports = {
   root: true,
   extends: [ 'riophae/vue' ],
+  plugins: [ 'react' ],
   globals: {
     PKG_VERSION: true,
   },
@@ -16,6 +17,7 @@ module.exports = {
     'import/exports-last': 0,
     'import/no-named-as-default': 0,
     'import/no-extraneous-dependencies': 0,
+    'react/jsx-uses-vars': 2,
     'vue/attributes-order': 0,
     'multiline-comment-style': 0,
     'no-confusing-arrow': 0,

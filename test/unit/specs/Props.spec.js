@@ -2,7 +2,8 @@ import Vue from 'vue'
 import { mount } from '@vue/test-utils'
 import sleep from 'yaku/lib/sleep'
 import Treeselect from '@src/components/Treeselect'
-import TreeselectOption from '@src/components/Option'
+import Option from '@src/components/Option'
+import MultiValueItem from '@src/components/MultiValueItem'
 import {
   UNCHECKED, CHECKED, INDETERMINATE,
   ALL, BRANCH_PRIORITY, LEAF_PRIORITY, ALL_WITH_INDETERMINATE,
@@ -146,15 +147,15 @@ describe('Props', () => {
   })
 
   describe('appendToBody', () => {
-    const findPortal = () => $('body > .vue-treeselect__portal')
+    const findPortalTarget = () => $('body > .vue-treeselect__portal-target')
 
     beforeEach(() => {
-      expect(findPortal()).toBe(null)
+      expect(findPortalTarget()).toBe(null)
     })
 
     afterEach(() => {
-      const portal = findPortal()
-      if (portal) portal.remove()
+      const portalTarget = findPortalTarget()
+      if (portalTarget) portalTarget.remove()
     })
 
     it('basic', async () => {
@@ -171,12 +172,12 @@ describe('Props', () => {
       vm.openMenu()
       await vm.$nextTick()
 
-      const portal = findPortal()
-      expect(portal.classList).toContain('vue-treeselect')
-      expect(portal.firstElementChild.classList).toContain('vue-treeselect__menu')
+      const portalTarget = findPortalTarget()
+      expect(portalTarget.classList).toContain('vue-treeselect')
+      expect(portalTarget.firstElementChild.classList).toContain('vue-treeselect__menu')
     })
 
-    it('should remove portal when component gets destroyed', async () => {
+    it('should remove portal target when component gets destroyed', async () => {
       const wrapper = mount(Treeselect, {
         sync: false,
         propsData: {
@@ -191,14 +192,14 @@ describe('Props', () => {
       vm.openMenu()
       await vm.$nextTick()
 
-      expect(findPortal()).toBeTruthy()
+      expect(findPortalTarget()).toBeTruthy()
 
       await wrapper.destroy()
 
-      expect(findPortal()).toBe(null)
+      expect(findPortalTarget()).toBe(null)
     })
 
-    it('should remove portal when set back to `appendToBody: false`', async () => {
+    it('should remove portal target when set back to `appendToBody: false`', async () => {
       const wrapper = mount(Treeselect, {
         sync: false,
         propsData: {
@@ -208,16 +209,16 @@ describe('Props', () => {
         attachToDocument: true,
       })
 
-      expect(findPortal()).toBe(null)
+      expect(findPortalTarget()).toBe(null)
 
       await wrapper.setProps({ appendToBody: true })
-      expect(findPortal()).toBeTruthy()
+      expect(findPortalTarget()).toBeTruthy()
 
       await wrapper.setProps({ appendToBody: false })
-      expect(findPortal()).toBe(null)
+      expect(findPortalTarget()).toBe(null)
 
       await wrapper.setProps({ appendToBody: true })
-      expect(findPortal()).toBeTruthy()
+      expect(findPortalTarget()).toBeTruthy()
     })
 
     it('portaled menu should be functional', async () => {
@@ -237,8 +238,8 @@ describe('Props', () => {
       vm.openMenu()
       await vm.$nextTick()
 
-      const portal = findPortal()
-      const label = $('.vue-treeselect__label', portal)
+      const portalTarget = findPortalTarget()
+      const label = $('.vue-treeselect__label', portalTarget)
       expect(label.textContent.trim()).toBe('a')
 
       const event = document.createEvent('Event')
@@ -267,7 +268,7 @@ describe('Props', () => {
       expect(menu.element.style.zIndex).toBe('1')
     })
 
-    it('should set `z-index` on portal when appendToBody=true', async () => {
+    it('should set `z-index` on portal target when appendToBody=true', async () => {
       const wrapper = mount(Treeselect, {
         sync: false,
         propsData: {
@@ -282,10 +283,10 @@ describe('Props', () => {
       vm.openMenu()
       await vm.$nextTick()
 
-      const portal = findPortal(wrapper)
-      expect(portal.style.zIndex).toBe('1')
+      const portalTarget = findPortalTarget(wrapper)
+      expect(portalTarget.style.zIndex).toBe('1')
 
-      const menu = $('.vue-treeselect__menu', portal)
+      const menu = $('.vue-treeselect__menu', portalTarget)
       expect(menu.style.zIndex).toBe('')
     })
   })
@@ -1143,11 +1144,9 @@ describe('Props', () => {
         },
       })
       const { vm } = wrapper
-      const { a, b, c, d } = vm.forest.nodeMap
 
       expect(vm.forest.selectedNodeIds).toEqual([ 'a', 'b', 'c', 'd' ])
-      expect(vm.visibleValue).toEqual([ a, b, c, d ])
-      expect(wrapper.findAll('.vue-treeselect__multi-value-item').length).toBe(4)
+      expect(wrapper.findAll(MultiValueItem).length).toBe(4)
       expect(wrapper.contains('.vue-treeselect__limit-tip')).toBe(false)
     })
 
@@ -1173,11 +1172,9 @@ describe('Props', () => {
         },
       })
       const { vm } = wrapper
-      const { a } = vm.forest.nodeMap
 
       expect(vm.forest.selectedNodeIds).toEqual([ 'a', 'b', 'c', 'd' ])
-      expect(vm.visibleValue).toEqual([ a ])
-      expect(wrapper.findAll('.vue-treeselect__multi-value-item').length).toBe(1)
+      expect(wrapper.findAll(MultiValueItem).length).toBe(1)
       expect(wrapper.contains('.vue-treeselect__limit-tip')).toBe(true)
       expect(wrapper.find('.vue-treeselect__limit-tip').text()).toBe('and 3 more')
     })
@@ -1708,13 +1705,15 @@ describe('Props', () => {
         })
         const { vm } = wrapper
 
+        await vm.$nextTick()
+
         expect(vm.localSearch.noResults).toBe(true)
 
         await typeSearchText(wrapper, 'b')
         expect(vm.localSearch.noResults).toBe(false)
 
         const expectedMatchedNodeIds = [ 'ab', 'b' ]
-        const options = wrapper.findAll(TreeselectOption)
+        const options = wrapper.findAll(Option)
         expect(options.length).toBe(4)
         options.wrappers.forEach(option => {
           const { node } = option.vm
@@ -1763,7 +1762,7 @@ describe('Props', () => {
   describe('showCountOnSearch', () => {
     let wrapper
 
-    beforeEach(() => {
+    beforeEach(async () => {
       wrapper = mount(Treeselect, {
         propsData: {
           alwaysOpen: true,
@@ -1791,6 +1790,8 @@ describe('Props', () => {
           showCount: true,
         },
       })
+
+      await wrapper.vm.$nextTick()
     })
 
     it('when showCountOnSearch=false', async () => {
