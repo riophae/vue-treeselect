@@ -142,6 +142,10 @@ export function findLabelContainerByNodeId(wrapper, nodeId) {
   return findOptionByNodeId(wrapper, nodeId).find('.vue-treeselect__label-container')
 }
 
+export function findLabelByNodeId(wrapper, nodeId) {
+  return findOptionByNodeId(wrapper, nodeId).find('.vue-treeselect__label')
+}
+
 export function findChildrenOptionListByNodeId(wrapper, nodeId) {
   return wrapper.findAll(Option).wrappers
     .find(optionWrapper => optionWrapper.vm.node.id === nodeId)
