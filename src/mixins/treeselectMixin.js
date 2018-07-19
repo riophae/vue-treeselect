@@ -1434,7 +1434,7 @@ export default {
       this.menu.current = node.id
       node.isHighlighted = true
 
-      if (scroll) {
+      if (this.menu.isOpen && scroll) {
         const $option = this.$el.querySelector(`.vue-treeselect__option[data-id="${node.id}"]`)
         if ($option) scrollIntoView(this.$refs.menu, $option)
       }

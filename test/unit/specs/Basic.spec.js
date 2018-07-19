@@ -681,14 +681,14 @@ describe('Basic', () => {
     spyOn(console, 'error')
 
     const DELAY = 10
-    const vm = new Vue({
+    const app = new Vue({
       components: { Treeselect },
       data: {
         value: 'a', // <- this creates a fallback node
         options: null,
         loadOptions({ callback }) {
           setTimeout(() => {
-            vm.options = [ {
+            app.options = [ {
               id: 'a',
               label: 'a',
             } ]
@@ -706,13 +706,13 @@ describe('Basic', () => {
         </div>
       `,
     }).$mount()
-    const comp = vm.$children[0]
+    const vm = app.$children[0]
 
-    expect(comp.forest.nodeMap.a.isFallbackNode).toBe(true)
+    expect(vm.forest.nodeMap.a.isFallbackNode).toBe(true)
 
     await sleep(DELAY + 1)
     expect(console.error).not.toHaveBeenCalled()
-    expect(comp.forest.nodeMap.a).not.toHaveMember('isFallbackNode')
+    expect(vm.forest.nodeMap.a).not.toHaveMember('isFallbackNode')
   })
 
   it('should rebuild state after swithching from single to multiple', () => {
