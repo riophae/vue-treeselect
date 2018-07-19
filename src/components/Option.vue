@@ -63,67 +63,6 @@
         )
       },
 
-      renderSubOptions() {
-        const { node } = this
-
-        if (!node.childrenStates.isLoaded) return null
-
-        return node.children.map(childNode => (
-          <Option node={childNode} key={childNode.id} />
-        ))
-      },
-
-      renderNoChildrenTip() {
-        const { instance, node } = this
-
-        if (!node.childrenStates.isLoaded || node.children.length) return null
-
-        return (
-          <Tip type="no-children" icon="warning">{ instance.noChildrenText }</Tip>
-        )
-      },
-
-      renderLoadingChildrenTip() {
-        const { instance, node } = this
-
-        if (!node.childrenStates.isLoading) return null
-
-        return (
-          <Tip type="loading" icon="loader">{ instance.loadingText }</Tip>
-        )
-      },
-
-      renderLoadingChildrenErrorTip() {
-        const { instance, node } = this
-
-        if (!node.childrenStates.loadingError) return null
-
-        return (
-          <Tip type="error" icon="error">
-            { node.childrenStates.loadingError }
-            <a class="vue-treeselect__retry" title={instance.retryTitle} onMousedown={this.handleMouseDownOnRetry}>
-              { instance.retryText }
-            </a>
-          </Tip>
-        )
-      },
-
-      handleMouseEnterOption(evt) {
-        const { instance, node } = this
-
-        // Equivalent to `self` modifier.
-        // istanbul ignore next
-        if (evt.target !== evt.currentTarget) return
-
-        instance.setCurrentHighlightedOption(node, false)
-      },
-
-      handleMouseDownOnRetry: onLeftClick(function handleMouseDownOnRetry() {
-        const { instance, node } = this
-
-        instance.loadChildrenOptions(node)
-      }),
-
       renderArrow() {
         const { instance, node } = this
 
@@ -224,8 +163,8 @@
           : NaN
         const labelClassName = 'vue-treeselect__label'
         const countClassName = 'vue-treeselect__count'
-
         const customLabelRenderer = instance.$scopedSlots['option-label']
+
         if (customLabelRenderer) return customLabelRenderer({
           node,
           shouldShowCount,
@@ -244,6 +183,61 @@
         )
       },
 
+      renderSubOptions() {
+        const { node } = this
+
+        if (!node.childrenStates.isLoaded) return null
+
+        return node.children.map(childNode => (
+          <Option node={childNode} key={childNode.id} />
+        ))
+      },
+
+      renderNoChildrenTip() {
+        const { instance, node } = this
+
+        if (!node.childrenStates.isLoaded || node.children.length) return null
+
+        return (
+          <Tip type="no-children" icon="warning">{ instance.noChildrenText }</Tip>
+        )
+      },
+
+      renderLoadingChildrenTip() {
+        const { instance, node } = this
+
+        if (!node.childrenStates.isLoading) return null
+
+        return (
+          <Tip type="loading" icon="loader">{ instance.loadingText }</Tip>
+        )
+      },
+
+      renderLoadingChildrenErrorTip() {
+        const { instance, node } = this
+
+        if (!node.childrenStates.loadingError) return null
+
+        return (
+          <Tip type="error" icon="error">
+            { node.childrenStates.loadingError }
+            <a class="vue-treeselect__retry" title={instance.retryTitle} onMousedown={this.handleMouseDownOnRetry}>
+              { instance.retryText }
+            </a>
+          </Tip>
+        )
+      },
+
+      handleMouseEnterOption(evt) {
+        const { instance, node } = this
+
+        // Equivalent to `self` modifier.
+        // istanbul ignore next
+        if (evt.target !== evt.currentTarget) return
+
+        instance.setCurrentHighlightedOption(node, false)
+      },
+
       handleMouseDownOnArrow: onLeftClick(function handleMouseDownOnOptionArrow() {
         const { instance, node } = this
 
@@ -258,6 +252,12 @@
         } else {
           instance.select(node)
         }
+      }),
+
+      handleMouseDownOnRetry: onLeftClick(function handleMouseDownOnRetry() {
+        const { instance, node } = this
+
+        instance.loadChildrenOptions(node)
       }),
     },
 

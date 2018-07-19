@@ -2,23 +2,14 @@
   import { onLeftClick, isPromise } from '../utils'
   import SingleValue from './SingleValue'
   import MultiValue from './MultiValue'
-  import ArrowIcon from './icons/Arrow'
   import DeleteIcon from './icons/Delete'
+  import ArrowIcon from './icons/Arrow'
 
   export default {
     name: 'vue-treeselect--control',
     inject: [ 'instance' ],
 
     computed: {
-      shouldShowArrow() {
-        const { instance } = this
-
-        if (!instance.alwaysOpen) return true
-        // Even with `alwaysOpen: true`, sometimes the menu is still closed,
-        // e.g. when the control is disabled.
-        return !instance.menu.isOpen
-      },
-
       shouldShowX() {
         const { instance } = this
 
@@ -28,15 +19,23 @@
           instance.hasUndisabledValue
         )
       },
+
+      shouldShowArrow() {
+        const { instance } = this
+
+        if (!instance.alwaysOpen) return true
+        // Even with `alwaysOpen: true`, sometimes the menu is still closed,
+        // e.g. when the control is disabled.
+        return !instance.menu.isOpen
+      },
     },
 
     methods: {
       renderX() {
         const { instance } = this
+        const title = instance.multiple ? instance.clearAllText : instance.clearValueText
 
         if (!this.shouldShowX) return null
-
-        const title = instance.multiple ? instance.clearAllText : instance.clearValueText
 
         return (
           <div class="vue-treeselect__x-container" title={title} onMousedown={this.handleMouseDownOnX}>
@@ -47,13 +46,12 @@
 
       renderArrow() {
         const { instance } = this
-
-        if (!this.shouldShowArrow) return null
-
         const arrowClass = {
           'vue-treeselect__control-arrow': true,
           'vue-treeselect__control-arrow--rotated': instance.menu.isOpen,
         }
+
+        if (!this.shouldShowArrow) return null
 
         return (
           <div class="vue-treeselect__control-arrow-container" onMousedown={this.handleMouseDownOnArrow}>
@@ -72,11 +70,10 @@
          * need of any polyfill.
          */
 
-        const { instance } = this
-
         evt.stopPropagation()
         evt.preventDefault()
 
+        const { instance } = this
         const result = instance.beforeClearAll()
         const handler = shouldClear => {
           if (shouldClear) {
@@ -100,10 +97,10 @@
       }),
 
       handleMouseDownOnArrow: onLeftClick(function handleMouseDownOnArrow(evt) {
-        const { instance } = this
-
         evt.preventDefault()
         evt.stopPropagation()
+
+        const { instance } = this
 
         // Focus the input or prevent blurring.
         instance.focusInput()

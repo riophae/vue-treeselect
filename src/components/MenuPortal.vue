@@ -29,8 +29,7 @@
 
     render() {
       const { instance } = this
-      // Ensure `vue-treeselect__portal` goes after any other classes.
-      const className = [ instance.wrapperClass, 'vue-treeselect__portal-target' ]
+      const className = [ 'vue-treeselect__portal-target', instance.wrapperClass ]
       const style = { zIndex: instance.zIndex }
 
       return (

@@ -7,9 +7,8 @@
     inject: [ 'instance' ],
 
     render() {
-      const { instance } = this
+      const { instance, $parent: { renderValueContainer } } = this
       const shouldShowValue = instance.hasValue && !instance.trigger.searchQuery
-      const { renderValueContainer } = this.$parent
 
       return renderValueContainer([
         shouldShowValue && (
