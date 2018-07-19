@@ -53,9 +53,7 @@ const webpackConfig = merge(base, {
       new OptimizeJsPlugin({
         sourceMap: config.bundle.prod.productionSourceMap,
       }),
-      new OptimizeCSSPlugin({
-        cssProcessor: config.bundle.prod.cssProcessor,
-      }),
+      new OptimizeCSSPlugin(),
     ],
   },
 })

@@ -19,6 +19,7 @@ module.exports = {
     'import/no-extraneous-dependencies': 0,
     'react/jsx-uses-vars': 2,
     'vue/attributes-order': 0,
+    'vue/no-v-html': 0,
     'multiline-comment-style': 0,
     'no-confusing-arrow': 0,
     'no-console': 0,

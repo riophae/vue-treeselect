@@ -1,12 +1,6 @@
 // see http://vuejs-templates.github.io/webpack for documentation.
 const path = require('path')
 
-const createCssProcessor = sourceMap => require('cssnano')({
-  safe: true,
-  autoprefixer: { disable: true },
-  map: !!sourceMap,
-})
-
 const dev = {
   env: require('./dev.env'),
   port: 8080,
@@ -30,7 +24,6 @@ const bundle = {
     libraryTarget: 'umd',
     env: require('./prod.env'),
     productionSourceMap: false,
-    cssProcessor: createCssProcessor(false),
   },
   dev: {
     jsFilename: 'vue-treeselect.js',
@@ -48,7 +41,6 @@ const docs = {
   assetsPublicPath: '',
   assetsSubDirectory: 'static',
   productionSourceMap: false,
-  cssProcessor: createCssProcessor(false),
   bundleAnalyzerReport: process.env.npm_config_report,
 }
 
