@@ -1751,28 +1751,6 @@ export default {
         this._deselectNode(node)
       }
 
-      if (this.flat) {
-        if (nextState && this.autoSelectAncestors) {
-          node.ancestors.forEach(ancestor => {
-            if (!this.isSelected(ancestor)) this._selectNode(ancestor)
-          })
-        } else if (nextState && this.autoSelectDescendants) {
-          this.traverseDescendantsBFS(node, descendant => {
-            if (!this.isSelected(descendant)) this._selectNode(descendant)
-          })
-        }
-
-        if (!nextState && this.autoDeselectAncestors) {
-          node.ancestors.forEach(ancestor => {
-            if (this.isSelected(ancestor)) this._deselectNode(ancestor)
-          })
-        } else if (!nextState && this.autoDeselectDescendants) {
-          this.traverseDescendantsBFS(node, descendant => {
-            if (this.isSelected(descendant)) this._deselectNode(descendant)
-          })
-        }
-      }
-
       this.buildForestState()
 
       if (nextState) {
@@ -1806,8 +1784,24 @@ export default {
 
     // This is meant to be called only by `select()`.
     _selectNode(node) {
-      if (this.single || this.flat || this.disableBranchNodes) {
+      if (this.single || this.disableBranchNodes) {
         return this.addValue(node)
+      }
+
+      if (this.flat) {
+        this.addValue(node)
+
+        if (this.autoSelectAncestors) {
+          node.ancestors.forEach(ancestor => {
+            if (!this.isSelected(ancestor) && !ancestor.isDisabled) this.addValue(ancestor)
+          })
+        } else if (this.autoSelectDescendants) {
+          this.traverseDescendantsBFS(node, descendant => {
+            if (!this.isSelected(descendant) && !descendant.isDisabled) this.addValue(descendant)
+          })
+        }
+
+        return
       }
 
       if (node.isLeaf || (node.isBranch && !node.hasDisabledDescendants)) {
@@ -1831,8 +1825,24 @@ export default {
 
     // This is meant to be called only by `select()`.
     _deselectNode(node) {
-      if (this.single || this.flat || this.disableBranchNodes) {
+      if (this.disableBranchNodes) {
         return this.removeValue(node)
+      }
+
+      if (this.flat) {
+        this.removeValue(node)
+
+        if (this.autoDeselectAncestors) {
+          node.ancestors.forEach(ancestor => {
+            if (this.isSelected(ancestor) && !ancestor.isDisabled) this.removeValue(ancestor)
+          })
+        } else if (this.autoDeselectDescendants) {
+          this.traverseDescendantsBFS(node, descendant => {
+            if (this.isSelected(descendant) && !descendant.isDisabled) this.removeValue(descendant)
+          })
+        }
+
+        return
       }
 
       let hasUncheckedSomeDescendants = false

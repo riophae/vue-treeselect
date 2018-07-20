@@ -384,6 +384,18 @@ describe('Props', () => {
           }, {
             id: 'b',
             label: 'b',
+            children: [ {
+              id: 'ba',
+              label: 'ba',
+              isDisabled: true,
+              children: [ {
+                id: 'baa',
+                label: 'baa',
+              } ],
+            } ],
+          }, {
+            id: 'c',
+            label: 'c',
           } ],
         },
       })
@@ -401,6 +413,17 @@ describe('Props', () => {
       expect(vm.internalValue).toEqual([ 'aa', 'aaa', 'a' ])
     })
 
+    it('autoSelectAncestors + disabled nodes', () => {
+      wrapper.setProps({
+        autoSelectAncestors: true,
+        value: [],
+      })
+      expect(vm.internalValue).toEqual([])
+
+      vm.select(vm.forest.nodeMap.baa)
+      expect(vm.internalValue).toEqual([ 'baa', 'b' ])
+    })
+
     it('autoSelectDescendants', () => {
       wrapper.setProps({
         autoSelectDescendants: true,
@@ -410,6 +433,17 @@ describe('Props', () => {
 
       vm.select(vm.forest.nodeMap.a)
       expect(vm.internalValue).toEqual([ 'aa', 'a', 'ab', 'aaa', 'aab' ])
+    })
+
+    it('autoSelectDescendants + disabled nodes', () => {
+      wrapper.setProps({
+        autoSelectDescendants: true,
+        value: [],
+      })
+      expect(vm.internalValue).toEqual([])
+
+      vm.select(vm.forest.nodeMap.b)
+      expect(vm.internalValue).toEqual([ 'b', 'baa' ])
     })
 
     it('autoDeselectAncestors', () => {
@@ -423,6 +457,17 @@ describe('Props', () => {
       expect(vm.internalValue).toEqual([ 'aab' ])
     })
 
+    it('autoDeselectAncestors + disabled nodes', () => {
+      wrapper.setProps({
+        autoDeselectAncestors: true,
+        value: [ 'b', 'ba', 'baa' ],
+      })
+      expect(vm.internalValue).toEqual([ 'b', 'ba', 'baa' ])
+
+      vm.select(vm.forest.nodeMap.baa)
+      expect(vm.internalValue).toEqual([ 'ba' ])
+    })
+
     it('autoDeselectDescendants', () => {
       wrapper.setProps({
         autoDeselectDescendants: true,
@@ -432,6 +477,17 @@ describe('Props', () => {
 
       vm.select(vm.forest.nodeMap.a)
       expect(vm.internalValue).toEqual([])
+    })
+
+    it('autoDeselectDescendants + disabled nodes', () => {
+      wrapper.setProps({
+        autoDeselectDescendants: true,
+        value: [ 'b', 'ba', 'baa' ],
+      })
+      expect(vm.internalValue).toEqual([ 'b', 'ba', 'baa' ])
+
+      vm.select(vm.forest.nodeMap.b)
+      expect(vm.internalValue).toEqual([ 'ba' ])
     })
 
     it('must be used in conjunction with `flat=true`', () => {
@@ -1088,6 +1144,8 @@ describe('Props', () => {
         expect(vm.forest.selectedNodeMap).toEqual({ leaf: true })
         expect(vm.forest.selectedNodeIds).toEqual([ 'leaf' ])
         expect(vm.internalValue).toEqual([ 'leaf' ])
+        vm.select(vm.forest.nodeMap.leaf)
+        expect(vm.internalValue).toEqual([])
       })
 
       describe('combined with valueConsistsOf (multi-select mode)', () => {
