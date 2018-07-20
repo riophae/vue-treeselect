@@ -488,6 +488,44 @@ describe('Props', () => {
         bb: jasmine.objectContaining({ index: [ 1, 1 ] }),
       })
     })
+
+    it('should resort nodes after value of `branchNodesFirst` changes', () => {
+      const wrapper = mount(Treeselect, {
+        propsData: {
+          branchNodesFirst: false,
+          options: [ {
+            id: 'a',
+            label: 'a',
+          }, {
+            id: 'b',
+            label: 'b',
+            children: [ {
+              id: 'ba',
+              label: 'ba',
+            }, {
+              id: 'bb',
+              label: 'bb',
+              children: [],
+            }, {
+              id: 'bc',
+              label: 'bc',
+            } ],
+          }, {
+            id: 'c',
+            label: 'c',
+          } ],
+        },
+      })
+      const { vm } = wrapper
+
+      expect(vm.forest.normalizedOptions.map(node => node.id)).toEqual([ 'a', 'b', 'c' ])
+      expect(vm.forest.nodeMap.b.children.map(node => node.id)).toEqual([ 'ba', 'bb', 'bc' ])
+
+      wrapper.setProps({ branchNodesFirst: true })
+
+      expect(vm.forest.normalizedOptions.map(node => node.id)).toEqual([ 'b', 'a', 'c' ])
+      expect(vm.forest.nodeMap.b.children.map(node => node.id)).toEqual([ 'bb', 'ba', 'bc' ])
+    })
   })
 
   describe('clearable', () => {
