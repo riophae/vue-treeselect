@@ -1354,6 +1354,10 @@ export default {
       return true
     },
 
+    getControl() {
+      return this.$refs.control.$el
+    },
+
     getMenu() {
       const ref = this.appendToBody ? this.$refs.portal.portalTarget : this
       const $menu = ref.$refs.menu.$el

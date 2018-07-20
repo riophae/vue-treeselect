@@ -1,6 +1,7 @@
 <script>
   import Vue from 'vue'
   import domAlign from 'dom-align'
+  import { watchSize } from '../utils'
   import Menu from './Menu'
 
   const PortalTarget = {
@@ -11,6 +12,10 @@
       'instance.menu.isOpen'(newValue) {
         if (newValue) this.updateStyle()
       },
+    },
+
+    created() {
+      this._stopWatchingSize = null
     },
 
     methods: {
@@ -40,7 +45,15 @@
     },
 
     mounted() {
+      const { instance } = this
+      const $control = instance.getControl()
+
+      this._stopWatchingSize = watchSize($control, this.updateStyle)
       this.updateStyle()
+    },
+
+    destroyed() {
+      this._stopWatchingSize()
     },
   }
 
@@ -48,7 +61,6 @@
 
   export default {
     name: 'vue-treeselect--menu-portal',
-    inject: [ 'instance' ],
 
     created() {
       this.portalTarget = null
