@@ -146,8 +146,6 @@
             this.clear()
           } else if (instance.menu.isOpen) {
             instance.closeMenu()
-          } else if (instance.escapeClearsValue) {
-            instance.clear()
           }
           break
         }

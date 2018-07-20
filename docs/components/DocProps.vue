@@ -156,11 +156,6 @@
         defaultValue: code('false'),
         description: `Set to ${code('true')} to disable the fuzzy matching functionality, which is enabled by default.`,
       }, {
-        name: 'escapeClearsValue',
-        type: 'Boolean',
-        defaultValue: code('true'),
-        description: 'Whether <kbd>Esc</kbd> clears the value when the menu is closed.',
-      }, {
         name: 'flat',
         type: 'Boolean',
         defaultValue: code('false'),

@@ -179,7 +179,6 @@ describe('Keyboard Support', () => {
             label: 'b',
           } ],
           multiple: true,
-          escapeClearsValue: true,
           value: [ 'a', 'b' ],
         },
       })
@@ -198,25 +197,6 @@ describe('Keyboard Support', () => {
       expect(vm.trigger.searchQuery).toBe('')
       expect(vm.forest.selectedNodeIds).toEqual([ 'a', 'b' ])
 
-      pressEscapeKey(wrapper)
-      expect(vm.trigger.searchQuery).toBe('')
-      expect(vm.forest.selectedNodeIds).toEqual([ 'a', 'b' ])
-      expect(vm.menu.isOpen).toBe(false)
-    })
-
-    it('should reset value if menu is closed', () => {
-      expect(vm.trigger.searchQuery).toBe('')
-      expect(vm.forest.selectedNodeIds).toEqual([ 'a', 'b' ])
-      expect(vm.menu.isOpen).toBe(false)
-
-      pressEscapeKey(wrapper)
-      expect(vm.trigger.searchQuery).toBe('')
-      expect(vm.forest.selectedNodeIds).toEqual([])
-      expect(vm.menu.isOpen).toBe(false)
-    })
-
-    it('should not reset value when escapeClearsValue=false', () => {
-      wrapper.setProps({ escapeClearsValue: false })
       pressEscapeKey(wrapper)
       expect(vm.trigger.searchQuery).toBe('')
       expect(vm.forest.selectedNodeIds).toEqual([ 'a', 'b' ])
