@@ -856,23 +856,30 @@ export default {
     verifyProps() {
       warning(
         () => this.id == null,
-        () => '`id` prop is deprecated. Use `instanceId` instead.'
+        () => '`id` prop is deprecated. Use `instanceId` instead.',
       )
 
       warning(
         () => !this.autofocus,
-        () => '`autofocus` prop is deprecated. Use `autoFocus` instead.'
+        () => '`autofocus` prop is deprecated. Use `autoFocus` instead.',
       )
 
       warning(
         () => this.async ? this.searchable : true,
-        () => 'For async search mode, the value of `searchable` prop must be true.'
+        () => 'For async search mode, the value of "searchable" prop must be true.',
       )
 
       if (this.options == null && !this.loadOptions) {
         warning(
           () => false,
-          () => 'Are you meant to dynamically load options? You need to use `loadOptions` prop.'
+          () => 'Are you meant to dynamically load options? You need to use "loadOptions" prop.',
+        )
+      }
+
+      if (this.flat) {
+        warning(
+          () => this.multiple,
+          () => 'You are using flat mode. But you forgot to add "multiple=true"?',
         )
       }
     },
@@ -1518,7 +1525,7 @@ export default {
             if (!isLoaded && typeof this.loadOptions !== 'function') {
               warning(
                 () => false,
-                () => 'Unloaded branch node detected. `loadOptions` prop is required to load its children.'
+                () => 'Unloaded branch node detected. "loadOptions" prop is required to load its children.'
               )
             } else if (!isLoaded && normalized.isExpanded) {
               this.loadChildrenOptions(normalized)

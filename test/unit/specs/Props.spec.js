@@ -305,7 +305,7 @@ describe('Props', () => {
 
       expect(console.error).toHaveBeenCalledWith(
         '[Vue-Treeselect Warning]',
-        'For async search mode, the value of `searchable` prop must be true.'
+        'For async search mode, the value of "searchable" prop must be true.'
       )
     })
   })
@@ -1081,6 +1081,24 @@ describe('Props', () => {
       wrapper.setProps({ disableFuzzyMatching: true })
       await typeSearchText(wrapper, 'jb')
       expect(vm.forest.nodeMap.jamesblunt.isMatched).toBe(false)
+    })
+  })
+
+  describe('flat', () => {
+    it('must be used in conjunction with `multiple=true`', () => {
+      spyOn(console, 'error')
+
+      mount(Treeselect, {
+        propsData: {
+          options: [],
+          flat: true,
+        },
+      })
+
+      expect(console.error).toHaveBeenCalledWith(
+        '[Vue-Treeselect Warning]',
+        'You are using flat mode. But you forgot to add "multiple=true"?'
+      )
     })
   })
 

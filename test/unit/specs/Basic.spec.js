@@ -179,6 +179,7 @@ describe('Basic', () => {
         const wrapper = mount(Treeselect, {
           propsData: {
             flat: false,
+            multiple: true,
             options,
           },
         })
@@ -191,6 +192,7 @@ describe('Basic', () => {
         const wrapper = mount(Treeselect, {
           propsData: {
             flat: true,
+            multiple: true,
             options,
           },
         })
@@ -222,6 +224,7 @@ describe('Basic', () => {
       const wrapper = mount(Treeselect, {
         propsData: {
           flat: true,
+          multiple: true,
           options: [ {
             id: 'a',
             label: 'a',

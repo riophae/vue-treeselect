@@ -23,7 +23,7 @@ describe('Dynamical Loading', () => {
 
       expect(console.error).toHaveBeenCalledWith(
         '[Vue-Treeselect Warning]',
-        'Are you meant to dynamically load options? You need to use `loadOptions` prop.',
+        'Are you meant to dynamically load options? You need to use "loadOptions" prop.',
       )
     })
 
@@ -42,7 +42,7 @@ describe('Dynamical Loading', () => {
 
       expect(console.error).toHaveBeenCalledWith(
         '[Vue-Treeselect Warning]',
-        'Unloaded branch node detected. `loadOptions` prop is required to load its children.',
+        'Unloaded branch node detected. "loadOptions" prop is required to load its children.',
       )
     })
   })
