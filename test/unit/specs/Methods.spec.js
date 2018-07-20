@@ -26,6 +26,55 @@ describe('Methods', () => {
     })
   })
 
+  describe('clear()', () => {
+    let wrapper, vm
+
+    beforeEach(() => {
+      wrapper = mount(Treeselect, {
+        propsData: {
+          options: [ {
+            id: 'a',
+            label: 'a',
+          }, {
+            id: 'b',
+            label: 'b',
+          }, {
+            id: 'c',
+            label: 'c',
+            isDisabled: true,
+          } ],
+        },
+      })
+      vm = wrapper.vm
+    })
+
+    it('when multiple=false', () => {
+      wrapper.setProps({ multiple: false })
+
+      wrapper.setProps({ value: 'a' })
+      vm.clear()
+      expect(vm.internalValue).toEqual([])
+
+      // Should clear disabled value.
+      wrapper.setProps({ value: 'c' })
+      vm.clear()
+      expect(vm.internalValue).toEqual([])
+    })
+
+    it('when multiple=true', () => {
+      wrapper.setProps({ multiple: true })
+
+      wrapper.setProps({ value: [ 'a', 'b' ] })
+      vm.clear()
+      expect(vm.internalValue).toEqual([])
+
+      // Should not clear disabled value.
+      wrapper.setProps({ value: [ 'a', 'b', 'c' ] })
+      vm.clear()
+      expect(vm.internalValue).toEqual([ 'c' ])
+    })
+  })
+
   it('focusInput() & blurInput()', () => {
     const wrapper = mount(Treeselect, {
       attachToDocument: true,

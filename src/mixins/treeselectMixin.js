@@ -1380,6 +1380,7 @@ export default {
         if (this.getMenu()) {
           scrollToOption()
         } else {
+          // istanbul ignore next
           this.$nextTick(scrollToOption)
         }
       }
