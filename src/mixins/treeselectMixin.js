@@ -1356,7 +1356,8 @@ export default {
 
     getMenu() {
       const ref = this.appendToBody ? this.$refs.portal.portalTarget : this
-      return ref.$refs.menu.$el
+      const $menu = ref.$refs.menu.$el
+      return $menu && $menu.nodeName !== '#comment' ? $menu : null
     },
 
     setCurrentHighlightedOption(node, scroll = true) {
@@ -1364,13 +1365,23 @@ export default {
       if (prev != null && prev in this.forest.nodeMap) {
         this.forest.nodeMap[prev].isHighlighted = false
       }
+
       this.menu.current = node.id
       node.isHighlighted = true
 
       if (this.menu.isOpen && scroll) {
-        const $menu = this.getMenu()
-        const $option = $menu.querySelector(`.vue-treeselect__option[data-id="${node.id}"]`)
-        if ($option) scrollIntoView($menu, $option)
+        const scrollToOption = () => {
+          const $menu = this.getMenu()
+          const $option = $menu.querySelector(`.vue-treeselect__option[data-id="${node.id}"]`)
+          if ($option) scrollIntoView($menu, $option)
+        }
+
+        // In case `openMenu()` is just called and the menu is not rendered yet.
+        if (this.getMenu()) {
+          scrollToOption()
+        } else {
+          this.$nextTick(scrollToOption)
+        }
       }
     },
 
@@ -1433,8 +1444,8 @@ export default {
       if (this.disabled || this.menu.isOpen) return
       this.menu.isOpen = true
       this.$nextTick(this.adjustMenuOpenDirection)
-      this.$nextTick(this.resetHighlightedOptionWhenNecessary)
       this.$nextTick(this.restoreMenuScrollPosition)
+      this.$nextTick(this.resetHighlightedOptionWhenNecessary)
       if (!this.options && !this.async) this.loadRootOptions()
       this.toggleClickOutsideEvent(true)
       this.$emit('open', this.getInstanceId())

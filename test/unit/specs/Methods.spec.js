@@ -46,32 +46,56 @@ describe('Methods', () => {
   })
 
   describe('getMenu()', () => {
-    const createInstance = async appendToBody => {
+    let vm
+
+    const createInstance = appendToBody => {
       const wrapper = mount(Treeselect, {
+        sync: false,
         propsData: {
           appendToBody,
           options: [],
         },
         attachToDocument: true,
       })
-      const { vm } = wrapper
+      vm = wrapper.vm
+    }
+
+    afterEach(() => {
+      vm.$destroy()
+      vm = null
+    })
+
+    it('when appendToBody=false', async () => {
+      createInstance(false)
 
       vm.openMenu()
       await vm.$nextTick()
 
-      return vm
-    }
-
-    it('when appendToBody=false', async () => {
-      const vm = await createInstance(false)
       expect(vm.getMenu().classList).toContain('vue-treeselect__menu')
       vm.$destroy()
     })
 
     it('when appendToBody=true', async () => {
-      const vm = await createInstance(true)
+      createInstance(true)
+
+      vm.openMenu()
+      await vm.$nextTick()
+
       expect(vm.getMenu().classList).toContain('vue-treeselect__menu')
       vm.$destroy()
+    })
+
+    it('when menu is closed', async () => {
+      createInstance(false)
+      expect(vm.getMenu()).toBe(null)
+
+      vm.openMenu()
+      await vm.$nextTick()
+      expect(vm.getMenu().classList).toContain('vue-treeselect__menu')
+
+      vm.closeMenu()
+      await vm.$nextTick()
+      expect(vm.getMenu()).toBe(null)
     })
   })
 
