@@ -434,7 +434,7 @@ describe('Props', () => {
       expect(vm.internalValue).toEqual([])
     })
 
-    it('must be used in counjunction with `flat=true`', () => {
+    it('must be used in conjunction with `flat=true`', () => {
       spyOn(console, 'error')
 
       function test(propName) {
