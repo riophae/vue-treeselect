@@ -356,6 +356,110 @@ describe('Props', () => {
     })
   })
 
+  describe('auto(De)SelectX', () => {
+    let wrapper, vm
+
+    beforeEach(() => {
+      wrapper = mount(Treeselect, {
+        propsData: {
+          multiple: true,
+          flat: true,
+          options: [ {
+            id: 'a',
+            label: 'a',
+            children: [ {
+              id: 'aa',
+              label: 'aa',
+              children: [ {
+                id: 'aaa',
+                label: 'aaa',
+              }, {
+                id: 'aab',
+                label: 'aab',
+              } ],
+            }, {
+              id: 'ab',
+              label: 'ab',
+            } ],
+          }, {
+            id: 'b',
+            label: 'b',
+          } ],
+        },
+      })
+      vm = wrapper.vm
+    })
+
+    it('autoSelectAncestors', () => {
+      wrapper.setProps({
+        autoSelectAncestors: true,
+        value: [ 'aa' ],
+      })
+      expect(vm.internalValue).toEqual([ 'aa' ])
+
+      vm.select(vm.forest.nodeMap.aaa)
+      expect(vm.internalValue).toEqual([ 'aa', 'aaa', 'a' ])
+    })
+
+    it('autoSelectDescendants', () => {
+      wrapper.setProps({
+        autoSelectDescendants: true,
+        value: [ 'aa' ],
+      })
+      expect(vm.internalValue).toEqual([ 'aa' ])
+
+      vm.select(vm.forest.nodeMap.a)
+      expect(vm.internalValue).toEqual([ 'aa', 'a', 'ab', 'aaa', 'aab' ])
+    })
+
+    it('autoDeselectAncestors', () => {
+      wrapper.setProps({
+        autoDeselectAncestors: true,
+        value: [ 'aa', 'aaa', 'aab' ],
+      })
+      expect(vm.internalValue).toEqual([ 'aa', 'aaa', 'aab' ])
+
+      vm.select(vm.forest.nodeMap.aaa)
+      expect(vm.internalValue).toEqual([ 'aab' ])
+    })
+
+    it('autoDeselectDescendants', () => {
+      wrapper.setProps({
+        autoDeselectDescendants: true,
+        value: [ 'a', 'aaa', 'aab' ],
+      })
+      expect(vm.internalValue).toEqual([ 'a', 'aaa', 'aab' ])
+
+      vm.select(vm.forest.nodeMap.a)
+      expect(vm.internalValue).toEqual([])
+    })
+
+    it('must be used in counjunction with `flat=true`', () => {
+      spyOn(console, 'error')
+
+      function test(propName) {
+        mount(Treeselect, {
+          propsData: {
+            [propName]: true,
+            multiple: true,
+            options: [],
+          },
+        })
+
+        expect(console.error).toHaveBeenCalledWith(
+          '[Vue-Treeselect Warning]',
+          `"${propName}" only applies to flat mode.`,
+        )
+        console.error.calls.reset()
+      }
+
+      test('autoSelectAncestors')
+      test('autoSelectDescendants')
+      test('autoDeselectAncestors')
+      test('autoDeselectDescendants')
+    })
+  })
+
   describe('beforeClearAll', () => {
     async function clickOnX(wrapper) {
       const x = wrapper.find('.vue-treeselect__x-container')

@@ -120,6 +120,38 @@ export default {
     },
 
     /**
+     * When user deselects a node, automatically deselect its ancestors. Applies to flat mode only.
+     */
+    autoDeselectAncestors: {
+      type: Boolean,
+      default: false,
+    },
+
+    /**
+     * When user deselects a node, automatically deselect its descendants. Applies to flat mode only.
+     */
+    autoDeselectDescendants: {
+      type: Boolean,
+      default: false,
+    },
+
+    /**
+     * When user selects a node, automatically select its ancestors. Applies to flat mode only.
+     */
+    autoSelectAncestors: {
+      type: Boolean,
+      default: false,
+    },
+
+    /**
+     * When user selects a node, automatically select its descendants. Applies to flat mode only.
+     */
+    autoSelectDescendants: {
+      type: Boolean,
+      default: false,
+    },
+
+    /**
      * Whether pressing backspace key removes the last item if there is no text input.
      */
     backspaceRemoves: {
@@ -881,6 +913,22 @@ export default {
           () => this.multiple,
           () => 'You are using flat mode. But you forgot to add "multiple=true"?',
         )
+      }
+
+      if (!this.flat) {
+        const propNames = [
+          'autoSelectAncestors',
+          'autoSelectDescendants',
+          'autoDeselectAncestors',
+          'autoDeselectDescendants',
+        ]
+
+        propNames.forEach(propName => {
+          warning(
+            () => !this[propName],
+            () => `"${propName}" only applies to flat mode.`,
+          )
+        })
       }
     },
 
@@ -1701,6 +1749,28 @@ export default {
         this._selectNode(node)
       } else {
         this._deselectNode(node)
+      }
+
+      if (this.flat) {
+        if (nextState && this.autoSelectAncestors) {
+          node.ancestors.forEach(ancestor => {
+            if (!this.isSelected(ancestor)) this._selectNode(ancestor)
+          })
+        } else if (nextState && this.autoSelectDescendants) {
+          this.traverseDescendantsBFS(node, descendant => {
+            if (!this.isSelected(descendant)) this._selectNode(descendant)
+          })
+        }
+
+        if (!nextState && this.autoDeselectAncestors) {
+          node.ancestors.forEach(ancestor => {
+            if (this.isSelected(ancestor)) this._deselectNode(ancestor)
+          })
+        } else if (!nextState && this.autoDeselectDescendants) {
+          this.traverseDescendantsBFS(node, descendant => {
+            if (this.isSelected(descendant)) this._deselectNode(descendant)
+          })
+        }
       }
 
       this.buildForestState()

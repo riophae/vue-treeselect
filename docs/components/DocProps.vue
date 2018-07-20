@@ -56,6 +56,26 @@
         defaultValue: code('true'),
         description: `Automatically load root options on mount. When set to ${code('false')}, root options will be loaded when the menu is opened.`,
       }, {
+        name: 'autoDeselectAncestors',
+        type: 'Boolean',
+        defaultValue: code('false'),
+        description: 'When user deselects a node, automatically deselect its ancestors. Applies to flat mode only.',
+      }, {
+        name: 'autoDeselectDescendants',
+        type: 'Boolean',
+        defaultValue: code('false'),
+        description: 'When user deselects a node, automatically deselect its descendants. Applies to flat mode only.',
+      }, {
+        name: 'autoSelectAncestors',
+        type: 'Boolean',
+        defaultValue: code('false'),
+        description: 'When user selects a node, automatically select its ancestors. Applies to flat mode only.',
+      }, {
+        name: 'autoSelectDescendants',
+        type: 'Boolean',
+        defaultValue: code('false'),
+        description: 'When user selects a node, automatically select its descendants. Applies to flat mode only.',
+      }, {
         name: 'backspaceRemoves',
         type: 'Boolean',
         defaultValue: code('true'),
