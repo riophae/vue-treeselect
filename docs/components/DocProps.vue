@@ -43,7 +43,7 @@
       }, {
         name: 'async',
         type: 'Boolean',
-        defaultValue: code('true'),
+        defaultValue: code('false'),
         description: `Whether to enable ${link('#async-searching', 'async search mode')}.`,
       }, {
         name: 'autoFocus',
