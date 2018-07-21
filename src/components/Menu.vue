@@ -1,6 +1,16 @@
 <script>
+  import { MENU_BUFFER } from '../constants'
+  import setupResizeAndScrollEventListeners from '../setupResizeAndScrollEventListeners'
+  import { watchSize } from '../utils'
   import Option from './Option'
   import Tip from './Tip'
+
+  const directionMap = {
+    top: 'top',
+    bottom: 'bottom',
+    above: 'top',
+    below: 'bottom',
+  }
 
   export default {
     name: 'vue-treeselect--menu',
@@ -11,10 +21,42 @@
         const { instance } = this
 
         return {
-          maxHeight: instance.menu.optimizedHeight + 'px',
-          zIndex: instance.appendToBody ? null : instance.zIndex,
+          maxHeight: instance.maxHeight + 'px',
         }
       },
+
+      menuContainerStyle() {
+        const { instance } = this
+        const zIndex = instance.appendToBody ? null : instance.zIndex
+
+        return { zIndex }
+      },
+    },
+
+    watch: {
+      'instance.menu.isOpen'(newValue) {
+        if (newValue) {
+          // In case `openMenu()` is just called and the menu is not rendered yet.
+          this.$nextTick(this.onMenuOpen)
+        } else {
+          this.onMenuClose()
+        }
+      },
+    },
+
+    created() {
+      this.menuSizeWatcher = null
+      this.menuResizeAndScrollEventListeners = null
+    },
+
+    mounted() {
+      const { instance } = this
+
+      if (instance.menu.isOpen) this.$nextTick(this.onMenuOpen)
+    },
+
+    destroyed() {
+      this.onMenuClose()
     },
 
     methods: {
@@ -24,7 +66,7 @@
         if (!instance.menu.isOpen) return null
 
         return (
-          <div class="vue-treeselect__menu" onMousedown={instance.handleMouseDown} style={this.menuStyle}>
+          <div ref="menu" class="vue-treeselect__menu" onMousedown={instance.handleMouseDown} style={this.menuStyle}>
             {instance.async
               ? this.renderAsyncSearchMenuInner()
               : instance.localSearch.active
@@ -157,13 +199,92 @@
           <Tip type="no-results" icon="warning">{ instance.noResultsText }</Tip>
         )
       },
+
+      onMenuOpen() {
+        this.adjustMenuOpenDirection()
+        this.setupMenuSizeWatcher()
+        this.setupMenuResizeAndScrollEventListeners()
+      },
+
+      onMenuClose() {
+        this.removeMenuSizeWatcher()
+        this.removeMenuResizeAndScrollEventListeners()
+      },
+
+      adjustMenuOpenDirection() {
+        const { instance } = this
+        if (!instance.menu.isOpen) return
+
+        const $menu = instance.getMenu()
+        const $control = instance.getControl()
+        const menuRect = $menu.getBoundingClientRect()
+        const controlRect = $control.getBoundingClientRect()
+        const menuHeight = menuRect.height
+        const viewportHeight = window.innerHeight
+        const spaceAbove = controlRect.top
+        const spaceBelow = window.innerHeight - controlRect.bottom
+        const isControlInViewport = (
+          (controlRect.top >= 0 && controlRect.top <= viewportHeight) ||
+          (controlRect.top < 0 && controlRect.bottom > 0)
+        )
+        const hasEnoughSpaceBelow = spaceBelow > menuHeight + MENU_BUFFER
+        const hasEnoughSpaceAbove = spaceAbove > menuHeight + MENU_BUFFER
+
+        if (!isControlInViewport) {
+          instance.closeMenu()
+        } else if (instance.openDirection !== 'auto') {
+          instance.menu.placement = directionMap[instance.openDirection]
+        } else if (hasEnoughSpaceBelow || !hasEnoughSpaceAbove) {
+          instance.menu.placement = 'bottom'
+        } else {
+          instance.menu.placement = 'top'
+        }
+      },
+
+      setupMenuSizeWatcher() {
+        const { instance } = this
+        const $menu = instance.getMenu()
+
+        if (this.menuSizeWatcher) return
+
+        this.menuSizeWatcher = {
+          remove: watchSize($menu, this.adjustMenuOpenDirection),
+        }
+      },
+
+      setupMenuResizeAndScrollEventListeners() {
+        const { instance } = this
+        const $control = instance.getControl()
+
+        if (this.menuResizeAndScrollEventListeners) return
+
+        this.menuResizeAndScrollEventListeners = {
+          remove: setupResizeAndScrollEventListeners($control, this.adjustMenuOpenDirection),
+        }
+      },
+
+      removeMenuSizeWatcher() {
+        if (!this.menuSizeWatcher) return
+
+        this.menuSizeWatcher.remove()
+        this.menuSizeWatcher = null
+      },
+
+      removeMenuResizeAndScrollEventListeners() {
+        if (!this.menuResizeAndScrollEventListeners) return
+
+        this.menuResizeAndScrollEventListeners.remove()
+        this.menuResizeAndScrollEventListeners = null
+      },
     },
 
     render() {
       return (
-        <transition name="vue-treeselect__menu--transition">
-          {this.renderMenu()}
-        </transition>
+        <div ref="menu-container" class="vue-treeselect__menu-container" style={this.menuContainerStyle}>
+          <transition name="vue-treeselect__menu--transition">
+            {this.renderMenu()}
+          </transition>
+        </div>
       )
     },
   }

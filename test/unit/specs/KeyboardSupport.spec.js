@@ -170,6 +170,7 @@ describe('Keyboard Support', () => {
 
     beforeEach(() => {
       wrapper = mount(Treeselect, {
+        sync: false,
         propsData: {
           options: [ {
             id: 'a',
@@ -544,7 +545,9 @@ describe('Keyboard Support', () => {
           />
         </div>
       `,
-    }))
+    }), {
+      sync: false,
+    })
     const { vm } = wrapper.find(Treeselect)
 
     vm.openMenu()

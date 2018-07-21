@@ -666,16 +666,32 @@
  * Menu
  */
 
+.vue-treeselect__menu-container {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  overflow: visible;
+  transition: 0s;
+
+  .vue-treeselect--open-below:not(.vue-treeselect--append-to-body) & {
+    top: 100%;
+  }
+
+  .vue-treeselect--open-above:not(.vue-treeselect--append-to-body) & {
+    bottom: 100%;
+  }
+}
+
 .vue-treeselect__menu {
   .reset-cursor(); // set to normal cursor since text is unselectable
   .vertical-padding(@treeselect-menu-padding-y);
 
   display: block;
   position: absolute;
-  right: 0;
-  left: 0;
   overflow-x: hidden;
   overflow-y: auto;
+  // IE9 doesn't properly handle `width: 100%` with scrollbar when `box-sizing: border-box`
+  width: auto;
   border: 1px solid @treeselect-control-border-color-active;
   background: @treeselect-menu-bg;
   line-height: @treeselect-menu-line-height;
@@ -685,7 +701,7 @@
   .vue-treeselect--open-below & {
     .border-radius-bottom(@treeselect-border-radius-lg);
 
-    top: 100%;
+    top: 0;
     margin-top: (-@treeselect-control-border-width);
     border-top-color: @treeselect-control-menu-divider-color;
     box-shadow: @treeselect-menu-box-shadow;
@@ -694,7 +710,7 @@
   .vue-treeselect--open-above & {
     .border-radius-top(@treeselect-border-radius-lg);
 
-    bottom: 100%;
+    bottom: 0;
     margin-bottom: (-@treeselect-control-border-width);
     border-bottom-color: @treeselect-control-menu-divider-color;
   }
@@ -1048,7 +1064,10 @@
 .vue-treeselect__portal-target {
   position: absolute;
   display: block;
+  left: 0;
+  top: 0;
   height: 0;
+  width: 0;
   padding: 0;
   margin: 0;
   border: 0;

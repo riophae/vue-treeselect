@@ -118,6 +118,10 @@ export function findInput(wrapper) {
   return wrapper.find('.vue-treeselect__input')
 }
 
+export function findMenuContainer(wrapper) {
+  return wrapper.find('.vue-treeselect__menu-container')
+}
+
 export function findMenu(wrapper) {
   return wrapper.find('.vue-treeselect__menu')
 }

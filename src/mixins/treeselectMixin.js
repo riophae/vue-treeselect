@@ -15,7 +15,6 @@ import {
   ALL, BRANCH_PRIORITY, LEAF_PRIORITY, ALL_WITH_INDETERMINATE,
   ALL_CHILDREN, ALL_DESCENDANTS, LEAF_CHILDREN, LEAF_DESCENDANTS,
   ORDER_SELECTED, LEVEL, INDEX,
-  MENU_BUFFER,
 } from '../constants'
 
 function sortValueByIndex(a, b) {
@@ -433,6 +432,7 @@ export default {
     },
 
     /**
+     * TODO:
      * By default the menu will open whereever there is more space once there is not enough space below to open at `maxHeight`.
      * Use this prop to force the menu to always open to specified direction.
      * Acceptable values:
@@ -445,6 +445,10 @@ export default {
     openDirection: {
       type: String,
       default: 'auto',
+      validator(value) {
+        const acceptableValues = [ 'auto', 'top', 'bottom', 'above', 'below' ]
+        return includes(acceptableValues, value)
+      },
     },
 
     /**
@@ -647,10 +651,8 @@ export default {
         current: null,
         // The scroll position before last menu closing.
         lastScrollPosition: 0,
-        // Menu height.
-        optimizedHeight: 0,
         // Which direction to open the menu.
-        prefferedOpenDirection: 'below',
+        placement: 'bottom',
       },
 
       forest: {
@@ -1360,7 +1362,7 @@ export default {
 
     getMenu() {
       const ref = this.appendToBody ? this.$refs.portal.portalTarget : this
-      const $menu = ref.$refs.menu.$el
+      const $menu = ref.$refs.menu.$refs.menu
       return $menu && $menu.nodeName !== '#comment' ? $menu : null
     },
 
@@ -1448,7 +1450,6 @@ export default {
     openMenu() {
       if (this.disabled || this.menu.isOpen) return
       this.menu.isOpen = true
-      this.$nextTick(this.adjustMenuOpenDirection)
       this.$nextTick(this.resetHighlightedOptionWhenNecessary)
       this.$nextTick(this.restoreMenuScrollPosition)
       if (!this.options && !this.async) this.loadRootOptions()
@@ -1911,32 +1912,6 @@ export default {
       const $menu = this.getMenu()
       // istanbul ignore else
       if ($menu) $menu.scrollTop = this.menu.lastScrollPosition
-    },
-
-    adjustMenuOpenDirection() {
-      // istanbul ignore next
-      if (typeof window === 'undefined') return
-
-      const rect = this.$el.getBoundingClientRect()
-      const spaceAbove = rect.top
-      const spaceBelow = window.innerHeight - rect.bottom
-      const hasEnoughSpaceBelow = spaceBelow > this.maxHeight
-      const isInViewport = rect.top > 0 && (window.innerHeight - rect.top) > MENU_BUFFER
-
-      switch (true) {
-      case hasEnoughSpaceBelow:
-      case spaceBelow > spaceAbove:
-      case !isInViewport:
-      case this.openDirection === 'below':
-      case this.openDirection === 'bottom':
-        this.menu.prefferedOpenDirection = 'below'
-        this.menu.optimizedHeight = Math.max(Math.min(spaceBelow - MENU_BUFFER, this.maxHeight), this.maxHeight)
-        break
-
-      default:
-        this.menu.prefferedOpenDirection = 'above'
-        this.menu.optimizedHeight = Math.min(spaceAbove - MENU_BUFFER, this.maxHeight)
-      }
     },
   },
 

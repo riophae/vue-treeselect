@@ -95,10 +95,10 @@ describe('Methods', () => {
   })
 
   describe('getMenu()', () => {
-    let vm
+    let wrapper, vm
 
     const createInstance = appendToBody => {
-      const wrapper = mount(Treeselect, {
+      wrapper = mount(Treeselect, {
         sync: false,
         propsData: {
           appendToBody,
@@ -110,8 +110,7 @@ describe('Methods', () => {
     }
 
     afterEach(() => {
-      vm.$destroy()
-      vm = null
+      wrapper.destroy()
     })
 
     it('when appendToBody=false', async () => {
@@ -121,7 +120,6 @@ describe('Methods', () => {
       await vm.$nextTick()
 
       expect(vm.getMenu().classList).toContain('vue-treeselect__menu')
-      vm.$destroy()
     })
 
     it('when appendToBody=true', async () => {
@@ -131,7 +129,6 @@ describe('Methods', () => {
       await vm.$nextTick()
 
       expect(vm.getMenu().classList).toContain('vue-treeselect__menu')
-      vm.$destroy()
     })
 
     it('when menu is closed', async () => {
@@ -175,6 +172,7 @@ describe('Methods', () => {
   describe('closeMenu()', () => {
     it('should close the menu', () => {
       const wrapper = mount(Treeselect, {
+        sync: false,
         propsData: {
           options: [],
         },

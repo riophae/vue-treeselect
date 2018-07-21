@@ -15,7 +15,7 @@ import {
   typeSearchText,
   findInputContainer,
   findInput,
-  findMenu,
+  findMenuContainer,
   findOptionByNodeId,
   findLabelContainerByNodeId,
 } from './shared'
@@ -147,56 +147,47 @@ describe('Props', () => {
   })
 
   describe('appendToBody', () => {
-    const findPortalTarget = () => $('body > .vue-treeselect__portal-target')
-
-    beforeEach(() => {
-      expect(findPortalTarget()).toBe(null)
-    })
-
-    afterEach(() => {
-      const portalTarget = findPortalTarget()
-      if (portalTarget) portalTarget.remove()
-    })
+    const findPortalTarget = vm => $(`.vue-treeselect__portal-target[data-instance-id="${vm.getInstanceId()}"]`)
 
     it('basic', async () => {
       const wrapper = mount(Treeselect, {
         sync: false,
+        attachToDocument: true,
         propsData: {
           appendToBody: true,
           options: [],
         },
-        attachToDocument: true,
       })
       const { vm } = wrapper
 
       vm.openMenu()
       await vm.$nextTick()
 
-      const portalTarget = findPortalTarget()
+      const portalTarget = findPortalTarget(vm)
       expect(portalTarget.classList).toContain('vue-treeselect')
-      expect(portalTarget.firstElementChild.classList).toContain('vue-treeselect__menu')
+      expect(portalTarget.firstElementChild.classList).toContain('vue-treeselect__menu-container')
     })
 
     it('should remove portal target when component gets destroyed', async () => {
       const wrapper = mount(Treeselect, {
         sync: false,
+        attachToDocument: true,
         propsData: {
           appendToBody: true,
           options: [],
         },
-        attachToDocument: true,
       })
-
       const { vm } = wrapper
 
       vm.openMenu()
       await vm.$nextTick()
 
-      expect(findPortalTarget()).toBeTruthy()
+      expect(findPortalTarget(vm)).toBeTruthy()
 
-      await wrapper.destroy()
+      wrapper.destroy()
+      await vm.$nextTick()
 
-      expect(findPortalTarget()).toBe(null)
+      expect(findPortalTarget(vm)).toBe(null)
     })
 
     it('should remove portal target when set back to `appendToBody: false`', async () => {
@@ -208,17 +199,18 @@ describe('Props', () => {
         },
         attachToDocument: true,
       })
+      const { vm } = wrapper
 
-      expect(findPortalTarget()).toBe(null)
+      expect(findPortalTarget(vm)).toBe(null)
 
       await wrapper.setProps({ appendToBody: true })
-      expect(findPortalTarget()).toBeTruthy()
+      expect(findPortalTarget(vm)).toBeTruthy()
 
       await wrapper.setProps({ appendToBody: false })
-      expect(findPortalTarget()).toBe(null)
+      expect(findPortalTarget(vm)).toBe(null)
 
       await wrapper.setProps({ appendToBody: true })
-      expect(findPortalTarget()).toBeTruthy()
+      expect(findPortalTarget(vm)).toBeTruthy()
     })
 
     it('portaled menu should be functional', async () => {
@@ -238,7 +230,7 @@ describe('Props', () => {
       vm.openMenu()
       await vm.$nextTick()
 
-      const portalTarget = findPortalTarget()
+      const portalTarget = findPortalTarget(vm)
       const label = $('.vue-treeselect__label', portalTarget)
       expect(label.textContent.trim()).toBe('a')
 
@@ -249,7 +241,7 @@ describe('Props', () => {
       expect(vm.internalValue).toEqual([ 'a' ])
     })
 
-    it('should set `z-index` on menu when appendToBody=false', async () => {
+    it('should set `z-index` on menu container when appendToBody=false', async () => {
       const wrapper = mount(Treeselect, {
         sync: false,
         propsData: {
@@ -264,8 +256,8 @@ describe('Props', () => {
       vm.openMenu()
       await vm.$nextTick()
 
-      const menu = findMenu(wrapper)
-      expect(menu.element.style.zIndex).toBe('1')
+      const menuContainer = findMenuContainer(wrapper)
+      expect(menuContainer.element.style.zIndex).toBe('1')
     })
 
     it('should set `z-index` on portal target when appendToBody=true', async () => {
@@ -283,11 +275,11 @@ describe('Props', () => {
       vm.openMenu()
       await vm.$nextTick()
 
-      const portalTarget = findPortalTarget(wrapper)
+      const portalTarget = findPortalTarget(vm)
       expect(portalTarget.style.zIndex).toBe('1')
 
-      const menu = $('.vue-treeselect__menu', portalTarget)
-      expect(menu.style.zIndex).toBe('')
+      const $menuContainer = $('.vue-treeselect__menu-container', portalTarget)
+      expect($menuContainer.style.zIndex).toBe('')
     })
   })
 
@@ -833,8 +825,9 @@ describe('Props', () => {
   })
 
   describe('closeOnSelect', () => {
-    it('closes the menu after selecting when closeOnSelect=true', () => {
+    it('closes the menu after selecting when closeOnSelect=true', async () => {
       const wrapper = mount(Treeselect, {
+        sync: false,
         propsData: {
           closeOnSelect: true,
           multiple: false,
@@ -844,6 +837,7 @@ describe('Props', () => {
       const { vm } = wrapper
 
       vm.openMenu()
+      await vm.$nextTick()
 
       const labelContainer = findLabelContainerByNodeId(wrapper, 'a')
 
@@ -852,8 +846,9 @@ describe('Props', () => {
       expect(vm.menu.isOpen).toBe(false)
     })
 
-    it('keeps the menu open after selecting when closeOnSelect=false', () => {
+    it('keeps the menu open after selecting when closeOnSelect=false', async () => {
       const wrapper = mount(Treeselect, {
+        sync: false,
         propsData: {
           closeOnSelect: false,
           multiple: false,
@@ -864,6 +859,7 @@ describe('Props', () => {
       const { vm } = wrapper
 
       vm.openMenu()
+      await vm.$nextTick()
 
       const labelContainer = findLabelContainerByNodeId(wrapper, 'a')
 
@@ -1011,7 +1007,7 @@ describe('Props', () => {
 
     beforeEach(() => {
       wrapper = mount(Treeselect, {
-        attachToDocument: true,
+        sync: false,
         propsData: {
           defaultExpandLevel: Infinity,
           flat: false,
@@ -1028,18 +1024,22 @@ describe('Props', () => {
       vm = wrapper.vm
     })
 
-    const getLabelContainerOfBranchNode = () => {
+    const getLabelContainerOfBranchNode = async () => {
       vm.openMenu() // ensure the menu is opened otherwise the options won't be displayed
+      await vm.$nextTick()
+
       return findLabelContainerByNodeId(wrapper, 'branch')
     }
 
-    const getLabelContainerOfLeafNode = () => {
+    const getLabelContainerOfLeafNode = async () => {
       vm.openMenu() // ensure the menu is opened otherwise the options won't be displayed
+      await vm.$nextTick()
+
       return findLabelContainerByNodeId(wrapper, 'leaf')
     }
 
-    const clickOnLabelOfBranchNode = () => {
-      const labelContainerOfBranchNode = getLabelContainerOfBranchNode()
+    const clickOnLabelOfBranchNode = async () => {
+      const labelContainerOfBranchNode = await getLabelContainerOfBranchNode()
       leftClick(labelContainerOfBranchNode)
     }
 
@@ -1048,44 +1048,47 @@ describe('Props', () => {
         wrapper.setProps({ disableBranchNodes: false })
       })
 
-      it('a branch node should have checkbox when multiple=true', () => {
+      it('a branch node should have checkbox when multiple=true', async () => {
         wrapper.setProps({ multiple: true })
-        const labelContainerOfBranchNode = getLabelContainerOfBranchNode()
+
+        const labelContainerOfBranchNode = await getLabelContainerOfBranchNode()
 
         expect(labelContainerOfBranchNode.contains('.vue-treeselect__checkbox')).toBe(true)
       })
 
-      it('a leaf node should have checkbox too when multiple=true', () => {
+      it('a leaf node should have checkbox too when multiple=true', async () => {
         wrapper.setProps({ multiple: true })
-        const labelContainerOfLeafNode = getLabelContainerOfLeafNode()
+
+        const labelContainerOfLeafNode = await getLabelContainerOfLeafNode()
 
         expect(labelContainerOfLeafNode.contains('.vue-treeselect__checkbox')).toBe(true)
       })
 
-      it('click on label of a branch node should toggle checking state when multiple=true', () => {
+      it('click on label of a branch node should toggle checking state when multiple=true', async () => {
         wrapper.setProps({ multiple: true })
 
         expect(vm.isSelected(vm.forest.nodeMap.branch)).toBe(false)
-        clickOnLabelOfBranchNode()
+        await clickOnLabelOfBranchNode()
         expect(vm.isSelected(vm.forest.nodeMap.branch)).toBe(true)
-        clickOnLabelOfBranchNode()
+        await clickOnLabelOfBranchNode()
         expect(vm.isSelected(vm.forest.nodeMap.branch)).toBe(false)
       })
 
-      it('click on label of a branch node should not toggle expanding state when multiple=true', () => {
+      it('click on label of a branch node should not toggle expanding state when multiple=true', async () => {
         wrapper.setProps({ multiple: true })
 
         expect(vm.forest.nodeMap.branch.isExpanded).toBe(true)
-        clickOnLabelOfBranchNode()
+        await clickOnLabelOfBranchNode()
         expect(vm.forest.nodeMap.branch.isExpanded).toBe(true)
       })
 
-      it('click on label of a branch node should close the dropdown when multiple=false & closeOnSelect=true', () => {
+      it('click on label of a branch node should close the dropdown when multiple=false & closeOnSelect=true', async () => {
         wrapper.setProps({ multiple: false, closeOnSelect: true })
         vm.openMenu()
+        await vm.$nextTick()
 
         expect(vm.menu.isOpen).toBe(true)
-        clickOnLabelOfBranchNode()
+        await clickOnLabelOfBranchNode()
         expect(vm.menu.isOpen).toBe(false)
       })
     })
@@ -1095,49 +1098,51 @@ describe('Props', () => {
         wrapper.setProps({ disableBranchNodes: true })
       })
 
-      it('a branch node should not have checkbox when multiple=true', () => {
+      it('a branch node should not have checkbox when multiple=true', async () => {
         wrapper.setProps({ multiple: true })
-        const labelContainerOfBranchNode = getLabelContainerOfBranchNode()
+        const labelContainerOfBranchNode = await getLabelContainerOfBranchNode()
 
         expect(labelContainerOfBranchNode.contains('.vue-treeselect__checkbox')).toBe(false)
       })
 
-      it('a leaf node should have checkbox when multiple=true', () => {
+      it('a leaf node should have checkbox when multiple=true', async () => {
         wrapper.setProps({ multiple: true })
-        const labelContainerOfLeafNode = getLabelContainerOfLeafNode()
+        const labelContainerOfLeafNode = await getLabelContainerOfLeafNode()
 
         expect(labelContainerOfLeafNode.contains('.vue-treeselect__checkbox')).toBe(true)
       })
 
-      it('click on label of a branch node should not toggle checking state when multiple=true', () => {
+      it('click on label of a branch node should not toggle checking state when multiple=true', async () => {
         wrapper.setProps({ multiple: true })
 
         expect(vm.isSelected(vm.forest.nodeMap.branch)).toBe(false)
-        clickOnLabelOfBranchNode()
+        await clickOnLabelOfBranchNode()
         expect(vm.isSelected(vm.forest.nodeMap.branch)).toBe(false)
       })
 
-      it('click on label of a branch node should toggle expanding state when multiple=true', () => {
+      it('click on label of a branch node should toggle expanding state when multiple=true', async () => {
         wrapper.setProps({ multiple: true })
 
         expect(vm.forest.nodeMap.branch.isExpanded).toBe(true)
-        clickOnLabelOfBranchNode()
+        await clickOnLabelOfBranchNode()
         expect(vm.forest.nodeMap.branch.isExpanded).toBe(false)
-        clickOnLabelOfBranchNode()
+        await clickOnLabelOfBranchNode()
         expect(vm.forest.nodeMap.branch.isExpanded).toBe(true)
       })
 
-      it('click on label of a branch node should not close the dropdown when multiple=false & closeOnSelect=true', () => {
+      it('click on label of a branch node should not close the dropdown when multiple=false & closeOnSelect=true', async () => {
         wrapper.setProps({ multiple: false, closeOnSelect: true })
         vm.openMenu()
+        await vm.$nextTick()
 
         expect(vm.menu.isOpen).toBe(true)
-        clickOnLabelOfBranchNode()
+        await clickOnLabelOfBranchNode()
         expect(vm.menu.isOpen).toBe(true)
       })
 
-      it('should not auto-select ancestor nodes like flat mode', () => {
+      it('should not auto-select ancestor nodes like flat mode', async () => {
         wrapper.setProps({ multiple: true })
+        await vm.$nextTick()
 
         vm.select(vm.forest.nodeMap.leaf)
         expect(vm.forest.checkedStateMap).toEqual({ branch: UNCHECKED, leaf: CHECKED })
@@ -1152,12 +1157,13 @@ describe('Props', () => {
         const types = [ 'ALL', 'BRANCH_PRIORITY', 'LEAF_PRIORITY', 'ALL_WITH_INDETERMINATE' ]
 
         types.forEach(valueConsistsOf => {
-          it(`when valueConsistsOf=${valueConsistsOf}`, () => {
+          it(`when valueConsistsOf=${valueConsistsOf}`, async () => {
             wrapper.setProps({
               multiple: true,
               valueConsistsOf,
               value: [ 'leaf' ],
             })
+            await vm.$nextTick()
 
             expect(vm.forest.checkedStateMap).toEqual({ branch: UNCHECKED, leaf: CHECKED })
             expect(vm.forest.selectedNodeMap).toEqual({ leaf: true })
@@ -1197,17 +1203,24 @@ describe('Props', () => {
         expect(wrapper.contains('.vue-treeselect__input')).toBe(false)
       })
 
-      it('should close the menu when setting disabled from false to true', () => {
+      it('should close the menu when setting disabled from false to true', async () => {
         const wrapper = mount(Treeselect, {
+          sync: false,
           propsData: {
             options: [],
             disabled: false,
           },
         })
+        const { vm } = wrapper
 
-        wrapper.vm.openMenu()
+        vm.openMenu()
+        await vm.$nextTick()
+
         expect(wrapper.vm.menu.isOpen).toBe(true)
+
         wrapper.setProps({ disabled: true })
+        await vm.$nextTick()
+
         expect(wrapper.vm.menu.isOpen).toBe(false)
       })
 
@@ -1551,6 +1564,7 @@ describe('Props', () => {
   describe('openOnClick', () => {
     it('when openOnClick=false', () => {
       const wrapper = mount(Treeselect, {
+        sync: false,
         attachToDocument: true,
         propsData: {
           options: [],
@@ -1574,6 +1588,7 @@ describe('Props', () => {
 
     it('when openOnClick=true', () => {
       const wrapper = mount(Treeselect, {
+        sync: false,
         attachToDocument: true,
         propsData: {
           options: [],
@@ -1595,6 +1610,7 @@ describe('Props', () => {
   describe('openOnFocus', () => {
     it('when openOnFocus=false', () => {
       const wrapper = mount(Treeselect, {
+        sync: false,
         attachToDocument: true,
         propsData: {
           options: [],
@@ -1637,6 +1653,7 @@ describe('Props', () => {
     describe('combined with autoFocus', () => {
       it('when openOnFocus=false', () => {
         const wrapper = mount(Treeselect, {
+          sync: false,
           attachToDocument: true,
           propsData: {
             options: [],
@@ -1652,6 +1669,7 @@ describe('Props', () => {
 
       it('when openOnFocus=true', () => {
         const wrapper = mount(Treeselect, {
+          sync: false,
           attachToDocument: true,
           propsData: {
             options: [],
@@ -2900,13 +2918,13 @@ describe('Props', () => {
     vm.openMenu()
     await vm.$nextTick()
 
-    const menu = findMenu(wrapper)
+    const menuContainer = findMenuContainer(wrapper)
 
-    expect(menu.element.style.zIndex).toBe('1')
+    expect(menuContainer.element.style.zIndex).toBe('1')
 
     wrapper.setProps({ zIndex: 2 })
     await vm.$nextTick()
 
-    expect(menu.element.style.zIndex).toBe('2')
+    expect(menuContainer.element.style.zIndex).toBe('2')
   })
 })

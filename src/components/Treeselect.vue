@@ -20,8 +20,8 @@
           'vue-treeselect--focused': this.trigger.isFocused,
           'vue-treeselect--has-value': this.hasValue,
           'vue-treeselect--open': this.menu.isOpen,
-          'vue-treeselect--open-above': this.menu.prefferedOpenDirection === 'above',
-          'vue-treeselect--open-below': this.menu.prefferedOpenDirection === 'below',
+          'vue-treeselect--open-above': this.menu.placement === 'top',
+          'vue-treeselect--open-below': this.menu.placement === 'bottom',
           'vue-treeselect--branch-nodes-disabled': this.disableBranchNodes,
           'vue-treeselect--append-to-body': this.appendToBody,
         }

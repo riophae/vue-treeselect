@@ -8,8 +8,9 @@ import {
 } from './shared'
 
 describe('Menu', () => {
-  it('should blur the input & close the menu after clicking anywhere outside the component', () => {
+  it('should blur the input & close the menu after clicking anywhere outside the component', async () => {
     const wrapper = mount(Treeselect, {
+      sync: false,
       attachToDocument: true,
       propsData: {
         options: [],
@@ -18,6 +19,8 @@ describe('Menu', () => {
     const { vm } = wrapper
 
     vm.openMenu()
+    await vm.$nextTick()
+
     const event = document.createEvent('event')
     event.initEvent('mousedown', true, true)
     document.body.dispatchEvent(event)
@@ -39,8 +42,9 @@ describe('Menu', () => {
     expect(wrapper.vm.menu.isOpen).toBe(true)
   })
 
-  it('click on option arrow should toggle expanded', () => {
+  it('click on option arrow should toggle expanded', async () => {
     const wrapper = mount(Treeselect, {
+      sync: false,
       attachToDocument: true,
       propsData: {
         options: [ {
@@ -50,9 +54,11 @@ describe('Menu', () => {
         } ],
       },
     })
-    const { a } = wrapper.vm.forest.nodeMap
+    const { vm } = wrapper
+    const { a } = vm.forest.nodeMap
 
-    wrapper.vm.openMenu()
+    vm.openMenu()
+    await vm.$nextTick()
 
     expect(a.isExpanded).toBe(false)
     const optionArrow = findOptionByNodeId(wrapper, 'a').find('.vue-treeselect__option-arrow-container')
@@ -144,5 +150,17 @@ describe('Menu', () => {
     vm.closeMenu()
     await vm.$nextTick()
     assertInputValue('')
+  })
+
+  it('set appendToBody to true when alwaysOpen=true should not throw error', () => {
+    const wrapper = mount(Treeselect, {
+      attachToDocument: true,
+      propsData: {
+        options: [],
+        alwaysOpen: true,
+      },
+    })
+
+    wrapper.setProps({ appendToBody: true })
   })
 })

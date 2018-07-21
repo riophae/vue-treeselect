@@ -27,19 +27,98 @@ export function onLeftClick(mouseDownHandler) {
 }
 
 // from react-select
-export function scrollIntoView(scrollingEl, focusedEl) {
-  const scrollingReact = scrollingEl.getBoundingClientRect()
-  const focusedRect = focusedEl.getBoundingClientRect()
-  const overScroll = focusedEl.offsetHeight / 3
+export function scrollIntoView($scrollingEl, $focusedEl) {
+  const scrollingReact = $scrollingEl.getBoundingClientRect()
+  const focusedRect = $focusedEl.getBoundingClientRect()
+  const overScroll = $focusedEl.offsetHeight / 3
 
   if (focusedRect.bottom + overScroll > scrollingReact.bottom) {
-    scrollingEl.scrollTop = Math.min(
-      focusedEl.offsetTop + focusedEl.clientHeight - scrollingEl.offsetHeight + overScroll,
-      scrollingEl.scrollHeight
+    $scrollingEl.scrollTop = Math.min(
+      $focusedEl.offsetTop + $focusedEl.clientHeight - $scrollingEl.offsetHeight + overScroll,
+      $scrollingEl.scrollHeight
     )
   } else if (focusedRect.top - overScroll < scrollingReact.top) {
-    scrollingEl.scrollTop = Math.max(focusedEl.offsetTop - overScroll, 0)
+    $scrollingEl.scrollTop = Math.max($focusedEl.offsetTop - overScroll, 0)
   }
+}
+
+import watchSizeForBrowsersOtherThanIE9 from 'watch-size'
+
+/* eslint-disable indent */
+// istanbul ignore next
+const watchSizeForIE9 = (() => {
+  let running = false
+  let intervalId
+  const registered = []
+  const INTERVAL_DURATION = 100
+
+  function run() {
+    if (running) return
+    running = true
+
+    intervalId = setInterval(() => {
+      registered.forEach(test)
+    }, INTERVAL_DURATION)
+  }
+
+  function stop() {
+    if (!running) return
+    running = false
+
+    clearInterval(intervalId)
+    intervalId = null
+  }
+
+  function test(item) {
+    const { $el, listener, lastWidth, lastHeight } = item
+    const width = $el.offsetWidth
+    const height = $el.offsetHeight
+
+    if (lastWidth !== width || lastHeight !== height) {
+      item.lastWidth = width
+      item.lastHeight = height
+
+      listener({ width, height })
+    }
+  }
+
+  return ($el, listener) => {
+    const item = {
+      $el,
+      listener,
+      lastWidth: null,
+      lastHeight: null,
+    }
+    const unwatch = () => {
+      removeFromArray(registered, item)
+      if (!registered.length) stop()
+    }
+
+    registered.push(item)
+    // The original watch-size will call the listener on initialization.
+    // Keep the same behavior here.
+    test(item)
+    run()
+
+    return unwatch
+  }
+})()
+/* eslint-enable indent */
+
+export function watchSize($el, listener) {
+  // See: https://stackoverflow.com/a/31293352
+  const isIE9 = document.documentMode === 9
+  // watch-size will call the listener on initialization.
+  // Disable this behavior with a lock to achieve a clearer code logic.
+  let locked = true
+  const wrappedListener = (...args) => locked || listener(...args)
+  const implementation = isIE9
+    ? watchSizeForIE9
+    : watchSizeForBrowsersOtherThanIE9
+  const removeSizeWatcher = implementation($el, wrappedListener)
+  locked = false // unlock after initialization
+
+  return removeSizeWatcher
 }
 
 /**

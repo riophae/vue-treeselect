@@ -42,9 +42,9 @@ describe('Single-select', () => {
     expect(vm.forest.selectedNodeMap).toEqual({ aa: true })
   })
 
-  it('should blur the input after selecting an option when closeOnSelect=true & searchable=true', () => {
+  it('should blur the input after selecting an option when closeOnSelect=true & searchable=true', async () => {
     const wrapper = mount(Treeselect, {
-      attachToDocument: true,
+      sync: false,
       propsData: {
         options: [ {
           id: 'a',
@@ -58,6 +58,7 @@ describe('Single-select', () => {
     const { vm } = wrapper
 
     vm.openMenu()
+    await vm.$nextTick()
 
     const labelContainer = findLabelContainerByNodeId(wrapper, 'a')
 

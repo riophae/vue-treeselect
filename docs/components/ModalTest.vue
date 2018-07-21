@@ -2,7 +2,7 @@
   <div id="modal-test">
     <button type="button" @click="showModal = true">Click Me</button>
     <vodal :show="showModal" :custom-styles="modalStyle" :close-button="false" @hide="showModal = false">
-      <treeselect :multiple="true" :options="options" :default-expand-level="1" :append-to-body="true" />
+      <treeselect :multiple="true" :flat="true" :options="options" :default-expand-level="1" :append-to-body="true" />
     </vodal>
   </div>
 </template>

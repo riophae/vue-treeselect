@@ -246,7 +246,7 @@
         name: 'openDirection',
         type: 'String',
         defaultValue: code('"auto"'),
-        description: `By default the menu will open whereever there is more space once there is not enough space below to open at ${code('maxHeight')}. Use this prop to force the menu to always open to specified direction. <br>Acceptable values: ${code('"auto"')}, ${code('"below"')}, ${code('"bottom"')}, ${code('"above"')} or ${code('"top"')}.`,
+        description: `TODO: By default the menu will open whereever there is more space once there is not enough space below to open at ${code('maxHeight')}. Use this prop to force the menu to always open to specified direction. <br>Acceptable values: ${code('"auto"')}, ${code('"below"')}, ${code('"bottom"')}, ${code('"above"')} or ${code('"top"')}.`,
       }, {
         name: 'openOnClick',
         type: 'Boolean',

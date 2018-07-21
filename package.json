@@ -31,7 +31,6 @@
   "pre-commit": "lint",
   "dependencies": {
     "babel-helper-vue-jsx-merge-props": "^2.0.3",
-    "dom-align": "^1.8.0",
     "easings-css": "^1.0.0",
     "fuzzysearch": "^1.0.3",
     "google-material-color": "^1.3.1",

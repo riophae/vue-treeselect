@@ -5,6 +5,7 @@ import { leftClick } from './shared'
 describe('Control', () => {
   it('should toggle the menu when the arrow is clicked', () => {
     const wrapper = mount(Treeselect, {
+      sync: false,
       attachToDocument: true,
       propsData: {
         options: [],
