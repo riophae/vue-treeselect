@@ -1449,8 +1449,8 @@ export default {
       if (this.disabled || this.menu.isOpen) return
       this.menu.isOpen = true
       this.$nextTick(this.adjustMenuOpenDirection)
-      this.$nextTick(this.restoreMenuScrollPosition)
       this.$nextTick(this.resetHighlightedOptionWhenNecessary)
+      this.$nextTick(this.restoreMenuScrollPosition)
       if (!this.options && !this.async) this.loadRootOptions()
       this.toggleClickOutsideEvent(true)
       this.$emit('open', this.getInstanceId())
