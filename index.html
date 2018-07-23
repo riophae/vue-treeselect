@@ -40,13 +40,13 @@
       gtag('config', 'UA-108169693-1');
     </script>
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600|Dosis:300,500">
-  <link href="static/css/app.96823ee92b3c2edeb441.css" rel="stylesheet"></head>
+  <link href="static/css/app.72175b03561c7b72c533.css" rel="stylesheet"></head>
   <body>
     <div id="app">
       <header class="site-header">
         <div class="container" id="header">
           <div class="site-header-logo"><a class="site-header-logo-link" href="https://vue-treeselect.js.org/">Vue<span class="site-header-logo-component-name">Treeselect</span></a></div>
-          <nav class="site-header-nav"><a class="site-header-nav-item" href="https://github.com/riophae/vue-treeselect/releases">v0.0.32</a><span class="site-header-nav-item"><a class="github-button" href="https://github.com/riophae/vue-treeselect" data-show-count="true" aria-label="Star riophae/vue-treeselect on GitHub">Star</a></span></nav>
+          <nav class="site-header-nav"><a class="site-header-nav-item" href="https://github.com/riophae/vue-treeselect/releases">v0.0.33</a><span class="site-header-nav-item"><a class="github-button" href="https://github.com/riophae/vue-treeselect" data-show-count="true" aria-label="Star riophae/vue-treeselect on GitHub">Star</a></span></nav>
         </div>
       </header>
       <div class="container">
@@ -165,8 +165,8 @@
     &lt;!-- include Vue 2.x --&gt;
     &lt;script src=&quot;https://cdn.jsdelivr.net/npm/vue@^2&quot;&gt;&lt;/script&gt;
     &lt;!-- include vue-treeselect &amp; its styles. you can change the version tag to better suit your need. --&gt;
-    &lt;script src=&quot;https://cdn.jsdelivr.net/npm/@riophae/vue-treeselect@0.0.32/dist/vue-treeselect.min.js&quot;&gt;&lt;/script&gt;
-    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@riophae/vue-treeselect@0.0.32/dist/vue-treeselect.min.css&quot;&gt;
+    &lt;script src=&quot;https://cdn.jsdelivr.net/npm/@riophae/vue-treeselect@0.0.33/dist/vue-treeselect.min.js&quot;&gt;&lt;/script&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@riophae/vue-treeselect@0.0.33/dist/vue-treeselect.min.css&quot;&gt;
   &lt;/head&gt;
   &lt;body&gt;
     &lt;div id=&quot;app&quot;&gt;
@@ -393,13 +393,19 @@ export default {
 </code></template>
                 <template slot="javascript"><code v-pre>import { LOAD_CHILDREN_OPTIONS } from '@riophae/vue-treeselect'
 
+// We just use `setTimeout()` here to simulate an async operation
+// instead of requesting a real API server for demo purpose.
+const simulateAsyncOperation = fn =&gt; {
+  setTimeout(fn, 2000)
+}
+
 export default {
   data: () =&gt; ({
     value: null,
     options: [ {
       id: 'success',
       label: 'With children',
-      // declare an unloaded branch node
+      // Declare an unloaded branch node.
       children: null,
     }, {
       id: 'no-children',
@@ -417,32 +423,30 @@ export default {
       // Typically, do the AJAX stuff here.
       // Once the server has responded,
       // assign children options to the parent node &amp; call the callback.
-      // We just use `setTimeout()` here to simulate an async operation
-      // instead of requesting a real API server for demo purpose.
 
       if (action === LOAD_CHILDREN_OPTIONS) {
         switch (parentNode.id) {
         case 'success': {
-          setTimeout(() =&gt; {
+          simulateAsyncOperation(() =&gt; {
             parentNode.children = [ {
               id: 'child',
               label: 'Child option',
             } ]
             callback()
-          }, 2000)
+          })
           break
         }
         case 'no-children': {
-          setTimeout(() =&gt; {
+          simulateAsyncOperation(() =&gt; {
             parentNode.children = []
             callback()
-          }, 2000)
+          })
           break
         }
         case 'failure': {
-          setTimeout(() =&gt; {
+          simulateAsyncOperation(() =&gt; {
             callback(new Error('Failed to load options: network error.'))
-          }, 2000)
+          })
           break
         }
         default: /* empty */
@@ -473,20 +477,23 @@ export default {
   data: () =&gt; ({
     options: null,
   }),
+
   methods: {
-    // You can either use callback or return a Promise
+    // You can either use callback or return a Promise.
     async loadOptions({ action/*, callback*/ }) {
       if (action === LOAD_ROOT_OPTIONS) {
-        if (called) {
+        if (!called) {
+          // First try: simulate an exception.
+          await sleep(2000) // Simulate an async operation.
+          called = true
+          throw new Error('Failed to load options: test.')
+        } else {
+          // Second try: simulate a successful loading.
           await sleep(2000)
           this.options = [ 'a', 'b', 'c', 'd', 'e' ].map(id =&gt; ({
             id,
             label: `option-${id}`,
           }))
-        } else {
-          await sleep(2000)
-          called = true
-          throw new Error('Failed to load options: test.')
         }
       }
     },
@@ -510,17 +517,21 @@ export default {
 </code></template>
                 <template slot="javascript"><code v-pre>import { ASYNC_SEARCH } from '@riophae/vue-treeselect'
 
+const simulateAsyncOperation = fn =&gt; {
+  setTimeout(fn, 2000)
+}
+
 export default {
   methods: {
     loadOptions({ action, searchQuery, callback }) {
       if (action === ASYNC_SEARCH) {
-        setTimeout(() =&gt; {
+        simulateAsyncOperation(() =&gt; {
           const options = [ 1, 2, 3, 4, 5 ].map(i =&gt; ({
             id: `${searchQuery}-${i}`,
             label: `${searchQuery}-${i}`,
           }))
           callback(null, options)
-        }, 2000)
+        })
       }
     },
   },
@@ -969,5 +980,5 @@ export default {
       </footer>
     </div>
     <script src="https://buttons.github.io/buttons.js" async defer="defer"></script>
-  <script type="text/javascript" src="static/js/app.f3e87b96daf9c9f4994f.js"></script></body>
+  <script type="text/javascript" src="static/js/app.9e25437cc56c6fc5ae80.js"></script></body>
 </html>
