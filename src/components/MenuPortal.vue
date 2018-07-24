@@ -1,7 +1,7 @@
 <script>
   import Vue from 'vue'
   import domAlign from 'dom-align'
-  import { watchSize } from '../utils'
+  import watchSize from 'watch-size'
   import Menu from './Menu'
 
   const PortalTarget = {
