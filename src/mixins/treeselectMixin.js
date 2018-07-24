@@ -1474,7 +1474,7 @@ export default {
         nextState = node.isExpanded = !node.isExpanded
       }
 
-      if (nextState && !node.isLoaded) {
+      if (nextState && !node.childrenStates.isLoaded) {
         this.loadChildrenOptions(node)
       }
     },
@@ -1599,6 +1599,9 @@ export default {
           // Preserve previous states.
           if (prevNodeMap && prevNodeMap[id]) {
             const prev = prevNodeMap[id]
+
+            normalized.isHighlighted = prev.isHighlighted
+
             if (prev.isBranch && normalized.isBranch) {
               normalized.isExpanded = prev.isExpanded
               normalized.isExpandedOnSearch = prev.isExpandedOnSearch

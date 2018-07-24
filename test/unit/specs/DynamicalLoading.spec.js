@@ -534,6 +534,40 @@ describe('Dynamical Loading', () => {
         loadingError: 'test',
       })
     })
+
+    it('should keep the highlighted state after loading children options', async () => {
+      const wrapper = mount(Treeselect, {
+        propsData: {
+          options: [ {
+            id: 'a',
+            label: 'a',
+          }, {
+            id: 'b',
+            label: 'b',
+            children: null,
+          } ],
+          loadOptions({ parentNode, callback }) {
+            parentNode.children = [ {
+              id: 'ba',
+              label: 'ba',
+            } ]
+            callback()
+          },
+        },
+      })
+      const { vm } = wrapper
+
+      vm.openMenu()
+      await vm.$nextTick()
+
+      vm.setCurrentHighlightedOption(vm.forest.nodeMap.b)
+      expect(vm.menu.current).toBe('b')
+      expect(vm.forest.nodeMap.b.isHighlighted).toBe(true)
+
+      vm.toggleExpanded(vm.forest.nodeMap.b)
+      expect(vm.forest.nodeMap.b.childrenStates.isLoaded).toBe(true)
+      expect(vm.forest.nodeMap.b.isHighlighted).toBe(true)
+    })
   })
 
   describe('Loading root options', () => {
