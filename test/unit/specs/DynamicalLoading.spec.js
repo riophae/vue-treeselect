@@ -5,6 +5,8 @@ import Treeselect from '@src/components/Treeselect'
 import { CHECKED } from '@src/constants'
 import {
   leftClick,
+  typeSearchText,
+  findMenu,
   findOptionByNodeId,
   findOptionArrowContainerByNodeId,
   findChildrenOptionListByNodeId,
@@ -567,6 +569,46 @@ describe('Dynamical Loading', () => {
       vm.toggleExpanded(vm.forest.nodeMap.b)
       expect(vm.forest.nodeMap.b.childrenStates.isLoaded).toBe(true)
       expect(vm.forest.nodeMap.b.isHighlighted).toBe(true)
+    })
+
+    it('load children options when doing local search', async () => {
+      const wrapper = mount(Treeselect, {
+        propsData: {
+          options: [ {
+            id: 'branch',
+            label: 'branch',
+            children: null,
+          }, {
+            id: 'other',
+            label: 'other',
+          } ],
+          loadOptions({ parentNode, callback }) {
+            parentNode.children = [ {
+              id: 'leaf',
+              label: 'leaf',
+            } ]
+            callback()
+          },
+        },
+      })
+      const { vm } = wrapper
+
+      vm.openMenu()
+      await vm.$nextTick()
+      const menu = findMenu(wrapper)
+
+      await typeSearchText(wrapper, 'branch')
+      expect(vm.visibleOptionIds).toEqual([ 'branch' ])
+
+      vm.toggleExpanded(vm.forest.nodeMap.branch)
+      await vm.$nextTick()
+
+      expect(vm.forest.nodeMap.branch.childrenStates.isLoaded).toBe(true)
+      expect(vm.visibleOptionIds).toEqual([ 'branch', 'leaf' ])
+
+      const labels = menu.findAll('.vue-treeselect__option:not(.vue-treeselect__option--hide) .vue-treeselect__label')
+        .wrappers.map(label => label.text().trim())
+      expect(labels).toEqual([ 'branch', 'leaf' ])
     })
   })
 

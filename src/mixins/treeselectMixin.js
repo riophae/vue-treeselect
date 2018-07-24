@@ -1600,6 +1600,8 @@ export default {
           if (prevNodeMap && prevNodeMap[id]) {
             const prev = prevNodeMap[id]
 
+            normalized.isMatched = prev.isMatched
+            normalized.showAllChildrenOnSearch = prev.showAllChildrenOnSearch
             normalized.isHighlighted = prev.isHighlighted
 
             if (prev.isBranch && normalized.isBranch) {
