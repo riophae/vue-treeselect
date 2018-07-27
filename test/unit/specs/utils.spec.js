@@ -1,3 +1,5 @@
+/* eslint import/namespace: 0 */
+
 import * as utils from '@src/utils'
 
 describe('Utils', () => {
@@ -127,16 +129,16 @@ describe('Utils', () => {
     })
   })
 
-  describe('getLast', () => {
-    const { getLast } = utils
+  describe('last', () => {
+    const { last } = utils
 
     it('returns undefined if array is empty', () => {
-      expect(getLast([])).toBe(undefined)
+      expect(last([])).toBe(undefined)
     })
 
     it('returns last element of array', () => {
-      expect(getLast([ 1 ])).toBe(1)
-      expect(getLast([ 1, 2, 3 ])).toBe(3)
+      expect(last([ 1 ])).toBe(1)
+      expect(last([ 1, 2, 3 ])).toBe(3)
     })
   })
 

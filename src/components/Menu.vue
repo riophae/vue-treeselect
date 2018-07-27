@@ -1,7 +1,6 @@
 <script>
   import { MENU_BUFFER } from '../constants'
-  import setupResizeAndScrollEventListeners from '../setupResizeAndScrollEventListeners'
-  import { watchSize } from '../utils'
+  import { watchSize, setupResizeAndScrollEventListeners } from '../utils'
   import Option from './Option'
   import Tip from './Tip'
 

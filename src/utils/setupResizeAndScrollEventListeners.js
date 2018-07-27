@@ -25,7 +25,7 @@ function getStyleComputedProperty($el, property) {
   return arguments.length === 2 ? css[property] : css
 }
 
-export default function setupResizeAndScrollEventListeners($el, listener) {
+export function setupResizeAndScrollEventListeners($el, listener) {
   const $scrollParents = findScrollParents($el)
 
   window.addEventListener('resize', listener, { passive: true })

@@ -1,7 +1,6 @@
 <script>
   import Vue from 'vue'
-  import setupResizeAndScrollEventListeners from '../setupResizeAndScrollEventListeners'
-  import { watchSize, find } from '../utils'
+  import { watchSize, setupResizeAndScrollEventListeners, find } from '../utils'
   import Menu from './Menu'
 
   const PortalTarget = {

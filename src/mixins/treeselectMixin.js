@@ -5,7 +5,7 @@ import {
   onLeftClick, scrollIntoView,
   isNaN, isPromise, once,
   identity, constant, createMap,
-  quickDiff, getLast, includes, find, removeFromArray,
+  quickDiff, last as getLast, includes, find, removeFromArray,
 } from '../utils'
 
 import {
