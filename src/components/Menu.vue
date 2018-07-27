@@ -244,6 +244,7 @@
         const { instance } = this
         const $menu = instance.getMenu()
 
+        // istanbul ignore next
         if (this.menuSizeWatcher) return
 
         this.menuSizeWatcher = {
@@ -255,6 +256,7 @@
         const { instance } = this
         const $control = instance.getControl()
 
+        // istanbul ignore next
         if (this.menuResizeAndScrollEventListeners) return
 
         this.menuResizeAndScrollEventListeners = {

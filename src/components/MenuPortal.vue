@@ -49,6 +49,7 @@
         const { instance } = this
         const $control = instance.getControl()
 
+        // istanbul ignore next
         if (this.controlResizeAndScrollEventListeners) return
 
         this.controlResizeAndScrollEventListeners = {
@@ -60,6 +61,7 @@
         const { instance } = this
         const $control = instance.getControl()
 
+        // istanbul ignore next
         if (this.controlSizeWatcher) return
 
         this.controlSizeWatcher = {

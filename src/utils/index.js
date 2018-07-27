@@ -5,7 +5,7 @@
 export { warning } from './warning'
 
 // ========================
-// DOM Utilites
+// DOM Utilities
 // ========================
 
 export { onLeftClick } from './onLeftClick'

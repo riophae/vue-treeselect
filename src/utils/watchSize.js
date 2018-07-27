@@ -1,24 +1,17 @@
 import watchSizeForBrowsersOtherThanIE9 from 'watch-size'
 import { removeFromArray } from './removeFromArray'
 
-let running = false
 let intervalId
 const registered = []
 const INTERVAL_DURATION = 100
 
 function run() {
-  if (running) return
-  running = true
-
   intervalId = setInterval(() => {
     registered.forEach(test)
   }, INTERVAL_DURATION)
 }
 
 function stop() {
-  if (!running) return
-  running = false
-
   clearInterval(intervalId)
   intervalId = null
 }

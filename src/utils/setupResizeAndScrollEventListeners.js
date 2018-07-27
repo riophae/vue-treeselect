@@ -2,7 +2,7 @@ function findScrollParents($el) {
   const $scrollParents = []
   let $parent = $el.parentNode
 
-  while ($parent && $parent.nodeName !== 'BODY') {
+  while ($parent && $parent.nodeName !== 'BODY' && $parent.nodeType === document.ELEMENT_NODE) {
     if (isScrollElment($parent)) $scrollParents.push($parent)
     $parent = $parent.parentNode
   }
@@ -13,16 +13,8 @@ function findScrollParents($el) {
 
 function isScrollElment($el) {
   // Firefox wants us to check `-x` and `-y` variations as well
-  const { overflow, overflowX, overflowY } = getStyleComputedProperty($el)
+  const { overflow, overflowX, overflowY } = getComputedStyle($el)
   return /(auto|scroll|overlay)/.test(overflow + overflowY + overflowX)
-}
-
-function getStyleComputedProperty($el, property) {
-  if ($el.nodeType !== document.ELEMENT_NODE) {
-    return {}
-  }
-  const css = getComputedStyle($el, null)
-  return arguments.length === 2 ? css[property] : css
 }
 
 export function setupResizeAndScrollEventListeners($el, listener) {
