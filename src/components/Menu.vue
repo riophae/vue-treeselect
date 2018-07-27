@@ -26,9 +26,10 @@
 
       menuContainerStyle() {
         const { instance } = this
-        const zIndex = instance.appendToBody ? null : instance.zIndex
 
-        return { zIndex }
+        return {
+          zIndex: instance.appendToBody ? null : instance.zIndex,
+        }
       },
     },
 
