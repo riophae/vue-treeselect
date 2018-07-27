@@ -432,9 +432,10 @@ export default {
     },
 
     /**
-     * TODO:
-     * By default the menu will open whereever there is more space once there is not enough space below to open at `maxHeight`.
-     * Use this prop to force the menu to always open to specified direction.
+     * By default (`auto`), the menu will open below the control. If there is not
+     * enough space, vue-treeselect will automatically flip the menu.
+     * You can use one of other four options to force the menu to be always opened
+     * to specified direction.
      * Acceptable values:
      *   - `"auto"`
      *   - `"below"`
