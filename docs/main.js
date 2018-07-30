@@ -11,6 +11,8 @@ Vue.config.productionTip = false
 Vue.component('treeselect', Treeselect)
 
 let sections
+const components = {}
+
 function calculateNavPositions() {
   sections = [].map.call(document.querySelectorAll('[data-section]'), section => ({
     id: section.id,
@@ -19,19 +21,24 @@ function calculateNavPositions() {
 }
 
 function loadComponents() {
-  const components = {}
-  const context = require.context('./components', false, /\.vue$/)
-  context.keys().forEach(key => {
-    const componentName = key.replace(/^\.\/|\.vue$/g, '')
-    components[componentName] = context(key).default
-  })
-  return components
+  const loadContext = context => {
+    context.keys().forEach(key => {
+      const componentName = key.replace(/^\.\/|\.vue$/g, '')
+      components[componentName] = context(key).default
+    })
+  }
+
+  loadContext(require.context('./components', false, /\.vue$/))
+  if (process.env.NODE_ENV !== 'production') {
+    loadContext(require.context('./components/dev', false, /\.vue$/))
+  }
 }
+loadComponents()
 
 new Vue({
   el: '#app',
 
-  components: loadComponents(),
+  components,
 
   data: () => ({
     currentPosition: '',

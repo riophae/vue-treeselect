@@ -3,17 +3,17 @@ if process.env.NODE_ENV !== 'production'
 
   +subsection('Performance Test')
     :markdown-it
-      Checkpoints:
+      Checklist:
         - Opening & closing the menu should be fast
         - Hovering the mouse over the list should be smooth
-        - Select & deselect option should feel snappy
-    +demo('PerformanceTest')
+        - Selecting & deselecting options should feel snappy
+    +component('PerformanceTest')
 
 
   +subsection('Modal Test')
     :markdown-it
-      Checkpoints:
+      Checklist:
         - The modal uses `overflow: hidden` and the menu should not be clipped
         - When the size of the control changes, the position of the menu should be recalculated
-        - When scrolling the page, the menu should be kept correctly positioned
-    +demo('ModalTest')
+        - While scrolling the page, the menu should be kept correctly positioned
+    +component('ModalTest')

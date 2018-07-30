@@ -3,7 +3,7 @@
 </template>
 
 <script>
-  import { generateOptions } from './utils'
+  import { generateOptions } from '../utils'
 
   export default {
     data: () => ({

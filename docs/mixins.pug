@@ -38,6 +38,9 @@ mixin subsection(name)
         anchor
     block
 
+mixin component(name)
+  #{kebabCase(name)}
+
 mixin demo(name)
   demo
     #{kebabCase(name)}(slot="demo")

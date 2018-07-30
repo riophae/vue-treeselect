@@ -10,7 +10,7 @@
 <script>
   import Vodal from 'vodal'
   import 'vodal/common.css'
-  import { generateOptions } from './utils'
+  import { generateOptions } from '../utils'
 
   export default {
     components: { Vodal },
