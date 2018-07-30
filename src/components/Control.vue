@@ -76,11 +76,7 @@
         const { instance } = this
         const result = instance.beforeClearAll()
         const handler = shouldClear => {
-          if (shouldClear) {
-            instance.clear()
-          }
-
-          instance.focusInput()
+          if (shouldClear) instance.clear()
         }
 
         if (isPromise(result)) {
