@@ -44,7 +44,7 @@ export const KEY_CODES = {
 
 // Other constants.
 export const INPUT_DEBOUNCE_DELAY = process.env.NODE_ENV === 'testing'
-  ? 10 // to speed up unit testing
+  ? /* to speed up unit testing */ 10
   : /* istanbul ignore next */ 200
 export const MIN_INPUT_WIDTH = 5
 export const MENU_BUFFER = 40
