@@ -10,16 +10,26 @@
     inject: [ 'instance' ],
 
     computed: {
+      /* eslint-disable valid-jsdoc */
+      /**
+       * Should show the "×" button that resets value?
+       * @return {boolean}
+       */
       shouldShowX() {
         const { instance } = this
 
         return (
           instance.clearable &&
           !instance.disabled &&
-          instance.hasUndisabledValue
+          instance.hasValue &&
+          (this.hasUndisabledValue || instance.allowClearingDisabled)
         )
       },
 
+      /**
+       * Should show the arrow button that toggles menu?
+       * @return {boolean}
+       */
       shouldShowArrow() {
         const { instance } = this
 
@@ -28,6 +38,20 @@
         // e.g. when the control is disabled.
         return !instance.menu.isOpen
       },
+
+      /**
+       * Has any undisabled option been selected?
+       * @type {boolean}
+       */
+      hasUndisabledValue() {
+        const { instance } = this
+
+        return (
+          instance.hasValue &&
+          instance.internalValue.some(id => !instance.getNode(id).isDisabled)
+        )
+      },
+      /* eslint-enable valid-jsdoc */
     },
 
     methods: {

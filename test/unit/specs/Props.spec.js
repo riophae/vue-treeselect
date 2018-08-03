@@ -21,6 +21,167 @@ import {
 } from './shared'
 
 describe('Props', () => {
+  describe('allowClearingDisabled', () => {
+    let wrapper, vm
+
+    beforeEach(() => {
+      wrapper = mount(Treeselect, {
+        propsData: {
+          multiple: true,
+          clearable: true,
+          options: [ {
+            id: 'a',
+            label: 'a',
+            isDisabled: true,
+          }, {
+            id: 'b',
+            label: 'b',
+          }, {
+            id: 'c',
+            label: 'c',
+            isDisabled: true,
+          } ],
+        },
+      })
+      vm = wrapper.vm
+    })
+
+    describe('when allowClearingDisabled=false', () => {
+      beforeEach(() => {
+        wrapper.setProps({ allowClearingDisabled: false })
+      })
+
+      describe('when all selected nodes are disabled', () => {
+        beforeEach(() => {
+          wrapper.setProps({ value: [ 'a', 'c' ] })
+        })
+
+        it('should hide "×" button', () => {
+          expect(wrapper.contains('.vue-treeselect__x')).toBe(false)
+        })
+      })
+
+      describe('when not all selected nodes are disabled', () => {
+        beforeEach(() => {
+          wrapper.setProps({ value: [ 'a', 'b' ] })
+        })
+
+        it('should show "×" button ', () => {
+          expect(wrapper.contains('.vue-treeselect__x')).toBe(true)
+        })
+
+        it('clear() should only remove undisabled value', () => {
+          vm.clear()
+          expect(vm.internalValue).toEqual([ 'a' ])
+          expect(wrapper.contains('.vue-treeselect__x')).toBe(false)
+        })
+      })
+    })
+
+    describe('when allowClearingDisabled=true', () => {
+      beforeEach(() => {
+        wrapper.setProps({ allowClearingDisabled: true })
+      })
+
+      describe('when all selected nodes are disabled', () => {
+        beforeEach(() => {
+          wrapper.setProps({ value: [ 'a', 'c' ] })
+        })
+
+        it('should show "×" button', () => {
+          expect(wrapper.contains('.vue-treeselect__x')).toBe(true)
+        })
+
+        it('clear() should completely reset value', () => {
+          vm.clear()
+          expect(vm.internalValue).toEqual([])
+          expect(wrapper.contains('.vue-treeselect__x')).toBe(false)
+        })
+      })
+    })
+  })
+
+  describe('allowSelectingDisabledDescendants', () => {
+    let wrapper, vm
+
+    beforeEach(() => {
+      wrapper = mount(Treeselect, {
+        propsData: {
+          multiple: true,
+          options: [ {
+            id: 'a',
+            label: 'a',
+            children: [ {
+              id: 'aa',
+              label: 'aa',
+              isDisabled: true,
+              children: [ {
+                id: 'aaa',
+                label: 'aaa',
+              } ],
+            }, {
+              id: 'ab',
+              label: 'ab',
+              isDisabled: true,
+            }, {
+              id: 'ac',
+              label: 'ac',
+            } ],
+          } ],
+        },
+      })
+      vm = wrapper.vm
+    })
+
+    describe('when allowSelectingDisabledDescendants=false', () => {
+      beforeEach(() => {
+        wrapper.setProps({ allowSelectingDisabledDescendants: false })
+      })
+
+      it('should not also select disabled descendants', () => {
+        wrapper.setProps({ value: [] })
+        vm.select(vm.forest.nodeMap.a)
+        expect(vm.internalValue).toEqual([ 'ac' ])
+      })
+
+      it('should not also deselect disabled descendants', () => {
+        wrapper.setProps({ value: [ 'a' ] })
+        vm.select(vm.forest.nodeMap.a)
+        expect(vm.internalValue).toEqual([ 'aa', 'ab' ])
+      })
+    })
+
+    describe('when allowSelectingDisabledDescendants=true', () => {
+      beforeEach(() => {
+        wrapper.setProps({ allowSelectingDisabledDescendants: true })
+      })
+
+      it('should also select disabled descendants', () => {
+        wrapper.setProps({ value: [] })
+        vm.select(vm.forest.nodeMap.a)
+        expect(vm.internalValue).toEqual([ 'a' ])
+      })
+
+      it('should also deselect disabled descendants', () => {
+        wrapper.setProps({ value: [ 'a' ] })
+        vm.select(vm.forest.nodeMap.a)
+        expect(vm.internalValue).toEqual([])
+      })
+
+      it('disabled branch nodes are still unselectable', () => {
+        wrapper.setProps({ value: [] })
+        vm.select(vm.forest.nodeMap.aa)
+        expect(vm.internalValue).toEqual([])
+      })
+
+      it('disabled branch nodes are still undeselectable', () => {
+        wrapper.setProps({ value: [ 'aa' ] })
+        vm.select(vm.forest.nodeMap.aa)
+        expect(vm.internalValue).toEqual([ 'aa' ])
+      })
+    })
+  })
+
   describe('alwaysOpen', () => {
     it('should auto open the menu on mount', () => {
       const wrapper = mount(Treeselect, {
@@ -707,7 +868,7 @@ describe('Props', () => {
     })
 
     it('should hide when no options selected', () => {
-      vm.clear()
+      wrapper.setProps({ value: null })
       expect(wrapper.contains('.vue-treeselect__x')).toBe(false)
     })
 

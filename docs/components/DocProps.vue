@@ -31,6 +31,16 @@
   export default {
     data: () => ({
       props: [ {
+        name: 'allowClearingDisabled',
+        type: 'Boolean',
+        defaultValue: code('false'),
+        description: 'Whether to allow resetting value even if there are disabled selected nodes.',
+      }, {
+        name: 'allowSelectingDisabledDescendants',
+        type: 'Boolean',
+        defaultValue: code('false'),
+        description: `When an ancestor node is selected/deselected, whether its disabled descendants should be selected/deselected. You may want to use this in conjunction with ${code('allowClearingDisabled')} prop.`,
+      }, {
         name: 'alwaysOpen',
         type: 'Boolean',
         defaultValue: code('false'),

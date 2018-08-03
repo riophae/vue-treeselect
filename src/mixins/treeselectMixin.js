@@ -71,6 +71,23 @@ export default {
 
   props: {
     /**
+     * Whether to allow resetting value even if there are disabled selected nodes.
+     */
+    allowClearingDisabled: {
+      type: Boolean,
+      default: false,
+    },
+
+    /**
+     * When an ancestor node is selected/deselected, whether its disabled descendants should be selected/deselected.
+     * You may want to use this in conjunction with `allowClearingDisabled` prop.
+     */
+    allowSelectingDisabledDescendants: {
+      type: Boolean,
+      default: false,
+    },
+
+    /**
      * Whether the menu should be always open.
      */
     alwaysOpen: {
@@ -745,13 +762,6 @@ export default {
      */
     hasValue() {
       return this.internalValue.length > 0
-    },
-    /**
-     * Has any undisabled option been selected?
-     * @type {boolean}
-     */
-    hasUndisabledValue() {
-      return this.hasValue && this.internalValue.map(this.getNode).some(node => !node.isDisabled)
     },
     /**
      * Single-select mode?
@@ -1790,9 +1800,14 @@ export default {
 
     clear() {
       if (this.hasValue) {
-        this.forest.selectedNodeIds = this.multiple
-          ? this.forest.selectedNodeIds.filter(nodeId => this.getNode(nodeId).isDisabled)
-          : []
+        if (this.single || this.allowClearingDisabled) {
+          this.forest.selectedNodeIds = []
+        } else /* if (this.multiple && !this.allowClearingDisabled) */ {
+          this.forest.selectedNodeIds = this.forest.selectedNodeIds.filter(nodeId =>
+            this.getNode(nodeId).isDisabled
+          )
+        }
+
         this.buildForestState()
       }
     },
@@ -1819,17 +1834,24 @@ export default {
         return
       }
 
-      if (node.isLeaf || (node.isBranch && !node.hasDisabledDescendants)) {
+      const isFullyChecked = (
+        node.isLeaf ||
+        (/* node.isBranch && */!node.hasDisabledDescendants) ||
+        (/* node.isBranch && */this.allowSelectingDisabledDescendants)
+      )
+      if (isFullyChecked) {
         this.addValue(node)
       }
 
       if (node.isBranch) {
         this.traverseDescendantsBFS(node, descendant => {
-          if (!descendant.isDisabled) this.addValue(descendant)
+          if (!descendant.isDisabled || this.allowSelectingDisabledDescendants) {
+            this.addValue(descendant)
+          }
         })
       }
 
-      if (node.isLeaf || (node.isBranch && !node.hasDisabledDescendants)) {
+      if (isFullyChecked) {
         let curr = node
         while ((curr = curr.parentNode) !== NO_PARENT_NODE) {
           if (curr.children.every(this.isSelected)) this.addValue(curr)
@@ -1863,7 +1885,7 @@ export default {
       let hasUncheckedSomeDescendants = false
       if (node.isBranch) {
         this.traverseDescendantsDFS(node, descendant => {
-          if (!descendant.isDisabled) {
+          if (!descendant.isDisabled || this.allowSelectingDisabledDescendants) {
             this.removeValue(descendant)
             hasUncheckedSomeDescendants = true
           }
