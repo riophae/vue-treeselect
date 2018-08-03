@@ -43,11 +43,11 @@
       'instance.trigger.searchQuery'(newValue) {
         this.value = newValue
       },
-    },
 
-    updated() {
-      // istanbul ignore else
-      if (this.needAutoSize) this.updateInputWidth()
+      value() {
+        // istanbul ignore else
+        if (this.needAutoSize) this.$nextTick(this.updateInputWidth)
+      },
     },
 
     created() {
