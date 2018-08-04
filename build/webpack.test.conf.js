@@ -6,13 +6,14 @@ if (!process.env.NODE_ENV) {
 
 const webpack = require('webpack')
 const merge = require('webpack-merge')
-const utils = require('./utils')
 const baseConfig = require('./webpack.base.conf')
+const utils = require('./utils')
 
 const webpackConfig = merge(baseConfig, {
   mode: 'development',
   module: {
     rules: [
+      utils.eslintLoader('test'),
       utils.styleLoaders(),
     ],
   },

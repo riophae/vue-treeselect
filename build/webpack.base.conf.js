@@ -1,12 +1,7 @@
-const path = require('path')
 const webpack = require('webpack')
 const { VueLoaderPlugin } = require('vue-loader')
 const config = require('../config')
-const { withCacheLoader } = require('./utils')
-
-function resolve(dir) {
-  return path.join(__dirname, '..', dir)
-}
+const utils = require('./utils')
 
 module.exports = {
   entry: {
@@ -26,23 +21,14 @@ module.exports = {
       // see: https://vuejs.org/v2/guide/installation.html#Explanation-of-Different-Builds
       vue$: 'vue/dist/vue',
       // for consistent docs
-      '@riophae/vue-treeselect': resolve('src'),
+      '@riophae/vue-treeselect': utils.resolve('src'),
       // for shorter import path in tests
-      '@src': resolve('src'),
+      '@src': utils.resolve('src'),
     },
   },
   module: {
     rules: [
-      {
-        test: /\.(js|vue)$/,
-        loader: 'eslint-loader',
-        enforce: 'pre',
-        include: [ resolve('src'), resolve('test') ],
-        options: {
-          formatter: require('eslint-friendly-formatter'),
-        },
-      },
-      withCacheLoader({
+      utils.withCacheLoader({
         test: /\.vue$/,
         loader: 'vue-loader',
         options: {
@@ -51,17 +37,16 @@ module.exports = {
           },
         },
       }),
-      withCacheLoader({
+      utils.withCacheLoader({
         test: /\.js$/,
         loader: 'babel-loader',
-        include: [ resolve('src'), resolve('docs'), resolve('test') ],
+        include: [ 'src', 'docs', 'test' ].map(utils.resolve),
       }, {
         disableCacheInTest: true,
       }),
-      withCacheLoader({
+      utils.withCacheLoader({
         test: /\.pug$/,
         loader: 'pug-loader',
-        include: [ resolve('src'), resolve('docs') ],
         options: {
           pretty: true,
         },

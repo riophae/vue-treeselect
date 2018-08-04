@@ -15,6 +15,7 @@ module.exports = merge(baseWebpackConfig, {
   mode: 'development',
   module: {
     rules: [
+      utils.eslintLoader('src'),
       utils.styleLoaders({
         sourceMap: config.dev.cssSourceMap,
       }),
