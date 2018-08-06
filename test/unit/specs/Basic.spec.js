@@ -312,13 +312,24 @@ describe('Basic', () => {
             label: 'b',
             isDefaultExpanded: false,
             children: [],
+          }, {
+            id: 'c',
+            label: 'c',
+            children: [ {
+              id: 'ca',
+              label: 'ca',
+              isDefaultExpanded: true,
+              children: [],
+            } ],
           } ],
         },
       })
-      const { a, b } = wrapper.vm.forest.nodeMap
+      const { a, b, c, ca } = wrapper.vm.forest.nodeMap
 
       expect(a.isExpanded).toBe(true)
       expect(b.isExpanded).toBe(false)
+      expect(c.isExpanded).toBe(true)
+      expect(ca.isExpanded).toBe(true)
     })
 
     it('isRootNode', () => {

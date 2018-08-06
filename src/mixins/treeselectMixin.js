@@ -1590,6 +1590,10 @@ export default {
               ? this.normalize(normalized, children, prevNodeMap)
               : [])
 
+            if (isDefaultExpanded === true) normalized.ancestors.forEach(ancestor => {
+              ancestor.isExpanded = true
+            })
+
             if (!isLoaded && typeof this.loadOptions !== 'function') {
               warning(
                 () => false,

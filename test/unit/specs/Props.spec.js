@@ -1122,7 +1122,7 @@ describe('Props', () => {
 
       expect(a.isExpanded).toBe(true)
       expect(aa.isExpanded).toBe(false)
-      expect(b.isExpanded).toBe(false)
+      expect(b.isExpanded).toBe(true)
       expect(bb.isExpanded).toBe(true)
     })
 
