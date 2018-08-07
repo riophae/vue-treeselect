@@ -26,6 +26,10 @@
         name: 'option-label',
         props: makePropList([ 'node', 'shouldShowCount', 'count', 'labelClassName', 'countClassName' ]),
         description: `Slot for custom option label template. See ${link('#customize-option-label')} for detailed information.`,
+      }, {
+        name: 'value-label',
+        props: makePropList([ 'node' ]),
+        description: `Slot for custom value label template. See ${link('#customize-value-label')} for detailed information.`,
       } ],
     }),
   }

@@ -118,6 +118,13 @@
     - `labelClassName` & `countClassName` - CSS classnames for making the style correct
   +demo('CustomizeOptionLabel')
 
++subsection('Customize Value Label')
+  :markdown-it
+    You can customize the label of value item (each item in case of multi-select). vue-treeselect utilizes Vue's [scoped slot](https://vuejs.org/v2/guide/components.html#Scoped-Slots) feature and provides some props you should use in your customized template:
+
+    - `node` - a normalized node object (note that, this is differnt from what you return from `normalizer()` prop)
+  +demo('CustomizeValueLabel')
+
 +subsection('Vuex Support')
   :markdown-it
       In all previous examples, we used `v-model` to sync value between application state and vue-treeselect, a.k.a two-way data binding. If you are using Vuex, we could make use of `:value` and `@input`, since `v-model` is just a syntax sugar for them in Vue 2.
