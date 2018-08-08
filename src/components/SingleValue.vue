@@ -7,14 +7,15 @@
     inject: [ 'instance' ],
     methods: {
       renderSingleValueLabel() {
-        const { instance, node } = this;
+        const { instance } = this
+        const node = instance.selectedNodes[0]
 
-        const customValueLabelRenderer = instance.$scopedSlots['value-label'];
+        const customValueLabelRenderer = instance.$scopedSlots['value-label']
         return customValueLabelRenderer
-          ? customValueLabelRenderer({ node: instance.selectedNodes[0] })
-          : instance.selectedNodes[0].label;
+          ? customValueLabelRenderer({ node })
+          : node.label
       },
-	  },
+    },
     render() {
       const { instance, $parent: { renderValueContainer } } = this
       const shouldShowValue = instance.hasValue && !instance.trigger.searchQuery

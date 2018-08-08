@@ -29,8 +29,8 @@
         'vue-treeselect__multi-value-item-disabled': node.isDisabled,
         'vue-treeselect__multi-value-item-new': node.isNew,
       }
-      const customValueLabelRenderer = instance.$scopedSlots['value-label'];
-      const labelRenderer = customValueLabelRenderer ? customValueLabelRenderer({ node }) : node.label;
+      const customValueLabelRenderer = instance.$scopedSlots['value-label']
+      const labelRenderer = customValueLabelRenderer ? customValueLabelRenderer({ node }) : node.label
 
       return (
         <div class="vue-treeselect__multi-value-item-container">
