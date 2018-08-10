@@ -1680,6 +1680,12 @@ export default {
       // So `parentNode` can be stale and we use `getNode()` to avoid that.
 
       const { id, raw } = parentNode
+      const done = () => {
+        if (this.async) {
+          this.initialize()
+          this.resetHighlightedOptionWhenNecessary(true)
+        }
+      }
 
       this.callLoadOptionsProp({
         action: LOAD_CHILDREN_OPTIONS,
@@ -1699,6 +1705,7 @@ export default {
         },
         succeed: () => {
           this.getNode(id).childrenStates.isLoaded = true
+          done()
         },
         fail: err => {
           this.getNode(id).childrenStates.loadingError = getErrorMessage(err)
