@@ -1306,7 +1306,7 @@ export default {
         succeed: options => {
           entry.isLoaded = true
           entry.options = options
-          // When the request finishes, the search query may has changed.
+          // When the request completes, the search query may have changed.
           // We only show these options if they are for the current search query.
           if (this.trigger.searchQuery === searchQuery) done()
         },
@@ -1325,6 +1325,12 @@ export default {
         ...createAsyncOptionsStates(),
         options: [],
       }
+
+      // Vue doesn't support directly watch on object.
+      this.$watch(() => entry.options, () => {
+        // TODO: potential redundant re-initialization.
+        if (this.trigger.searchQuery === searchQuery) this.initialize()
+      }, { deep: true })
 
       if (searchQuery === '') {
         if (Array.isArray(this.defaultOptions)) {
@@ -1680,12 +1686,6 @@ export default {
       // So `parentNode` can be stale and we use `getNode()` to avoid that.
 
       const { id, raw } = parentNode
-      const done = () => {
-        if (this.async) {
-          this.initialize()
-          this.resetHighlightedOptionWhenNecessary(true)
-        }
-      }
 
       this.callLoadOptionsProp({
         action: LOAD_CHILDREN_OPTIONS,
@@ -1705,7 +1705,6 @@ export default {
         },
         succeed: () => {
           this.getNode(id).childrenStates.isLoaded = true
-          done()
         },
         fail: err => {
           this.getNode(id).childrenStates.loadingError = getErrorMessage(err)
