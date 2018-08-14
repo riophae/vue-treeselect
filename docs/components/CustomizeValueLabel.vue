@@ -1,10 +1,6 @@
 <template>
   <div>
-    <treeselect
-      :options="options"
-      :value="value"
-      :multiple="multiple"
-      >
+    <treeselect :options="options" :value="value" :multiple="multiple">
       <div slot="value-label" slot-scope="{ node }">{{ node.raw.customLabel }}</div>
     </treeselect>
     <p>
@@ -18,21 +14,11 @@
     data: () => ({
       multiple: true,
       value: null,
-      options: [ {
-                   id: '1',
-                   label: 'label1',
-                   customLabel: 'custom label1',
-                 },
-                 {
-                   id: '2',
-                   label: 'label2',
-                   customLabel: 'custom label2',
-                 },
-                 {
-                   id: '3',
-                   label: 'label3',
-                   customLabel: 'custom label3',
-      } ],
+      options: [ 1, 2, 3 ].map(i => ({
+        id: i,
+        label: `Label ${i}`,
+        customLabel: `Custom Label ${i}`,
+      })),
     }),
   }
 </script>
