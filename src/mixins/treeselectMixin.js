@@ -1009,6 +1009,7 @@ export default {
         isLeaf: true,
         isBranch: false,
         isDisabled: false,
+        canSelectChildrenEvenIfDisabled: false,
         isNew: false,
         index: [ -1 ],
         level: 0,
@@ -1544,7 +1545,8 @@ export default {
           const level = isRootNode ? 0 : parentNode.level + 1
           const isBranch = Array.isArray(children) || children === null
           const isLeaf = !isBranch
-          const isDisabled = !!node.isDisabled || (!this.flat && !isRootNode && parentNode.isDisabled)
+          const canSelectChildrenEvenIfDisabled = node.canSelectChildrenEvenIfDisabled
+          const isDisabled = !!node.isDisabled || (!this.flat && !isRootNode && parentNode.isDisabled && !parentNode.canSelectChildrenEvenIfDisabled)
           const isNew = !!node.isNew
           const lowerCased = this.matchKeys.reduce((prev, key) => ({
             ...prev,
@@ -1564,6 +1566,7 @@ export default {
           this.$set(normalized, 'lowerCased', lowerCased)
           this.$set(normalized, 'nestedSearchLabel', nestedSearchLabel)
           this.$set(normalized, 'isDisabled', isDisabled)
+          this.$set(normalized, 'canSelectChildrenEvenIfDisabled', canSelectChildrenEvenIfDisabled)
           this.$set(normalized, 'isNew', isNew)
           this.$set(normalized, 'isMatched', false)
           this.$set(normalized, 'isHighlighted', false)
@@ -1864,7 +1867,7 @@ export default {
       if (isFullyChecked) {
         let curr = node
         while ((curr = curr.parentNode) !== NO_PARENT_NODE) {
-          if (curr.children.every(this.isSelected)) this.addValue(curr)
+          if (curr.children.every(this.isSelected) && !curr.canSelectChildrenEvenIfDisabled) this.addValue(curr)
           else break
         }
       }
