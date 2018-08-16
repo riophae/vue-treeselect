@@ -43,7 +43,7 @@
         <tr>
           <td><strong>canSelectChildrenEvenIfDisabled</strong></td>
           <td class="type">Boolean</td>
-          <td>Allow to select children of a disabled node</td>
+          <td>If set to true, children of the node can be selected even if it's disabled.</td>
         </tr>
       </tbody>
     </table>
