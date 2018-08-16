@@ -1306,7 +1306,7 @@ export default {
         succeed: options => {
           entry.isLoaded = true
           entry.options = options
-          // When the request finishes, the search query may has changed.
+          // When the request completes, the search query may have changed.
           // We only show these options if they are for the current search query.
           if (this.trigger.searchQuery === searchQuery) done()
         },
@@ -1325,6 +1325,12 @@ export default {
         ...createAsyncOptionsStates(),
         options: [],
       }
+
+      // Vue doesn't support directly watch on object.
+      this.$watch(() => entry.options, () => {
+        // TODO: potential redundant re-initialization.
+        if (this.trigger.searchQuery === searchQuery) this.initialize()
+      }, { deep: true })
 
       if (searchQuery === '') {
         if (Array.isArray(this.defaultOptions)) {

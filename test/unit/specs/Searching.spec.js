@@ -2,7 +2,7 @@ import { mount } from '@vue/test-utils'
 import sleep from 'yaku/lib/sleep'
 import Treeselect from '@src/components/Treeselect'
 import { INPUT_DEBOUNCE_DELAY } from '@src/constants'
-import { typeSearchText, findMenu, findOptionArrowByNodeId } from './shared'
+import { typeSearchText, findMenu, findOptionByNodeId, findOptionArrowByNodeId } from './shared'
 
 describe('Searching', () => {
   describe('local search', () => {
@@ -901,6 +901,57 @@ describe('Searching', () => {
         await sleep(DELAY)
         expect(vm.menu.current).toBe(keyword + '-1')
       }
+    })
+
+    it('combined with delayed children options loading', async () => {
+      const DELAY = 10
+      const wrapper = mount(Treeselect, {
+        sync: false,
+        propsData: {
+          async: true,
+          loadOptions({ action, parentNode, /*searchQuery, */callback }) {
+            if (action === 'ASYNC_SEARCH') {
+              setTimeout(() => {
+                callback(null, [ {
+                  id: 'a',
+                  label: 'a',
+                }, {
+                  id: 'b',
+                  label: 'b',
+                  children: null,
+                } ])
+              }, DELAY)
+            } else if (action === 'LOAD_CHILDREN_OPTIONS') {
+              setTimeout(() => {
+                parentNode.children = [ {
+                  id: 'ba',
+                  label: 'ba',
+                } ]
+                callback()
+              }, DELAY)
+            }
+          },
+        },
+      })
+      const { vm } = wrapper
+
+      vm.openMenu()
+      await vm.$nextTick()
+
+      await typeSearchText(wrapper, 'random search query')
+      await sleep(DELAY)
+
+      expect(vm.menu.current).toBe('a')
+
+      vm.highlightNextOption()
+      expect(vm.menu.current).toBe('b')
+
+      vm.toggleExpanded(vm.forest.nodeMap.b)
+      await sleep(DELAY)
+
+      // should not reset highlighted item
+      expect(vm.menu.current).toBe('b')
+      expect(findOptionByNodeId(wrapper, 'ba')).toBeTruthy()
     })
   })
 })
