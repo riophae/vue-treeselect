@@ -37,6 +37,10 @@
           'vue-treeselect__option--hide': !instance.shouldShowOptionInMenu(node),
         }
 
+        if (instance.disableAncestorsOnSearch && instance.localSearch.active && !node.isMatched) {
+          return null
+        }
+
         return (
           <div class={optionClass} onMouseenter={this.handleMouseEnterOption} data-id={node.id}>
             {this.renderArrow()}

@@ -279,6 +279,16 @@ export default {
     },
 
     /**
+     * Only show the nodes that match the search value directly, excluding its ancestors.
+     *
+     * @type {Object}
+     */
+    disableAncestorsOnSearch: {
+      type: Boolean,
+      default: false,
+    },
+
+    /**
      * Prevent branch nodes from being selected?
      */
     disableBranchNodes: {
@@ -1358,7 +1368,7 @@ export default {
       // 1) This option is matched.
       if (node.isMatched) return true
       // 2) This option is not matched, but has matched descendant(s).
-      if (node.isBranch && node.hasMatchedDescendants) return true
+      if (!this.disableAncestorsOnSearch && node.isBranch && node.hasMatchedDescendants) return true
       // 3) This option's parent has no matched descendants,
       //    but after being expanded, all its children should be shown.
       if (!node.isRootNode && node.parentNode.showAllChildrenOnSearch) return true
