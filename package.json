@@ -30,7 +30,7 @@
   },
   "pre-commit": "lint",
   "dependencies": {
-    "@babel/runtime": "^7.0.0-beta.56",
+    "@babel/runtime": "^7.0.0",
     "babel-helper-vue-jsx-merge-props": "^2.0.3",
     "easings-css": "^1.0.0",
     "fuzzysearch": "^1.0.3",
@@ -40,15 +40,15 @@
     "watch-size": "^2.0.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.0.0-beta.56",
-    "@babel/plugin-syntax-jsx": "^7.0.0-beta.56",
-    "@babel/plugin-transform-runtime": "^7.0.0-beta.56",
-    "@babel/preset-env": "^7.0.0-beta.56",
+    "@babel/core": "^7.0.0",
+    "@babel/plugin-syntax-jsx": "^7.0.0",
+    "@babel/plugin-transform-runtime": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
     "@vue/test-utils": "1.0.0-beta.16",
     "autoprefixer": "^9.0.0",
-    "babel-eslint": "^8.2.5",
-    "babel-loader": "^8.0.0-beta.4",
-    "babel-plugin-istanbul": "^4.1.5",
+    "babel-eslint": "^9.0.0",
+    "babel-loader": "^8.0.0",
+    "babel-plugin-istanbul": "^5.0.1",
     "babel-plugin-transform-vue-jsx": "^4.0.1",
     "cache-loader": "^1.2.2",
     "chalk": "^2.3.2",
@@ -73,7 +73,7 @@
     "http-proxy-middleware": "^0.18.0",
     "jasmine-core": "^3.1.0",
     "jstransformer-markdown-it": "^2.0.0",
-    "karma": "^2.0.0",
+    "karma": "^3.0.0",
     "karma-chrome-launcher": "^2.2.0",
     "karma-coverage": "^1.1.1",
     "karma-jasmine": "^1.1.1",
@@ -88,7 +88,7 @@
     "optimize-css-assets-webpack-plugin": "^5.0.0",
     "optimize-js-plugin": "0.0.4",
     "ora": "^3.0.0",
-    "postcss-loader": "^2.1.3",
+    "postcss-loader": "^3.0.0",
     "pre-commit": "^1.2.2",
     "pug": "^2.0.0",
     "pug-loader": "^2.4.0",
@@ -116,7 +116,7 @@
     "webpack-hot-middleware": "^2.18.0",
     "webpack-merge": "^4.1.0",
     "webpack-node-externals": "^1.7.2",
-    "yaku": "^0.18.5"
+    "yaku": "^0.19.3"
   },
   "peerDependencies": {
     "vue": "^2.2.0"
