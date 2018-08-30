@@ -46,7 +46,7 @@
       <header class="site-header">
         <div class="container" id="header">
           <div class="site-header-logo"><a class="site-header-logo-link" href="https://vue-treeselect.js.org/">Vue<span class="site-header-logo-component-name">Treeselect</span></a></div>
-          <nav class="site-header-nav"><a class="site-header-nav-item" href="https://github.com/riophae/vue-treeselect/releases">v0.0.36</a><span class="site-header-nav-item"><a class="github-button" href="https://github.com/riophae/vue-treeselect" data-show-count="true" aria-label="Star riophae/vue-treeselect on GitHub">Star</a></span></nav>
+          <nav class="site-header-nav"><a class="site-header-nav-item" href="https://github.com/riophae/vue-treeselect/releases">v0.0.37</a><span class="site-header-nav-item"><a class="github-button" href="https://github.com/riophae/vue-treeselect" data-show-count="true" aria-label="Star riophae/vue-treeselect on GitHub">Star</a></span></nav>
         </div>
       </header>
       <div class="container">
@@ -77,6 +77,7 @@
     <li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'nested-search' }"><a href="#nested-search">Nested Search</a></li>
     <li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'customize-key-names' }"><a href="#customize-key-names">Customize Key Names</a></li>
     <li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'customize-option-label' }"><a href="#customize-option-label">Customize Option Label</a></li>
+    <li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'customize-value-label' }"><a href="#customize-value-label">Customize Value Label</a></li>
     <li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'vuex-support' }"><a href="#vuex-support">Vuex Support</a></li>
   </ul>
 </section>
@@ -165,8 +166,8 @@
     &lt;!-- include Vue 2.x --&gt;
     &lt;script src=&quot;https://cdn.jsdelivr.net/npm/vue@^2&quot;&gt;&lt;/script&gt;
     &lt;!-- include vue-treeselect &amp; its styles. you can change the version tag to better suit your need. --&gt;
-    &lt;script src=&quot;https://cdn.jsdelivr.net/npm/@riophae/vue-treeselect@0.0.36/dist/vue-treeselect.min.js&quot;&gt;&lt;/script&gt;
-    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@riophae/vue-treeselect@0.0.36/dist/vue-treeselect.min.css&quot;&gt;
+    &lt;script src=&quot;https://cdn.jsdelivr.net/npm/@riophae/vue-treeselect@0.0.37/dist/vue-treeselect.min.js&quot;&gt;&lt;/script&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@riophae/vue-treeselect@0.0.37/dist/vue-treeselect.min.css&quot;&gt;
   &lt;/head&gt;
   &lt;body&gt;
     &lt;div id=&quot;app&quot;&gt;
@@ -893,6 +894,39 @@ export default {
               </demo>
             </section>
             <section>
+              <h2 id="customize-value-label" data-section>Customize Value Label<a class="anchor" href="#customize-value-label">
+                  <anchor></anchor></a>
+              </h2><p>You can customize the label of value item (each item in case of multi-select). vue-treeselect utilizes Vue's <a href="https://vuejs.org/v2/guide/components.html#Scoped-Slots">scoped slot</a> feature and provides some props you should use in your customized template:</p>
+<ul>
+<li><code>node</code> - a normalized node object (note that, this is differnt from what you return from <code>normalizer()</code> prop)</li>
+</ul>
+
+              <demo>
+                <customize-value-label slot="demo"></customize-value-label>
+                <template slot="html"><code v-pre>&lt;div&gt;
+  &lt;treeselect :options=&quot;options&quot; :value=&quot;value&quot; :multiple=&quot;multiple&quot;&gt;
+    &lt;div slot=&quot;value-label&quot; slot-scope=&quot;{ node }&quot;&gt;{{ node.raw.customLabel }}&lt;/div&gt;
+  &lt;/treeselect&gt;
+  &lt;p&gt;
+    &lt;label&gt;&lt;input type=&quot;checkbox&quot; v-model=&quot;multiple&quot;&gt;Multi-select&lt;/label&gt;
+  &lt;/p&gt;
+&lt;/div&gt;
+</code></template>
+                <template slot="javascript"><code v-pre>export default {
+  data: () =&gt; ({
+    multiple: true,
+    value: null,
+    options: [ 1, 2, 3 ].map(i =&gt; ({
+      id: i,
+      label: `Label ${i}`,
+      customLabel: `Custom Label ${i}`,
+    })),
+  }),
+}
+</code></template>
+              </demo>
+            </section>
+            <section>
               <h2 id="vuex-support" data-section>Vuex Support<a class="anchor" href="#vuex-support">
                   <anchor></anchor></a>
               </h2><p>In all previous examples, we used <code>v-model</code> to sync value between application state and vue-treeselect, a.k.a two-way data binding. If you are using Vuex, we could make use of <code>:value</code> and <code>@input</code>, since <code>v-model</code> is just a syntax sugar for them in Vue 2.</p>
@@ -980,5 +1014,5 @@ export default {
       </footer>
     </div>
     <script src="https://buttons.github.io/buttons.js" async defer="defer"></script>
-  <script type="text/javascript" src="static/js/app.2374bec4f8d8abea7337.js"></script></body>
+  <script type="text/javascript" src="static/js/app.be08c9082e8b9011389d.js"></script></body>
 </html>
