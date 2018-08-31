@@ -89,6 +89,11 @@
     Set `disableBranchNodes: true` to make branch nodes uncheckable and treat them as collapsible folders only. You may also want to show a count next to the label of each branch node by setting `showCount: true`.
   +demo('DisableBranchNodes')
 
++subsection('Disable Ancestors On Search')
+  :markdown-it
+    Set `disableAncestorsOnSearch: true` to flatten the tree when searching. With this option set to `true`, only the results that match will be shown. With this set to `false` (default), its ancestors will also be displayed, even if they would not individually be included in the results.
+  +demo('DisableAncestorsOnSearch')
+
 +subsection('Disable Item Selection')
   :markdown-it
     You can disable item selection by setting `isDisabled: true` on any leaf node or branch node. For non-flat mode, setting on a branch node will disable all its descendants as well.

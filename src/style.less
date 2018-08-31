@@ -727,6 +727,18 @@
     .vue-treeselect__tip {
       padding-left: @treeselect-padding + (@i + 1) * @treeselect-narrow-cell-width;
     }
+
+    // If disable-ancestors-on-search is enabled, flatten the indentation.
+    .vue-treeselect__option,
+    .vue-treeselect__tip {
+      .vue-treeselect--is-searching.vue-treeselect--search-ancestors-disabled & {
+        padding-left: @treeselect-padding;
+        .vue-treeselect__option-arrow-placeholder,
+        .vue-treeselect__option-arrow-container {
+          display: none;
+        }
+      }
+    }
   }
 }
 .generate-level-indentations(@treeselect-max-level);
