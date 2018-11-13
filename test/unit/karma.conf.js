@@ -2,13 +2,19 @@ const webpackConfig = require('../../build/webpack.test.conf')
 
 module.exports = config => {
   config.set({
-    browsers: [ 'ChromeHeadless' ],
-    frameworks: [ 'jasmine', 'jasmine-matchers' ],
-    client: {
-      jasmine: { random: false },
-    },
-    reporters: [ 'spec', 'coverage' ],
     files: [ './index.js' ],
+    browsers: [ 'CustomChrome' ],
+    customLaunchers: {
+      CustomChrome: {
+        // `ChromeHeadless` without any flags used to be fine,
+        // but it is not now for some unknown reason.
+        // Adding `--no-sandbox` flag solves the issue, which
+        // I know is insecure, but since we are only running
+        // tests, it should be no problem.
+        base: 'ChromeHeadless',
+        flags: [ '--no-sandbox' ],
+      },
+    },
     preprocessors: {
       './index.js': [ 'webpack', 'sourcemap' ],
     },
@@ -16,6 +22,11 @@ module.exports = config => {
     webpackMiddleware: {
       noInfo: true,
     },
+    frameworks: [ 'jasmine', 'jasmine-matchers' ],
+    client: {
+      jasmine: { random: false },
+    },
+    reporters: [ 'spec', 'coverage' ],
     coverageReporter: {
       dir: './coverage',
       reporters: [
