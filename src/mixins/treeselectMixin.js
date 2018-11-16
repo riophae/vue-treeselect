@@ -661,8 +661,13 @@ export default {
       type: [ Number, String ],
       default: 999,
     },
+    /**
+     * For another form
+     */
+    form: {
+      type: String,
+    },
   },
-
   data() {
     return {
       trigger: {

@@ -13,7 +13,6 @@
     name: 'vue-treeselect--hidden-fields',
     inject: [ 'instance' ],
     functional: true,
-
     render(_, context) {
       const { instance } = context.injections
 
@@ -24,9 +23,9 @@
       if (instance.multiple && instance.joinValues) stringifiedValues = [
         stringifiedValues.join(instance.delimiter),
       ]
-
       return stringifiedValues.map((stringifiedValue, i) => (
         <input type="hidden"
+          form={instance.$props.form}
           name={instance.name}
           value={stringifiedValue}
           key={'hidden-field-' + i}

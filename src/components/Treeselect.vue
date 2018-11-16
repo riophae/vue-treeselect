@@ -33,7 +33,7 @@
     render() {
       return (
         <div ref="wrapper" class={this.wrapperClass}>
-          <HiddenFields />
+          <HiddenFields form={this.$props.form}/>
           <Control ref="control" />
           {this.appendToBody ? <MenuPortal ref="portal" /> : <Menu ref="menu" />}
         </div>
