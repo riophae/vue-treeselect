@@ -662,14 +662,12 @@ export default {
       default: 999,
     },
     /**
-     * 
      * For another form
      */
     form: {
-      type: String
-    }
+      type: String,
+    },
   },
-
   data() {
     return {
       trigger: {

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <form action="" id="another-form"></form>
+    <form action="" id="another-form" />
     <treeselect
       :options="options"
       :value="value"
