@@ -1,8 +1,8 @@
 <template>
   <treeselect
     :options="options"
-    :disable-ancestors-on-search="true"
     :multiple="true"
+    :flatten-search-results="true"
     placeholder="Where are you from?"
     />
 </template>

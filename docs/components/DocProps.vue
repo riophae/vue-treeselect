@@ -151,10 +151,10 @@
         defaultValue: code('","'),
         description: `Delimiter to use to join multiple values for the hidden field value.`,
       }, {
-        name: 'disableAncestorsOnSearch',
+        name: 'flattenSearchResults',
         type: 'Boolean',
         defaultValue: code('false'),
-        description: `Whether to flatten the tree when searching. See ${link('#disable-ancestors-on-search')} for example.`,
+        description: `Whether to flatten the tree when searching (sync search mode only). See ${link('#flatten-search-results')} for example.`,
       }, {
         name: 'disableBranchNodes',
         type: 'Boolean',

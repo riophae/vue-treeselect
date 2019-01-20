@@ -283,7 +283,7 @@ export default {
      *
      * @type {Object}
      */
-    disableAncestorsOnSearch: {
+    flattenSearchResults: {
       type: Boolean,
       default: false,
     },
@@ -829,6 +829,9 @@ export default {
     hasBranchNodes() {
       return this.forest.normalizedOptions.some(rootNode => rootNode.isBranch)
     },
+    shouldFlattenOptions() {
+      return this.localSearch.active && this.flattenSearchResults
+    },
     /* eslint-enable valid-jsdoc */
   },
 
@@ -1368,7 +1371,7 @@ export default {
       // 1) This option is matched.
       if (node.isMatched) return true
       // 2) This option is not matched, but has matched descendant(s).
-      if (!this.disableAncestorsOnSearch && node.isBranch && node.hasMatchedDescendants) return true
+      if (node.isBranch && node.hasMatchedDescendants && !this.flattenSearchResults) return true
       // 3) This option's parent has no matched descendants,
       //    but after being expanded, all its children should be shown.
       if (!node.isRootNode && node.parentNode.showAllChildrenOnSearch) return true
