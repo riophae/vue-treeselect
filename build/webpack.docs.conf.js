@@ -1,7 +1,7 @@
 const path = require('path')
 const merge = require('webpack-merge')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const TerserPlugin = require('terser-webpack-plugin')
 const OptimizeJsPlugin = require('optimize-js-plugin')
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
@@ -65,14 +65,11 @@ const webpackConfig = merge(baseWebpackConfig, {
   ],
   optimization: {
     minimizer: [
-      new UglifyJsPlugin({
-        uglifyOptions: {
-          compress: { warnings: false },
-        },
+      new TerserPlugin({
         parallel: true,
-        sourceMap: config.bundle.productionSourceMap,
+        sourceMap: config.docs.productionSourceMap,
       }),
-      new OptimizeJsPlugin({ sourceMap: config.bundle.productionSourceMap }),
+      new OptimizeJsPlugin({ sourceMap: config.docs.productionSourceMap }),
       new OptimizeCSSPlugin(),
     ],
   },

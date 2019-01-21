@@ -1,7 +1,7 @@
 const webpack = require('webpack')
 const merge = require('webpack-merge')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const TerserPlugin = require('terser-webpack-plugin')
 const OptimizeJsPlugin = require('optimize-js-plugin')
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 const config = require('../config')
@@ -43,12 +43,9 @@ const webpackConfig = merge(base, {
   ],
   optimization: {
     minimizer: [
-      new UglifyJsPlugin({
-        uglifyOptions: {
-          compress: { warnings: false },
-        },
-        sourceMap: config.bundle.prod.productionSourceMap,
+      new TerserPlugin({
         parallel: true,
+        sourceMap: config.bundle.prod.productionSourceMap,
       }),
       new OptimizeJsPlugin({
         sourceMap: config.bundle.prod.productionSourceMap,
