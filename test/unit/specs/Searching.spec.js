@@ -2,7 +2,7 @@ import { mount } from '@vue/test-utils'
 import sleep from 'yaku/lib/sleep'
 import Treeselect from '@src/components/Treeselect'
 import { INPUT_DEBOUNCE_DELAY } from '@src/constants'
-import { typeSearchText, findMenu, findOptionByNodeId, findOptionArrowByNodeId } from './shared'
+import { typeSearchText, findMenu, findVisibleOptions, findOptionByNodeId, findOptionArrowByNodeId } from './shared'
 
 describe('Searching', () => {
   describe('local search', () => {
@@ -426,6 +426,46 @@ describe('Searching', () => {
         }),
       })
     })
+  })
+
+  it('flatten search results', async () => {
+    async function typeAndAssert(searchText, idListOfNodesThatShouldBeVisible) {
+      await typeSearchText(wrapper, searchText)
+      const visibleOptionWrappers = findVisibleOptions(wrapper).wrappers
+      const visibleOptionIds = visibleOptionWrappers.map(optionWrapper => {
+        return optionWrapper.element.dataset.id
+      })
+      visibleOptionWrappers.forEach(visibleOption => {
+        const isLevel0 = visibleOption.element.parentElement.classList.contains('vue-treeselect__indent-level-0')
+        expect(isLevel0).toBe(true)
+      })
+      expect(visibleOptionIds).toEqual(idListOfNodesThatShouldBeVisible)
+    }
+
+    const wrapper = mount(Treeselect, {
+      propsData: {
+        options: [ {
+          id: 'a',
+          label: 'a',
+          children: [ {
+            id: 'aa',
+            label: 'aa',
+          }, {
+            id: 'ab',
+            label: 'ab',
+          } ],
+        }, {
+          id: 'b',
+          label: 'b',
+        } ],
+        flattenSearchResults: true,
+      },
+    })
+
+    await wrapper.vm.openMenu()
+    await typeAndAssert('a', [ 'a', 'aa', 'ab' ])
+    await typeAndAssert('ab', [ 'ab' ])
+    await typeAndAssert('b', [ 'ab', 'b' ])
   })
 
   describe('async search', () => {
