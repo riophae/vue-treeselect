@@ -24,7 +24,7 @@
     "pretest": "npm run lint",
     "lint:js": "eslint --ext .js --ext .vue --cache --cache-location node_modules/.cache/eslint --rule 'no-console: 2' .",
     "lint:css": "stylelint '**/*.less'",
-    "lint": "npm run lint:js # disable temporarily: && npm run lint:css",
+    "lint": "npm run lint:js && npm run lint:css",
     "size": "size-limit",
     "verify-bundle": "npm run size && node build/verify-bundle.js",
     "finish": "npm test && npm run bundle && npm run verify-bundle"
@@ -102,7 +102,7 @@
     "size-limit": "^0.21.0",
     "strip-indent": "^2.0.0",
     "stylelint": "^9.1.2",
-    "stylelint-config-xo-space": "^0.10.0",
+    "stylelint-config-xo-space": "^0.11.0",
     "uglifyjs-webpack-plugin": "^2.0.1",
     "url-loader": "^1.0.1",
     "vodal": "^2.3.3",

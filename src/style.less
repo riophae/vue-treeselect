@@ -202,7 +202,7 @@
 }
 
 // based on: https://github.com/strues/retinajs/blob/master/dist/retina.less
-.retina(@path, @cap: 2) {
+.retina(@path, @cap: 2) { // stylelint-disable-line selector-class-pattern
   @lowretina: ~"(min-resolution: 1.5dppx)";
   @2xpath: replace(@path, "(\.\w+)$", "@2x$1");
 
@@ -448,7 +448,7 @@
 
   display: inline-table;
   background: @treeselect-multi-value-item-bg;
-  // Table elements don't have margin, so we set at the container element.
+  // Table elements do not have margin, so we set at the container element.
   padding: @treeselect-multi-value-margin-y @treeselect-multi-value-margin-x;
   border: @treeselect-multi-value-item-border-width solid @treeselect-multi-value-item-border-color;
   border-radius: @treeselect-border-radius-sm;
@@ -690,7 +690,7 @@
   position: absolute;
   overflow-x: hidden;
   overflow-y: auto;
-  // IE9 doesn't properly handle `width: 100%` with scrollbar when `box-sizing: border-box`
+  // IE9 does not properly handle `width: 100%` with scrollbar when `box-sizing: border-box`
   width: auto;
   border: 1px solid @treeselect-control-border-color-active;
   background: @treeselect-menu-bg;
