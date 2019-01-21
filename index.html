@@ -40,13 +40,13 @@
       gtag('config', 'UA-108169693-1');
     </script>
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600|Dosis:300,500">
-  <link href="static/css/app.15ee9391baf2a44ad864.css" rel="stylesheet"></head>
+  <link href="static/css/app.b5abf0baa440673947cf.css" rel="stylesheet"></head>
   <body>
     <div id="app">
       <header class="site-header">
         <div class="container" id="header">
           <div class="site-header-logo"><a class="site-header-logo-link" href="https://vue-treeselect.js.org/">Vue<span class="site-header-logo-component-name">Treeselect</span></a></div>
-          <nav class="site-header-nav"><a class="site-header-nav-item" href="https://github.com/riophae/vue-treeselect/releases">v0.0.37</a><span class="site-header-nav-item"><a class="github-button" href="https://github.com/riophae/vue-treeselect" data-show-count="true" aria-label="Star riophae/vue-treeselect on GitHub">Star</a></span></nav>
+          <nav class="site-header-nav"><a class="site-header-nav-item" href="https://github.com/riophae/vue-treeselect/releases">v0.0.38</a><span class="site-header-nav-item"><a class="github-button" href="https://github.com/riophae/vue-treeselect" data-show-count="true" aria-label="Star riophae/vue-treeselect on GitHub">Star</a></span></nav>
         </div>
       </header>
       <div class="container">
@@ -73,6 +73,7 @@
     <li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'flat-mode-and-sort-values' }"><a href="#flat-mode-and-sort-values">Flat Mode &amp; Sort Values</a></li>
     <li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'prevent-value-combining' }"><a href="#prevent-value-combining">Prevent Value Combining</a></li>
     <li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'disable-branch-nodes' }"><a href="#disable-branch-nodes">Disable Branch Nodes</a></li>
+    <li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'flatten-search-results' }"><a href="#flatten-search-results">Flatten Search Results</a></li>
     <li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'disable-item-selection' }"><a href="#disable-item-selection">Disable Item Selection</a></li>
     <li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'nested-search' }"><a href="#nested-search">Nested Search</a></li>
     <li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'customize-key-names' }"><a href="#customize-key-names">Customize Key Names</a></li>
@@ -166,8 +167,8 @@
     &lt;!-- include Vue 2.x --&gt;
     &lt;script src=&quot;https://cdn.jsdelivr.net/npm/vue@^2&quot;&gt;&lt;/script&gt;
     &lt;!-- include vue-treeselect &amp; its styles. you can change the version tag to better suit your need. --&gt;
-    &lt;script src=&quot;https://cdn.jsdelivr.net/npm/@riophae/vue-treeselect@0.0.37/dist/vue-treeselect.min.js&quot;&gt;&lt;/script&gt;
-    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@riophae/vue-treeselect@0.0.37/dist/vue-treeselect.min.css&quot;&gt;
+    &lt;script src=&quot;https://cdn.jsdelivr.net/npm/@riophae/vue-treeselect@0.0.38/dist/vue-treeselect.min.js&quot;&gt;&lt;/script&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@riophae/vue-treeselect@0.0.38/dist/vue-treeselect.min.css&quot;&gt;
   &lt;/head&gt;
   &lt;body&gt;
     &lt;div id=&quot;app&quot;&gt;
@@ -683,6 +684,30 @@ export default {
               </demo>
             </section>
             <section>
+              <h2 id="flatten-search-results" data-section>Flatten Search Results<a class="anchor" href="#flatten-search-results">
+                  <anchor></anchor></a>
+              </h2><p>Set <code>flattenSearchResults: true</code> to flatten the tree when searching. With this option set to <code>true</code>, only the results that match will be shown. With this set to <code>false</code> (default), its ancestors will also be displayed, even if they would not individually be included in the results.</p>
+
+              <demo>
+                <flatten-search-results slot="demo"></flatten-search-results>
+                <template slot="html"><code v-pre>&lt;treeselect
+  :options=&quot;options&quot;
+  :multiple=&quot;true&quot;
+  :flatten-search-results=&quot;true&quot;
+  placeholder=&quot;Where are you from?&quot;
+  /&gt;
+</code></template>
+                <template slot="javascript"><code v-pre>import countries from './data/countries-of-the-world'
+
+export default {
+  data: () =&gt; ({
+    options: countries,
+  }),
+}
+</code></template>
+              </demo>
+            </section>
+            <section>
               <h2 id="disable-item-selection" data-section>Disable Item Selection<a class="anchor" href="#disable-item-selection">
                   <anchor></anchor></a>
               </h2><p>You can disable item selection by setting <code>isDisabled: true</code> on any leaf node or branch node. For non-flat mode, setting on a branch node will disable all its descendants as well.</p>
@@ -1010,9 +1035,9 @@ export default {
         </section>
       </div>
       <footer class="site-footer">
-        <div class="container">Copyright &copy; 2017-2018 <a href="https://github.com/riophae">Riophae Lee</a>. MIT Licensed.</div>
+        <div class="container">Copyright &copy; 2017-2019 <a href="https://github.com/riophae">Riophae Lee</a>. MIT Licensed.</div>
       </footer>
     </div>
     <script src="https://buttons.github.io/buttons.js" async defer="defer"></script>
-  <script type="text/javascript" src="static/js/app.be08c9082e8b9011389d.js"></script></body>
+  <script type="text/javascript" src="static/js/app.48bc78826cd47a94bc30.js"></script></body>
 </html>
