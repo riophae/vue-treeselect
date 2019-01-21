@@ -1,7 +1,7 @@
 # vue-treeselect
-[![npm](https://badgen.now.sh/npm/v/@riophae/vue-treeselect)](https://www.npmjs.com/package/@riophae/vue-treeselect) [![CircleCI](	https://badgen.now.sh/circleci/github/riophae/vue-treeselect)](https://circleci.com/gh/riophae/vue-treeselect/tree/master) [![Codecov](https://codecov.io/gh/riophae/vue-treeselect/branch/master/graph/badge.svg)](https://codecov.io/gh/riophae/vue-treeselect?branch=master)
+[![npm](https://badgen.now.sh/npm/v/@riophae/vue-treeselect)](https://www.npmjs.com/package/@riophae/vue-treeselect) [![Build](https://badgen.now.sh/circleci/github/riophae/vue-treeselect)](https://circleci.com/gh/riophae/vue-treeselect/tree/master) [![Coverage](https://badgen.net/codecov/c/github/riophae/vue-treeselect)](https://codecov.io/gh/riophae/vue-treeselect?branch=master)
 ![npm monthly downloads](https://badgen.now.sh/npm/dm/@riophae/vue-treeselect)
-![jsDelivr monthly hits](https://data.jsdelivr.com/v1/package/npm/@riophae/vue-treeselect/badge?style=rounded)
+![jsDelivr monthly hits](https://badgen.net/jsdelivr/hits/npm/@riophae/vue-treeselect) [![Known vulnerabilities](https://snyk.io/test/npm/@riophae/vue-treeselect/badge.svg)](https://snyk.io/test/npm/@riophae/vue-treeselect) ![License](https://badgen.net/github/license/riophae/vue-treeselect)
 
 > A multi-select component with nested options support for Vue.js
 
