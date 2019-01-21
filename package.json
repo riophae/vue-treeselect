@@ -35,9 +35,9 @@
     "babel-helper-vue-jsx-merge-props": "^2.0.3",
     "easings-css": "^1.0.0",
     "fuzzysearch": "^1.0.3",
-    "google-material-color": "^1.3.1",
     "is-promise": "^2.1.0",
     "lodash": "^4.0.0",
+    "material-colors": "^1.2.6",
     "watch-size": "^2.0.0"
   },
   "devDependencies": {

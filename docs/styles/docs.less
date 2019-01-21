@@ -1,6 +1,6 @@
 /* stylelint-disable declaration-no-important */
 
-@import "~google-material-color/dist/palette.less";
+@import "~material-colors/dist/colors.less";
 
 /* Utils */
 
@@ -41,13 +41,13 @@ body {
   font-size: 14px;
   line-height: 1.5;
   font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-  color: @palette-Grey-700;
+  color: @md-grey-700;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 ::selection {
-  background: fade(@palette-Light-Blue-600, 10%);
+  background: fade(@md-light-blue-600, 10%);
 }
 
 dl, h1, h2, h3, h4, h5, h6, ol, p, pre, ul {
@@ -89,7 +89,7 @@ input[type="radio"] {
 
 a {
   text-decoration: none;
-  color: @palette-Grey-700;
+  color: @md-grey-700;
 }
 
 a img {
@@ -166,7 +166,7 @@ kbd {
 
 #content a,
 .site-footer a {
-  color: @palette-Light-Blue-600;
+  color: @md-light-blue-600;
   font-weight: 600;
 }
 
@@ -250,7 +250,7 @@ kbd {
   }
 
   svg:hover {
-    color: @palette-Light-Blue-600;
+    color: @md-light-blue-600;
   }
 
   h1 & svg {
@@ -265,7 +265,7 @@ kbd {
 }
 
 p.tip {
-  @tip-color: @palette-Orange-500;
+  @tip-color: @md-orange-500;
 
   position: relative;
   margin: 1em 0;
@@ -513,7 +513,7 @@ label input[type="checkbox"] {
 
   a:hover,
   &.current a {
-    color: @palette-Light-Blue-600;
+    color: @md-light-blue-600;
     font-weight: 600;
   }
 }
