@@ -14,7 +14,6 @@ module.exports = {
     },
   },
   rules: {
-    'import/exports-last': 0,
     'import/no-named-as-default': 0,
     'import/no-extraneous-dependencies': 0,
     'react/jsx-uses-vars': 2,
