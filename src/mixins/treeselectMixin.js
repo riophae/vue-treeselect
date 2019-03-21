@@ -459,6 +459,15 @@ export default {
     },
 
     /**
+     * Whether to only select visible child nodes when parent node is selected
+     * while search is active.
+     */
+    onlySelectVisibleSearchResultChildNodes: {
+      type: Boolean,
+      default: false,
+    },
+
+    /**
      * By default (`auto`), the menu will open below the control. If there is not
      * enough space, vue-treeselect will automatically flip the menu.
      * You can use one of other four options to force the menu to be always opened
@@ -1857,22 +1866,36 @@ export default {
         return
       }
 
-      const isFullyChecked = (
+      let isFullyChecked = (
         node.isLeaf ||
         (/* node.isBranch && */!node.hasDisabledDescendants) ||
         (/* node.isBranch && */this.allowSelectingDisabledDescendants)
       )
+
+      const selectedDescendants = []
+
+      if (node.isBranch) {
+        this.traverseDescendantsBFS(node, descendant => {
+          if ((!descendant.isDisabled || this.allowSelectingDisabledDescendants) &&
+              (
+                !this.onlySelectVisibleSearchResultChildNodes ||
+                !this.localSearch.active ||
+                this.visibleOptionIds.includes(descendant.id))
+          ) {
+            selectedDescendants.push(descendant)
+          } else if (this.onlySelectVisibleSearchResultChildNodes) {
+            isFullyChecked = false
+          }
+        })
+      }
+
       if (isFullyChecked) {
         this.addValue(node)
       }
 
-      if (node.isBranch) {
-        this.traverseDescendantsBFS(node, descendant => {
-          if (!descendant.isDisabled || this.allowSelectingDisabledDescendants) {
-            this.addValue(descendant)
-          }
-        })
-      }
+      selectedDescendants.forEach(descendant => {
+        this.addValue(descendant)
+      })
 
       if (isFullyChecked) {
         let curr = node
