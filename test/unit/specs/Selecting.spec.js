@@ -1462,7 +1462,6 @@ describe('Disable Item Selection', () => {
         vm.select(vm.forest.nodeMap.a)
         expect(vm.forest.selectedNodeIds).toEqual([ 'c', 'ca', 'cb' ])
       })
-
     })
 
     describe('flat=true', () => {
