@@ -1,7 +1,7 @@
 import { mount } from '@vue/test-utils'
 import Treeselect from '@src/components/Treeselect'
 import { UNCHECKED, INDETERMINATE, CHECKED } from '@src/constants'
-import { leftClick, findLabelContainerByNodeId } from './shared'
+import { leftClick, findLabelContainerByNodeId, typeSearchText } from './shared'
 
 describe('Single-select', () => {
   it('basic', () => {
@@ -1374,6 +1374,93 @@ describe('Disable Item Selection', () => {
         //    |   |--[v] abb
         vm.select(vm.forest.nodeMap.abb)
         expect(vm.forest.selectedNodeIds).toEqual([ 'aa', 'aaa', 'aab', 'aba', 'abb', 'ab', 'a' ])
+      })
+
+      it('onlySelectVisibleSearchResultChildNodes', async () => {
+        const wrapper = mount(Treeselect, {
+          propsData: {
+            options: [ {
+              id: 'a',
+              label: 'a',
+              children: [ {
+                id: 'foo_a',
+                label: 'foo_a',
+              },
+              {
+                id: 'foo_b',
+                label: 'foo_b',
+              },
+              {
+                id: 'bar_a',
+                label: 'bar_a',
+              },
+              {
+                id: 'bar_b',
+                label: 'bar_b',
+              },
+              ] },
+            {
+              id: 'c',
+              label: 'c',
+              children: [ {
+                id: 'ca',
+                label: 'ca',
+              }, {
+                id: 'cb',
+                label: 'cb',
+              } ],
+            } ],
+            multiple: true,
+            onlySelectVisibleSearchResultChildNodes: true,
+            value: [ 'c' ],
+          },
+        })
+        const { vm } = wrapper
+
+        // current:
+        //   [ ] a <- select (while searching for 'foo')
+        //    |--[ ] foo_a
+        //    |--[ ] foo_b
+        //    |--[ ] bar_a
+        //    |--[ ] bar_b
+        //   [v] c
+        //    |--[v] ca
+        //    |--[v] cb
+        // expected
+        //   [-] a
+        //    |--[v] foo_a
+        //    |--[v] foo_b
+        //    |--[ ] bar_a
+        //    |--[ ] bar_b
+        //   [v] c
+        //    |--[v] ca
+        //    |--[v] cb
+        await typeSearchText(wrapper, 'foo')
+        vm.select(vm.forest.nodeMap.a)
+        expect(vm.forest.selectedNodeIds).toEqual([ 'c', 'ca', 'cb', 'foo_a', 'foo_b' ])
+
+        // current:
+        //   [-] a <- deselect (while searching for 'bar')
+        //    |--[v] foo_a
+        //    |--[v] foo_b
+        //    |--[ ] bar_a
+        //    |--[ ] bar_b
+        //   [v] c
+        //    |--[v] ca
+        //    |--[v] cb
+
+        // expected
+        //   [ ] a
+        //    |--[ ] foo_a
+        //    |--[ ] foo_b
+        //    |--[ ] bar_a
+        //    |--[ ] bar_b
+        //   [v] c
+        //    |--[v] ca
+        //    |--[v] cb
+        await typeSearchText(wrapper, 'bar')
+        vm.select(vm.forest.nodeMap.a)
+        expect(vm.forest.selectedNodeIds).toEqual([ 'c', 'ca', 'cb' ])
       })
     })
 
