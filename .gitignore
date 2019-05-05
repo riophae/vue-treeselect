@@ -4,7 +4,6 @@
 *error.log*
 
 .eslintcache
-.cache-loader
 
 node_modules/
 yarn.lock
@@ -13,4 +12,3 @@ dist
 gh-pages
 
 test/unit/coverage
-test/e2e/reports

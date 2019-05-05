@@ -1,6 +1,3 @@
 dist
 static
 test/unit/coverage
-
-# temp
-test/e2e

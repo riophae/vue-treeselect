@@ -49,7 +49,7 @@
           {this.renderExceedLimitTip()}
           <Placeholder key="placeholder" />
           <Input ref="input" key="input" />
-        </transition-group>
+        </transition-group>,
       )
     },
   }

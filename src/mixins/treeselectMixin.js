@@ -995,7 +995,7 @@ export default {
     getNode(nodeId) {
       warning(
         () => nodeId != null,
-        () => `Invalid node id: ${nodeId}`
+        () => `Invalid node id: ${nodeId}`,
       )
 
       if (nodeId == null) return null
@@ -1057,7 +1057,7 @@ export default {
         : this.value ? [ this.value ] : []
       const matched = find(
         valueArray,
-        node => node && this.enhancedNormalizer(node).id === id
+        node => node && this.enhancedNormalizer(node).id === id,
       )
 
       return matched || defaultNode
@@ -1262,11 +1262,11 @@ export default {
       this.traverseAllNodesDFS(node => {
         if (this.searchNested && splitSearchQuery.length > 1) {
           node.isMatched = splitSearchQuery.every(filterValue =>
-            match(false, filterValue, node.nestedSearchLabel)
+            match(false, filterValue, node.nestedSearchLabel),
           )
         } else {
           node.isMatched = this.matchKeys.some(matchKey =>
-            match(!this.disableFuzzyMatching, lowerCasedSearchQuery, node.lowerCased[matchKey])
+            match(!this.disableFuzzyMatching, lowerCasedSearchQuery, node.lowerCased[matchKey]),
           )
         }
 
@@ -1616,7 +1616,7 @@ export default {
             if (!isLoaded && typeof this.loadOptions !== 'function') {
               warning(
                 () => false,
-                () => 'Unloaded branch node detected. "loadOptions" prop is required to load its children.'
+                () => 'Unloaded branch node detected. "loadOptions" prop is required to load its children.',
               )
             } else if (!isLoaded && normalized.isExpanded) {
               this.loadChildrenOptions(normalized)
@@ -1768,7 +1768,7 @@ export default {
       warning(
         () => !((node.id in this.forest.nodeMap) && !this.forest.nodeMap[node.id].isFallbackNode),
         () => `Detected duplicate presence of node id ${JSON.stringify(node.id)}. ` +
-          `Their labels are "${this.forest.nodeMap[node.id].label}" and "${node.label}" respectively.`
+          `Their labels are "${this.forest.nodeMap[node.id].label}" and "${node.label}" respectively.`,
       )
     },
 
@@ -1776,7 +1776,7 @@ export default {
       warning(
         () => !(node.children === undefined && node.isBranch === true),
         () => 'Are you meant to declare an unloaded branch node? ' +
-          '`isBranch: true` is no longer supported, please use `children: null` instead.'
+          '`isBranch: true` is no longer supported, please use `children: null` instead.',
       )
     },
 
@@ -1827,7 +1827,7 @@ export default {
           this.forest.selectedNodeIds = []
         } else /* if (this.multiple && !this.allowClearingDisabled) */ {
           this.forest.selectedNodeIds = this.forest.selectedNodeIds.filter(nodeId =>
-            this.getNode(nodeId).isDisabled
+            this.getNode(nodeId).isDisabled,
           )
         }
 

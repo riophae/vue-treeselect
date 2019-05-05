@@ -1,11 +1,11 @@
 import { mount } from '@vue/test-utils'
-import Treeselect from '@src/components/Treeselect'
-import Input from '@src/components/Input'
 import {
   generateOptions,
   leftClick, typeSearchText,
   findMenu, findOptionByNodeId,
 } from './shared'
+import Treeselect from '@src/components/Treeselect'
+import Input from '@src/components/Input'
 
 describe('Menu', () => {
   it('should blur the input & close the menu after clicking anywhere outside the component', async () => {

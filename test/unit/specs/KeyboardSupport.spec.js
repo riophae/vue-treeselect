@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import { mount } from '@vue/test-utils'
 import sleep from 'yaku/lib/sleep'
-import Treeselect from '@src/components/Treeselect'
 import {
   typeSearchText,
   pressBackspaceKey,
@@ -16,6 +15,7 @@ import {
   pressDeleteKey,
   pressAKey,
 } from './shared'
+import Treeselect from '@src/components/Treeselect'
 
 describe('Keyboard Support', () => {
   it('(enter + arrows + home + end) keys should trigger opening menu', () => {

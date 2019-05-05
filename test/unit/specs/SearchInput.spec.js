@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils'
-import Treeselect from '@src/components/Treeselect'
 import { findInput, typeSearchText } from './shared'
+import Treeselect from '@src/components/Treeselect'
 
 describe('Search Input', () => {
   it('should disable auto complete', () => {

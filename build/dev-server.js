@@ -7,7 +7,7 @@ if (!process.env.NODE_ENV) {
 }
 
 const path = require('path')
-const opn = require('opn')
+const open = require('open')
 const express = require('express')
 const webpack = require('webpack')
 const proxyMiddleware = require('http-proxy-middleware')
@@ -34,9 +34,8 @@ const hotMiddleware = require('webpack-hot-middleware')(compiler, {
 })
 // force page reload when html-webpack-plugin template changes
 compiler.plugin('compilation', compilation => {
-  compilation.plugin('html-webpack-plugin-after-emit', (data, cb) => {
+  compilation.plugin('html-webpack-plugin-after-emit', () => {
     hotMiddleware.publish({ action: 'reload' })
-    cb()
   })
 })
 
@@ -77,6 +76,6 @@ module.exports = app.listen(port, err => {
 
   // when env is testing, don't need open it
   if (autoOpenBrowser && process.env.NODE_ENV !== 'testing') {
-    opn(uri)
+    open(uri)
   }
 })

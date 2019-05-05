@@ -640,7 +640,7 @@ describe('Basic', () => {
     expect(console.error).toHaveBeenCalledWith(
       '[Vue-Treeselect Warning]',
       'Are you meant to declare an unloaded branch node? ' +
-        '`isBranch: true` is no longer supported, please use `children: null` instead.'
+        '`isBranch: true` is no longer supported, please use `children: null` instead.',
     )
   })
 
@@ -663,7 +663,7 @@ describe('Basic', () => {
       expect(console.error).toHaveBeenCalledWith(
         '[Vue-Treeselect Warning]',
         'Detected duplicate presence of node id "same_id". ' +
-          'Their labels are "a" and "b" respectively.'
+          'Their labels are "a" and "b" respectively.',
       )
     })
 
@@ -686,7 +686,7 @@ describe('Basic', () => {
       expect(console.error).toHaveBeenCalledWith(
         '[Vue-Treeselect Warning]',
         'Detected duplicate presence of node id "same_id". ' +
-          'Their labels are "a" and "b" respectively.'
+          'Their labels are "a" and "b" respectively.',
       )
     })
   })
