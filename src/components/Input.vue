@@ -136,6 +136,7 @@
         case KEY_CODES.ENTER: {
           evt.preventDefault()
           const current = instance.getNode(instance.menu.current)
+          if (!current) return
           if (current.isBranch && instance.disableBranchNodes) return
           instance.select(current)
           break
