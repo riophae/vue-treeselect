@@ -1,4 +1,4 @@
-<script>
+﻿<script>
   import { debounce, deepExtend, includes } from '../utils'
   import { MIN_INPUT_WIDTH, KEY_CODES, INPUT_DEBOUNCE_DELAY } from '../constants'
 
@@ -95,7 +95,6 @@
         }
 
         instance.trigger.isFocused = false
-        instance.closeMenu()
       },
 
       onInput(evt) {
