@@ -112,14 +112,6 @@ export default {
     },
 
     /**
-     * Deprecated. Use `autoFocus` instead.
-     */
-    autofocus: {
-      type: Boolean,
-      default: false,
-    },
-
-    /**
      * Automatically focus the component on mount?
      */
     autoFocus: {
@@ -321,14 +313,6 @@ export default {
     flat: {
       type: Boolean,
       default: false,
-    },
-
-    /**
-     * Deprecated. Use `instanceId` prop instead.
-     * @type {string|number}
-    */
-    id: {
-      default: null,
     },
 
     /**
@@ -904,16 +888,6 @@ export default {
 
   methods: {
     verifyProps() {
-      warning(
-        () => this.id == null,
-        () => '`id` prop is deprecated. Use `instanceId` instead.',
-      )
-
-      warning(
-        () => !this.autofocus,
-        () => '`autofocus` prop is deprecated. Use `autoFocus` instead.',
-      )
-
       warning(
         () => this.async ? this.searchable : true,
         () => 'For async search mode, the value of "searchable" prop must be true.',
