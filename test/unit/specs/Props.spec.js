@@ -463,21 +463,6 @@ describe('Props', () => {
     })
   })
 
-  describe('autofocus', () => {
-    it('should focus the search input on mount', () => {
-      const wrapper = mount(Treeselect, {
-        attachToDocument: true,
-        propsData: {
-          options: [],
-          autofocus: true,
-          searchable: true,
-        },
-      })
-      const input = findInput(wrapper)
-      expect(document.activeElement).toBe(input.element)
-    })
-  })
-
   describe('autoFocus', () => {
     it('should focus the search input on mount', () => {
       const wrapper = mount(Treeselect, {
