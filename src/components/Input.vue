@@ -87,10 +87,11 @@
 
       onBlur() {
         const { instance } = this
+        const menu = instance.getMenu()
 
         // #15
         // istanbul ignore next
-        if (document.activeElement === instance.$refs.menu) {
+        if (menu && document.activeElement === menu) {
           return this.focus()
         }
 
