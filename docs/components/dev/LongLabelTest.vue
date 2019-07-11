@@ -6,6 +6,8 @@
 </template>
 
 <script>
+  import 'string.prototype.repeat'
+
   const longAToZ = 'abcdefghijklmnopqrstuvwxyz'.repeat(10)
   const longZToA = longAToZ.split('').reverse().join('')
 
