@@ -1078,14 +1078,12 @@
 [dir="rtl"] {
   .vue-treeselect {
     text-align: unset;
-    
+
     .vue-treeselect__option-arrow {
-      -webkit-transform: rotateZ(90deg);
       transform: rotateZ(90deg);
     }
     .vue-treeselect__option-arrow--rotated {
-        -webkit-transform: rotateZ(0);
-        transform: rotateZ(0);
+      transform: rotateZ(0);
     }
 
     .vue-treeselect__label {
@@ -1105,13 +1103,13 @@
 
     .generate-level-indentations(@i) when (@i >= 0) {
       .generate-level-indentations((@i - 1));
-    
+
       .vue-treeselect__indent-level-@{i} {
         .vue-treeselect__option {
           padding-left: unset;
           padding-right: @treeselect-padding + @i * @treeselect-narrow-cell-width;
         }
-    
+
         .vue-treeselect__tip {
           padding-left: unset;
           padding-right: @treeselect-padding + (@i + 1) * @treeselect-narrow-cell-width;
