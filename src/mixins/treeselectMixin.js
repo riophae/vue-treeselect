@@ -1176,7 +1176,7 @@ export default {
       evt.preventDefault()
       evt.stopPropagation()
 
-      // If disabled or not displayed in DOM (see: #272)
+      // If disabled or doesn't exists in DOM (see: #272)
       if (this.disabled || !this.$refs.control) return
 
       const isClickedOnValueContainer = this.getValueContainer().$el.contains(evt.target)
