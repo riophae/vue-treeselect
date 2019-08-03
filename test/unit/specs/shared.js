@@ -105,7 +105,9 @@ export async function typeSearchText(wrapper, text) {
   const $input = findInput(wrapper)
   $input.element.value = text
   $input.trigger('input')
-  expect(wrapper.vm.$refs.control.$refs['value-container'].$refs.input.value).toBe(text)
+  expect(
+    wrapper.vm.$refs.control.$refs['value-container'].$refs.input.value,
+  ).toBe(text)
   await sleep(INPUT_DEBOUNCE_DELAY + 1)
   expect(wrapper.vm.trigger.searchQuery).toBe(text)
 }
@@ -127,7 +129,9 @@ export function findMenu(wrapper) {
 }
 
 export function findVisibleOptions(wrapper) {
-  return wrapper.findAll('.vue-treeselect__option:not(.vue-treeselect__option--hide)')
+  return wrapper.findAll(
+    '.vue-treeselect__option:not(.vue-treeselect__option--hide)',
+  )
 }
 
 export function findOptionByNodeId(wrapper, nodeId) {
@@ -135,11 +139,15 @@ export function findOptionByNodeId(wrapper, nodeId) {
 }
 
 export function findOptionArrowContainerByNodeId(wrapper, nodeId) {
-  return findOptionByNodeId(wrapper, nodeId).find('.vue-treeselect__option-arrow-container')
+  return findOptionByNodeId(wrapper, nodeId).find(
+    '.vue-treeselect__option-arrow-container',
+  )
 }
 
 export function findOptionArrowByNodeId(wrapper, nodeId) {
-  return findOptionByNodeId(wrapper, nodeId).find('.vue-treeselect__option-arrow')
+  return findOptionByNodeId(wrapper, nodeId).find(
+    '.vue-treeselect__option-arrow',
+  )
 }
 
 export function findCheckboxByNodeId(wrapper, nodeId) {
@@ -147,7 +155,9 @@ export function findCheckboxByNodeId(wrapper, nodeId) {
 }
 
 export function findLabelContainerByNodeId(wrapper, nodeId) {
-  return findOptionByNodeId(wrapper, nodeId).find('.vue-treeselect__label-container')
+  return findOptionByNodeId(wrapper, nodeId).find(
+    '.vue-treeselect__label-container',
+  )
 }
 
 export function findLabelByNodeId(wrapper, nodeId) {
@@ -155,7 +165,12 @@ export function findLabelByNodeId(wrapper, nodeId) {
 }
 
 export function findChildrenOptionListByNodeId(wrapper, nodeId) {
-  return wrapper.findAll(Option).wrappers
-    .find(optionWrapper => optionWrapper.vm.node.id === nodeId)
+  return wrapper
+    .findAll(Option)
+    .wrappers.find(optionWrapper => optionWrapper.vm.node.id === nodeId)
     .find('.vue-treeselect__list')
+}
+
+export function findMultiValueItemByNodeId(wrapper) {
+  return wrapper.find(`.vue-treeselect__multi-value-item`)
 }
