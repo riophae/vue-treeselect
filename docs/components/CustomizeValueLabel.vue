@@ -1,14 +1,14 @@
 <template>
-<div>
-    <treeselect :options="options" :value="value" :multiple="multiple">
+  <div>
+      <treeselect :options="options" :value="value" :multiple="multiple">
         <div slot="value-label" slot-scope="{ node }">{{ node.raw.customLabel }}</div>
-    </treeselect>
-    <p>
+      </treeselect>
+      <p>
         <label>
-            <input type="checkbox" v-model="multiple" />Multi-select
+          <input type="checkbox" v-model="multiple" />Multi-select
         </label>
-    </p>
-</div>
+      </p>
+  </div>
 </template>
 
 <script>
