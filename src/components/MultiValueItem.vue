@@ -24,7 +24,7 @@
 
     render() {
       const { instance, node } = this
-      const customClass = node.customClass
+      const customClass = node.customClass ? node.customClass : ''
       const itemClass = {
         'vue-treeselect__multi-value-item': true,
         'vue-treeselect__multi-value-item-disabled': node.isDisabled,
