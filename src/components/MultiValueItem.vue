@@ -23,22 +23,26 @@
     },
 
     render() {
-        const { instance, node } = this
-        const customClass = node.customClass;
-        const itemClass = {
+      const { instance, node } = this
+      const customClass = node.customClass
+      const itemClass = {
         'vue-treeselect__multi-value-item': true,
         'vue-treeselect__multi-value-item-disabled': node.isDisabled,
         'vue-treeselect__multi-value-item-new': node.isNew,
-            [customClass]: !!customClass
-        }
+        [customClass]: !!customClass,
+      }
       const customValueLabelRenderer = instance.$scopedSlots['value-label']
-      const labelRenderer = customValueLabelRenderer ? customValueLabelRenderer({ node }) : node.label
+      const labelRenderer = customValueLabelRenderer
+        ? customValueLabelRenderer({ node })
+        : node.label
 
       return (
         <div class="vue-treeselect__multi-value-item-container">
           <div class={itemClass} onMousedown={this.handleMouseDown}>
-            <span class="vue-treeselect__multi-value-label">{ labelRenderer }</span>
-            <span class="vue-treeselect__icon vue-treeselect__value-remove"><DeleteIcon /></span>
+            <span class="vue-treeselect__multi-value-label">{labelRenderer}</span>
+            <span class="vue-treeselect__icon vue-treeselect__value-remove">
+              <DeleteIcon />
+            </span>
           </div>
         </div>
       )
