@@ -23,14 +23,14 @@
     },
 
     render() {
-      const { instance, node } = this
-      const customClass = node.raw && node.raw.customClass;
-      const itemClass = {
+        const { instance, node } = this
+        const customClass = node.customClass;
+        const itemClass = {
         'vue-treeselect__multi-value-item': true,
         'vue-treeselect__multi-value-item-disabled': node.isDisabled,
         'vue-treeselect__multi-value-item-new': node.isNew,
-        [customClass]: customClass
-      }
+            [customClass]: !!customClass
+        }
       const customValueLabelRenderer = instance.$scopedSlots['value-label']
       const labelRenderer = customValueLabelRenderer ? customValueLabelRenderer({ node }) : node.label
 

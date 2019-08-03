@@ -997,6 +997,7 @@ export default {
         isBranch: false,
         isDisabled: false,
         isNew: false,
+        customClass: '',
         index: [ -1 ],
         level: 0,
         raw,
@@ -1533,6 +1534,7 @@ export default {
           const isLeaf = !isBranch
           const isDisabled = !!node.isDisabled || (!this.flat && !isRootNode && parentNode.isDisabled)
           const isNew = !!node.isNew
+          const customClass = node.customClass || ''
           const lowerCased = this.matchKeys.reduce((prev, key) => ({
             ...prev,
             [key]: stringifyOptionPropValue(node[key]).toLocaleLowerCase(),
@@ -1552,6 +1554,7 @@ export default {
           this.$set(normalized, 'nestedSearchLabel', nestedSearchLabel)
           this.$set(normalized, 'isDisabled', isDisabled)
           this.$set(normalized, 'isNew', isNew)
+          this.$set(normalized, 'customClass', customClass)
           this.$set(normalized, 'isMatched', false)
           this.$set(normalized, 'isHighlighted', false)
           this.$set(normalized, 'isBranch', isBranch)

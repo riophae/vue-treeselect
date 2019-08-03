@@ -14,11 +14,76 @@
     data: () => ({
       multiple: true,
       value: null,
-      options: [ 1, 2, 3 ].map(i => ({
-        id: i,
-        label: `Label ${i}`,
-        customLabel: `Custom Label ${i}`,
-      })),
+      options: [ {
+        id: 'fruits',
+        label: 'Fruits with custom colors',
+        customLabel: 'Fruits 🍎 🍇 🍐 🍓 🍉', 
+        customClass: 'fruit-yellow',
+        children: [ {
+          id: 'apple',
+          label: 'Apple 🍎',
+          customLabel:'🍎',
+          customClass: 'fruit-red',
+        }, {
+          id: 'grapes',
+          customClass: 'fruit-green',
+          label: 'Grapes 🍇',
+          customLabel:'🍇',
+        }, {
+          id: 'pear',
+          customClass: 'fruit-yellow',
+          label: 'Pear 🍐',
+          customLabel:'🍐',
+        }, {
+          id: 'strawberry',
+          customClass: 'fruit-red',
+          label: 'Strawberry 🍓',
+          customLabel:'🍓',
+        }, {
+          id: 'watermelon',
+          customClass: 'fruit-green',
+          label: 'Watermelon 🍉',
+          customLabel:'🍉',
+        } ],
+      }, {
+        id: 'vegetables',
+        label: 'Vegetables',
+        customLabel: 'Vegetables 🌽🥕🍆🍅',
+        children: [ {
+          id: 'corn',
+          label: 'Corn 🌽',
+          customLabel:'🌽'
+        }, {
+          id: 'carrot',
+          label: 'Carrot 🥕',
+          customLabel:'🥕'
+        }, {
+          id: 'eggplant',
+          label: 'Eggplant 🍆',
+          customLabel:'🍆'
+        }, {
+          id: 'tomato',
+          label: 'Tomato 🍅',
+          customLabel:'🍅'
+        } ],
+      } ],
     }),
   }
 </script>
+
+
+<style lang="less">
+.fruit-yellow{
+  background-color: yellow;
+  color: black;
+}
+.fruit-red{
+background-color: red;
+color: white;
+}
+.fruit-green{
+background-color: green;
+color: white;
+}
+</style>
+

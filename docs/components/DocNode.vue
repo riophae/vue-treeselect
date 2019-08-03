@@ -36,6 +36,11 @@
           <td>Used for giving new nodes a different color.</td>
         </tr>
         <tr>
+          <td><strong>customClass</strong></td>
+          <td class="type">Boolean</td>
+          <td>Can be utilized to give new styles to value labels.</td>
+        </tr>
+        <tr>
           <td><strong>isDefaultExpanded</strong></td>
           <td class="type">Boolean</td>
           <td>Whether this folder option should be expanded by default.</td>
