@@ -1,6 +1,6 @@
-import entities from 'entities'
+import { encodeHTML } from 'entities'
 
-export const code = str => `<code>${entities.encodeHTML(str)}</code>`
+export const code = str => `<code>${encodeHTML(str)}</code>`
 
 export const strong = str => `<strong>${str}</strong>`
 
