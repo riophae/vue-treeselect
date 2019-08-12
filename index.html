@@ -40,19 +40,27 @@
       gtag('config', 'UA-108169693-1');
     </script>
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600|Dosis:300,500">
-  <link href="static/css/app.44c7ddc1f0c33d75cff2.css" rel="stylesheet"></head>
+  <link href="static/css/app.f753f00d6a6fb2bbc90d.css" rel="stylesheet"></head>
   <body>
     <div id="app">
       <header class="site-header">
         <div class="container" id="header">
           <div class="site-header-logo"><a class="site-header-logo-link" href="https://vue-treeselect.js.org/">Vue<span class="site-header-logo-component-name">Treeselect</span></a></div>
-          <nav class="site-header-nav"><a class="site-header-nav-item" href="https://github.com/riophae/vue-treeselect/releases">v0.0.38</a><span class="site-header-nav-item"><a class="github-button" href="https://github.com/riophae/vue-treeselect" data-show-count="true" aria-label="Star riophae/vue-treeselect on GitHub">Star</a></span></nav>
+          <nav class="site-header-nav"><a class="site-header-nav-item" href="https://github.com/riophae/vue-treeselect/releases">v0.1.0</a><span class="site-header-nav-item"><a class="github-button" href="https://github.com/riophae/vue-treeselect" data-show-count="true" aria-label="Star riophae/vue-treeselect on GitHub">Star</a></span></nav>
         </div>
       </header>
       <div class="container">
         <section id="main">
           <div id="sidebar">
 <div class="sidebar-nav" :class="{ sticky: isNavSticky }">
+<section class="sidebar-nav-section">
+  <h4 class="sidebar-nav-section-title">Dev</h4>
+  <ul class="sidebar-nav-list">
+    <li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'performance-test' }"><a href="#performance-test">Performance Test</a></li>
+    <li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'modal-test' }"><a href="#modal-test">Modal Test</a></li>
+    <li class="sidebar-nav-list-item" :class="{ current: currentPosition === 'long-label-test' }"><a href="#long-label-test">Long Label Test</a></li>
+  </ul>
+</section>
 <section class="sidebar-nav-section">
   <h4 class="sidebar-nav-section-title">Introduction</h4>
   <ul class="sidebar-nav-list">
@@ -94,6 +102,39 @@
 </div>
           </div>
           <div id="content">
+            <h1 id="dev">Dev<a class="anchor" href="#dev">
+                <anchor></anchor></a>
+            </h1>
+            <section>
+              <h2 id="performance-test" data-section>Performance Test<a class="anchor" href="#performance-test">
+                  <anchor></anchor></a>
+              </h2><p>Checklist:</p>
+<ul>
+<li>Opening &amp; closing the menu should be fast</li>
+<li>Hovering the mouse over the list should be smooth</li>
+<li>Selecting &amp; deselecting options should feel snappy</li>
+</ul>
+
+              <performance-test></performance-test>
+            </section>
+            <section>
+              <h2 id="modal-test" data-section>Modal Test<a class="anchor" href="#modal-test">
+                  <anchor></anchor></a>
+              </h2><p>Checklist:</p>
+<ul>
+<li>The modal uses <code>overflow: hidden</code> and the menu should not be clipped</li>
+<li>When the size of the control changes, the position of the menu should be recalculated</li>
+<li>While scrolling the page, the menu should be kept correctly positioned</li>
+</ul>
+
+              <modal-test></modal-test>
+            </section>
+            <section>
+              <h2 id="long-label-test" data-section>Long Label Test<a class="anchor" href="#long-label-test">
+                  <anchor></anchor></a>
+              </h2>
+              <long-label-test></long-label-test>
+            </section>
             <h1 id="introduction">Introduction<a class="anchor" href="#introduction">
                 <anchor></anchor></a>
             </h1>
@@ -136,7 +177,7 @@
     components: { Treeselect },
     data() {
       return {
-        // define default value
+        // define the default value
         value: null,
         // define options
         options: [ {
@@ -161,14 +202,14 @@
   }
 &lt;/script&gt;
 </code></pre>
-<p>If you just don't want to use webpack or other bundlers, you can also simply include the standalone UMD build in your page. In this way, make sure Vue as a dependency is included before vue-treeselect.</p>
+<p>If you just don't want to use webpack or any other bundlers, you can simply include the standalone UMD build in your page. In this way, make sure Vue as a dependency is included before vue-treeselect.</p>
 <pre><code class="language-html">&lt;html&gt;
   &lt;head&gt;
     &lt;!-- include Vue 2.x --&gt;
     &lt;script src=&quot;https://cdn.jsdelivr.net/npm/vue@^2&quot;&gt;&lt;/script&gt;
-    &lt;!-- include vue-treeselect &amp; its styles. you can change the version tag to better suit your need. --&gt;
-    &lt;script src=&quot;https://cdn.jsdelivr.net/npm/@riophae/vue-treeselect@0.0.38/dist/vue-treeselect.min.js&quot;&gt;&lt;/script&gt;
-    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@riophae/vue-treeselect@0.0.38/dist/vue-treeselect.min.css&quot;&gt;
+    &lt;!-- include vue-treeselect &amp; its styles. you can change the version tag to better suit your needs. --&gt;
+    &lt;script src=&quot;https://cdn.jsdelivr.net/npm/@riophae/vue-treeselect@0.1.0/dist/vue-treeselect.min.js&quot;&gt;&lt;/script&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@riophae/vue-treeselect@0.1.0/dist/vue-treeselect.min.css&quot;&gt;
   &lt;/head&gt;
   &lt;body&gt;
     &lt;div id=&quot;app&quot;&gt;
@@ -182,7 +223,7 @@
     new Vue({
       el: '#app',
       data: {
-        // define default value
+        // define the default value
         value: null,
         // define options
         options: [ {
@@ -275,7 +316,7 @@
               </demo><p>The first thing you need to learn is how to define options. There are two types of options: <strong>a. folder options</strong> that are foldable &amp; <em>may</em> have children options, and <strong>b. normal options</strong> that aren't &amp; don't. Here, I'd like to borrow the basic concepts from Computer Science and call the former as <em>branch nodes</em> &amp; the latter as <em>leaf nodes</em>. These two kinds of nodes together compose the tree.</p>
 <p>Defining leaf nodes is quite simple:</p>
 <pre><code class="language-js">{
-  id: '&lt;id&gt;', // used to identify the option within the tree so it's value must be unique across all options
+  id: '&lt;id&gt;', // used to identify the option within the tree so its value must be unique across all options
   label: '&lt;label&gt;', // used to display the option
 }
 </code></pre>
@@ -458,7 +499,7 @@ export default {
   },
 }
 </code></template>
-              </demo><p>It's also possible to have root level options to be delayed loaded. If no options have been initially registered (<code>options: null</code>), vue-treeselect will attempt to load root options by calling <code>loadOptions({ action, callback, instanceId })</code> after the component is mounted. In this example I have disabled the auto loading feature by setting <code>autoLoadRootOptions: false</code>, and root options will be loaded when the menu is opened.</p>
+              </demo><p>It's also possible to have root level options to be delayed loaded. If no options have been initially registered (<code>options: null</code>), vue-treeselect will attempt to load root options by calling <code>loadOptions({ action, callback, instanceId })</code> after the component is mounted. In this example I have disabled the auto loading feature by setting <code>autoLoadRootOptions: false</code>, and the root options will be loaded when the menu is opened.</p>
 
               <demo>
                 <delayed-root-options slot="demo"></delayed-root-options>
@@ -549,7 +590,7 @@ export default {
 <li>Whenever a branch node gets checked, all its children will be checked too</li>
 <li>Whenever a branch node has all children checked, the branch node itself will be checked too</li>
 </ol>
-<p>Sometimes we don't need that mechanism, and want branch nodes and leaf nodes don't affect each other. In this case, flat mode should be used, as demonstrated in the following.</p>
+<p>Sometimes we don't need that mechanism, and want branch nodes &amp; leaf nodes don't affect each other. In this case, flat mode should be used, as demonstrated in the following.</p>
 <p>If you want to control the order in which selected options to be displayed, use the <code>sortValueBy</code> prop. This prop has three options:</p>
 <ul>
 <li><code>&quot;ORDER_SELECTED&quot;</code> (default) - Order selected</li>
@@ -1039,5 +1080,5 @@ export default {
       </footer>
     </div>
     <script src="https://buttons.github.io/buttons.js" async defer="defer"></script>
-  <script type="text/javascript" src="static/js/app.1f14d499ffb4f1417281.js"></script></body>
+  <script type="text/javascript" src="static/js/app.eb00fad7e1fd3c24cd0c.js"></script></body>
 </html>
