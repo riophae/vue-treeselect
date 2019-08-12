@@ -36,8 +36,8 @@ const webpackConfig = merge(baseWebpackConfig, {
     // you can customize output by editing /index.html
     // see https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
-      filename: config.docs.index,
-      template: 'docs/index.pug',
+      ...config.docs.baseHtmlWebpackPluginOptions,
+      filename: config.docs.output,
       minify: {
         caseSensitive: true,
         removeComments: false,

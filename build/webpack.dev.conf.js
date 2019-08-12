@@ -26,15 +26,12 @@ module.exports = merge(baseWebpackConfig, {
   optimization: {
     noEmitOnErrors: true,
   },
-  node: {
-    process: true,
-  },
   plugins: [
     // https://github.com/glenjamin/webpack-hot-middleware#installation--usage
     new webpack.HotModuleReplacementPlugin(),
     // https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
-      template: './docs/index.pug',
+      ...config.docs.baseHtmlWebpackPluginOptions,
     }),
     new FriendlyErrorsPlugin(),
   ],

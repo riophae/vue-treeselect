@@ -36,7 +36,11 @@ const bundle = {
 
 const docs = {
   env: require('./prod.env'),
-  index: path.resolve(__dirname, '../gh-pages/index.html'),
+  output: path.resolve(__dirname, '../gh-pages/index.html'),
+  baseHtmlWebpackPluginOptions: {
+    template: path.resolve(__dirname, '../docs/index.pug'),
+    templateParameters: { process },
+  },
   assetsRoot: path.resolve(__dirname, '../gh-pages'),
   assetsPublicPath: '',
   assetsSubDirectory: 'static',
