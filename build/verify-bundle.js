@@ -32,7 +32,9 @@ shouldReplaceEnvOrNot(true, 'vue-treeselect.min.js')
 
 function shouldReplaceCssEasings(fileName) {
   const source = readFile(fileName)
-  return source.includes('cubic-bezier(')
+  if (!source.includes('cubic-bezier(')) {
+    throw new Error('The bundle file was not built correctly.')
+  }
 }
 shouldReplaceCssEasings('vue-treeselect.css')
 shouldReplaceCssEasings('vue-treeselect.min.css')
