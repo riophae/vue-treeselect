@@ -97,7 +97,7 @@
     "puppeteer": "^1.19.0",
     "raw-loader": "^3.0.0",
     "regenerator-runtime": "^0.13.1",
-    "rimraf": "^2.6.2",
+    "rimraf": "^3.0.0",
     "script-loader": "^0.7.2",
     "shallow-equal": "^1.0.0",
     "shelljs": "^0.8.1",
