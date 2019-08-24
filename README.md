@@ -16,6 +16,7 @@
 - Keyboard support (navigate using <kbd>Arrow Up</kbd> & <kbd>Arrow Down</kbd> keys, select option using <kbd>Enter</kbd> key, etc.)
 - Rich options & highly customizable
 - Supports a wide range of browsers (see [below](#browser-compatibility))
+- RTL support
 
 *Requires Vue 2.2+*
 
