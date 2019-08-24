@@ -30,7 +30,7 @@ const webpackConfig = merge(base, {
     ],
   },
   externals: [ nodeExternals() ],
-  devtool: config.bundle.dev.productionSourceMap ? '#source-map' : false,
+  devtool: config.bundle.dev.productionSourceMap ? 'source-map' : false,
   plugins: [
     new MiniCssExtractPlugin({
       filename: config.bundle.dev.cssFilename,

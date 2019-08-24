@@ -56,8 +56,8 @@ exports.styleLoaders = (options = {}) => {
   }
 }
 
-exports.withCacheLoader = (rule, opts = {}) => {
-  if (opts.disableCacheInTest && process.env.NODE_ENV === 'testing') {
+exports.withCacheLoader = rule => {
+  if (process.env.NODE_ENV === 'testing') {
     return rule
   }
 

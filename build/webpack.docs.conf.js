@@ -26,7 +26,7 @@ const webpackConfig = merge(baseWebpackConfig, {
       }),
     ],
   },
-  devtool: config.docs.productionSourceMap ? '#source-map' : false,
+  devtool: config.docs.productionSourceMap ? 'source-map' : false,
   plugins: [
     // extract css into its own file
     new MiniCssExtractPlugin({

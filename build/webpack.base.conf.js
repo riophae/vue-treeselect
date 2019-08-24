@@ -41,8 +41,6 @@ module.exports = {
         test: /\.js$/,
         loader: 'babel-loader',
         include: [ 'src', 'docs', 'test' ].map(utils.resolve),
-      }, {
-        disableCacheInTest: true,
       }),
       utils.withCacheLoader({
         test: /\.pug$/,
