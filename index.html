@@ -40,13 +40,13 @@
       gtag('config', 'UA-108169693-1');
     </script>
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600|Dosis:300,500">
-  <link href="/static/css/app.30f0087f13e0ab445aad.css" rel="stylesheet"></head>
+  <link href="/static/css/app.77a8999cdce3ee1fdf70.css" rel="stylesheet"></head>
   <body>
     <div id="app">
       <header class="site-header">
         <div class="container" id="header">
           <div class="site-header-logo"><a class="site-header-logo-link" href="https://vue-treeselect.js.org/">Vue<span class="site-header-logo-component-name">Treeselect</span></a></div>
-          <nav class="site-header-nav"><a class="site-header-nav-item" href="https://github.com/riophae/vue-treeselect/releases">v0.1.0</a><span class="site-header-nav-item"><a class="github-button" href="https://github.com/riophae/vue-treeselect" data-show-count="true" aria-label="Star riophae/vue-treeselect on GitHub">Star</a></span></nav>
+          <nav class="site-header-nav"><a class="site-header-nav-item" href="https://github.com/riophae/vue-treeselect/releases">v0.2.0</a><span class="site-header-nav-item"><a class="github-button" href="https://github.com/riophae/vue-treeselect" data-show-count="true" aria-label="Star riophae/vue-treeselect on GitHub">Star</a></span></nav>
         </div>
       </header>
       <div class="container">
@@ -167,8 +167,8 @@
     &lt;!-- include Vue 2.x --&gt;
     &lt;script src=&quot;https://cdn.jsdelivr.net/npm/vue@^2&quot;&gt;&lt;/script&gt;
     &lt;!-- include vue-treeselect &amp; its styles. you can change the version tag to better suit your needs. --&gt;
-    &lt;script src=&quot;https://cdn.jsdelivr.net/npm/@riophae/vue-treeselect@0.1.0/dist/vue-treeselect.min.js&quot;&gt;&lt;/script&gt;
-    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@riophae/vue-treeselect@0.1.0/dist/vue-treeselect.min.css&quot;&gt;
+    &lt;script src=&quot;https://cdn.jsdelivr.net/npm/@riophae/vue-treeselect@^0.2.0/dist/vue-treeselect.min.js&quot;&gt;&lt;/script&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@riophae/vue-treeselect@^0.2.0/dist/vue-treeselect.min.css&quot;&gt;
   &lt;/head&gt;
   &lt;body&gt;
     &lt;div id=&quot;app&quot;&gt;
@@ -304,23 +304,25 @@
               <demo>
                 <more-features slot="demo"></more-features>
                 <template slot="html"><code v-pre>&lt;div&gt;
-  &lt;treeselect
-    name=&quot;demo&quot;
-    :multiple=&quot;multiple&quot;
-    :clearable=&quot;clearable&quot;
-    :searchable=&quot;searchable&quot;
-    :disabled=&quot;disabled&quot;
-    :open-on-click=&quot;openOnClick&quot;
-    :open-on-focus=&quot;openOnFocus&quot;
-    :clear-on-select=&quot;clearOnSelect&quot;
-    :close-on-select=&quot;closeOnSelect&quot;
-    :always-open=&quot;alwaysOpen&quot;
-    :append-to-body=&quot;appendToBody&quot;
-    :options=&quot;options&quot;
-    :limit=&quot;3&quot;
-    :max-height=&quot;200&quot;
-    v-model=&quot;value&quot;
-    /&gt;
+  &lt;div :dir=&quot;rtl ? 'rtl' : 'ltr'&quot;&gt;
+    &lt;treeselect
+      name=&quot;demo&quot;
+      :multiple=&quot;multiple&quot;
+      :clearable=&quot;clearable&quot;
+      :searchable=&quot;searchable&quot;
+      :disabled=&quot;disabled&quot;
+      :open-on-click=&quot;openOnClick&quot;
+      :open-on-focus=&quot;openOnFocus&quot;
+      :clear-on-select=&quot;clearOnSelect&quot;
+      :close-on-select=&quot;closeOnSelect&quot;
+      :always-open=&quot;alwaysOpen&quot;
+      :append-to-body=&quot;appendToBody&quot;
+      :options=&quot;options&quot;
+      :limit=&quot;3&quot;
+      :max-height=&quot;200&quot;
+      v-model=&quot;value&quot;
+      /&gt;
+  &lt;/div&gt;
   &lt;pre class=&quot;result&quot;&gt;{{ value }}&lt;/pre&gt;
   &lt;p&gt;
     &lt;label&gt;&lt;input type=&quot;checkbox&quot; v-model=&quot;multiple&quot;&gt;Multi-select&lt;/label&gt;
@@ -339,6 +341,7 @@
   &lt;p&gt;
     &lt;label&gt;&lt;input type=&quot;checkbox&quot; v-model=&quot;alwaysOpen&quot;&gt;Always open&lt;/label&gt;
     &lt;label&gt;&lt;input type=&quot;checkbox&quot; v-model=&quot;appendToBody&quot;&gt;Append to body&lt;/label&gt;
+    &lt;label&gt;&lt;input type=&quot;checkbox&quot; v-model=&quot;rtl&quot;&gt;RTL mode&lt;/label&gt;
   &lt;/p&gt;
 &lt;/div&gt;
 </code></template>
@@ -356,6 +359,7 @@ export default {
     closeOnSelect: false,
     alwaysOpen: false,
     appendToBody: false,
+    rtl: false,
     value: [ 'a' ],
     options: generateOptions(2, 3),
   }),
@@ -1039,5 +1043,5 @@ export default {
       </footer>
     </div>
     <script src="https://buttons.github.io/buttons.js" async defer="defer"></script>
-  <script type="text/javascript" src="https://unpkg.com/vue@2.6.10/dist/vue.min.js"></script><script type="text/javascript" src="/static/js/app.c3db426127f7d09854d0.js"></script></body>
+  <script type="text/javascript" src="https://unpkg.com/vue@2.6.10/dist/vue.min.js"></script><script type="text/javascript" src="/static/js/app.1c8c84cbf8e976368db5.js"></script></body>
 </html>
