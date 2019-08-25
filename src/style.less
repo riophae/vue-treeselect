@@ -438,6 +438,11 @@
   .vue-treeselect--focused.vue-treeselect--searchable & {
     color: @treeselect-single-value-font-color-focused;
   }
+
+  .vue-treeselect--disabled & {
+    // #274 Fix for IE
+    position: static;
+  }
 }
 
 .vue-treeselect__multi-value-item-container {
