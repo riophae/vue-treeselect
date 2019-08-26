@@ -1941,7 +1941,7 @@ export default {
   },
 
   mounted() {
-    if (this.autoFocus || this.autofocus) this.focusInput()
+    if (this.autoFocus) this.focusInput()
     if (!this.options && !this.async && this.autoLoadRootOptions) this.loadRootOptions()
     if (this.alwaysOpen) this.openMenu()
     if (this.async && this.defaultOptions) this.handleRemoteSearch()
