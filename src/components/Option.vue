@@ -285,9 +285,11 @@
       return (
         <div class={listItemClass}>
           {this.renderOption()}
-          <transition {...transitionProps}>
-            {this.renderSubOptionsList()}
-          </transition>
+          {node.isBranch && (
+            <transition {...transitionProps}>
+              {this.renderSubOptionsList()}
+            </transition>
+          )}
         </div>
       )
     },
