@@ -30,6 +30,14 @@
         name: 'value-label',
         props: makePropList([ 'node' ]),
         description: `Slot for custom value label template. See ${link('#customize-value-label')} for detailed information.`,
+      }, {
+        name: 'before-list',
+        props: '-',
+        description: `Slot showed before the menu list.`,
+      }, {
+        name: 'after-list',
+        props: '-',
+        description: `Slot showed after the menu list.`,
       } ],
     }),
   }
