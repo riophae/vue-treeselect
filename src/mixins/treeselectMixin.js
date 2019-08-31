@@ -354,15 +354,6 @@ export default {
     },
 
     /**
-     * Whether is externally loading options or not.
-     * Set `true` to show a spinner.
-     */
-    loading: {
-      type: Boolean,
-      default: false,
-    },
-
-    /**
      * Text displayed when loading options.
      */
     loadingText: {

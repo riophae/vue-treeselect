@@ -196,11 +196,6 @@
         defaultValue: code('count => `and ${count} more`'),
         description: 'Function that processes the message shown when selected elements pass the defined limit.',
       }, {
-        name: 'loading',
-        type: 'Boolean',
-        defaultValue: code('false'),
-        description: `Whether is externally loading options or not. Set ${code('true')} to show a spinner.`,
-      }, {
         name: 'loadingText',
         type: 'String',
         defaultValue: code('"Loading..."'),
