@@ -6,7 +6,7 @@
       :searchable="false"
       @input="updateValue"
       />
-    <pre class="result">{{ value }}</pre>
+    <treeselect-value :value="value" />
   </div>
 </template>
 

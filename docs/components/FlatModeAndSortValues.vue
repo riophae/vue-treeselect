@@ -9,7 +9,7 @@
       placeholder="Try selecting some options."
       v-model="value"
       />
-    <pre class="result">{{ value }}</pre>
+    <treeselect-value :value="value" />
     <p><strong>Sort value by:</strong></p>
     <p class="options">
       <label><input type="radio" value="ORDER_SELECTED" v-model="sortValueBy">Order selected</label>
