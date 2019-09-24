@@ -15,6 +15,7 @@ module.exports = {
   },
   rules: {
     'import/no-named-as-default': 0,
+    'unicorn/consistent-function-scoping': 0,
     'vue/attributes-order': 0,
     'vue/no-v-html': 0,
     'no-confusing-arrow': 0,
@@ -24,9 +25,11 @@ module.exports = {
     'prefer-destructuring': 0,
   },
   overrides: [ {
-    files: [ 'docs/**', 'test/**' ],
+    files: [ 'src/**' ],
     rules: {
-      'require-atomic-updates': 0,
+      'unicorn/no-for-loop': 0,
+      'unicorn/prefer-includes': 0,
+      'unicorn/prefer-node-append': 0,
     },
   } ],
 }

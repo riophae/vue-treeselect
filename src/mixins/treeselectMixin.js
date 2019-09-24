@@ -1305,10 +1305,14 @@ export default {
       }
 
       // Vue doesn't support directly watching on objects.
-      this.$watch(() => entry.options, () => {
-        // TODO: potential redundant re-initialization.
-        if (this.trigger.searchQuery === searchQuery) this.initialize()
-      }, { deep: true })
+      this.$watch(
+        () => entry.options,
+        () => {
+          // TODO: potential redundant re-initialization.
+          if (this.trigger.searchQuery === searchQuery) this.initialize()
+        },
+        { deep: true },
+      )
 
       if (searchQuery === '') {
         if (Array.isArray(this.defaultOptions)) {

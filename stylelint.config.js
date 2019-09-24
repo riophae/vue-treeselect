@@ -14,7 +14,7 @@ module.exports = {
     'font-weight-notation': null,
     'no-descending-specificity': null,
     'selector-max-compound-selectors': null,
-    // Disable this rule temporarily as it causes stylelint to crash.
+    // Stylelint v11 is buggy with this rule.
     'block-no-empty': null,
   },
 }

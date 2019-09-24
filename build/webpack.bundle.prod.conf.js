@@ -44,8 +44,8 @@ const webpackConfig = merge(base, {
   optimization: {
     minimizer: [
       new TerserPlugin({
-        parallel: true,
         sourceMap: config.bundle.prod.productionSourceMap,
+        extractComments: false,
       }),
       new OptimizeJsPlugin({
         sourceMap: config.bundle.prod.productionSourceMap,
