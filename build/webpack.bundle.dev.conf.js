@@ -1,6 +1,5 @@
 const webpack = require('webpack')
 const merge = require('webpack-merge')
-const nodeExternals = require('webpack-node-externals')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeJsPlugin = require('optimize-js-plugin')
 const config = require('../config')
@@ -19,7 +18,6 @@ const webpackConfig = merge(base, {
     publicPath: config.bundle.assetsPublicPath,
     filename: config.bundle.dev.jsFilename,
     library: config.bundle.library,
-    libraryTarget: config.bundle.dev.libraryTarget,
   },
   module: {
     rules: [
@@ -29,7 +27,6 @@ const webpackConfig = merge(base, {
       }),
     ],
   },
-  externals: [ nodeExternals() ],
   devtool: config.bundle.dev.productionSourceMap ? 'source-map' : false,
   plugins: [
     new MiniCssExtractPlugin({

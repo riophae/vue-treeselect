@@ -20,7 +20,6 @@ const webpackConfig = merge(base, {
     publicPath: config.bundle.assetsPublicPath,
     filename: config.bundle.prod.jsFilename,
     library: config.bundle.library,
-    libraryTarget: config.bundle.prod.libraryTarget,
   },
   module: {
     rules: [
@@ -29,9 +28,6 @@ const webpackConfig = merge(base, {
         extract: true,
       }),
     ],
-  },
-  externals: {
-    vue: 'Vue',
   },
   devtool: config.bundle.prod.productionSourceMap ? 'source-map' : false,
   plugins: [
