@@ -71,6 +71,7 @@ const webpackConfig = merge(require('./base'), {
         name: 'vue',
         var: 'Vue',
         path: 'dist/vue.min.js',
+        prodUrl: '//cdn.jsdelivr.net/npm/:name@:version/:path',
       } ],
       publicPath: '/node_modules',
     }),
