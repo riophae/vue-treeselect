@@ -1,4 +1,4 @@
-const { version } = require('../package')
+const { version } = require('../../package')
 
 module.exports = `
 vue-treeselect v${version} | (c) 2017-${new Date().getFullYear()} Riophae Lee

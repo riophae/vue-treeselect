@@ -1,5 +1,3 @@
-const webpackConfig = require('../../build/webpack.test.conf')
-
 process.env.CHROME_BIN = require('puppeteer').executablePath()
 
 module.exports = config => {
@@ -20,7 +18,7 @@ module.exports = config => {
     preprocessors: {
       './index.js': [ 'webpack', 'sourcemap' ],
     },
-    webpack: webpackConfig,
+    webpack: require('../../build/webpack-configs/test'),
     webpackMiddleware: {
       noInfo: true,
     },

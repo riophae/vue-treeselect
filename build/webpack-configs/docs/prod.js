@@ -1,44 +1,57 @@
-const path = require('path')
 const merge = require('webpack-merge')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
-const OptimizeJsPlugin = require('optimize-js-plugin')
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 const WebpackCdnPlugin = require('webpack-cdn-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const config = require('../config')
-const utils = require('./utils')
-const baseWebpackConfig = require('./webpack.base.conf')
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
+const config = require('../../config')
+const utils = require('../utils')
 
-const webpackConfig = merge(baseWebpackConfig, {
+const ENABLE_SOURCE_MAP = false
+
+const assetsPath = path => [
+  config.docs.assetsSubDirectory,
+  path,
+].join('/')
+
+const webpackConfig = merge(require('./base'), {
   mode: 'production',
-  output: {
-    path: config.docs.assetsRoot,
-    filename: utils.assetsPath('js/[name].[chunkhash].js'),
-    chunkFilename: utils.assetsPath('js/[id].[chunkhash].js'),
+
+  entry: {
+    app: utils.resolve('docs/main.js'),
   },
+
+  output: {
+    publicPath: config.docs.assetsPublicPath,
+    filename: assetsPath('js/[name].[chunkhash].js'),
+    chunkFilename: assetsPath('js/[id].[chunkhash].js'),
+  },
+
   module: {
     rules: [
       utils.styleLoaders({
-        sourceMap: config.docs.productionSourceMap,
+        sourceMap: ENABLE_SOURCE_MAP,
         extract: true,
       }),
     ],
   },
-  devtool: config.docs.productionSourceMap ? 'source-map' : false,
+
+  devtool: ENABLE_SOURCE_MAP ? 'source-map' : false,
+
   plugins: [
     // extract css into its own file
     new MiniCssExtractPlugin({
-      filename: utils.assetsPath('css/[name].[contenthash].css'),
+      filename: assetsPath('css/[name].[contenthash].css'),
       chunkFilename: '[id].css',
     }),
     // generate dist index.html with correct asset hash for caching.
     // you can customize output by editing /index.html
     // see https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
-      ...config.docs.baseHtmlWebpackPluginOptions,
-      filename: config.docs.output,
+      template: utils.resolve('docs/index.pug'),
+      filename: utils.resolve('gh-pages/index.html'),
       minify: {
         caseSensitive: true,
         removeComments: false,
@@ -49,6 +62,9 @@ const webpackConfig = merge(baseWebpackConfig, {
       },
       // necessary to consistently work with multiple chunks via CommonsChunkPlugin
       chunksSortMode: 'dependency',
+      templateParameters: {
+        NODE_ENV: 'production',
+      },
     }),
     new WebpackCdnPlugin({
       modules: [ {
@@ -59,33 +75,32 @@ const webpackConfig = merge(baseWebpackConfig, {
       publicPath: '/node_modules',
     }),
     new CopyWebpackPlugin([ {
-      from: path.join(__dirname, '../static'),
-      to: path.join(__dirname, '../gh-pages/static'),
+      from: utils.resolve('static'),
+      to: utils.resolve('gh-pages/static'),
     }, {
-      from: path.join(__dirname, '../docs/CNAME'),
-      to: path.join(__dirname, '../gh-pages'),
+      from: utils.resolve('docs/CNAME'),
+      to: utils.resolve('gh-pages'),
     }, {
-      from: path.join(__dirname, '../docs/browserconfig.xml'),
-      to: path.join(__dirname, '../gh-pages'),
+      from: utils.resolve('docs/browserconfig.xml'),
+      to: utils.resolve('gh-pages'),
     }, {
-      from: path.join(__dirname, '../.circleci'),
-      to: path.join(__dirname, '../gh-pages/.circleci'),
+      from: utils.resolve('.circleci'),
+      to: utils.resolve('gh-pages/.circleci'),
     } ]),
   ],
+
   optimization: {
     minimizer: [
       new TerserPlugin({
-        sourceMap: config.docs.productionSourceMap,
+        sourceMap: ENABLE_SOURCE_MAP,
         extractComments: false,
       }),
-      new OptimizeJsPlugin({ sourceMap: config.docs.productionSourceMap }),
       new OptimizeCSSPlugin(),
     ],
   },
 })
 
 if (config.docs.bundleAnalyzerReport) {
-  const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
   webpackConfig.plugins.push(new BundleAnalyzerPlugin())
 }
 
