@@ -40,13 +40,13 @@
       gtag('config', 'UA-108169693-1');
     </script>
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600|Dosis:300,500">
-  <link href="/static/css/app.5d862bacb678c9ecafde.css" rel="stylesheet"></head>
+  <link href="/static/css/app.4e84dc7e03246b3e28ab.css" rel="stylesheet"></head>
   <body>
     <div id="app">
       <header class="site-header">
         <div class="container" id="header">
           <div class="site-header-logo"><a class="site-header-logo-link" href="https://vue-treeselect.js.org/">Vue<span class="site-header-logo-component-name">Treeselect</span></a></div>
-          <nav class="site-header-nav"><a class="site-header-nav-item" href="https://github.com/riophae/vue-treeselect/releases">v0.3.0</a><span class="site-header-nav-item"><a class="github-button" href="https://github.com/riophae/vue-treeselect" data-show-count="true" aria-label="Star riophae/vue-treeselect on GitHub">Star</a></span></nav>
+          <nav class="site-header-nav"><a class="site-header-nav-item" href="https://github.com/riophae/vue-treeselect/releases">v0.4.0</a><span class="site-header-nav-item"><a class="github-button" href="https://github.com/riophae/vue-treeselect" data-show-count="true" aria-label="Star riophae/vue-treeselect on GitHub">Star</a></span></nav>
         </div>
       </header>
       <div class="container">
@@ -167,8 +167,8 @@
     &lt;!-- include Vue 2.x --&gt;
     &lt;script src=&quot;https://cdn.jsdelivr.net/npm/vue@^2&quot;&gt;&lt;/script&gt;
     &lt;!-- include vue-treeselect &amp; its styles. you can change the version tag to better suit your needs. --&gt;
-    &lt;script src=&quot;https://cdn.jsdelivr.net/npm/@riophae/vue-treeselect@^0.3.0/dist/vue-treeselect.min.js&quot;&gt;&lt;/script&gt;
-    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@riophae/vue-treeselect@^0.3.0/dist/vue-treeselect.min.css&quot;&gt;
+    &lt;script src=&quot;https://cdn.jsdelivr.net/npm/@riophae/vue-treeselect@^0.4.0/dist/vue-treeselect.umd.min.js&quot;&gt;&lt;/script&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@riophae/vue-treeselect@^0.4.0/dist/vue-treeselect.min.css&quot;&gt;
   &lt;/head&gt;
   &lt;body&gt;
     &lt;div id=&quot;app&quot;&gt;
@@ -226,7 +226,7 @@
     placeholder=&quot;Select your favourite(s)...&quot;
     v-model=&quot;value&quot;
     /&gt;
-  &lt;pre class=&quot;result&quot;&gt;{{ value }}&lt;/pre&gt;
+  &lt;treeselect-value :value=&quot;value&quot; /&gt;
 &lt;/div&gt;
 </code></template>
                 <template slot="javascript"><code v-pre>export default {
@@ -323,7 +323,7 @@
       v-model=&quot;value&quot;
       /&gt;
   &lt;/div&gt;
-  &lt;pre class=&quot;result&quot;&gt;{{ value }}&lt;/pre&gt;
+  &lt;treeselect-value :value=&quot;value&quot; /&gt;
   &lt;p&gt;
     &lt;label&gt;&lt;input type=&quot;checkbox&quot; v-model=&quot;multiple&quot;&gt;Multi-select&lt;/label&gt;
     &lt;label&gt;&lt;input type=&quot;checkbox&quot; v-model=&quot;clearable&quot;&gt;Clearable&lt;/label&gt;
@@ -573,7 +573,7 @@ export default {
     placeholder=&quot;Try selecting some options.&quot;
     v-model=&quot;value&quot;
     /&gt;
-  &lt;pre class=&quot;result&quot;&gt;{{ value }}&lt;/pre&gt;
+  &lt;treeselect-value :value=&quot;value&quot; /&gt;
   &lt;p&gt;&lt;strong&gt;Sort value by:&lt;/strong&gt;&lt;/p&gt;
   &lt;p class=&quot;options&quot;&gt;
     &lt;label&gt;&lt;input type=&quot;radio&quot; value=&quot;ORDER_SELECTED&quot; v-model=&quot;sortValueBy&quot;&gt;Order selected&lt;/label&gt;
@@ -616,7 +616,7 @@ export default {
     :value-consists-of=&quot;valueConsistsOf&quot;
     v-model=&quot;value&quot;
     /&gt;
-  &lt;pre class=&quot;result&quot;&gt;{{ value }}&lt;/pre&gt;
+  &lt;treeselect-value :value=&quot;value&quot; /&gt;
   &lt;p&gt;&lt;strong&gt;Value consists of:&lt;/strong&gt;&lt;/p&gt;
   &lt;p class=&quot;options&quot;&gt;
     &lt;label&gt;&lt;input type=&quot;radio&quot; value=&quot;ALL&quot; v-model=&quot;valueConsistsOf&quot;&gt;All&lt;/label&gt;&lt;br&gt;
@@ -970,7 +970,7 @@ export default {
     :searchable=&quot;false&quot;
     @input=&quot;updateValue&quot;
     /&gt;
-  &lt;pre class=&quot;result&quot;&gt;{{ value }}&lt;/pre&gt;
+  &lt;treeselect-value :value=&quot;value&quot; /&gt;
 &lt;/div&gt;
 </code></template>
                 <template slot="javascript"><code v-pre>import Vue from 'vue'
@@ -1043,5 +1043,5 @@ export default {
       </footer>
     </div>
     <script src="https://buttons.github.io/buttons.js" async defer="defer"></script>
-  <script type="text/javascript" src="https://unpkg.com/vue@2.6.10/dist/vue.min.js"></script><script type="text/javascript" src="/static/js/app.72f2be82a1cf0cd385bf.js"></script></body>
+  <script type="text/javascript" src="//cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js"></script><script type="text/javascript" src="/static/js/app.20101580af1ef81841d0.js"></script></body>
 </html>
