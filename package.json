@@ -6,8 +6,8 @@
   "license": "MIT",
   "homepage": "https://vue-treeselect.js.org/",
   "repository": "riophae/vue-treeselect",
-  "main": "dist/vue-treeselect.js",
-  "unpkg": "dist/vue-treeselect.min.js",
+  "main": "dist/vue-treeselect.cjs.js",
+  "unpkg": "dist/vue-treeselect.umd.min.js",
   "css": "dist/vue-treeselect.min.css",
   "files": [
     "src",
