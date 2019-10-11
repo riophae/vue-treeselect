@@ -68,6 +68,6 @@ describe('Search Input', () => {
     })
     const text = 'hello world'
     await typeSearchText(wrapper, text)
-    expect(wrapper.vm.isOnComposition).toBe(false)
+    expect(wrapper.vm.trigger.isOnComposition).toBe(false)
   })
 })

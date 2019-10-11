@@ -645,6 +645,7 @@ export default {
         isFocused: false,
         // User entered search query - value of the input.
         searchQuery: '',
+        isOnComposition: false,
       },
 
       menu: {

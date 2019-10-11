@@ -19,7 +19,6 @@
     data: () => ({
       inputWidth: MIN_INPUT_WIDTH,
       value: '',
-      isOnComposition: false,
     }),
 
     computed: {
