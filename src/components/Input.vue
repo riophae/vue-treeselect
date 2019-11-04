@@ -254,7 +254,7 @@
           <input ref="input"
             class="vue-treeselect__input"
             type="text"
-            autocomplete="off"
+            autocomplete="disabled"
             tabIndex={instance.tabIndex}
             required={instance.required && !instance.hasValue}
             value={this.value}
