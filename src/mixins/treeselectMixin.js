@@ -636,6 +636,14 @@ export default {
       type: [ Number, String ],
       default: 999,
     },
+
+    /**
+     * Set selected option to the center of the menu, if possible
+     */
+    scrollPositionOnCenter: {
+      type: Boolean,
+      default: false
+    }
   },
 
   data() {
@@ -940,6 +948,7 @@ export default {
       } else {
         this.forest.normalizedOptions = []
       }
+      this.expandParentNodes()
     },
 
     getInstanceId() {
@@ -1453,6 +1462,9 @@ export default {
       this.$nextTick(this.restoreMenuScrollPosition)
       if (!this.options && !this.async) this.loadRootOptions()
       this.toggleClickOutsideEvent(true)
+      if (this.scrollPositionOnCenter) {
+        this.$nextTick(this.scrollMenuOnCenter);
+      }
       this.$emit('open', this.getInstanceId())
     },
 
@@ -1918,16 +1930,36 @@ export default {
     },
 
     saveMenuScrollPosition() {
+      if (this.scrollPositionOnCenter) return;
       const $menu = this.getMenu()
       // istanbul ignore else
       if ($menu) this.menu.lastScrollPosition = $menu.scrollTop
     },
 
     restoreMenuScrollPosition() {
+      if (this.scrollPositionOnCenter) return;
       const $menu = this.getMenu()
       // istanbul ignore else
       if ($menu) $menu.scrollTop = this.menu.lastScrollPosition
     },
+
+    scrollMenuOnCenter() {
+      const $option = document.querySelector(".vue-treeselect__option--selected");
+      const $menu = this.getMenu();
+
+      if ($option && $menu) {
+        const position = Math.max($option.offsetTop - (($menu.offsetHeight - $option.offsetHeight) / 2), 0);
+        $menu.scrollTop = position;
+      }
+    },
+
+    expandParentNodes() {
+      for (const id of this.forest.selectedNodeIds) {
+        for (const ancestor of this.forest.nodeMap[id].ancestors) {
+          ancestor.isExpanded = true;
+        }
+      }
+    }
   },
 
   created() {
