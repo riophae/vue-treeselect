@@ -14,7 +14,6 @@ module.exports = {
     'font-weight-notation': null,
     'no-descending-specificity': null,
     'selector-max-compound-selectors': null,
-    // Stylelint v11 is buggy with this rule.
-    'block-no-empty': null,
+    'block-no-empty': [ true, { ignore: [] } ],
   },
 }
