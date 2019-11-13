@@ -1784,15 +1784,15 @@ export default {
 
       if (nextState) {
         this.expandParentNodes();
-        if (this.scrollPositionOnCenter) {
-          this.$nextTick(this.scrollMenuOnCenter);
-        }
         this.$emit('select', node.raw, this.getInstanceId())
       } else {
         this.$emit('deselect', node.raw, this.getInstanceId())
       }
 
       if (this.localSearch.active && nextState && (this.single || this.clearOnSelect)) {
+        if (this.scrollPositionOnCenter) {
+          this.$nextTick(this.scrollMenuOnCenter);
+        }
         this.resetSearchQuery()
       }
 
