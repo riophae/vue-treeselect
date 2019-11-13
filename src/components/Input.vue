@@ -254,6 +254,7 @@
           <input ref="input"
             class="vue-treeselect__input"
             type="text"
+            aria-label={instance.ariaLabel}
             autocomplete="off"
             tabIndex={instance.tabIndex}
             required={instance.required && !instance.hasValue}
