@@ -40,6 +40,11 @@
           <td class="type">Boolean</td>
           <td>Whether this folder option should be expanded by default.</td>
         </tr>
+        <tr>
+          <td><strong>canSelectChildrenEvenIfDisabled</strong></td>
+          <td class="type">Boolean</td>
+          <td>If set to true, children of the node can be selected even if it's disabled.</td>
+        </tr>
       </tbody>
     </table>
     <p class="tip">The value of <code>label</code>, <code>children</code> or <code>isDisabled</code> can be reassigned anytime.</p>
