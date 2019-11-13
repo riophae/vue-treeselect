@@ -100,6 +100,7 @@
       },
 
       onInput(evt) {
+        if (this.isOnComposition) return
         const { value } = evt.target
 
         this.value = value
@@ -109,6 +110,16 @@
         } else {
           this.debouncedCallback.cancel()
           this.updateSearchQuery()
+        }
+      },
+
+      handleComposition(event) {
+        if (event.type === 'compositionstart') {
+          this.isOnComposition = true
+        }
+        if (event.type === 'compositionend') {
+          this.isOnComposition = false
+          this.onInput(event)
         }
       },
 
@@ -262,6 +273,8 @@
             onFocus={this.onFocus}
             onInput={this.onInput}
             onBlur={this.onBlur}
+            onCompositionstart={this.handleComposition}
+            onCompositionend={this.handleComposition}
             onKeydown={this.onKeyDown}
             onMousedown={this.onMouseDown}
           />

@@ -59,4 +59,15 @@ describe('Search Input', () => {
       prevWidth = width
     }
   })
+
+  it('when input letter, compositionstart should not be triggered', async () => {
+    const wrapper = mount(Treeselect, {
+      propsData: {
+        options: [],
+      },
+    })
+    const text = 'hello world'
+    await typeSearchText(wrapper, text)
+    expect(wrapper.vm.trigger.isOnComposition).toBe(false)
+  })
 })
