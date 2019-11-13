@@ -51,6 +51,7 @@ describe('Basic', () => {
         isHighlighted: jasmine.any(Boolean),
         isDisabled: jasmine.any(Boolean),
         isNew: jasmine.any(Boolean),
+        customClass: jasmine.any(String),
         parentNode: jasmine.any(Object),
         ancestors: jasmine.any(Array),
         index: jasmine.any(Array),
@@ -550,6 +551,7 @@ describe('Basic', () => {
         isBranch: false,
         isDisabled: false,
         isNew: false,
+        customClass: '',
         index: [ -1 ],
         level: 0,
         raw: {
