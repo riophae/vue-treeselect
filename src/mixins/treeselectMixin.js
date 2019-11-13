@@ -1783,6 +1783,10 @@ export default {
       this.buildForestState()
 
       if (nextState) {
+        this.expandParentNodes();
+        if (this.scrollPositionOnCenter) {
+          this.$nextTick(this.scrollMenuOnCenter);
+        }
         this.$emit('select', node.raw, this.getInstanceId())
       } else {
         this.$emit('deselect', node.raw, this.getInstanceId())
