@@ -57,12 +57,18 @@
     methods: {
       renderX() {
         const { instance } = this
-        const title = instance.multiple ? instance.clearAllText : instance.clearValueText
+        const title = instance.multiple
+          ? instance.clearAllText
+          : instance.clearValueText
 
         if (!this.shouldShowX) return null
 
         return (
-          <div class="vue-treeselect__x-container" title={title} onMousedown={this.handleMouseDownOnX}>
+          <div
+            class="vue-treeselect__x-container"
+            title={title}
+            onMousedown={this.handleMouseDownOnX}
+          >
             <DeleteIcon class="vue-treeselect__x" />
           </div>
         )
@@ -77,9 +83,17 @@
 
         if (!this.shouldShowArrow) return null
 
+        const arrowIconRenderer = instance.$scopedSlots['arrow-icon']
         return (
-          <div class="vue-treeselect__control-arrow-container" onMousedown={this.handleMouseDownOnArrow}>
-            <ArrowIcon class={arrowClass} />
+          <div
+            class="vue-treeselect__control-arrow-container"
+            onMousedown={this.handleMouseDownOnArrow}
+          >
+            {arrowIconRenderer ? (
+              arrowIconRenderer({ isOpen: instance.menu.isOpen })
+            ) : (
+              <ArrowIcon class={arrowClass} />
+            )}
           </div>
         )
       },
@@ -129,11 +143,7 @@
 
       // This is meant to be called by child `<Value />` component.
       renderValueContainer(children) {
-        return (
-          <div class="vue-treeselect__value-container">
-            {children}
-          </div>
-        )
+        return <div class="vue-treeselect__value-container">{children}</div>
       },
     },
 
@@ -142,7 +152,10 @@
       const ValueContainer = instance.single ? SingleValue : MultiValue
 
       return (
-        <div class="vue-treeselect__control" onMousedown={instance.handleMouseDown}>
+        <div
+          class="vue-treeselect__control"
+          onMousedown={instance.handleMouseDown}
+        >
           <ValueContainer ref="value-container" />
           {this.renderX()}
           {this.renderArrow()}
