@@ -41,6 +41,7 @@
     This demonstrates more features.
   +demo('MoreFeatures')
 
+
 +subsection('Delayed Loading')
   :markdown-it
     If you have a large number of deeply nested options, you might want to load options only of the most top levels on initial load, and load the rest only when needed. You can achieve that by following these steps:
@@ -129,6 +130,14 @@
 
     - `node` - a normalized node object (note that, this is differnt from what you return from `normalizer()` prop)
   +demo('CustomizeValueLabel')
+
+
++subsection('Custom Arrow Icon')
+  :markdown-it
+    You can customize the arrow icon. vue-treeselect utilizes Vue's [scoped slot](https://vuejs.org/v2/guide/components.html#Scoped-Slots) feature and provides some props you should use in your customized template:
+
+    - `isOpen` - true if the menu is open, false otherwise
+  +demo('CustomArrowIcon')
 
 +subsection('Vuex Support')
   :markdown-it
