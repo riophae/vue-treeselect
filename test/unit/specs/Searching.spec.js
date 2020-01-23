@@ -467,8 +467,8 @@ describe('Searching', () => {
     await typeAndAssert('ab', [ 'ab' ])
     await typeAndAssert('b', [ 'ab', 'b' ])
   })
-  
-  it('sync search throttling delay', () => {
+
+  it('sync search throttling delay', async () => {
     const wrapper = mount(Treeselect, {
       propsData: {
         inputDebounceDelay: 500,
