@@ -467,6 +467,27 @@ describe('Searching', () => {
     await typeAndAssert('ab', [ 'ab' ])
     await typeAndAssert('b', [ 'ab', 'b' ])
   })
+  
+  it('sync search throttling delay', () => {
+    const wrapper = mount(Treeselect, {
+      propsData: {
+        inputDebounceDelay: 500,
+        options: [ {
+          id: 'a',
+          label: 'a',
+          children: [ {
+            id: 'aa',
+            label: 'x',
+          }, {
+            id: 'ab',
+            label: 'a x',
+          } ],
+        } ],
+      },
+    })
+
+    await typeSearchText(wrapper, 'a x')
+  })
 
   describe('async search', () => {
     it('basic', async () => {

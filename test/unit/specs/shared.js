@@ -106,7 +106,7 @@ export async function typeSearchText(wrapper, text) {
   $input.element.value = text
   $input.trigger('input')
   expect(wrapper.vm.$refs.control.$refs['value-container'].$refs.input.value).toBe(text)
-  await sleep(INPUT_DEBOUNCE_DELAY + 1)
+  await sleep(wrapper.vm.inputDebounceDelay + 1)
   expect(wrapper.vm.trigger.searchQuery).toBe(text)
 }
 
