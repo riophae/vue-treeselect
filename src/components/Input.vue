@@ -53,7 +53,7 @@
     created() {
       this.debouncedCallback = debounce(
         this.updateSearchQuery,
-        this.inputDebounceDelay,
+        this.instance.inputDebounceDelay,
         { leading: true, trailing: true },
       )
     },
