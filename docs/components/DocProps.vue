@@ -352,6 +352,11 @@
         type: 'Number | String',
         defaultValue: code('999'),
         description: `${(code('z-index'))} of the menu.`,
+      }, {
+        name: 'inputDebounceDelay',
+        type: 'Number',
+        defaultValue: code('200'),
+        description: `Sync search throttling delay. The represents the “waiting time” between input entries before processing the search.`,
       } ],
     }),
   }

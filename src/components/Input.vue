@@ -1,6 +1,6 @@
 <script>
   import { debounce, deepExtend, includes } from '../utils'
-  import { MIN_INPUT_WIDTH, KEY_CODES, INPUT_DEBOUNCE_DELAY } from '../constants'
+  import { MIN_INPUT_WIDTH, KEY_CODES } from '../constants'
 
   const keysThatRequireMenuBeingOpen = [
     KEY_CODES.ENTER,
@@ -53,7 +53,7 @@
     created() {
       this.debouncedCallback = debounce(
         this.updateSearchQuery,
-        INPUT_DEBOUNCE_DELAY,
+        this.instance.inputDebounceDelay,
         { leading: true, trailing: true },
       )
     },

@@ -14,7 +14,7 @@ import {
   LOAD_ROOT_OPTIONS, LOAD_CHILDREN_OPTIONS, ASYNC_SEARCH,
   ALL, BRANCH_PRIORITY, LEAF_PRIORITY, ALL_WITH_INDETERMINATE,
   ALL_CHILDREN, ALL_DESCENDANTS, LEAF_CHILDREN, LEAF_DESCENDANTS,
-  ORDER_SELECTED, LEVEL, INDEX,
+  ORDER_SELECTED, LEVEL, INDEX, INPUT_DEBOUNCE_DELAY,
 } from '../constants'
 
 function sortValueByIndex(a, b) {
@@ -635,6 +635,14 @@ export default {
     zIndex: {
       type: [ Number, String ],
       default: 999,
+    },
+
+    /**
+     * Sync search throttling delay.
+     */
+    inputDebounceDelay: {
+      type: Number,
+      default: INPUT_DEBOUNCE_DELAY,
     },
   },
 

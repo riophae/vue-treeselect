@@ -1,6 +1,5 @@
 import sleep from 'yaku/lib/sleep'
 import Option from '@src/components/Option'
-import { INPUT_DEBOUNCE_DELAY } from '@src/constants'
 
 export function $(selector, context = document) {
   return context.querySelector(selector)
@@ -106,7 +105,7 @@ export async function typeSearchText(wrapper, text) {
   $input.element.value = text
   $input.trigger('input')
   expect(wrapper.vm.$refs.control.$refs['value-container'].$refs.input.value).toBe(text)
-  await sleep(INPUT_DEBOUNCE_DELAY + 1)
+  await sleep(wrapper.vm.inputDebounceDelay + 1)
   expect(wrapper.vm.trigger.searchQuery).toBe(text)
 }
 
