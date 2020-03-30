@@ -1373,6 +1373,8 @@ export default {
 
       this.menu.current = node.id
       node.isHighlighted = true
+      
+      this.$emit('highlight', node)
 
       if (this.menu.isOpen && scroll) {
         const scrollToOption = () => {
