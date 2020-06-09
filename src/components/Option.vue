@@ -21,7 +21,7 @@
       shouldExpand() {
         const { instance, node } = this
 
-        return node.isBranch && instance.shouldExpand(node)
+        return (node.isBranch || node.isGroup) && instance.shouldExpand(node)
       },
 
       shouldShow() {
@@ -36,10 +36,11 @@
         const { instance, node } = this
         const optionClass = {
           'vue-treeselect__option': true,
+          'vue-treeselect__option--group': node.isGroup,
           'vue-treeselect__option--disabled': node.isDisabled,
-          'vue-treeselect__option--selected': instance.isSelected(node),
-          'vue-treeselect__option--highlight': node.isHighlighted,
-          'vue-treeselect__option--matched': instance.localSearch.active && node.isMatched,
+          'vue-treeselect__option--selected': instance.isSelected(node) && !node.isGroup,
+          'vue-treeselect__option--highlight': node.isHighlighted && !node.isGroup,
+          'vue-treeselect__option--matched': instance.localSearch.active && node.isMatched && !node.isGroup,
           'vue-treeselect__option--hide': !this.shouldShow,
         }
 
@@ -74,7 +75,7 @@
 
         if (instance.shouldFlattenOptions && this.shouldShow) return null
 
-        if (node.isBranch) {
+        if (node.isBranch && !node.isGroup) {
           const transitionProps = {
             props: {
               name: 'vue-treeselect__option-arrow--prepare',
@@ -98,7 +99,7 @@
         // For leaf nodes, we render a placeholder to keep its label aligned to
         // branch nodes. Unless there is no branch nodes at all (a normal
         // non-tree select).
-        if (/*node.isLeaf && */instance.hasBranchNodes) {
+        if (/*node.isLeaf && */instance.hasBranchNodes && !instance.showAsGroup) {
           if (!arrowPlaceholder) arrowPlaceholder = (
             <div class="vue-treeselect__option-arrow-placeholder">&nbsp;</div>
           )
@@ -140,6 +141,8 @@
           'vue-treeselect__checkbox--unchecked': checkedState === UNCHECKED,
           'vue-treeselect__checkbox--disabled': node.isDisabled,
         }
+
+        if (node.isGroup) return true
 
         if (!checkMark) checkMark = (
           <span class="vue-treeselect__check-mark" />
@@ -257,7 +260,7 @@
 
         if (node.isBranch && instance.disableBranchNodes) {
           instance.toggleExpanded(node)
-        } else {
+        } else if (!node.isGroup) {
           instance.select(node)
         }
       }),
@@ -274,6 +277,7 @@
       const indentLevel = this.instance.shouldFlattenOptions ? 0 : node.level
       const listItemClass = {
         'vue-treeselect__list-item': true,
+        'vue-treeselect__list-group': node.isGroup,
         [`vue-treeselect__indent-level-${indentLevel}`]: true,
       }
       const transitionProps = {

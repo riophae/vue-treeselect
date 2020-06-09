@@ -308,6 +308,11 @@
         defaultValue: code('"Type to search..."'),
         description: `Text tip to prompt for async search. Used for ${link('#async-searching', 'async search mode')}.`,
       }, {
+        name: 'showAsGroup',
+        type: 'Boolean',
+        defaultValue: code('false'),
+        description: `Show tree of items as flat select with groups. Groups can't be selected. See ${link('#show-as-group')} for example.`,
+      }, {
         name: 'showCount',
         type: 'Boolean',
         defaultValue: code('false'),

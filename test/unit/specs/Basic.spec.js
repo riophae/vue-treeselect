@@ -46,6 +46,7 @@ describe('Basic', () => {
         nestedSearchLabel: jasmine.any(String),
         isLeaf: jasmine.any(Boolean),
         isBranch: jasmine.any(Boolean),
+        isGroup: jasmine.any(Boolean),
         isRootNode: jasmine.any(Boolean),
         isMatched: jasmine.any(Boolean),
         isHighlighted: jasmine.any(Boolean),
