@@ -1382,8 +1382,9 @@ export default {
 
       if (this.menu.isOpen && scroll) {
         const scrollToOption = () => {
+          const nodeId = node.id.toString().replace(/"/g, '\\"')
           const $menu = this.getMenu()
-          const $option = $menu.querySelector(`.vue-treeselect__option[data-id="${node.id}"]`)
+          const $option = $menu.querySelector(`.vue-treeselect__option[data-id="${nodeId}"]`)
           if ($option) scrollIntoView($menu, $option)
         }
 

@@ -33,6 +33,7 @@
         typeD: true,
       },
       options: [
+        { id: '"quotes in ID"', label: 'quotes in ID', type: 'typeA' },
         {
           label: 'Group of type A',
           children: [
@@ -68,7 +69,7 @@
     }),
     computed: {
       selectOptions() {
-        return this.options.filter(element => element.children.filter(option => this.availableTypes[option.type]).length > 0)
+        return this.options.filter(element => element.children === undefined || element.children.filter(option => this.availableTypes[option.type]).length > 0)
       },
     },
     watch: {
