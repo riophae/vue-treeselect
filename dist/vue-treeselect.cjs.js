@@ -1486,9 +1486,11 @@ var instanceId = 0;
 
       if (this.menu.isOpen && scroll) {
         var scrollToOption = function scrollToOption() {
+          var nodeId = node.id.toString().replace(/"/g, '\\"');
+
           var $menu = _this14.getMenu();
 
-          var $option = $menu.querySelector(".vue-treeselect__option[data-id=\"".concat(node.id, "\"]"));
+          var $option = $menu.querySelector(".vue-treeselect__option[data-id=\"".concat(nodeId, "\"]"));
           if ($option) scrollIntoView($menu, $option);
         };
 
