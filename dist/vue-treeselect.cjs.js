@@ -3211,7 +3211,7 @@ var Option = {
         labelClassName: labelClassName,
         countClassName: countClassName
       });
-      return h("label", {
+      return h("span", {
         "class": labelClassName
       }, [node.label, shouldShowCount && h("span", {
         "class": countClassName

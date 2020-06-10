@@ -185,12 +185,12 @@
         })
 
         return (
-          <label class={labelClassName}>
+          <span class={labelClassName}>
             {node.label}
             {shouldShowCount && (
               <span class={countClassName}>({count})</span>
             )}
-          </label>
+          </span>
         )
       },
 
