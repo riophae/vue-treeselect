@@ -111,7 +111,7 @@
 
       renderLabelContainer(children) {
         return (
-          <div class="vue-treeselect__label-container" onMousedown={this.handleMouseDownOnLabelContainer}>
+          <div class="vue-treeselect__label-container">
             {children}
           </div>
         )
@@ -124,7 +124,7 @@
         if (instance.disableBranchNodes && node.isBranch) return null
 
         return (
-          <div class="vue-treeselect__checkbox-container">
+          <div class="vue-treeselect__checkbox-container" onMousedown={this.handleMouseDownOnLabelContainer}>
             {children}
           </div>
         )
@@ -172,6 +172,7 @@
         const labelClassName = 'vue-treeselect__label'
         const countClassName = 'vue-treeselect__count'
         const customLabelRenderer = instance.$scopedSlots['option-label']
+        const on = { click: this.handleMouseDownOnLabelContainerDuplicate }
 
         if (customLabelRenderer) return customLabelRenderer({
           node,
@@ -179,10 +180,11 @@
           count,
           labelClassName,
           countClassName,
+          on,
         })
 
         return (
-          <label class={labelClassName}>
+          <label class={labelClassName} onMousedown={this.handleMouseDownOnLabelContainer}>
             {node.label}
             {shouldShowCount && (
               <span class={countClassName}>({count})</span>
@@ -251,6 +253,16 @@
 
         instance.toggleExpanded(node)
       }),
+
+      handleMouseDownOnLabelContainerDuplicate() {
+        const { instance, node } = this
+
+        if (node.isBranch && instance.disableBranchNodes) {
+          instance.toggleExpanded(node)
+        } else {
+          instance.select(node)
+        }
+      },
 
       handleMouseDownOnLabelContainer: onLeftClick(function handleMouseDownOnLabelContainer() {
         const { instance, node } = this
