@@ -519,6 +519,14 @@ export default {
     },
 
     /**
+     * Minimum number of character after the search should be preformed
+     */
+    searchMinInputLength: {
+      type: Number,
+      default: 1,
+    },
+
+    /**
      * Search in ancestor nodes too.
      */
     searchNested: {
@@ -1196,7 +1204,7 @@ export default {
       const { searchQuery } = this.trigger
       const done = () => this.resetHighlightedOptionWhenNecessary(true)
 
-      if (!searchQuery) {
+      if (!searchQuery || searchQuery.length < this.searchMinInputLength) {
         // Exit sync search mode.
         this.localSearch.active = false
         return done()
