@@ -378,6 +378,14 @@ export default {
     },
 
     /**
+     * The maximum number of matched leaf/branch nodes which should be expanded during local search
+     */
+    maxExpandMatchesOnSearch: {
+      type: Number,
+      default: Infinity,
+    },
+
+    /**
      * Sets `maxHeight` style value of the menu.
      */
     maxHeight: {
@@ -406,6 +414,14 @@ export default {
     noChildrenText: {
       type: String,
       default: 'No sub-options.',
+    },
+
+    /**
+     * On search the options should not expand to show matched nodes at all
+     */
+    noExpandOnSearch: {
+      type: Boolean,
+      default: false,
     },
 
     /**
@@ -1232,6 +1248,7 @@ export default {
 
       const lowerCasedSearchQuery = searchQuery.trim().toLocaleLowerCase()
       const splitSearchQuery = lowerCasedSearchQuery.replace(/\s+/g, ' ').split(' ')
+      let maxExpandMatchesOnSearch = this.maxExpandMatchesOnSearch
       this.traverseAllNodesDFS(node => {
         if (this.searchNested && splitSearchQuery.length > 1) {
           node.isMatched = splitSearchQuery.every(filterValue =>
@@ -1255,10 +1272,20 @@ export default {
         }
 
         if (
-          (node.isMatched || (node.isBranch && node.isExpandedOnSearch)) &&
+          (node.isMatched || (node.isBranch && node.hasMatchedDescendants)) &&
           node.parentNode !== NO_PARENT_NODE
         ) {
-          node.parentNode.isExpandedOnSearch = true
+          if (!this.noExpandOnSearch) {
+            if (node.isMatched && maxExpandMatchesOnSearch) {
+              node.parentNode.isExpandedOnSearch = true
+              if (maxExpandMatchesOnSearch !== Infinity) {
+                --maxExpandMatchesOnSearch
+              }
+            } else if (node.isBranch && node.isExpandedOnSearch) {
+              node.parentNode.isExpandedOnSearch = true
+            }
+          }
+
           node.parentNode.hasMatchedDescendants = true
         }
       })
