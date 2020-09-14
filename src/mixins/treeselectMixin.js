@@ -1571,7 +1571,7 @@ export default {
             })
             this.$set(normalized, 'isExpanded', typeof isDefaultExpanded === 'boolean'
               ? isDefaultExpanded
-              : level < this.defaultExpandLevel)
+              : (level < this.defaultExpandLevel || node.isExpanded))
             this.$set(normalized, 'hasMatchedDescendants', false)
             this.$set(normalized, 'hasDisabledDescendants', false)
             this.$set(normalized, 'isExpandedOnSearch', false)

@@ -22,6 +22,7 @@
       options: [ {
         id: 'fruits',
         label: 'Fruits',
+        isExpanded: true,
         children: [ {
           id: 'apple',
           label: 'Apple 🍎',
