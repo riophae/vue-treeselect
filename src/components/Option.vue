@@ -259,7 +259,7 @@
           instance.toggleExpanded(node)
         } else {
           // fromLabel
-          instance.select(node, true)
+          instance.select(node)
         }
       }),
 
@@ -269,7 +269,7 @@
         if (node.isBranch && instance.disableBranchNodes) {
           instance.toggleExpanded(node)
         } else {
-          instance.select(node)
+          instance.select(node, true)
         }
       }),
 
