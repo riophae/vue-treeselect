@@ -111,7 +111,7 @@
 
       renderLabelContainer(children) {
         return (
-          <div class="vue-treeselect__label-container" onMousedown={this.handleMouseDownOnLabelContainer}>
+          <div class="vue-treeselect__label-container">
             {children}
           </div>
         )
@@ -124,7 +124,7 @@
         if (instance.disableBranchNodes && node.isBranch) return null
 
         return (
-          <div class="vue-treeselect__checkbox-container">
+          <div class="vue-treeselect__checkbox-container" onMousedown={this.handleMouseDownOnCheckboxContainer}>
             {children}
           </div>
         )
@@ -182,7 +182,7 @@
         })
 
         return (
-          <label class={labelClassName}>
+          <label class={labelClassName} onMousedown={this.handleMouseDownOnLabelContainer}>
             {node.label}
             {shouldShowCount && (
               <span class={countClassName}>({count})</span>
@@ -258,7 +258,18 @@
         if (node.isBranch && instance.disableBranchNodes) {
           instance.toggleExpanded(node)
         } else {
+          // fromLabel
           instance.select(node)
+        }
+      }),
+
+      handleMouseDownOnCheckboxContainer: onLeftClick(function handleMouseDownOnCheckboxContainer() {
+        const { instance, node } = this
+
+        if (node.isBranch && instance.disableBranchNodes) {
+          instance.toggleExpanded(node)
+        } else {
+          instance.select(node, true)
         }
       }),
 

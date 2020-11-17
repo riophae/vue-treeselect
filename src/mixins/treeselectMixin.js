@@ -394,6 +394,14 @@ export default {
     },
 
     /**
+     * Set `true` to allow only select self when click on label.
+     */
+    labelOnlySelectSelf: {
+      type: Boolean,
+      default: false,
+    },
+
+    /**
      * Generates a hidden <input /> tag with this field name for html forms.
      */
     name: {
@@ -1563,7 +1571,7 @@ export default {
             })
             this.$set(normalized, 'isExpanded', typeof isDefaultExpanded === 'boolean'
               ? isDefaultExpanded
-              : level < this.defaultExpandLevel)
+              : (level < this.defaultExpandLevel || node.isExpanded))
             this.$set(normalized, 'hasMatchedDescendants', false)
             this.$set(normalized, 'hasDisabledDescendants', false)
             this.$set(normalized, 'isExpandedOnSearch', false)
@@ -1749,7 +1757,7 @@ export default {
       )
     },
 
-    select(node) {
+    select(node, fromLabel) {
       if (this.disabled || node.isDisabled) {
         return
       }
@@ -1763,9 +1771,9 @@ export default {
         : !this.isSelected(node)
 
       if (nextState) {
-        this._selectNode(node)
+        this._selectNode(node, fromLabel && this.labelOnlySelectSelf)
       } else {
-        this._deselectNode(node)
+        this._deselectNode(node, fromLabel && this.labelOnlySelectSelf)
       }
 
       this.buildForestState()
@@ -1805,13 +1813,15 @@ export default {
     },
 
     // This is meant to be called only by `select()`.
-    _selectNode(node) {
+    _selectNode(node, onlySelf) {
       if (this.single || this.disableBranchNodes) {
         return this.addValue(node)
       }
 
       if (this.flat) {
         this.addValue(node)
+
+        if (onlySelf) return
 
         if (this.autoSelectAncestors) {
           node.ancestors.forEach(ancestor => {
@@ -1853,13 +1863,15 @@ export default {
     },
 
     // This is meant to be called only by `select()`.
-    _deselectNode(node) {
+    _deselectNode(node, onlySelf) {
       if (this.disableBranchNodes) {
         return this.removeValue(node)
       }
 
       if (this.flat) {
         this.removeValue(node)
+
+        if (onlySelf) return
 
         if (this.autoDeselectAncestors) {
           node.ancestors.forEach(ancestor => {
