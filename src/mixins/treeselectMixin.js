@@ -543,6 +543,25 @@ export default {
     },
 
     /**
+     * For performance we can set a start search length. It doesn't run search until sat length. If there are thounds of options then this helps well.
+     * default: 1
+     */
+    startSearchLength: {
+      type: Number,
+      default: 1
+    },
+
+    /**
+     * For performance we can set a wait time for search. It wait between characters sat time and run search on time only last. It helps much options there.
+     * default: 0
+     * time measurement: millisecond
+     */
+    waitSearchFinishTime: {
+      type: Number,
+      default: 0
+    },
+
+    /**
      * Used in conjunction with `showCount` to specify which type of count number should be displayed.
      * Acceptable values:
      *   - "ALL_CHILDREN"
@@ -683,6 +702,8 @@ export default {
         // <id, countObject> map for counting matched children/descendants.
         countMap: createMap(),
       },
+
+      lastSearchInput: null,
 
       // <searchQuery, remoteSearchEntry> map.
       remoteSearch: createMap(),
@@ -1192,14 +1213,50 @@ export default {
       }
     },
 
-    handleLocalSearch() {
+    handleLocalSearch(retry) {
       const { searchQuery } = this.trigger
       const done = () => this.resetHighlightedOptionWhenNecessary(true)
 
       if (!searchQuery) {
         // Exit sync search mode.
         this.localSearch.active = false
+        this.lastSearchInput = null
         return done()
+      }
+
+      if (searchQuery.length < this.startSearchLength) {
+        // Ignore.
+        return
+      }
+
+      if (this.waitSearchFinishTime > 0) {
+        // If waitSearchFinishTime configured.
+        const now = new Date()
+        if (!this.lastSearchInput) {
+          // First time.
+          setTimeout(() => {
+            this.handleLocalSearch(true)
+          }, this.waitSearchFinishTime);
+
+          this.lastSearchInput = now
+          return
+        }
+
+        const diff = now - this.lastSearchInput
+        if (diff < this.waitSearchFinishTime && !retry) {
+          setTimeout(() => {
+            this.handleLocalSearch(true)
+          }, this.waitSearchFinishTime);
+
+          this.lastSearchInput = now
+          return
+        }
+
+        if (retry && diff < this.waitSearchFinishTime) {
+          return
+        }
+
+        this.lastSearchInput = now
       }
 
       // Enter sync search mode.
@@ -1256,6 +1313,8 @@ export default {
       })
 
       done()
+      // Reset time
+      this.lastSearchInput = null
     },
 
     handleRemoteSearch() {
