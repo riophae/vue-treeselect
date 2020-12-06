@@ -984,7 +984,12 @@ export default {
         () => `Invalid node id: ${nodeId}`,
       )
 
-      if (nodeId == null) return null
+      if (nodeId == null) {
+        if (process.env.NODE_ENV !== 'production') {
+          console.error(this.options)
+        }
+        return null
+      }
 
       return nodeId in this.forest.nodeMap
         ? this.forest.nodeMap[nodeId]
@@ -1060,7 +1065,9 @@ export default {
           nextSelectedNodeIds.push(nodeId)
           const node = this.getNode(nodeId)
           if (node.isBranch) this.traverseDescendantsBFS(node, descendant => {
-            nextSelectedNodeIds.push(descendant.id)
+            if (descendant) {
+              nextSelectedNodeIds.push(descendant.id)
+            }
           })
         })
       } else if (this.valueConsistsOf === LEAF_PRIORITY) {
@@ -1071,6 +1078,7 @@ export default {
           const node = this.getNode(nodeId)
           nextSelectedNodeIds.push(nodeId)
           if (node.isRootNode) continue
+          if (!node.parentNode) continue
           if (!(node.parentNode.id in map)) map[node.parentNode.id] = node.parentNode.children.length
           if (--map[node.parentNode.id] === 0) queue.push(node.parentNode.id)
         }
@@ -1085,6 +1093,7 @@ export default {
           const node = this.getNode(nodeId)
           nextSelectedNodeIds.push(nodeId)
           if (node.isRootNode) continue
+          if (!node.parentNode) continue
           if (!(node.parentNode.id in map)) map[node.parentNode.id] = node.parentNode.children.length
           if (--map[node.parentNode.id] === 0) queue.push(node.parentNode.id)
         }
@@ -1995,6 +2004,9 @@ export default {
   },
 
   mounted() {
+    if (this.options) {
+      this.options = this.options.filter(o => o)
+    }
     if (this.autoFocus) this.focusInput()
     if (!this.options && !this.async && this.autoLoadRootOptions) this.loadRootOptions()
     if (this.alwaysOpen) this.openMenu()

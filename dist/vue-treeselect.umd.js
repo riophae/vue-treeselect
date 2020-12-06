@@ -2234,7 +2234,15 @@ var instanceId = 0;
       }, function () {
         return "Invalid node id: ".concat(nodeId);
       });
-      if (nodeId == null) return null;
+
+      if (nodeId == null) {
+        if (true) {
+          console.error(this.options);
+        }
+
+        return null;
+      }
+
       return nodeId in this.forest.nodeMap ? this.forest.nodeMap[nodeId] : this.createFallbackNode(nodeId);
     },
     createFallbackNode: function createFallbackNode(id) {
@@ -2303,7 +2311,9 @@ var instanceId = 0;
           var node = _this7.getNode(nodeId);
 
           if (node.isBranch) _this7.traverseDescendantsBFS(node, function (descendant) {
-            nextSelectedNodeIds.push(descendant.id);
+            if (descendant) {
+              nextSelectedNodeIds.push(descendant.id);
+            }
           });
         });
       } else if (this.valueConsistsOf === LEAF_PRIORITY) {
@@ -2315,6 +2325,7 @@ var instanceId = 0;
           var node = this.getNode(nodeId);
           nextSelectedNodeIds.push(nodeId);
           if (node.isRootNode) continue;
+          if (!node.parentNode) continue;
           if (!(node.parentNode.id in map)) map[node.parentNode.id] = node.parentNode.children.length;
           if (--map[node.parentNode.id] === 0) queue.push(node.parentNode.id);
         }
@@ -2334,6 +2345,7 @@ var instanceId = 0;
 
           nextSelectedNodeIds.push(_nodeId);
           if (_node.isRootNode) continue;
+          if (!_node.parentNode) continue;
           if (!(_node.parentNode.id in _map)) _map[_node.parentNode.id] = _node.parentNode.children.length;
           if (--_map[_node.parentNode.id] === 0) _queue.push(_node.parentNode.id);
         }
@@ -3204,6 +3216,12 @@ var instanceId = 0;
     this.resetFlags();
   },
   mounted: function mounted() {
+    if (this.options) {
+      this.options = this.options.filter(function (o) {
+        return o;
+      });
+    }
+
     if (this.autoFocus) this.focusInput();
     if (!this.options && !this.async && this.autoLoadRootOptions) this.loadRootOptions();
     if (this.alwaysOpen) this.openMenu();
