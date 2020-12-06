@@ -943,7 +943,7 @@ export default {
     initialize() {
       const options = this.async
         ? this.getRemoteSearchEntry().options
-        : this.options
+        : this.options.filter(o => o)
 
       if (Array.isArray(options)) {
         // In case we are re-initializing options, keep the old state tree temporarily.
@@ -1062,9 +1062,12 @@ export default {
         nextSelectedNodeIds = nodeIdListOfPrevValue
       } else if (this.valueConsistsOf === BRANCH_PRIORITY) {
         nodeIdListOfPrevValue.forEach(nodeId => {
+          if (!nodeId) {
+            return
+          }
           nextSelectedNodeIds.push(nodeId)
           const node = this.getNode(nodeId)
-          if (node.isBranch) this.traverseDescendantsBFS(node, descendant => {
+          if (node && node.isBranch) this.traverseDescendantsBFS(node, descendant => {
             if (descendant) {
               nextSelectedNodeIds.push(descendant.id)
             }
@@ -2004,9 +2007,6 @@ export default {
   },
 
   mounted() {
-    if (this.options) {
-      this.options = this.options.filter(o => o)
-    }
     if (this.autoFocus) this.focusInput()
     if (!this.options && !this.async && this.autoLoadRootOptions) this.loadRootOptions()
     if (this.alwaysOpen) this.openMenu()

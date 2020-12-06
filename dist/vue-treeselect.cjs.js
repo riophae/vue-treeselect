@@ -1068,7 +1068,9 @@ var instanceId = 0;
       this._blurOnSelect = false;
     },
     initialize: function initialize() {
-      var options = this.async ? this.getRemoteSearchEntry().options : this.options;
+      var options = this.async ? this.getRemoteSearchEntry().options : this.options.filter(function (o) {
+        return o;
+      });
 
       if (Array.isArray(options)) {
         var prevNodeMap = this.forest.nodeMap;
@@ -1173,11 +1175,15 @@ var instanceId = 0;
         nextSelectedNodeIds = nodeIdListOfPrevValue;
       } else if (this.valueConsistsOf === BRANCH_PRIORITY) {
         nodeIdListOfPrevValue.forEach(function (nodeId) {
+          if (!nodeId) {
+            return;
+          }
+
           nextSelectedNodeIds.push(nodeId);
 
           var node = _this7.getNode(nodeId);
 
-          if (node.isBranch) _this7.traverseDescendantsBFS(node, function (descendant) {
+          if (node && node.isBranch) _this7.traverseDescendantsBFS(node, function (descendant) {
             if (descendant) {
               nextSelectedNodeIds.push(descendant.id);
             }
@@ -2083,12 +2089,6 @@ var instanceId = 0;
     this.resetFlags();
   },
   mounted: function mounted() {
-    if (this.options) {
-      this.options = this.options.filter(function (o) {
-        return o;
-      });
-    }
-
     if (this.autoFocus) this.focusInput();
     if (!this.options && !this.async && this.autoLoadRootOptions) this.loadRootOptions();
     if (this.alwaysOpen) this.openMenu();
