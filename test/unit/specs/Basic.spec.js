@@ -583,14 +583,19 @@ describe('Basic', () => {
         const wrapper = mount(Treeselect, {
           propsData: {
             value: 'a',
+            noMatchingLabel: 'aa',
             options: [],
           },
         })
         const { vm } = wrapper
-
+        // expect(vm.forest.nodeMap.a).toEqual(jasmine.objectContaining({
+        //   id: 'a',
+        //   label: 'a (unknown)',
+        //   isFallbackNode: true,
+        // }))
         expect(vm.forest.nodeMap.a).toEqual(jasmine.objectContaining({
           id: 'a',
-          label: 'a (unknown)',
+          label: 'aa',
           isFallbackNode: true,
         }))
       })

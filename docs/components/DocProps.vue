@@ -238,6 +238,11 @@
         defaultValue: code('"No sub-options."'),
         description: 'Text displayed when a branch node has no children.',
       }, {
+        name: 'noMatchingLabel',
+        type: 'String',
+        defaultValue: code('"unknown"'),
+        description: 'Label displayed when there are no matching options.',
+      }, {
         name: 'noOptionsText',
         type: 'String',
         defaultValue: code('"No options available."'),

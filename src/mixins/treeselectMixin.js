@@ -70,6 +70,8 @@ export default {
   },
 
   props: {
+
+
     /**
      * Whether to allow resetting value even if there are disabled selected nodes.
      */
@@ -406,6 +408,14 @@ export default {
     noChildrenText: {
       type: String,
       default: 'No sub-options.',
+    },
+
+    /**
+     * Label displayed when there are no matching options.
+     */
+    noMatchingLabel: {
+      type: String,
+      default: 'unknown',
     },
 
     /**
@@ -976,7 +986,9 @@ export default {
       // When the real data is loaded, we'll override this fake node.
 
       const raw = this.extractNodeFromValue(id)
-      const label = this.enhancedNormalizer(raw).label || `${id} (unknown)`
+      // const label = this.enhancedNormalizer(raw).label || `${id} (unknown)`
+      const label = this.enhancedNormalizer(raw).label || `${this.noMatchingLabel}`
+
       const fallbackNode = {
         id,
         label,
