@@ -70,10 +70,7 @@ export default {
   },
 
   props: {
-    label: {
-      type: String,
-      default: 'unknown',
-    },
+
 
     /**
      * Whether to allow resetting value even if there are disabled selected nodes.
@@ -411,6 +408,14 @@ export default {
     noChildrenText: {
       type: String,
       default: 'No sub-options.',
+    },
+
+    /**
+     * Label displayed when there are no matching options.
+     */
+    noMatchingLabel: {
+      type: String,
+      default: 'unknown',
     },
 
     /**
@@ -982,7 +987,7 @@ export default {
 
       const raw = this.extractNodeFromValue(id)
       // const label = this.enhancedNormalizer(raw).label || `${id} (unknown)`
-      const label = this.enhancedNormalizer(raw).label || `${this.label}`
+      const label = this.enhancedNormalizer(raw).label || `${this.noMatchingLabel}`
 
       const fallbackNode = {
         id,
