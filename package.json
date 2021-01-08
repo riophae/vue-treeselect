@@ -5,7 +5,7 @@
   "author": "Riophae Lee <riophaelee@gmail.com>",
   "license": "MIT",
   "homepage": "https://vue-treeselect.js.org/",
-  "repository": "https://github.com/yeyaolong/vue-treeselect.git",
+  "repository": "riophae/vue-treeselect",
   "main": "dist/vue-treeselect.cjs.js",
   "unpkg": "dist/vue-treeselect.umd.min.js",
   "css": "dist/vue-treeselect.min.css",
