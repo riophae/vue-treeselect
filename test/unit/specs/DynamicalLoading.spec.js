@@ -325,6 +325,7 @@ describe('Dynamical Loading', () => {
             children: null,
           } ],
           value: 'aa', // <- this creates a fallback node
+          noMatchingLabel: 'labelAA',
           loadOptions({ parentNode, callback }) {
             setTimeout(() => {
               parentNode.children = [ {
@@ -342,12 +343,19 @@ describe('Dynamical Loading', () => {
       const { vm } = wrapper
       const getValueText = () => wrapper.find('.vue-treeselect__single-value').text().trim()
 
+      // expect(vm.forest.nodeMap.aa).toEqual(jasmine.objectContaining({
+      //   id: 'aa',
+      //   label: 'aa (unknown)',
+      //   isFallbackNode: true,
+      // }))
+      // expect(getValueText()).toBe('aa (unknown)')
+
       expect(vm.forest.nodeMap.aa).toEqual(jasmine.objectContaining({
         id: 'aa',
-        label: 'aa (unknown)',
+        label: 'labelAA',
         isFallbackNode: true,
       }))
-      expect(getValueText()).toBe('aa (unknown)')
+      expect(getValueText()).toBe('labelAA')
 
       vm.toggleExpanded(vm.forest.nodeMap.a)
       await sleep(DELAY)
@@ -824,6 +832,7 @@ describe('Dynamical Loading', () => {
         data: {
           options: null,
           value: 'a', // <- this creates a fallback node
+          noMatchingLabel: 'aa',
           loadOptions({ callback }) {
             setTimeout(() => {
               app.options = [ {
@@ -841,6 +850,7 @@ describe('Dynamical Loading', () => {
               :options="options"
               :load-options="loadOptions"
               :auto-load-root-options= "true"
+              :noMatchingLabel="noMatchingLabel"
               />
           </div>
         `,
@@ -848,11 +858,16 @@ describe('Dynamical Loading', () => {
       const vm = app.$children[0]
 
       expect(vm.rootOptionsStates.isLoading).toBe(true)
+      // expect(vm.forest.nodeMap.a).toEqual(jasmine.objectContaining({
+      //   id: 'a',
+      //   label: 'a (unknown)',
+      //   isFallbackNode: true,
+      // }))
       expect(vm.forest.nodeMap.a).toEqual(jasmine.objectContaining({
-        id: 'a',
-        label: 'a (unknown)',
+        label: 'aa',
         isFallbackNode: true,
       }))
+
 
       await sleep(DELAY)
       expect(vm.rootOptionsStates.isLoading).toBe(false)

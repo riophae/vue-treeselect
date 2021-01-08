@@ -1818,22 +1818,27 @@ describe('Props', () => {
           propsData: {
             options: [],
             value: 'a', // this creates a fallback node
+            noMatchingLabel: 'abc',
           },
         })
         const { vm } = wrapper
 
+        // expect(vm.forest.nodeMap.a).toEqual(jasmine.objectContaining({
+        //   isFallbackNode: true,
+        //   label: 'a (unknown)',
+        // }))
         expect(vm.forest.nodeMap.a).toEqual(jasmine.objectContaining({
           isFallbackNode: true,
-          label: 'a (unknown)',
+          label: 'abc',
         }))
 
         wrapper.setProps({
           options: [ {
             id: 'a',
-            label: 'a',
+            label: 'abcde',
           } ],
         })
-        expect(vm.forest.nodeMap.a.label).toBe('a')
+        expect(vm.forest.nodeMap.a.label).toBe('abcde')
       })
 
       it('directly modify `options` prop should trigger reinitializing', async () => {
