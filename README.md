@@ -1,3 +1,11 @@
+# 补充说明
+基于@riophae/vue-treeselect 我个人做了一点修改。
+## 20210118
+- 添加props: label
+
+当树的options数组不完整，或者使用nodeId无法在options中找到对应的节点时,可以使用 label， 在找不到节点时，显示相应内容.
+
+
 # vue-treeselect
 [![npm](https://badgen.now.sh/npm/v/@riophae/vue-treeselect)](https://www.npmjs.com/package/@riophae/vue-treeselect) [![Build](https://badgen.now.sh/circleci/github/riophae/vue-treeselect)](https://circleci.com/gh/riophae/vue-treeselect/tree/master) [![Coverage](https://badgen.net/codecov/c/github/riophae/vue-treeselect)](https://codecov.io/gh/riophae/vue-treeselect?branch=master)
 ![npm monthly downloads](https://badgen.now.sh/npm/dm/@riophae/vue-treeselect)

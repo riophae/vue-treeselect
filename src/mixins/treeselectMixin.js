@@ -70,6 +70,11 @@ export default {
   },
 
   props: {
+    label: {
+      type: String,
+      default: 'unknown',
+    },
+
     /**
      * Whether to allow resetting value even if there are disabled selected nodes.
      */
@@ -976,7 +981,7 @@ export default {
       // When the real data is loaded, we'll override this fake node.
 
       const raw = this.extractNodeFromValue(id)
-      const label = this.enhancedNormalizer(raw).label || `${id} (unknown)`
+      const label = this.enhancedNormalizer(raw).label || `${id} (${label})`
       const fallbackNode = {
         id,
         label,
