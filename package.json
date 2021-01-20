@@ -33,7 +33,7 @@
   "pre-commit": "lint",
   "dependencies": {
     "@babel/runtime": "^7.3.1",
-    "babel-helper-vue-jsx-merge-props": "^2.0.3",
+    "@vue/babel-helper-vue-jsx-merge-props": "^1.2.1",
     "easings-css": "^1.0.0",
     "fuzzysearch": "^1.0.3",
     "is-promise": "^2.1.0",
@@ -43,16 +43,16 @@
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
-    "@babel/plugin-syntax-jsx": "^7.0.0",
     "@babel/plugin-transform-runtime": "^7.0.0",
     "@babel/preset-env": "^7.3.1",
     "@size-limit/preset-big-lib": "^2.0.2",
+    "@vue/babel-plugin-jsx": "^1.0.2",
+    "@vue/compiler-sfc": "^3.0.5",
     "@vue/test-utils": "1.0.0-beta.16",
     "autoprefixer": "^9.4.6",
     "babel-eslint": "^10.0.1",
     "babel-loader": "^8.0.0",
     "babel-plugin-istanbul": "^5.0.1",
-    "babel-plugin-transform-vue-jsx": "^4.0.1",
     "cache-loader": "^4.0.1",
     "chalk": "^2.3.2",
     "codecov": "^3.0.0",
@@ -110,11 +110,9 @@
     "terser-webpack-plugin": "^2.1.0",
     "url-loader": "^2.0.1",
     "vodal": "^2.3.3",
-    "vue": "^2.2.0",
-    "vue-loader": "^15.6.0",
-    "vue-style-loader": "^4.0.2",
-    "vue-template-compiler": "^2.4.4",
-    "vuex": "^3.0.1",
+    "vue": "^3.0.0",
+    "vue-loader": "^16.1.2",
+    "vuex": "^4.0.0-0",
     "webpack": "^4.6.0",
     "webpack-bundle-analyzer": "^3.0.2",
     "webpack-cdn-plugin": "^3.1.4",
@@ -125,7 +123,7 @@
     "yaku": "^0.19.3"
   },
   "peerDependencies": {
-    "vue": "^2.2.0"
+    "vue": "^3.0.0"
   },
   "keywords": [
     "vue",

@@ -171,7 +171,7 @@
           : NaN
         const labelClassName = 'vue-treeselect__label'
         const countClassName = 'vue-treeselect__count'
-        const customLabelRenderer = instance.$scopedSlots['option-label']
+        const customLabelRenderer = instance.$slots['option-label']
 
         if (customLabelRenderer) return customLabelRenderer({
           node,

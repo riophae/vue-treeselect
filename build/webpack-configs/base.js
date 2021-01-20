@@ -9,9 +9,6 @@ module.exports = {
   resolve: {
     extensions: [ '.js', '.json', '.vue' ],
     alias: {
-      // use the full development build of Vue
-      // see: https://vuejs.org/v2/guide/installation.html#Explanation-of-Different-Builds
-      'vue$': 'vue/dist/vue',
       // for consistent docs
       '@riophae/vue-treeselect': utils.resolve('src'),
       // for shorter import path in tests

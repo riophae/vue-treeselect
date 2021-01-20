@@ -10,7 +10,7 @@
         const { instance } = this
         const node = instance.selectedNodes[0]
 
-        const customValueLabelRenderer = instance.$scopedSlots['value-label']
+        const customValueLabelRenderer = instance.$slots['value-label']
         return customValueLabelRenderer
           ? customValueLabelRenderer({ node })
           : node.label

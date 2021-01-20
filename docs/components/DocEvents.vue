@@ -31,7 +31,7 @@
         attributes: makeArgNameList([ 'value', 'instanceId' ]),
         description: 'Emitted when the menu closes.',
       }, {
-        name: 'input',
+        name: 'update:modelValue',
         attributes: makeArgNameList([ 'value', 'instanceId' ]),
         description: 'Emitted after value changes.',
       }, {

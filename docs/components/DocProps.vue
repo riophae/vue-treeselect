@@ -223,6 +223,11 @@
         defaultValue: code('300'),
         description: `Sets ${code('maxHeight')} style value of the menu.`,
       }, {
+        name: 'modelValue',
+        type: `${code('id')} | ${code('node')} | ${code('id[]')} | ${code('node[]')}`,
+        defaultValue: NO_DEFAULT_VALUE,
+        description: `The value of the control. <br>Should be ${code('id')} or ${code('node')} object when ${code(':multiple="false"')}, or an array of ${code('id')} or ${code('node')} object when ${code(':multiple="true"')}. Its format depends on the ${code('valueFormat')} prop. <br>For most cases, just use ${code('v-model')} instead.`,
+      }, {
         name: 'multiple',
         type: 'Boolean',
         defaultValue: code('false'),
@@ -332,11 +337,6 @@
         type: 'Number',
         defaultValue: code('0'),
         description: 'Tab index of the control.',
-      }, {
-        name: 'value',
-        type: `${code('id')} | ${code('node')} | ${code('id[]')} | ${code('node[]')}`,
-        defaultValue: NO_DEFAULT_VALUE,
-        description: `The value of the control. <br>Should be ${code('id')} or ${code('node')} object when ${code(':multiple="false"')}, or an array of ${code('id')} or ${code('node')} object when ${code(':multiple="true"')}. Its format depends on the ${code('valueFormat')} prop. <br>For most cases, just use ${code('v-model')} instead.`,
       }, {
         name: 'valueConsistsOf',
         type: 'String',
