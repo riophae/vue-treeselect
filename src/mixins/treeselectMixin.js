@@ -61,6 +61,15 @@ function getErrorMessage(err) {
 let instanceId = 0
 
 export default {
+  emits: [
+    'close',
+    'deselect',
+    'open',
+    'search-change',
+    'select',
+    'update:modelValue',
+  ],
+
   provide() {
     return {
       // Enable access to the instance of root component of vue-treeselect
@@ -598,7 +607,7 @@ export default {
      * For most cases, just use `v-model` instead.
      * @type {?Array}
      */
-    value: null,
+    modelValue: null,
 
     /**
      * Which kind of nodes should be included in the `value` array in multi-select mode.
@@ -834,8 +843,8 @@ export default {
       const hasChanged = quickDiff(newValue, oldValue)
       // #122
       // Vue would trigger this watcher when `newValue` and `oldValue` are shallow-equal.
-      // We emit the `input` event only when the value actually changes.
-      if (hasChanged) this.$emit('input', this.getValue(), this.getInstanceId())
+      // We emit the `update:modelValue` event only when the value actually changes.
+      if (hasChanged) this.$emit('update:modelValue', this.getValue(), this.getInstanceId())
     },
 
     matchKeys() {
@@ -993,19 +1002,19 @@ export default {
         raw,
       }
 
-      return this.$set(this.forest.nodeMap, id, fallbackNode)
+      return this.forest.nodeMap[id] = fallbackNode
     },
 
     extractCheckedNodeIdsFromValue() {
-      if (this.value == null) return []
+      if (this.modelValue == null) return []
 
       if (this.valueFormat === 'id') {
         return this.multiple
-          ? this.value.slice()
-          : [ this.value ]
+          ? this.modelValue.slice()
+          : [ this.modelValue ]
       }
 
-      return (this.multiple ? this.value : [ this.value ])
+      return (this.multiple ? this.modelValue : [ this.modelValue ])
         .map(node => this.enhancedNormalizer(node))
         .map(node => node.id)
     },
@@ -1018,8 +1027,8 @@ export default {
       }
 
       const valueArray = this.multiple
-        ? Array.isArray(this.value) ? this.value : []
-        : this.value ? [ this.value ] : []
+        ? Array.isArray(this.modelValue) ? this.modelValue : []
+        : this.modelValue ? [ this.modelValue ] : []
       const matched = find(
         valueArray,
         node => node && this.enhancedNormalizer(node).id === id,
@@ -1087,13 +1096,13 @@ export default {
           ...prevNodeMap[id],
           isFallbackNode: true,
         }
-        this.$set(this.forest.nodeMap, id, node)
+        this.forest.nodeMap[id] = node
       })
     },
 
     isSelected(node) {
       // whether a node is selected (single-select mode) or fully-checked (multi-select mode)
-      return this.forest.selectedNodeMap[node.id] === true
+      return node && this.forest.selectedNodeMap[node.id] === true
     },
 
     traverseDescendantsBFS(parentNode, callback) {
@@ -1213,12 +1222,12 @@ export default {
           node.showAllChildrenOnSearch = false
           node.isMatched = false
           node.hasMatchedDescendants = false
-          this.$set(this.localSearch.countMap, node.id, {
+          this.localSearch.countMap[node.id] = {
             [ALL_CHILDREN]: 0,
             [ALL_DESCENDANTS]: 0,
             [LEAF_CHILDREN]: 0,
             [LEAF_DESCENDANTS]: 0,
-          })
+          }
         }
       })
 
@@ -1326,7 +1335,7 @@ export default {
       }
 
       if (!this.remoteSearch[searchQuery]) {
-        this.$set(this.remoteSearch, searchQuery, entry)
+        this.remoteSearch[searchQuery] = entry
       }
 
       return entry
@@ -1536,47 +1545,47 @@ export default {
             ? lowerCased.label
             : parentNode.nestedSearchLabel + ' ' + lowerCased.label
 
-          const normalized = this.$set(this.forest.nodeMap, id, createMap())
-          this.$set(normalized, 'id', id)
-          this.$set(normalized, 'label', label)
-          this.$set(normalized, 'level', level)
-          this.$set(normalized, 'ancestors', isRootNode ? [] : [ parentNode ].concat(parentNode.ancestors))
-          this.$set(normalized, 'index', (isRootNode ? [] : parentNode.index).concat(index))
-          this.$set(normalized, 'parentNode', parentNode)
-          this.$set(normalized, 'lowerCased', lowerCased)
-          this.$set(normalized, 'nestedSearchLabel', nestedSearchLabel)
-          this.$set(normalized, 'isDisabled', isDisabled)
-          this.$set(normalized, 'isNew', isNew)
-          this.$set(normalized, 'isMatched', false)
-          this.$set(normalized, 'isHighlighted', false)
-          this.$set(normalized, 'isBranch', isBranch)
-          this.$set(normalized, 'isLeaf', isLeaf)
-          this.$set(normalized, 'isRootNode', isRootNode)
-          this.$set(normalized, 'raw', raw)
+          const normalized = this.forest.nodeMap[id] = createMap()
+          normalized.id = id
+          normalized.label = label
+          normalized.level = level
+          normalized.ancestors = isRootNode ? [] : [ parentNode ].concat(parentNode.ancestors)
+          normalized.index = (isRootNode ? [] : parentNode.index).concat(index)
+          normalized.parentNode = parentNode
+          normalized.lowerCased = lowerCased
+          normalized.nestedSearchLabel = nestedSearchLabel
+          normalized.isDisabled = isDisabled
+          normalized.isNew = isNew
+          normalized.isMatched = false
+          normalized.isHighlighted = false
+          normalized.isBranch = isBranch
+          normalized.isLeaf = isLeaf
+          normalized.isRootNode = isRootNode
+          normalized.raw = raw
 
           if (isBranch) {
             const isLoaded = Array.isArray(children)
 
-            this.$set(normalized, 'childrenStates', {
+            normalized.childrenStates = {
               ...createAsyncOptionsStates(),
               isLoaded,
-            })
-            this.$set(normalized, 'isExpanded', typeof isDefaultExpanded === 'boolean'
+            }
+            normalized.isExpanded = typeof isDefaultExpanded === 'boolean'
               ? isDefaultExpanded
-              : level < this.defaultExpandLevel)
-            this.$set(normalized, 'hasMatchedDescendants', false)
-            this.$set(normalized, 'hasDisabledDescendants', false)
-            this.$set(normalized, 'isExpandedOnSearch', false)
-            this.$set(normalized, 'showAllChildrenOnSearch', false)
-            this.$set(normalized, 'count', {
+              : level < this.defaultExpandLevel
+            normalized.hasMatchedDescendants = false
+            normalized.hasDisabledDescendants = false
+            normalized.isExpandedOnSearch = false
+            normalized.showAllChildrenOnSearch = false
+            normalized.count = {
               [ALL_CHILDREN]: 0,
               [ALL_DESCENDANTS]: 0,
               [LEAF_CHILDREN]: 0,
               [LEAF_DESCENDANTS]: 0,
-            })
-            this.$set(normalized, 'children', isLoaded
+            }
+            normalized.children = isLoaded
               ? this.normalize(normalized, children, prevNodeMap)
-              : [])
+              : []
 
             if (isDefaultExpanded === true) normalized.ancestors.forEach(ancestor => {
               ancestor.isExpanded = true
@@ -1942,7 +1951,7 @@ export default {
     if (this.async && this.defaultOptions) this.handleRemoteSearch()
   },
 
-  destroyed() {
+  unmounted() {
     // istanbul ignore next
     this.toggleClickOutsideEvent(false)
   },

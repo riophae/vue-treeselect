@@ -125,7 +125,7 @@
       )
     },
 
-    destroyed() {
+    unmounted() {
       this.removeHandlers()
     },
   }

@@ -4,7 +4,7 @@
       :options="options"
       :value="value"
       :searchable="false"
-      @input="updateValue"
+      @update:modelValue="updateValue"
       />
     <treeselect-value :value="value" />
   </div>
