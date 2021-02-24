@@ -138,7 +138,7 @@
           evt.preventDefault()
           if (instance.menu.current === null) return
           const current = instance.getNode(instance.menu.current)
-          if (current.isBranch && instance.disableBranchNodes) return
+          if ((current.isBranch && instance.disableBranchNodes) || !current.isMatched) return
           instance.select(current)
           break
         }
