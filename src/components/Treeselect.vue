@@ -13,6 +13,7 @@
       wrapperClass() {
         return {
           'vue-treeselect': true,
+          'vue-treeselect--as-group': this.showAsGroup,
           'vue-treeselect--single': this.single,
           'vue-treeselect--multi': this.multiple,
           'vue-treeselect--searchable': this.searchable,
