@@ -1,5 +1,5 @@
 <script>
-  import { defineComponent } from 'vue'
+  import { h, defineComponent } from 'vue'
 
   import { MENU_BUFFER } from '../constants'
   import { watchSize, setupResizeAndScrollEventListeners } from '../utils'
@@ -57,7 +57,7 @@
       if (instance.menu.isOpen) this.$nextTick(this.onMenuOpen)
     },
 
-    destroyed() {
+    unmounted() {
       this.onMenuClose()
     },
 

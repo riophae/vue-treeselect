@@ -40,7 +40,6 @@ const app = createApp({
 
 app.config.productionTip = false
 app.component('treeselect', Treeselect)
-app.mount('#app')
 
 let sections
 
@@ -68,3 +67,4 @@ function loadComponents() {
   }
 }
 loadComponents()
+app.mount('#app')

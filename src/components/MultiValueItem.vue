@@ -1,5 +1,5 @@
 <script>
-  import { defineComponent } from 'vue'
+  import { h, defineComponent } from 'vue'
 
   import { onLeftClick } from '../utils'
   import DeleteIcon from './icons/Delete'

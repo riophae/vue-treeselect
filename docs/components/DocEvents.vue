@@ -18,7 +18,7 @@
 </template>
 
 <script>
-  import { defineComponent } from 'vue'
+  import { h, defineComponent } from 'vue'
 
   import { makeArgNameList } from './utils'
 

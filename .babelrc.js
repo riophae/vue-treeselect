@@ -5,7 +5,7 @@ module.exports = api => {
     [ '@babel/preset-env', { modules: false } ],
   ]
   const plugins = [
-    'transform-vue-jsx',
+    "@vue/babel-plugin-jsx",
     '@babel/plugin-transform-runtime',
   ]
 

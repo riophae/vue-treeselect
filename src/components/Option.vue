@@ -1,5 +1,5 @@
 <script>
-  import { defineComponent } from 'vue'
+  import { h, defineComponent } from 'vue'
 
   import { UNCHECKED, INDETERMINATE, CHECKED } from '../constants'
   import { onLeftClick } from '../utils'

@@ -1,5 +1,5 @@
 <script>
-  import { defineComponent } from 'vue'
+  import { h, defineComponent } from 'vue'
 
   import treeselectMixin from '../mixins/treeselectMixin'
   import HiddenFields from './HiddenFields'

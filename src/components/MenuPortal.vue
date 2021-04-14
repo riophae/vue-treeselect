@@ -1,5 +1,5 @@
 <script>
-  import { defineComponent } from 'vue'
+  import { h, defineComponent } from 'vue'
 
   import { createApp } from 'vue'
   import { watchSize, setupResizeAndScrollEventListeners, find } from '../utils'
@@ -127,7 +127,7 @@
       )
     },
 
-    destroyed() {
+    unmounted() {
       this.removeHandlers()
     },
   }
@@ -145,7 +145,7 @@
       this.setup()
     },
 
-    destroyed() {
+    unmounted() {
       this.teardown()
     },
 

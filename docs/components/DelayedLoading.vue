@@ -9,7 +9,7 @@
 </template>
 
 <script>
-  import { defineComponent } from 'vue'
+  import { h, defineComponent } from 'vue'
 
   import { LOAD_CHILDREN_OPTIONS } from '@riophae/vue-treeselect'
 

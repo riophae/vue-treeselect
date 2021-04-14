@@ -3,7 +3,7 @@
 </template>
 
 <script>
-  import { defineComponent } from 'vue'
+  import { h, defineComponent } from 'vue'
 
   export default defineComponent({
     // eslint-disable-next-line vue/require-prop-types

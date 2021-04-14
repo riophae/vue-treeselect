@@ -9,7 +9,7 @@
 </template>
 
 <script>
-  import { defineComponent } from 'vue'
+  import { h, defineComponent } from 'vue'
 
   export default defineComponent({
     data: () => ({

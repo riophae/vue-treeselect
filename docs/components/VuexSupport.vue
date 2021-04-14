@@ -11,7 +11,7 @@
 </template>
 
 <script>
-  import { defineComponent } from 'vue'
+  import { h, defineComponent } from 'vue'
 
   import { createStore, mapState, mapMutations } from 'vuex'
   import { generateOptions } from './utils'

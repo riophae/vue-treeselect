@@ -65,6 +65,8 @@ module.exports = {
     new VueLoaderPlugin(),
     new webpack.DefinePlugin({
       PKG_VERSION: JSON.stringify(require('../../package').version),
+      __VUE_OPTIONS_API__: true,
+      __VUE_PROD_DEVTOOLS__: true,
     }),
   ],
 }

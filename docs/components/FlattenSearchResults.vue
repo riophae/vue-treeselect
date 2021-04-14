@@ -8,7 +8,7 @@
 </template>
 
 <script>
-  import { defineComponent } from 'vue'
+  import { h, defineComponent } from 'vue'
 
   import countries from './data/countries-of-the-world'
 

@@ -22,7 +22,7 @@
 </template>
 
 <script>
-  import { defineComponent } from 'vue'
+  import { h, defineComponent } from 'vue'
 
   /* eslint-disable no-template-curly-in-string */
   import { encodeHTML } from 'entities'

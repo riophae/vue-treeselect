@@ -7,7 +7,7 @@
 </template>
 
 <script>
-  import { defineComponent } from 'vue'
+  import { h, defineComponent } from 'vue'
 
   import { ASYNC_SEARCH } from '@riophae/vue-treeselect'
 

@@ -878,6 +878,10 @@ export default {
   },
 
   methods: {
+    $set(obj, key, value) {
+      obj[key] = value;
+      return obj;
+    },
     verifyProps() {
       warning(
         () => this.async ? this.searchable : true,
@@ -1942,7 +1946,7 @@ export default {
     if (this.async && this.defaultOptions) this.handleRemoteSearch()
   },
 
-  destroyed() {
+  unmounted() {
     // istanbul ignore next
     this.toggleClickOutsideEvent(false)
   },

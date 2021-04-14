@@ -1,5 +1,5 @@
 <script>
-  import { defineComponent } from 'vue'
+  import { h, defineComponent } from 'vue'
 
   import MultiValueItem from './MultiValueItem'
   import Input from './Input'

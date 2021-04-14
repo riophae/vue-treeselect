@@ -1,5 +1,5 @@
 <script>
-  import { defineComponent } from 'vue'
+  import { h, defineComponent } from 'vue'
 
   import { onLeftClick, isPromise } from '../utils'
   import SingleValue from './SingleValue'
