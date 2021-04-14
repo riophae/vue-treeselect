@@ -1,4 +1,6 @@
 <script>
+  import { defineComponent } from 'vue'
+
   import { debounce, deepExtend, includes } from '../utils'
   import { MIN_INPUT_WIDTH, KEY_CODES, INPUT_DEBOUNCE_DELAY } from '../constants'
 
@@ -12,7 +14,7 @@
     KEY_CODES.ARROW_DOWN,
   ]
 
-  export default {
+  export default defineComponent({
     name: 'vue-treeselect--input',
     inject: [ 'instance' ],
 
@@ -291,5 +293,6 @@
     render() {
       return this.renderInputContainer()
     },
-  }
+  },
+  )
 </script>

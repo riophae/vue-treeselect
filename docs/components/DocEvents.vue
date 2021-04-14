@@ -18,9 +18,11 @@
 </template>
 
 <script>
+  import { defineComponent } from 'vue'
+
   import { makeArgNameList } from './utils'
 
-  export default {
+  export default defineComponent({
     data: () => ({
       events: [ {
         name: 'open',
@@ -48,5 +50,6 @@
         description: 'Emitted after the search query changes.',
       } ],
     }),
-  }
+  },
+  )
 </script>

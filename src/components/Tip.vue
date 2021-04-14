@@ -1,5 +1,7 @@
 <script>
-  export default {
+  import { defineComponent } from 'vue'
+
+  export default defineComponent({
     name: 'vue-treeselect--tip',
     functional: true,
 
@@ -28,5 +30,6 @@
         </div>
       )
     },
-  }
+  },
+  )
 </script>

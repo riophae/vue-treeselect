@@ -18,7 +18,9 @@
 </template>
 
 <script>
-  export default {
+  import { defineComponent } from 'vue'
+
+  export default defineComponent({
     data: () => ({
       value: [ 'team-i' ],
       valueConsistsOf: 'BRANCH_PRIORITY',
@@ -51,5 +53,6 @@
         } ],
       } ],
     }),
-  }
+  },
+  )
 </script>

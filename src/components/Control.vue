@@ -1,11 +1,13 @@
 <script>
+  import { defineComponent } from 'vue'
+
   import { onLeftClick, isPromise } from '../utils'
   import SingleValue from './SingleValue'
   import MultiValue from './MultiValue'
   import DeleteIcon from './icons/Delete'
   import ArrowIcon from './icons/Arrow'
 
-  export default {
+  export default defineComponent({
     name: 'vue-treeselect--control',
     inject: [ 'instance' ],
 
@@ -149,5 +151,6 @@
         </div>
       )
     },
-  }
+  },
+  )
 </script>

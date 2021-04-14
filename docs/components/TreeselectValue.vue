@@ -3,7 +3,9 @@
 </template>
 
 <script>
-  export default {
+  import { defineComponent } from 'vue'
+
+  export default defineComponent({
     // eslint-disable-next-line vue/require-prop-types
     props: [ 'value' ],
 
@@ -16,5 +18,6 @@
           : JSON.stringify(rawValue, null, 2)
       },
     },
-  }
+  },
+  )
 </script>

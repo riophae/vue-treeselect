@@ -18,9 +18,11 @@
 </template>
 
 <script>
+  import { defineComponent } from 'vue'
+
   import { link, makePropList } from './utils'
 
-  export default {
+  export default defineComponent({
     data: () => ({
       slots: [ {
         name: 'option-label',
@@ -40,5 +42,6 @@
         description: `Slot showed after the menu list.`,
       } ],
     }),
-  }
+  },
+  )
 </script>

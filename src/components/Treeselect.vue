@@ -1,11 +1,13 @@
 <script>
+  import { defineComponent } from 'vue'
+
   import treeselectMixin from '../mixins/treeselectMixin'
   import HiddenFields from './HiddenFields'
   import Control from './Control'
   import Menu from './Menu'
   import MenuPortal from './MenuPortal'
 
-  export default {
+  export default defineComponent({
     name: 'vue-treeselect',
     mixins: [ treeselectMixin ],
 
@@ -30,12 +32,12 @@
 
     render() {
       return (
-        <div ref="wrapper" class={this.wrapperClass}>
-          <HiddenFields />
-          <Control ref="control" />
-          {this.appendToBody ? <MenuPortal ref="portal" /> : <Menu ref="menu" />}
-        </div>
-      )
+      <div ref="wrapper" class={this.wrapperClass}>
+        <HiddenFields />
+        <Control ref="control" />
+        {this.appendToBody ? <MenuPortal ref="portal" /> : <Menu ref="menu" />}
+      </div>
+    )
     },
-  }
+  })
 </script>

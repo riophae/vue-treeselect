@@ -1,4 +1,6 @@
 <script>
+  import { defineComponent } from 'vue'
+
   import { MENU_BUFFER } from '../constants'
   import { watchSize, setupResizeAndScrollEventListeners } from '../utils'
   import Option from './Option'
@@ -11,7 +13,7 @@
     below: 'bottom',
   }
 
-  export default {
+  export default defineComponent({
     name: 'vue-treeselect--menu',
     inject: [ 'instance' ],
 
@@ -309,5 +311,6 @@
         </div>
       )
     },
-  }
+  },
+  )
 </script>

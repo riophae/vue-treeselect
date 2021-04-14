@@ -3,11 +3,12 @@
 </template>
 
 <script>
+  import { defineComponent } from 'vue'
   import { generateOptions } from '../utils'
 
-  export default {
+  export default defineComponent({
     data: () => ({
       options: generateOptions(1, 500),
     }),
-  }
+  })
 </script>

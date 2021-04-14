@@ -1,43 +1,13 @@
 import 'script-loader!../static/prism.min.js'
 import 'regenerator-runtime/runtime'
 import 'yaku/lib/global'
-import Vue from 'vue'
+import { createApp } from 'vue'
 import Treeselect from '../src'
 
 import './styles/docs.less'
 import './styles/prism.less'
 
-Vue.config.productionTip = false
-Vue.component('treeselect', Treeselect)
-
-let sections
-
-function calculateNavPositions() {
-  sections = [].map.call(document.querySelectorAll('[data-section]'), section => ({
-    id: section.id,
-    offset: section.getBoundingClientRect().top + window.pageYOffset - 50,
-  }))
-}
-
-function loadComponents() {
-  const loadContext = context => {
-    context.keys().forEach(key => {
-      const componentName = key.replace(/^\.\/|\.vue$/g, '')
-      const component = context(key).default
-
-      Vue.component(componentName, component)
-    })
-  }
-
-  loadContext(require.context('./components', false, /\.vue$/))
-
-  if (process.env.NODE_ENV !== 'production') {
-    loadContext(require.context('./components/dev', false, /\.vue$/))
-  }
-}
-loadComponents()
-
-new Vue({
+const app = createApp({
   el: '#app',
 
   data: () => ({
@@ -67,3 +37,34 @@ new Vue({
     },
   },
 })
+
+app.config.productionTip = false
+app.component('treeselect', Treeselect)
+app.mount('#app')
+
+let sections
+
+function calculateNavPositions() {
+  sections = [].map.call(document.querySelectorAll('[data-section]'), section => ({
+    id: section.id,
+    offset: section.getBoundingClientRect().top + window.pageYOffset - 50,
+  }))
+}
+
+function loadComponents() {
+  const loadContext = context => {
+    context.keys().forEach(key => {
+      const componentName = key.replace(/^\.\/|\.vue$/g, '')
+      const component = context(key).default
+
+      app.component(componentName, component)
+    })
+  }
+
+  loadContext(require.context('./components', false, /\.vue$/))
+
+  if (process.env.NODE_ENV !== 'production') {
+    loadContext(require.context('./components/dev', false, /\.vue$/))
+  }
+}
+loadComponents()

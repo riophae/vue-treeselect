@@ -1,4 +1,6 @@
 <script>
+  import { defineComponent } from 'vue'
+
   import { isNaN } from '../utils'
 
   function stringifyValue(value) {
@@ -9,7 +11,7 @@
     return ''
   }
 
-  export default {
+  export default defineComponent({
     name: 'vue-treeselect--hidden-fields',
     inject: [ 'instance' ],
     functional: true,
@@ -33,5 +35,6 @@
         />
       ))
     },
-  }
+  },
+  )
 </script>

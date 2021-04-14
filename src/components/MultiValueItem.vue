@@ -1,8 +1,10 @@
 <script>
+  import { defineComponent } from 'vue'
+
   import { onLeftClick } from '../utils'
   import DeleteIcon from './icons/Delete'
 
-  export default {
+  export default defineComponent({
     name: 'vue-treeselect--multi-value-item',
     inject: [ 'instance' ],
 
@@ -41,5 +43,6 @@
         </div>
       )
     },
-  }
+  },
+  )
 </script>

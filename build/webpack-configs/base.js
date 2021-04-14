@@ -11,7 +11,7 @@ module.exports = {
     alias: {
       // use the full development build of Vue
       // see: https://vuejs.org/v2/guide/installation.html#Explanation-of-Different-Builds
-      'vue$': 'vue/dist/vue',
+      'vue$': 'vue/dist/vue.esm-bundler.js',
       // for consistent docs
       '@riophae/vue-treeselect': utils.resolve('src'),
       // for shorter import path in tests

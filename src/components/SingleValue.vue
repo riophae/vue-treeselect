@@ -1,8 +1,10 @@
 <script>
+  import { defineComponent } from 'vue'
+
   import Input from './Input'
   import Placeholder from './Placeholder'
 
-  export default {
+  export default defineComponent({
     name: 'vue-treeselect--single-value',
     inject: [ 'instance' ],
     methods: {
@@ -30,5 +32,6 @@
         <Input ref="input" />,
       ])
     },
-  }
+  },
+  )
 </script>

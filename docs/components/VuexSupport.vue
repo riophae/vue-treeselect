@@ -11,13 +11,14 @@
 </template>
 
 <script>
-  import Vue from 'vue'
-  import Vuex, { mapState, mapMutations } from 'vuex'
+  import { defineComponent } from 'vue'
+
+  import { createStore, mapState, mapMutations } from 'vuex'
   import { generateOptions } from './utils'
 
-  Vue.use(Vuex)
+  // Vue.use(Vuex)
 
-  const store = new Vuex.Store({
+  const store = createStore({
     state: {
       value: 'a',
     },
@@ -28,7 +29,7 @@
     },
   })
 
-  export default {
+  export default defineComponent({
     store,
 
     data: () => ({
@@ -42,5 +43,6 @@
     methods: {
       ...mapMutations([ 'updateValue' ]),
     },
-  }
+  },
+  )
 </script>

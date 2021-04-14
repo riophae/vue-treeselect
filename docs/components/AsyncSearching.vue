@@ -7,13 +7,15 @@
 </template>
 
 <script>
+  import { defineComponent } from 'vue'
+
   import { ASYNC_SEARCH } from '@riophae/vue-treeselect'
 
   const simulateAsyncOperation = fn => {
     setTimeout(fn, 2000)
   }
 
-  export default {
+  export default defineComponent({
     methods: {
       loadOptions({ action, searchQuery, callback }) {
         if (action === ASYNC_SEARCH) {
@@ -27,5 +29,6 @@
         }
       },
     },
-  }
+  },
+  )
 </script>

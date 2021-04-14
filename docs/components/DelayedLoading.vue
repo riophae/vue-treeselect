@@ -9,6 +9,8 @@
 </template>
 
 <script>
+  import { defineComponent } from 'vue'
+
   import { LOAD_CHILDREN_OPTIONS } from '@riophae/vue-treeselect'
 
   // We just use `setTimeout()` here to simulate an async operation
@@ -17,7 +19,7 @@
     setTimeout(fn, 2000)
   }
 
-  export default {
+  export default defineComponent({
     data: () => ({
       value: null,
       options: [ {
@@ -72,5 +74,6 @@
         }
       },
     },
-  }
+  },
+  )
 </script>

@@ -1,4 +1,6 @@
 <script>
+  import { defineComponent } from 'vue'
+
   import { UNCHECKED, INDETERMINATE, CHECKED } from '../constants'
   import { onLeftClick } from '../utils'
   import Tip from './Tip'
@@ -296,5 +298,6 @@
   }
 
   // eslint-disable-next-line vue/require-direct-export
-  export default Option
+  export default defineComponent(Option,
+  )
 </script>

@@ -1,5 +1,7 @@
 <script>
-  import Vue from 'vue'
+  import { defineComponent } from 'vue'
+
+  import { createApp } from 'vue'
   import { watchSize, setupResizeAndScrollEventListeners, find } from '../utils'
   import Menu from './Menu'
 
@@ -132,7 +134,7 @@
 
   let placeholder
 
-  export default {
+  export default defineComponent({
     name: 'vue-treeselect--menu-portal',
 
     created() {
@@ -152,7 +154,7 @@
         const el = document.createElement('div')
         document.body.appendChild(el)
 
-        this.portalTarget = new Vue({
+        this.portalTarget = createApp({
           el,
           parent: this,
           ...PortalTarget,
@@ -175,5 +177,6 @@
 
       return placeholder
     },
-  }
+  },
+  )
 </script>

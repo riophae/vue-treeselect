@@ -14,12 +14,15 @@
 </template>
 
 <script>
+  import { defineComponent } from 'vue'
+
   import { generateOptions } from './utils'
 
-  export default {
+  export default defineComponent({
     data: () => ({
       value: null,
       options: generateOptions(2),
     }),
-  }
+  },
+  )
 </script>

@@ -22,13 +22,15 @@
 </template>
 
 <script>
+  import { defineComponent } from 'vue'
+
   /* eslint-disable no-template-curly-in-string */
   import { encodeHTML } from 'entities'
   import { code, strong, link, makeArgNameList, makePropList } from './utils'
 
   const NO_DEFAULT_VALUE = '–'
 
-  export default {
+  export default defineComponent({
     data: () => ({
       props: [ {
         name: 'allowClearingDisabled',
@@ -354,5 +356,6 @@
         description: `${(code('z-index'))} of the menu.`,
       } ],
     }),
-  }
+  },
+  )
 </script>

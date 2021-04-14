@@ -6,12 +6,14 @@
 </template>
 
 <script>
+  import { defineComponent } from 'vue'
+
   import 'string.prototype.repeat'
 
   const longAToZ = 'abcdefghijklmnopqrstuvwxyz'.repeat(10)
   const longZToA = longAToZ.split('').reverse().join('')
 
-  export default {
+  export default defineComponent({
     data: () => ({
       multiple: true,
       value: [ longAToZ ],
@@ -39,5 +41,6 @@
         }
       },
     },
-  }
+  },
+  )
 </script>

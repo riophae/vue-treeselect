@@ -20,9 +20,11 @@
 </template>
 
 <script>
+  import { defineComponent } from 'vue'
+
   import { generateOptions } from './utils'
 
-  export default {
+  export default defineComponent({
     data() {
       return {
         value: [ 'c', 'aaa', 'bb' ],
@@ -30,5 +32,6 @@
         sortValueBy: 'ORDER_SELECTED',
       }
     },
-  }
+  },
+  )
 </script>

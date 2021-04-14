@@ -9,12 +9,14 @@
 </template>
 
 <script>
+  import { defineComponent } from 'vue'
+
   import { LOAD_ROOT_OPTIONS } from '@riophae/vue-treeselect'
 
   const sleep = d => new Promise(r => setTimeout(r, d))
   let called = false
 
-  export default {
+  export default defineComponent({
     data: () => ({
       options: null,
     }),
@@ -39,5 +41,6 @@
         }
       },
     },
-  }
+  },
+  )
 </script>

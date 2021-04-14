@@ -1,3 +1,7 @@
 dist
 static
 test/unit/coverage
+scripts
+
+docs
+src

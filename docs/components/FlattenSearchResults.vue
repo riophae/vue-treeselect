@@ -8,11 +8,14 @@
 </template>
 
 <script>
+  import { defineComponent } from 'vue'
+
   import countries from './data/countries-of-the-world'
 
-  export default {
+  export default defineComponent({
     data: () => ({
       options: countries,
     }),
-  }
+  },
+  )
 </script>

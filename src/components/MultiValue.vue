@@ -1,9 +1,11 @@
 <script>
+  import { defineComponent } from 'vue'
+
   import MultiValueItem from './MultiValueItem'
   import Input from './Input'
   import Placeholder from './Placeholder'
 
-  export default {
+  export default defineComponent({
     name: 'vue-treeselect--multi-value',
     inject: [ 'instance' ],
 
@@ -52,5 +54,6 @@
         </transition-group>,
       )
     },
-  }
+  },
+  )
 </script>
