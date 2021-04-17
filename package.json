@@ -31,7 +31,7 @@
     "finish": "npm test && npm run build-library && npm run verify-builds",
     "lint:js:fix": "eslint --fix --ext .js --ext .vue --cache --cache-location node_modules/.cache/eslint --rule 'no-console: 2' ."
   },
-  // "pre-commit": "lint",
+  "pre-commit": "lint",
   "dependencies": {
     "@babel/runtime": "^7.3.1",
     "babel-helper-vue-jsx-merge-props": "^2.0.3",
