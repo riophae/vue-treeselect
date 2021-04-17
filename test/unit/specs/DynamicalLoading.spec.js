@@ -678,7 +678,7 @@ describe('Dynamical Loading', () => {
           </div>
         `,
       }))
-      const vm = wrapper.find(Treeselect).vm
+      const vm = wrapper.findComponent(Treeselect).vm
 
       expect(vm.rootOptionsStates.isLoading).toBe(false)
 
@@ -746,7 +746,7 @@ describe('Dynamical Loading', () => {
           </div>
         `,
       }))
-      const vm = wrapper.find(Treeselect).vm
+      const vm = wrapper.findComponent(Treeselect).vm
       let menu
 
       // 1st try
@@ -803,7 +803,7 @@ describe('Dynamical Loading', () => {
           </div>
         `,
       }))
-      const vm = wrapper.find(Treeselect).vm
+      const vm = wrapper.findComponent(Treeselect).vm
 
       vm.openMenu()
       expect(spyForLoadOptions.calls.count()).toBe(1)
@@ -845,7 +845,7 @@ describe('Dynamical Loading', () => {
           </div>
         `,
       }))
-      const vm = wrapper.find(Treeselect).vm
+      const vm = wrapper.findComponent(Treeselect).vm
 
       expect(vm.rootOptionsStates.isLoading).toBe(true)
       expect(vm.forest.nodeMap.a).toEqual(jasmine.objectContaining({
@@ -944,7 +944,7 @@ describe('Dynamical Loading', () => {
           </div>
         `,
       }))
-      const vm = wrapper.find(Treeselect).vm
+      const vm = wrapper.findComponent(Treeselect).vm
 
       vm.openMenu()
       await sleep(DELAY)
@@ -984,7 +984,7 @@ describe('Dynamical Loading', () => {
           </div>
         `,
       }))
-      const vm = wrapper.find(Treeselect).vm
+      const vm = wrapper.findComponent(Treeselect).vm
 
       vm.openMenu()
       await vm.$nextTick()

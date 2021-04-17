@@ -571,7 +571,7 @@ describe('Keyboard Support', () => {
     }), {
       sync: false,
     })
-    const { vm } = wrapper.find(Treeselect)
+    const { vm } = wrapper.findComponent(Treeselect)
 
     vm.openMenu()
 

@@ -720,7 +720,7 @@ describe('Basic', () => {
         </div>
       `,
     }))
-    const vm = wrapper.find(Treeselect).vm
+    const vm = wrapper.findComponent(Treeselect).vm
 
     expect(vm.forest.nodeMap.a.isFallbackNode).toBe(true)
 
@@ -805,7 +805,7 @@ describe('Basic', () => {
       `,
     }))
     const vm = wrapper.vm
-    const comp = wrapper.find(Treeselect).vm
+    const comp = wrapper.findComponent(Treeselect).vm
 
     comp.select(comp.forest.nodeMap.a)
     await comp.$nextTick()

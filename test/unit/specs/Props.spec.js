@@ -1848,7 +1848,7 @@ describe('Props', () => {
           template: `<div><treeselect :options="options" /></div>`,
         }))
         const vm = wrapper.vm
-        const comp = wrapper.find(Treeselect).vm
+        const comp = wrapper.findComponent(Treeselect).vm
 
         // note that, this is directly modifying the original `options` array,
         // not creating a new `options` array.
@@ -2882,7 +2882,7 @@ describe('Props', () => {
           `,
         }))
         const vm = wrapper.vm
-        const comp = wrapper.find(Treeselect).vm
+        const comp = wrapper.findComponent(Treeselect).vm
 
         expect(comp.forest.selectedNodeIds).toEqual([ 'a' ])
 
@@ -2962,7 +2962,7 @@ describe('Props', () => {
           `,
         }))
         const vm = wrapper.vm
-        const comp = wrapper.find(Treeselect).vm
+        const comp = wrapper.findComponent(Treeselect).vm
 
         expect(comp.forest.selectedNodeIds).toEqual([ 'a' ])
 
@@ -3007,7 +3007,7 @@ describe('Props', () => {
           `,
         }))
         const vm = wrapper.vm
-        const comp = wrapper.find(Treeselect).vm
+        const comp = wrapper.findComponent(Treeselect).vm
 
         expect(comp.forest.selectedNodeIds).toEqual([ 'a' ])
 
