@@ -6,10 +6,12 @@
     :show-count="true"
     :default-expand-level="1"
     >
-    <label slot="option-label" slot-scope="{ node, shouldShowCount, count, labelClassName, countClassName }" :class="labelClassName">
-      {{ node.isBranch ? 'Branch' : 'Leaf' }}: {{ node.label }}
-      <span v-if="shouldShowCount" :class="countClassName">({{ count }})</span>
-    </label>
+    <template #option-label="{ node, shouldShowCount, count, labelClassName, countClassName }">
+      <label :class="labelClassName">
+        {{ node.isBranch ? 'Branch' : 'Leaf' }}: {{ node.label }}
+        <span v-if="shouldShowCount" :class="countClassName">({{ count }})</span>
+      </label>
+    </template>
   </treeselect>
 </template>
 
