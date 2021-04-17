@@ -880,7 +880,7 @@ export default {
   methods: {
     $set(obj, key, value) {
       obj[key] = value;
-      return obj;
+      return value;
     },
     verifyProps() {
       warning(
@@ -1495,7 +1495,7 @@ export default {
         this.traverseAllNodesByIndex(node => {
           checkedStateMap[node.id] = UNCHECKED
         })
-
+        
         this.selectedNodes.forEach(selectedNode => {
           checkedStateMap[selectedNode.id] = CHECKED
 

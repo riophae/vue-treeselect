@@ -16,8 +16,8 @@
       },
     },
 
-    render(_, context) {
-      const { props, children } = context
+    render() {
+      const { props, children } = this
 
       return (
         <div class={`vue-treeselect__tip vue-treeselect__${props.type}-tip`}>

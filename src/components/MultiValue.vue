@@ -47,10 +47,10 @@
 
       return renderValueContainer(
         <transition-group class="vue-treeselect__multi-value" {...transitionGroupProps}>
-          {this.renderMultiValueItems()}
-          {this.renderExceedLimitTip()}
-          <Placeholder key="placeholder" />
-          <Input ref="input" key="input" />
+            {this.renderMultiValueItems()}
+            {this.renderExceedLimitTip()}
+            <Placeholder key="placeholder" />
+            <Input ref="input" key="input" />  
         </transition-group>,
       )
     },
