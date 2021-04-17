@@ -51,8 +51,8 @@ describe('Events', () => {
       expect(wrapper.emitted().deselect).toBeUndefined()
     })
 
-    it('click on value remove icon', () => {
-      wrapper.setProps({ value: [ 'a' ] })
+    it('click on value remove icon', async () => {
+      await wrapper.setProps({ value: [ 'a' ] })
 
       // click on "×" of a
       leftClick(wrapper.find('.vue-treeselect__value-remove'))

@@ -1,4 +1,4 @@
-import Vue from 'vue'
+import { defineComponent } from 'vue'
 import { mount } from '@vue/test-utils'
 import sleep from 'yaku/lib/sleep'
 import {
@@ -647,7 +647,7 @@ describe('Dynamical Loading', () => {
         expect(action).toBe('LOAD_ROOT_OPTIONS')
 
         setTimeout(() => {
-          app.options = [ {
+          wrapper.vm.options = [ {
             id: 'a',
             label: 'a',
             children: [ {
@@ -662,12 +662,12 @@ describe('Dynamical Loading', () => {
         }, DELAY)
       }
       const spyForLoadOptions = jasmine.createSpy('loadOptions', loadOptions).and.callThrough()
-      const app = new Vue({
+      const wrapper = mount(defineComponent({
         components: { Treeselect },
-        data: {
+        data: () => ({
           options: null,
           loadOptions: spyForLoadOptions,
-        },
+        }),
         template: `
           <div>
             <treeselect
@@ -677,8 +677,8 @@ describe('Dynamical Loading', () => {
               />
           </div>
         `,
-      }).$mount()
-      const vm = app.$children[0]
+      }))
+      const vm = wrapper.find(Treeselect).vm
 
       expect(vm.rootOptionsStates.isLoading).toBe(false)
 
@@ -711,7 +711,7 @@ describe('Dynamical Loading', () => {
       const loadOptions = ({ callback }) => {
         setTimeout(() => {
           if (called) {
-            app.options = [ {
+            wrapper.vm.options = [ {
               id: 'a',
               label: 'a',
               children: [ {
@@ -730,12 +730,12 @@ describe('Dynamical Loading', () => {
         }, DELAY)
       }
       const spyForLoadOptions = jasmine.createSpy('loadOptions', loadOptions).and.callThrough()
-      const app = new Vue({
+      const wrapper = mount(defineComponent({
         components: { Treeselect },
-        data: {
+        data: () => ({
           options: null,
           loadOptions: spyForLoadOptions,
-        },
+        }),
         template: `
           <div>
             <treeselect
@@ -745,8 +745,8 @@ describe('Dynamical Loading', () => {
               />
           </div>
         `,
-      }).$mount()
-      const vm = app.$children[0]
+      }))
+      const vm = wrapper.find(Treeselect).vm
       let menu
 
       // 1st try
@@ -782,17 +782,17 @@ describe('Dynamical Loading', () => {
       const DELAY = 60
       const loadOptions = ({ callback }) => {
         setTimeout(() => {
-          app.options = []
+          wrapper.vm.options = []
           callback()
         }, DELAY)
       }
       const spyForLoadOptions = jasmine.createSpy('loadOptions', loadOptions).and.callThrough()
-      const app = new Vue({
+      const wrapper = mount(defineComponent({
         components: { Treeselect },
-        data: {
+        data: () => ({
           options: null,
           loadOptions: spyForLoadOptions,
-        },
+        }),
         template: `
           <div>
             <treeselect
@@ -802,8 +802,8 @@ describe('Dynamical Loading', () => {
               />
           </div>
         `,
-      }).$mount()
-      const vm = app.$children[0]
+      }))
+      const vm = wrapper.find(Treeselect).vm
 
       vm.openMenu()
       expect(spyForLoadOptions.calls.count()).toBe(1)
@@ -819,21 +819,21 @@ describe('Dynamical Loading', () => {
 
     it('should override fallback nodes', async () => {
       const DELAY = 10
-      const app = new Vue({
+      const wrapper = mount(defineComponent({
         components: { Treeselect },
-        data: {
+        data: () => ({
           options: null,
           value: 'a', // <- this creates a fallback node
           loadOptions({ callback }) {
             setTimeout(() => {
-              app.options = [ {
+              wrapper.vm.options = [ {
                 id: 'a',
                 label: 'a',
               } ]
               callback()
             }, DELAY)
           },
-        },
+        }),
         template: `
           <div>
             <treeselect
@@ -844,8 +844,8 @@ describe('Dynamical Loading', () => {
               />
           </div>
         `,
-      }).$mount()
-      const vm = app.$children[0]
+      }))
+      const vm = wrapper.find(Treeselect).vm
 
       expect(vm.rootOptionsStates.isLoading).toBe(true)
       expect(vm.forest.nodeMap.a).toEqual(jasmine.objectContaining({
@@ -917,14 +917,14 @@ describe('Dynamical Loading', () => {
     it('should accept promises', async () => {
       let called = false
       const DELAY = 10
-      const app = new Vue({
+      const wrapper = mount(defineComponent({
         components: { Treeselect },
-        data: {
+        data: () => ({
           options: null,
           async loadOptions() {
             await sleep(DELAY)
             if (called) {
-              app.options = [ {
+              wrapper.vm.options = [ {
                 id: 'a',
                 label: 'a',
               } ]
@@ -933,7 +933,7 @@ describe('Dynamical Loading', () => {
               throw new Error('test')
             }
           },
-        },
+        }),
         template: `
           <div>
             <treeselect
@@ -943,8 +943,8 @@ describe('Dynamical Loading', () => {
               />
           </div>
         `,
-      }).$mount()
-      const vm = app.$children[0]
+      }))
+      const vm = wrapper.find(Treeselect).vm
 
       vm.openMenu()
       await sleep(DELAY)
@@ -958,14 +958,14 @@ describe('Dynamical Loading', () => {
 
     it('should highlight first option after loading root options', async () => {
       const DELAY = 10
-      const app = new Vue({
+      const wrapper = mount(defineComponent({
         components: { Treeselect },
-        data: {
+        data: () => ({
           options: null,
           loadOptions({ action, callback }) {
             if (action === 'LOAD_ROOT_OPTIONS') {
               setTimeout(() => {
-                app.options = [ 'a', 'b', 'c' ].map(option => ({
+                wrapper.vm.options = [ 'a', 'b', 'c' ].map(option => ({
                   id: option,
                   label: option,
                 }))
@@ -973,7 +973,7 @@ describe('Dynamical Loading', () => {
               }, DELAY)
             }
           },
-        },
+        }),
         template: `
           <div>
             <treeselect
@@ -983,8 +983,8 @@ describe('Dynamical Loading', () => {
               />
           </div>
         `,
-      }).$mount()
-      const vm = app.$children[0]
+      }))
+      const vm = wrapper.find(Treeselect).vm
 
       vm.openMenu()
       await vm.$nextTick()

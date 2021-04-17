@@ -16,8 +16,7 @@
       },
     },
 
-    render() {
-      const { props, children } = this
+    render(props) {
 
       return (
         <div class={`vue-treeselect__tip vue-treeselect__${props.type}-tip`}>
@@ -25,7 +24,7 @@
             <span class={`vue-treeselect__icon-${props.icon}`} />
           </div>
           <span class={`vue-treeselect__tip-text vue-treeselect__${props.type}-tip-text`}>
-            {children}
+            {this.$slots.default?.()}
           </span>
         </div>
       )

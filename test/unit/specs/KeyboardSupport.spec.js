@@ -1,4 +1,4 @@
-import Vue from 'vue'
+import { defineComponent } from 'vue'
 import { mount } from '@vue/test-utils'
 import sleep from 'yaku/lib/sleep'
 import {
@@ -79,8 +79,8 @@ describe('Keyboard Support', () => {
       expect(wrapper.vm.forest.selectedNodeIds).toEqual([ 'a', 'b' ])
     })
 
-    it('should do nothing when backspaceRemoves=false', () => {
-      wrapper.setProps({ backspaceRemoves: false })
+    it('should do nothing when backspaceRemoves=false', async () => {
+      await wrapper.setProps({ backspaceRemoves: false })
       pressBackspaceKey(wrapper)
       expect(wrapper.vm.forest.selectedNodeIds).toEqual([ 'a', 'b' ])
     })
@@ -121,7 +121,7 @@ describe('Keyboard Support', () => {
     it('select or deselect option using enter key (single-select)', async () => {
       const { wrapper, vm } = await createInstance()
 
-      wrapper.setProps({ multiple: false })
+      await wrapper.setProps({ multiple: false })
 
       pressEnterKey(wrapper)
       expect(vm.internalValue).toEqual([ 'a' ])
@@ -137,7 +137,7 @@ describe('Keyboard Support', () => {
     it('select or deselect option using enter key (multi-select)', async () => {
       const { wrapper, vm } = await createInstance()
 
-      wrapper.setProps({ multiple: true })
+      await wrapper.setProps({ multiple: true })
 
       pressEnterKey(wrapper)
       expect(vm.internalValue).toEqual([ 'a' ])
@@ -163,7 +163,7 @@ describe('Keyboard Support', () => {
     it('pressing enter key on a branch node when disabledBranchNodes=true should be no-op', async () => {
       const { wrapper, vm } = await createInstance()
 
-      wrapper.setProps({ disableBranchNodes: true })
+      await wrapper.setProps({ disableBranchNodes: true })
 
       vm.setCurrentHighlightedOption(vm.forest.nodeMap.d)
       expect(vm.menu.current).toBe('d')
@@ -546,7 +546,7 @@ describe('Keyboard Support', () => {
 
   it('navigate when no options', async () => {
     const DELAY = 10
-    const wrapper = mount(Vue.extend({
+    const wrapper = mount(defineComponent({
       components: { Treeselect },
       data: () => ({
         options: null,
@@ -626,8 +626,8 @@ describe('Keyboard Support', () => {
       expect(wrapper.vm.forest.selectedNodeIds).toEqual([ 'a', 'b' ])
     })
 
-    it('should do nothing when backspaceRemoves=false', () => {
-      wrapper.setProps({ deleteRemoves: false })
+    it('should do nothing when backspaceRemoves=false', async () => {
+      await wrapper.setProps({ deleteRemoves: false })
       pressDeleteKey(wrapper)
       expect(wrapper.vm.forest.selectedNodeIds).toEqual([ 'a', 'b' ])
     })

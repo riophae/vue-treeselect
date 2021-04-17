@@ -20,7 +20,7 @@
     "preview-docs": "http-server gh-pages",
     "gh-pages": "npm run build-docs && gh-pages --dist gh-pages --branch gh-pages --dotfiles",
     "cleanup-cov": "rimraf test/unit/coverage",
-    "unit": "npm run cleanup-cov && karma start test/unit/karma.conf.js --watch",
+    "unit": "npm run cleanup-cov && karma start test/unit/karma.config.js --watch",
     "testonly": "npm run cleanup-cov && karma start test/unit/karma.config.js --single-run",
     "test": "npm run testonly",
     "pretest": "npm run lint",

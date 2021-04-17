@@ -14,26 +14,26 @@ describe('Hidden Fields', () => {
 
   const getHiddenFields = () => wrapper.findAll('input[type="hidden"]')
 
-  it('must have value & name', () => {
-    wrapper.setProps({ value: 'value' })
+  it('must have value & name', async () => {
+    await wrapper.setProps({ value: 'value' })
     expect(getHiddenFields().length).toBe(0)
 
-    wrapper.setProps({ value: null, name: 'test' })
+    await wrapper.setProps({ value: null, name: 'test' })
     expect(getHiddenFields().length).toBe(0)
 
-    wrapper.setProps({ value: 'value', name: 'test' })
+    await wrapper.setProps({ value: 'value', name: 'test' })
     expect(getHiddenFields().length).not.toBe(0)
   })
 
-  it('single-select mode', () => {
-    wrapper.setProps({ name: 'single', value: 'value' })
+  it('single-select mode', async () => {
+    await wrapper.setProps({ name: 'single', value: 'value' })
     const hiddenFields = getHiddenFields()
     expect(hiddenFields.length).toBe(1)
     expect(hiddenFields.at(0).html()).toBe('<input type="hidden" name="single" value="value">')
   })
 
-  it('multi-select mode', () => {
-    wrapper.setProps({ name: 'multiple', multiple: true, value: [ 1, 2, 3 ] })
+  it('multi-select mode', async () => {
+    await wrapper.setProps({ name: 'multiple', multiple: true, value: [ 1, 2, 3 ] })
     const hiddenFields = getHiddenFields()
     expect(hiddenFields.length).toBe(3)
     expect(hiddenFields.wrappers.map(hf => hf.html())).toEqual([
@@ -43,15 +43,15 @@ describe('Hidden Fields', () => {
     ])
   })
 
-  it('join values', () => {
-    wrapper.setProps({ name: 'join-values', multiple: true, value: [ 'a', 'b', 'c' ], joinValues: true })
+  it('join values', async () => {
+    await wrapper.setProps({ name: 'join-values', multiple: true, value: [ 'a', 'b', 'c' ], joinValues: true })
     const hiddenFields = getHiddenFields()
     expect(hiddenFields.length).toBe(1)
     expect(hiddenFields.at(0).html()).toBe('<input type="hidden" name="join-values" value="a,b,c">')
   })
 
   it('delimiter', async () => {
-    wrapper.setProps({ name: 'delimiter', multiple: true, value: [ 1, 2, 3 ], joinValues: true, delimiter: ';' })
+    await wrapper.setProps({ name: 'delimiter', multiple: true, value: [ 1, 2, 3 ], joinValues: true, delimiter: ';' })
     await wrapper.vm.$nextTick()
     const hiddenFields = getHiddenFields()
     expect(hiddenFields.length).toBe(1)
@@ -59,7 +59,7 @@ describe('Hidden Fields', () => {
   })
 
   it('disabled', async () => {
-    wrapper.setProps({ name: 'disabled', value: 'value', disabled: true })
+    await wrapper.setProps({ name: 'disabled', value: 'value', disabled: true })
     await wrapper.vm.$nextTick()
     const hiddenFields = getHiddenFields()
     expect(hiddenFields.length).toBe(0)

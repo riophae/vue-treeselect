@@ -152,7 +152,7 @@ describe('Menu', () => {
     assertInputValue('')
   })
 
-  it('set appendToBody to true when alwaysOpen=true should not throw error', () => {
+  it('set appendToBody to true when alwaysOpen=true should not throw error', async () => {
     const wrapper = mount(Treeselect, {
       attachToDocument: true,
       propsData: {
@@ -161,6 +161,6 @@ describe('Menu', () => {
       },
     })
 
-    wrapper.setProps({ appendToBody: true })
+    await wrapper.setProps({ appendToBody: true })
   })
 })

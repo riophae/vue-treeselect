@@ -48,28 +48,28 @@ describe('Methods', () => {
       vm = wrapper.vm
     })
 
-    it('when multiple=false', () => {
-      wrapper.setProps({ multiple: false })
+    it('when multiple=false', async () => {
+      await wrapper.setProps({ multiple: false })
 
-      wrapper.setProps({ value: 'a' })
+      await wrapper.setProps({ value: 'a' })
       vm.clear()
       expect(vm.internalValue).toEqual([])
 
       // Should clear disabled value.
-      wrapper.setProps({ value: 'c' })
+      await wrapper.setProps({ value: 'c' })
       vm.clear()
       expect(vm.internalValue).toEqual([])
     })
 
-    it('when multiple=true', () => {
-      wrapper.setProps({ multiple: true })
+    it('when multiple=true', async () => {
+      await wrapper.setProps({ multiple: true })
 
-      wrapper.setProps({ value: [ 'a', 'b' ] })
+      await wrapper.setProps({ value: [ 'a', 'b' ] })
       vm.clear()
       expect(vm.internalValue).toEqual([])
 
       // Should not clear disabled value.
-      wrapper.setProps({ value: [ 'a', 'b', 'c' ] })
+      await wrapper.setProps({ value: [ 'a', 'b', 'c' ] })
       vm.clear()
       expect(vm.internalValue).toEqual([ 'c' ])
     })
@@ -162,8 +162,8 @@ describe('Methods', () => {
       expect(wrapper.vm.menu.isOpen).toBe(true)
     })
 
-    it('should ignore when disabled=true', () => {
-      wrapper.setProps({ disabled: true })
+    it('should ignore when disabled=true', async () => {
+      await wrapper.setProps({ disabled: true })
       wrapper.vm.openMenu()
       expect(wrapper.vm.menu.isOpen).toBe(false)
     })
@@ -265,8 +265,8 @@ describe('Methods', () => {
           vm = wrapper.vm
         })
 
-        it('when sortValueBy=ORDER_SELECTED', () => {
-          wrapper.setProps({ sortValueBy: 'ORDER_SELECTED' })
+        it('when sortValueBy=ORDER_SELECTED', async () => {
+          await wrapper.setProps({ sortValueBy: 'ORDER_SELECTED' })
           expect(vm.internalValue).toEqual([ 'c', 'aaa', 'bb' ])
           vm.removeLastValue()
           expect(vm.internalValue).toEqual([ 'c', 'aaa' ])
@@ -276,8 +276,8 @@ describe('Methods', () => {
           expect(vm.internalValue).toEqual([])
         })
 
-        it('when sortValueBy=LEVEL', () => {
-          wrapper.setProps({ sortValueBy: 'LEVEL' })
+        it('when sortValueBy=LEVEL', async () => {
+          await wrapper.setProps({ sortValueBy: 'LEVEL' })
           expect(vm.internalValue).toEqual([ 'c', 'bb', 'aaa' ])
           vm.removeLastValue()
           expect(vm.internalValue).toEqual([ 'c', 'bb' ])
@@ -287,8 +287,8 @@ describe('Methods', () => {
           expect(vm.internalValue).toEqual([])
         })
 
-        it('when sortValueBy=INDEX', () => {
-          wrapper.setProps({ sortValueBy: 'INDEX' })
+        it('when sortValueBy=INDEX', async () => {
+          await wrapper.setProps({ sortValueBy: 'INDEX' })
           expect(vm.internalValue).toEqual([ 'aaa', 'bb', 'c' ])
           vm.removeLastValue()
           expect(vm.internalValue).toEqual([ 'aaa', 'bb' ])
@@ -330,8 +330,8 @@ describe('Methods', () => {
           vm = wrapper.vm
         })
 
-        it('when valueConsistsOf=ALL', () => {
-          wrapper.setProps({ valueConsistsOf: 'ALL' })
+        it('when valueConsistsOf=ALL', async () => {
+          await wrapper.setProps({ valueConsistsOf: 'ALL' })
           expect(vm.internalValue).toEqual([ 'a', 'aa', 'ab', 'aaa', 'aab' ])
           vm.removeLastValue()
           expect(vm.internalValue).toEqual([ 'ab', 'aaa' ])
@@ -341,15 +341,15 @@ describe('Methods', () => {
           expect(vm.internalValue).toEqual([])
         })
 
-        it('when valueConsistsOf=BRANCH_PRIORITY', () => {
-          wrapper.setProps({ valueConsistsOf: 'BRANCH_PRIORITY' })
+        it('when valueConsistsOf=BRANCH_PRIORITY', async () => {
+          await wrapper.setProps({ valueConsistsOf: 'BRANCH_PRIORITY' })
           expect(vm.internalValue).toEqual([ 'a' ])
           vm.removeLastValue()
           expect(vm.internalValue).toEqual([])
         })
 
-        it('when valueConsistsOf=LEAF_PRIORITY', () => {
-          wrapper.setProps({ valueConsistsOf: 'LEAF_PRIORITY' })
+        it('when valueConsistsOf=LEAF_PRIORITY', async () => {
+          await wrapper.setProps({ valueConsistsOf: 'LEAF_PRIORITY' })
           expect(vm.internalValue).toEqual([ 'ab', 'aaa', 'aab' ])
           vm.removeLastValue()
           expect(vm.internalValue).toEqual([ 'ab', 'aaa' ])
@@ -359,9 +359,9 @@ describe('Methods', () => {
           expect(vm.internalValue).toEqual([])
         })
 
-        it('when valueConsistsOf=ALL_WITH_INDETERMINATE', () => {
+        it('when valueConsistsOf=ALL_WITH_INDETERMINATE', async () => {
           // TODO: the order is still strange
-          wrapper.setProps({ valueConsistsOf: 'ALL_WITH_INDETERMINATE' })
+          await wrapper.setProps({ valueConsistsOf: 'ALL_WITH_INDETERMINATE' })
           expect(vm.internalValue).toEqual([ 'a', 'aa', 'ab', 'aaa', 'aab' ])
           vm.removeLastValue()
           expect(vm.internalValue).toEqual([ 'ab', 'aaa', 'a', 'aa' ])

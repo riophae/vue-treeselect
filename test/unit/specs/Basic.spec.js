@@ -1,4 +1,4 @@
-import Vue from 'vue'
+import { defineComponent } from 'vue'
 import { mount } from '@vue/test-utils'
 import sleep from 'yaku/lib/sleep'
 import Treeselect from '@src/components/Treeselect'
@@ -201,7 +201,7 @@ describe('Basic', () => {
         whenFlatMode(vm)
       })
 
-      it('should reinitialize options after value of `flat` prop changes', () => {
+      it('should reinitialize options after value of `flat` prop changes', async () => {
         const wrapper = mount(Treeselect, {
           propsData: {
             options,
@@ -209,13 +209,13 @@ describe('Basic', () => {
         })
         const { vm } = wrapper
 
-        wrapper.setProps({ flat: false })
+        await wrapper.setProps({ flat: false })
         whenNonFlatMode(vm)
 
-        wrapper.setProps({ flat: true })
+        await wrapper.setProps({ flat: true })
         whenFlatMode(vm)
 
-        wrapper.setProps({ flat: false })
+        await wrapper.setProps({ flat: false })
         whenNonFlatMode(vm)
       })
     })
@@ -529,7 +529,7 @@ describe('Basic', () => {
   })
 
   describe('fallback node', () => {
-    it('shape', () => {
+    it('shape', async () => {
       const wrapper = mount(Treeselect, {
         propsData: {
           options: [],
@@ -538,7 +538,7 @@ describe('Basic', () => {
       const { vm } = wrapper
 
       expect(vm.forest.nodeMap).toBeEmptyObject()
-      wrapper.setProps({ value: 'test' })
+      await wrapper.setProps({ value: 'test' })
       expect(vm.forest.nodeMap.test).toEqual({
         id: jasmine.any(String),
         label: jasmine.any(String),
@@ -695,21 +695,21 @@ describe('Basic', () => {
     spyOn(console, 'error')
 
     const DELAY = 10
-    const app = new Vue({
+    const wrapper = mount(defineComponent({
       components: { Treeselect },
-      data: {
+      data: () => ({
         value: 'a', // <- this creates a fallback node
         options: null,
         loadOptions({ callback }) {
           setTimeout(() => {
-            app.options = [ {
+            wrapper.vm.options = [ {
               id: 'a',
               label: 'a',
             } ]
             callback()
           }, DELAY)
         },
-      },
+      }),
       template: `
         <div>
           <treeselect
@@ -719,8 +719,8 @@ describe('Basic', () => {
           />
         </div>
       `,
-    }).$mount()
-    const vm = app.$children[0]
+    }))
+    const vm = wrapper.find(Treeselect).vm
 
     expect(vm.forest.nodeMap.a.isFallbackNode).toBe(true)
 
@@ -729,7 +729,7 @@ describe('Basic', () => {
     expect(vm.forest.nodeMap.a).not.toHaveMember('isFallbackNode')
   })
 
-  it('should rebuild state after swithching from single to multiple', () => {
+  it('should rebuild state after swithching from single to multiple', async () => {
     const wrapper = mount(Treeselect, {
       propsData: {
         options: [ {
@@ -747,11 +747,11 @@ describe('Basic', () => {
     const { vm } = wrapper
 
     expect(vm.forest.checkedStateMap).toBeEmptyObject()
-    wrapper.setProps({ multiple: true })
+    await wrapper.setProps({ multiple: true })
     expect(vm.forest.checkedStateMap).toBeNonEmptyObject()
   })
 
-  it('should rebuild state after value changed externally when multiple=true', () => {
+  it('should rebuild state after value changed externally when multiple=true', async () => {
     const wrapper = mount(Treeselect, {
       propsData: {
         options: [ {
@@ -772,7 +772,7 @@ describe('Basic', () => {
       a: 0,
       aa: 0,
     })
-    wrapper.setProps({ value: [ 'a' ] })
+    await wrapper.setProps({ value: [ 'a' ] })
     expect(vm.forest.checkedStateMap).toEqual({
       a: 2,
       aa: 2,
@@ -782,9 +782,9 @@ describe('Basic', () => {
   it('v-model support', async () => {
     // vue-test-utils doesn't support testing v-model
     // so here we write vanila vue code
-    const vm = new Vue({
+    const wrapper = mount(defineComponent({
       components: { Treeselect },
-      data: {
+      data: () => ({
         value: [],
         options: [ {
           id: 'a',
@@ -793,7 +793,7 @@ describe('Basic', () => {
           id: 'b',
           label: 'b',
         } ],
-      },
+      }),
       template: `
         <div>
           <treeselect
@@ -803,8 +803,9 @@ describe('Basic', () => {
           />
         </div>
       `,
-    }).$mount()
-    const comp = vm.$children[0]
+    }))
+    const vm = wrapper.vm
+    const comp = wrapper.find(Treeselect).vm
 
     comp.select(comp.forest.nodeMap.a)
     await comp.$nextTick()

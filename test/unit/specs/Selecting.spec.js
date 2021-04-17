@@ -670,8 +670,8 @@ describe('Multi-select', () => {
     })
   })
 
-  it('case #6', () => {
-    wrapper.setProps({
+  it('case #6', async () => {
+    await wrapper.setProps({
       options: [ {
         id: 'a',
         label: 'a',
