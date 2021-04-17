@@ -1,5 +1,5 @@
 <script>
-  import { h, defineComponent } from 'vue'
+  import { h, defineComponent, Transition } from 'vue'
 
   import { UNCHECKED, INDETERMINATE, CHECKED } from '../constants'
   import { onLeftClick } from '../utils'
@@ -78,10 +78,10 @@
 
         if (node.isBranch) {
           const transitionProps = {
-            props: {
+            // props: {
               name: 'vue-treeselect__option-arrow--prepare',
               appear: true,
-            },
+            // },
           }
           const arrowClass = {
             'vue-treeselect__option-arrow': true,
@@ -90,9 +90,9 @@
 
           return (
             <div class="vue-treeselect__option-arrow-container" onMousedown={this.handleMouseDownOnArrow}>
-              <transition {...transitionProps}>
+              <Transition {...transitionProps}>
                 <ArrowIcon class={arrowClass} />
-              </transition>
+              </Transition>
             </div>
           )
         }
@@ -279,18 +279,18 @@
         [`vue-treeselect__indent-level-${indentLevel}`]: true,
       }
       const transitionProps = {
-        props: {
+        // props: {
           name: 'vue-treeselect__list--transition',
-        },
+        // },
       }
 
       return (
         <div class={listItemClass}>
           {this.renderOption()}
           {node.isBranch && (
-            <transition {...transitionProps}>
+            <Transition {...transitionProps}>
               {this.renderSubOptionsList()}
-            </transition>
+            </Transition>
           )}
         </div>
       )
