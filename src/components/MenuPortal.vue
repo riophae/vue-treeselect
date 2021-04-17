@@ -1,11 +1,11 @@
 <script>
   import { h, defineComponent } from 'vue'
 
-  import { createApp } from 'vue'
+  import { createApp, Teleport } from 'vue'
   import { watchSize, setupResizeAndScrollEventListeners, find } from '../utils'
   import Menu from './Menu'
 
-  const PortalTarget = {
+  const PortalTarget = defineComponent({
     name: 'vue-treeselect--portal-target',
     inject: [ 'instance' ],
 
@@ -130,52 +130,62 @@
     unmounted() {
       this.removeHandlers()
     },
-  }
+  })
 
   let placeholder
 
   export default defineComponent({
     name: 'vue-treeselect--menu-portal',
 
-    created() {
-      this.portalTarget = null
+    computed: {
+      portalTarget() {
+        return this.$refs["portalTarget"]
+      }
     },
 
-    mounted() {
-      this.setup()
-    },
+    // created() {
+    //   this.portalTarget = null
+    // },
 
-    unmounted() {
-      this.teardown()
-    },
+    // mounted() {
+    //   this.setup()
+    // },
+
+    // unmounted() {
+    //   this.teardown()
+    // },
 
     methods: {
-      setup() {
-        const el = document.createElement('div')
-        document.body.appendChild(el)
+      // setup() {
+      //   const el = document.createElement('div')
+      //   document.body.appendChild(el)
 
-        this.portalTarget = createApp({
-          el,
-          parent: this,
-          ...PortalTarget,
-        })
-      },
+      //   this.portalTarget = createApp({
+      //     el,
+      //     parent: this,
+      //     ...PortalTarget,
+      //   })
+      // },
 
-      teardown() {
-        document.body.removeChild(this.portalTarget.$el)
-        this.portalTarget.$el.innerHTML = ''
+      // teardown() {
+      //   document.body.removeChild(this.portalTarget.$el)
+      //   this.portalTarget.$el.innerHTML = ''
 
-        this.portalTarget.$destroy()
-        this.portalTarget = null
-      },
+      //   this.portalTarget.$destroy()
+      //   this.portalTarget = null
+      // },
     },
 
     render() {
-      if (!placeholder) placeholder = (
-        <div class="vue-treeselect__menu-placeholder" />
-      )
+      return (<Teleport to="body">
+        <PortalTarget ref="portalTarget" />
+      </Teleport>);
 
-      return placeholder
+      // if (!placeholder) placeholder = (
+      //   <div class="vue-treeselect__menu-placeholder" />
+      // )
+
+      // return placeholder
     },
   },
   )
