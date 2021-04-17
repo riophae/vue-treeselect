@@ -11,7 +11,7 @@
   import { h, defineComponent } from 'vue'
 
   // import Vodal from 'vodal'
-  import 'vodal/common.css'
+  // import 'vodal/common.css'
   import { generateOptions } from '../utils'
 
   export default defineComponent({
