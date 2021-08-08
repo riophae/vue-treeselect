@@ -209,7 +209,7 @@ describe('Methods', () => {
     })
 
     it('should warn about invalid node id', () => {
-      spyOn(console, 'error')
+      spyOn(console, 'error').and.callThrough()
       wrapper.vm.getNode(null)
       expect(console.error).toHaveBeenCalledWith(
         '[Vue-Treeselect Warning]',

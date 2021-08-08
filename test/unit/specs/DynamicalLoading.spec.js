@@ -15,7 +15,7 @@ import { CHECKED } from '@src/constants'
 describe('Dynamical Loading', () => {
   describe('Verify props', () => {
     it('should warn about absense of `loadOptions` prop when options=null', () => {
-      spyOn(console, 'error')
+      spyOn(console, 'error').and.callThrough()
 
       mount(Treeselect, {
         propsData: {
@@ -30,7 +30,7 @@ describe('Dynamical Loading', () => {
     })
 
     it('should warn about absense of `loadOptions` prop when unloaded branch nodes detected', () => {
-      spyOn(console, 'error')
+      spyOn(console, 'error').and.callThrough()
 
       mount(Treeselect, {
         propsData: {

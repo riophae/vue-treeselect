@@ -446,7 +446,7 @@ describe('Props', () => {
 
   describe('async', () => {
     it('must be with searchable=true', () => {
-      spyOn(console, 'error')
+      spyOn(console, 'error').and.callThrough()
 
       mount(Treeselect, {
         propsData: {
@@ -613,7 +613,7 @@ describe('Props', () => {
     })
 
     it('must be used in conjunction with `flat=true`', () => {
-      spyOn(console, 'error')
+      spyOn(console, 'error').and.callThrough()
 
       function test(propName) {
         mount(Treeselect, {
@@ -1429,7 +1429,7 @@ describe('Props', () => {
 
   describe('flat', () => {
     it('must be used in conjunction with `multiple=true`', () => {
-      spyOn(console, 'error')
+      spyOn(console, 'error').and.callThrough()
 
       mount(Treeselect, {
         propsData: {

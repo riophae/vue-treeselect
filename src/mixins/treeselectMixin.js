@@ -941,7 +941,7 @@ export default {
     initialize() {
       const options = this.async
         ? this.getRemoteSearchEntry().options
-        : this.options.filter(o => o)
+        : this.options ? this.options.filter(o => o) : {}
 
       if (Array.isArray(options)) {
         // In case we are re-initializing options, keep the old state tree temporarily.

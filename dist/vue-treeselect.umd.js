@@ -1,5 +1,5 @@
 /*!
- * vue-treeselect v0.4.0 | (c) 2017-2020 Riophae Lee
+ * vue-treeselect v0.4.0 | (c) 2017-2021 Riophae Lee
  * Released under the MIT License.
  * https://vue-treeselect.js.org/
  */
@@ -2021,7 +2021,8 @@ var instanceId = 0;
         countMap: createMap()
       },
       lastSearchInput: null,
-      remoteSearch: createMap()
+      remoteSearch: createMap(),
+      hasBranchNodes: null
     };
   },
   computed: {
@@ -2103,11 +2104,6 @@ var instanceId = 0;
     },
     showCountOnSearchComputed: function showCountOnSearchComputed() {
       return typeof this.showCountOnSearch === 'boolean' ? this.showCountOnSearch : this.showCount;
-    },
-    hasBranchNodes: function hasBranchNodes() {
-      return this.forest.normalizedOptions.some(function (rootNode) {
-        return rootNode.isBranch;
-      });
     },
     shouldFlattenOptions: function shouldFlattenOptions() {
       return this.localSearch.active && this.flattenSearchResults;
@@ -2201,9 +2197,9 @@ var instanceId = 0;
       this._blurOnSelect = false;
     },
     initialize: function initialize() {
-      var options = this.async ? this.getRemoteSearchEntry().options : this.options.filter(function (o) {
+      var options = this.async ? this.getRemoteSearchEntry().options : this.options ? this.options.filter(function (o) {
         return o;
-      });
+      }) : {};
 
       if (Array.isArray(options)) {
         var prevNodeMap = this.forest.nodeMap;
@@ -2214,6 +2210,10 @@ var instanceId = 0;
       } else {
         this.forest.normalizedOptions = [];
       }
+
+      this.hasBranchNodes = this.forest.normalizedOptions.some(function (rootNode) {
+        return rootNode.isBranch;
+      });
     },
     getInstanceId: function getInstanceId() {
       return this.instanceId == null ? this.id : this.instanceId;
