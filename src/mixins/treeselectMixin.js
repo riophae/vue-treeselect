@@ -707,6 +707,11 @@ export default {
 
       // <searchQuery, remoteSearchEntry> map.
       remoteSearch: createMap(),
+      /**
+     * Is there any branch node?
+     * @type {boolean}
+     */
+      hasBranchNodes: null,
     }
   },
 
@@ -817,13 +822,6 @@ export default {
       return typeof this.showCountOnSearch === 'boolean'
         ? this.showCountOnSearch
         : this.showCount
-    },
-    /**
-     * Is there any branch node?
-     * @type {boolean}
-     */
-    hasBranchNodes() {
-      return this.forest.normalizedOptions.some(rootNode => rootNode.isBranch)
     },
     shouldFlattenOptions() {
       return this.localSearch.active && this.flattenSearchResults
@@ -961,6 +959,8 @@ export default {
       } else {
         this.forest.normalizedOptions = []
       }
+
+      this.hasBranchNodes = this.forest.normalizedOptions.some(rootNode => rootNode.isBranch)
     },
 
     getInstanceId() {
