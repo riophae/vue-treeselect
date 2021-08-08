@@ -1941,6 +1941,20 @@ describe('Props', () => {
             options: [ {
               id: 'a',
               label: 'a',
+              children: [ {
+                id: 'aa',
+                label: 'aa',
+              }, {
+                id: 'ab',
+                label: 'ab',
+                children: [ {
+                  id: 'aba',
+                  label: 'aba',
+                }, {
+                  id: 'abbb',
+                  label: 'abbb',
+                } ],
+              } ],
             },
             {
               id: 'b',
@@ -1954,8 +1968,9 @@ describe('Props', () => {
               id: 'd',
               label: 'd',
             } ],
-            value: 'd',
+            value: 'abbb',
             scrollPositionOnCenter: true,
+            clearOnSelect: true,
           },
         })
         const { vm } = wrapper
