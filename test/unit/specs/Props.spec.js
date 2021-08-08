@@ -1977,11 +1977,20 @@ describe('Props', () => {
 
         vm.openMenu()
         await vm.$nextTick()
-        sleep(100)
+        sleep(50)
         const menu = findMenu(wrapper)
         if (wrapper.contains('.vue-treeselect__option--selected') && menu.element.scrollHeight > menu.element.clientHeight) {
           expect(menu.element.scrollTop).toBeGreaterThan(0)
         }
+
+        wrapper.setProps({ value: null })
+        vm.localSearch.active = true
+        sleep(50)
+
+        if (wrapper.contains('.vue-treeselect__option--selected') && menu.element.scrollHeight > menu.element.clientHeight) {
+          expect(menu.element.scrollTop).toBeGreaterThan(0)
+        }
+
         vm.closeMenu()
         await vm.$nextTick()
       })
