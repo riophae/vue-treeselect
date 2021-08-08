@@ -1228,6 +1228,7 @@ export default {
     handleLocalSearch(retry) {
       const { searchQuery } = this.trigger
       const done = () => this.resetHighlightedOptionWhenNecessary(true)
+      const ignore = () => this.resetHighlightedOptionWhenNecessary(false)
 
       if (!searchQuery) {
         // Exit sync search mode.
@@ -1238,7 +1239,7 @@ export default {
 
       if (searchQuery.length < this.startSearchLength) {
         // Ignore.
-        return
+        return ignore()
       }
 
       if (this.waitSearchFinishTime > 0) {
@@ -1251,7 +1252,7 @@ export default {
           }, this.waitSearchFinishTime)
 
           this.lastSearchInput = now
-          return
+          return ignore()
         }
 
         const diff = now - this.lastSearchInput
@@ -1261,11 +1262,11 @@ export default {
           }, this.waitSearchFinishTime)
 
           this.lastSearchInput = now
-          return
+          return ignore()
         }
 
         if (retry && diff < this.waitSearchFinishTime) {
-          return
+          return ignore()
         }
 
         this.lastSearchInput = now

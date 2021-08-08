@@ -1339,6 +1339,10 @@ var instanceId = 0;
         return _this11.resetHighlightedOptionWhenNecessary(true);
       };
 
+      var ignore = function ignore() {
+        return _this11.resetHighlightedOptionWhenNecessary(false);
+      };
+
       if (!searchQuery) {
         this.localSearch.active = false;
         this.lastSearchInput = null;
@@ -1346,7 +1350,7 @@ var instanceId = 0;
       }
 
       if (searchQuery.length < this.startSearchLength) {
-        return;
+        return ignore();
       }
 
       if (this.waitSearchFinishTime > 0) {
@@ -1357,7 +1361,7 @@ var instanceId = 0;
             _this11.handleLocalSearch(true);
           }, this.waitSearchFinishTime);
           this.lastSearchInput = now;
-          return;
+          return ignore();
         }
 
         var diff = now - this.lastSearchInput;
@@ -1367,11 +1371,11 @@ var instanceId = 0;
             _this11.handleLocalSearch(true);
           }, this.waitSearchFinishTime);
           this.lastSearchInput = now;
-          return;
+          return ignore();
         }
 
         if (retry && diff < this.waitSearchFinishTime) {
-          return;
+          return ignore();
         }
 
         this.lastSearchInput = now;
