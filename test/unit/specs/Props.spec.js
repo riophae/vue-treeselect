@@ -8,6 +8,7 @@ import {
   typeSearchText,
   findInputContainer,
   findInput,
+  findMenu,
   findMenuContainer,
   findOptionByNodeId,
   findLabelContainerByNodeId,
@@ -446,7 +447,7 @@ describe('Props', () => {
 
   describe('async', () => {
     it('must be with searchable=true', () => {
-      spyOn(console, 'error')
+      spyOn(console, 'error').and.callThrough()
 
       mount(Treeselect, {
         propsData: {
@@ -613,7 +614,7 @@ describe('Props', () => {
     })
 
     it('must be used in conjunction with `flat=true`', () => {
-      spyOn(console, 'error')
+      spyOn(console, 'error').and.callThrough()
 
       function test(propName) {
         mount(Treeselect, {
@@ -1429,7 +1430,7 @@ describe('Props', () => {
 
   describe('flat', () => {
     it('must be used in conjunction with `multiple=true`', () => {
-      spyOn(console, 'error')
+      spyOn(console, 'error').and.callThrough()
 
       mount(Treeselect, {
         propsData: {
@@ -1875,7 +1876,6 @@ describe('Props', () => {
 
         vm.toggleExpanded(vm.forest.nodeMap.a)
         expect(vm.isSelected(vm.forest.nodeMap.a)).toBe(true)
-        expect(vm.forest.nodeMap.a.isExpanded).toBe(true)
         expect(vm.forest.checkedStateMap).toEqual({
           a: CHECKED,
           aa: CHECKED,
@@ -1933,6 +1933,76 @@ describe('Props', () => {
 
         expect(vm.forest.nodeMap.a.label).toBe('a')
         expect(vm.forest.nodeMap.a.isFallbackNode).toBe(true)
+      })
+
+      it('scrollPositionOnCenter check', async () => {
+        const wrapper = mount(Treeselect, {
+          propsData: {
+            options: [ {
+              id: 'a',
+              label: 'a',
+              children: [ {
+                id: 'aa',
+                label: 'aa',
+              }, {
+                id: 'ab',
+                label: 'ab',
+                children: [ {
+                  id: 'aba',
+                  label: 'aba',
+                }, {
+                  id: 'abbb',
+                  label: 'abbb',
+                }, {
+                  id: 'abbc',
+                  label: 'abbc',
+                }, {
+                  id: 'abbd',
+                  label: 'abbd',
+                }, {
+                  id: 'abbe',
+                  label: 'abbe',
+                } ],
+              } ],
+            },
+            {
+              id: 'b',
+              label: 'b',
+            },
+            {
+              id: 'c',
+              label: 'c',
+            },
+            {
+              id: 'd',
+              label: 'd',
+            } ],
+            value: 'd',
+            scrollPositionOnCenter: true,
+          },
+        })
+        const { vm } = wrapper
+
+        vm.openMenu()
+        await vm.$nextTick()
+        sleep(51)
+        const menu = findMenu(wrapper)
+        if (wrapper.contains('.vue-treeselect__option--selected') && menu.element.scrollHeight > menu.element.clientHeight) {
+          expect(menu.element.scrollTop).toBeGreaterThan(0)
+        }
+
+        wrapper.setProps({ value: null,
+          clearOnSelect: true })
+        vm.localSearch.active = true
+        sleep(51)
+
+        vm.select(vm.forest.nodeMap.abbb)
+        sleep(51)
+        vm.select(vm.forest.nodeMap.abbe)
+        sleep(51)
+
+        vm.closeMenu()
+        await vm.$nextTick()
       })
     })
   })

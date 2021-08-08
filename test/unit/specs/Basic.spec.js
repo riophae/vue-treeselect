@@ -625,7 +625,7 @@ describe('Basic', () => {
   })
 
   it('declaring branch nodes by `isBranch: true` should raise a warning', () => {
-    spyOn(console, 'error')
+    spyOn(console, 'error').and.callThrough()
 
     mount(Treeselect, {
       propsData: {
@@ -646,7 +646,7 @@ describe('Basic', () => {
 
   describe('should warn about duplicate node ids', () => {
     it('case #1', () => {
-      spyOn(console, 'error')
+      spyOn(console, 'error').and.callThrough()
 
       mount(Treeselect, {
         propsData: {
@@ -668,7 +668,7 @@ describe('Basic', () => {
     })
 
     it('case #2', () => {
-      spyOn(console, 'error')
+      spyOn(console, 'error').and.callThrough()
 
       mount(Treeselect, {
         propsData: {
@@ -692,7 +692,7 @@ describe('Basic', () => {
   })
 
   it('fallback nodes should not be considered duplicate', async () => {
-    spyOn(console, 'error')
+    spyOn(console, 'error').and.callThrough()
 
     const DELAY = 10
     const app = new Vue({

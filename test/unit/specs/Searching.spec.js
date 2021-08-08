@@ -221,6 +221,97 @@ describe('Searching', () => {
       await typeSearchText(wrapper, '')
       expect(vm.menu.current).toBe('a')
     })
+
+    it('ignore when set startSearchLength', async () => {
+      const wrapper = mount(Treeselect, {
+        propsData: {
+          options: [ {
+            id: 'a',
+            label: 'a',
+          }, {
+            id: 'b',
+            label: 'b',
+            children: [ {
+              id: 'ba',
+              label: 'ba',
+            }, {
+              id: 'bb',
+              label: 'bb',
+            } ],
+          },
+          {
+            id: 'cccccc',
+            label: 'cccccc',
+          } ],
+          startSearchLength: 3,
+        },
+      })
+      const { vm } = wrapper
+
+      vm.openMenu()
+      await vm.$nextTick()
+
+      expect(vm.menu.current).toBe('a')
+
+      await typeSearchText(wrapper, 'c')
+      expect(vm.menu.current).toBe('a')
+
+      await typeSearchText(wrapper, 'cc')
+      expect(vm.menu.current).toBe('a')
+
+      await typeSearchText(wrapper, 'ccc')
+      expect(vm.menu.current).toBe('cccccc')
+
+      await typeSearchText(wrapper, 'cccc')
+      expect(vm.menu.current).toBe('cccccc')
+    })
+
+    it('ignore when set waitSearchFinishTime between chars', async () => {
+      const wrapper = mount(Treeselect, {
+        propsData: {
+          options: [ {
+            id: 'a',
+            label: 'a',
+          }, {
+            id: 'b',
+            label: 'b',
+            children: [ {
+              id: 'ba',
+              label: 'ba',
+            }, {
+              id: 'bb',
+              label: 'bb',
+            } ],
+          },
+          {
+            id: 'cccccc',
+            label: 'cccccc',
+          } ],
+          waitSearchFinishTime: 100,
+        },
+      })
+      const { vm } = wrapper
+
+      vm.openMenu()
+      await vm.$nextTick()
+
+      expect(vm.menu.current).toBe('a')
+
+      await typeSearchText(wrapper, 'c')
+      expect(vm.menu.current).toBe('a')
+
+      await sleep(10)
+      await typeSearchText(wrapper, 'cc')
+      expect(vm.menu.current).toBe('a')
+
+      await sleep(101)
+      await typeSearchText(wrapper, 'ccc')
+      expect(vm.menu.current).toBe('cccccc')
+
+      await sleep(102)
+      await typeSearchText(wrapper, 'cccc')
+      expect(vm.menu.current).toBe('cccccc')
+    })
   })
 
   describe('fuzzy search', () => {

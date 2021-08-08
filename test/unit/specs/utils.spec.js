@@ -10,7 +10,7 @@ describe('Utils', () => {
       const WARNING_MSG = '$MESSAGE$'
 
       beforeEach(() => {
-        spyOn(console, 'error')
+        spyOn(console, 'error').and.callThrough()
       })
 
       it('when true', () => {

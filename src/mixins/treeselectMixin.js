@@ -543,6 +543,25 @@ export default {
     },
 
     /**
+     * For performance we can set a start search length. It doesn't run search until sat length. If there are thounds of options then this helps well.
+     * default: 1
+     */
+    startSearchLength: {
+      type: Number,
+      default: 1,
+    },
+
+    /**
+     * For performance we can set a wait time for search. It wait between characters sat time and run search on time only last. It helps much options there.
+     * default: 0
+     * time measurement: millisecond
+     */
+    waitSearchFinishTime: {
+      type: Number,
+      default: 0,
+    },
+
+    /**
      * Used in conjunction with `showCount` to specify which type of count number should be displayed.
      * Acceptable values:
      *   - "ALL_CHILDREN"
@@ -636,6 +655,14 @@ export default {
       type: [ Number, String ],
       default: 999,
     },
+
+    /**
+     * Set selected option to the center of the menu, if possible
+     */
+    scrollPositionOnCenter: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   data() {
@@ -684,8 +711,15 @@ export default {
         countMap: createMap(),
       },
 
+      lastSearchInput: null,
+
       // <searchQuery, remoteSearchEntry> map.
       remoteSearch: createMap(),
+      /**
+     * Is there any branch node?
+     * @type {boolean}
+     */
+      hasBranchNodes: null,
     }
   },
 
@@ -796,13 +830,6 @@ export default {
       return typeof this.showCountOnSearch === 'boolean'
         ? this.showCountOnSearch
         : this.showCount
-    },
-    /**
-     * Is there any branch node?
-     * @type {boolean}
-     */
-    hasBranchNodes() {
-      return this.forest.normalizedOptions.some(rootNode => rootNode.isBranch)
     },
     shouldFlattenOptions() {
       return this.localSearch.active && this.flattenSearchResults
@@ -922,7 +949,7 @@ export default {
     initialize() {
       const options = this.async
         ? this.getRemoteSearchEntry().options
-        : this.options
+        : this.options ? this.options.filter(o => o) : {}
 
       if (Array.isArray(options)) {
         // In case we are re-initializing options, keep the old state tree temporarily.
@@ -940,6 +967,9 @@ export default {
       } else {
         this.forest.normalizedOptions = []
       }
+
+      this.hasBranchNodes = this.forest.normalizedOptions.some(rootNode => rootNode.isBranch)
+      this.expandParentNodes()
     },
 
     getInstanceId() {
@@ -963,7 +993,12 @@ export default {
         () => `Invalid node id: ${nodeId}`,
       )
 
-      if (nodeId == null) return null
+      if (nodeId == null) {
+        if (process.env.NODE_ENV !== 'production') {
+          console.error(this.options)
+        }
+        return null
+      }
 
       return nodeId in this.forest.nodeMap
         ? this.forest.nodeMap[nodeId]
@@ -1036,10 +1071,15 @@ export default {
         nextSelectedNodeIds = nodeIdListOfPrevValue
       } else if (this.valueConsistsOf === BRANCH_PRIORITY) {
         nodeIdListOfPrevValue.forEach(nodeId => {
+          if (!nodeId) {
+            return
+          }
           nextSelectedNodeIds.push(nodeId)
           const node = this.getNode(nodeId)
-          if (node.isBranch) this.traverseDescendantsBFS(node, descendant => {
-            nextSelectedNodeIds.push(descendant.id)
+          if (node && node.isBranch) this.traverseDescendantsBFS(node, descendant => {
+            if (descendant) {
+              nextSelectedNodeIds.push(descendant.id)
+            }
           })
         })
       } else if (this.valueConsistsOf === LEAF_PRIORITY) {
@@ -1050,6 +1090,7 @@ export default {
           const node = this.getNode(nodeId)
           nextSelectedNodeIds.push(nodeId)
           if (node.isRootNode) continue
+          if (!node.parentNode) continue
           if (!(node.parentNode.id in map)) map[node.parentNode.id] = node.parentNode.children.length
           if (--map[node.parentNode.id] === 0) queue.push(node.parentNode.id)
         }
@@ -1064,6 +1105,7 @@ export default {
           const node = this.getNode(nodeId)
           nextSelectedNodeIds.push(nodeId)
           if (node.isRootNode) continue
+          if (!node.parentNode) continue
           if (!(node.parentNode.id in map)) map[node.parentNode.id] = node.parentNode.children.length
           if (--map[node.parentNode.id] === 0) queue.push(node.parentNode.id)
         }
@@ -1192,14 +1234,51 @@ export default {
       }
     },
 
-    handleLocalSearch() {
+    handleLocalSearch(retry) {
       const { searchQuery } = this.trigger
       const done = () => this.resetHighlightedOptionWhenNecessary(true)
+      const ignore = () => this.resetHighlightedOptionWhenNecessary(false)
 
       if (!searchQuery) {
         // Exit sync search mode.
         this.localSearch.active = false
+        this.lastSearchInput = null
         return done()
+      }
+
+      if (searchQuery.length < this.startSearchLength) {
+        // Ignore.
+        return ignore()
+      }
+
+      if (this.waitSearchFinishTime > 0) {
+        // If waitSearchFinishTime configured.
+        const now = new Date()
+        if (!this.lastSearchInput) {
+          // First time.
+          setTimeout(() => {
+            this.handleLocalSearch(true)
+          }, this.waitSearchFinishTime)
+
+          this.lastSearchInput = now
+          return ignore()
+        }
+
+        const diff = now - this.lastSearchInput
+        if (diff < this.waitSearchFinishTime && !retry) {
+          setTimeout(() => {
+            this.handleLocalSearch(true)
+          }, this.waitSearchFinishTime)
+
+          this.lastSearchInput = now
+          return ignore()
+        }
+
+        if (retry && diff < this.waitSearchFinishTime) {
+          return ignore()
+        }
+
+        this.lastSearchInput = now
       }
 
       // Enter sync search mode.
@@ -1256,6 +1335,8 @@ export default {
       })
 
       done()
+      // Reset time
+      this.lastSearchInput = null
     },
 
     handleRemoteSearch() {
@@ -1453,6 +1534,9 @@ export default {
       this.$nextTick(this.restoreMenuScrollPosition)
       if (!this.options && !this.async) this.loadRootOptions()
       this.toggleClickOutsideEvent(true)
+      if (this.scrollPositionOnCenter) {
+        this.$nextTick(this.scrollMenuOnCenter)
+      }
       this.$emit('open', this.getInstanceId())
     },
 
@@ -1771,12 +1855,16 @@ export default {
       this.buildForestState()
 
       if (nextState) {
+        this.expandParentNodes()
         this.$emit('select', node.raw, this.getInstanceId())
       } else {
         this.$emit('deselect', node.raw, this.getInstanceId())
       }
 
       if (this.localSearch.active && nextState && (this.single || this.clearOnSelect)) {
+        if (this.scrollPositionOnCenter) {
+          this.$nextTick(this.scrollMenuOnCenter)
+        }
         this.resetSearchQuery()
       }
 
@@ -1918,15 +2006,36 @@ export default {
     },
 
     saveMenuScrollPosition() {
+      if (this.scrollPositionOnCenter) return
       const $menu = this.getMenu()
       // istanbul ignore else
       if ($menu) this.menu.lastScrollPosition = $menu.scrollTop
     },
 
     restoreMenuScrollPosition() {
+      if (this.scrollPositionOnCenter) return
       const $menu = this.getMenu()
       // istanbul ignore else
       if ($menu) $menu.scrollTop = this.menu.lastScrollPosition
+    },
+
+    scrollMenuOnCenter() {
+      const $option = document.querySelector('.vue-treeselect__option--selected')
+      const $menu = this.getMenu()
+
+      if ($option && $menu) {
+        const position = Math.max($option.offsetTop - (($menu.offsetHeight - $option.offsetHeight) / 2), 0)
+        $menu.scrollTop = position
+      }
+    },
+
+    expandParentNodes() {
+      for (const id of this.forest.selectedNodeIds) {
+        const node = this.getNode(id)
+        for (const ancestor of node.ancestors) {
+          ancestor.isExpanded = true
+        }
+      }
     },
   },
 
