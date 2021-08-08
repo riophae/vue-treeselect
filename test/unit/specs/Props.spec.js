@@ -1953,6 +1953,15 @@ describe('Props', () => {
                 }, {
                   id: 'abbb',
                   label: 'abbb',
+                }, {
+                  id: 'abbc',
+                  label: 'abbc',
+                }, {
+                  id: 'abbd',
+                  label: 'abbd',
+                }, {
+                  id: 'abbe',
+                  label: 'abbe',
                 } ],
               } ],
             },
@@ -1968,7 +1977,7 @@ describe('Props', () => {
               id: 'd',
               label: 'd',
             } ],
-            value: 'abbb',
+            value: 'd',
             scrollPositionOnCenter: true,
           },
         })
@@ -1987,13 +1996,16 @@ describe('Props', () => {
         vm.localSearch.active = true
         sleep(50)
 
-        vm.select(vm.forest.nodeMap.aa)
+        vm.select(vm.forest.nodeMap.abbb)
 
         vm.closeMenu()
         await vm.$nextTick()
-        sleep(50)
+        sleep(100)
         vm.openMenu()
         await vm.$nextTick()
+        wrapper.setProps({ clearOnSelect: false })
+        sleep(50)
+        vm.select(vm.forest.nodeMap.abbe)
       })
     })
   })
