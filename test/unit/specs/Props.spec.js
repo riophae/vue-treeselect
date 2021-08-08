@@ -1985,7 +1985,7 @@ describe('Props', () => {
 
         vm.openMenu()
         await vm.$nextTick()
-        sleep(50)
+        sleep(51)
         const menu = findMenu(wrapper)
         if (wrapper.contains('.vue-treeselect__option--selected') && menu.element.scrollHeight > menu.element.clientHeight) {
           expect(menu.element.scrollTop).toBeGreaterThan(0)
@@ -1994,18 +1994,15 @@ describe('Props', () => {
         wrapper.setProps({ value: null,
           clearOnSelect: true })
         vm.localSearch.active = true
-        sleep(50)
+        sleep(51)
 
         vm.select(vm.forest.nodeMap.abbb)
+        sleep(51)
+        vm.select(vm.forest.nodeMap.abbe)
+        sleep(51)
 
         vm.closeMenu()
         await vm.$nextTick()
-        sleep(100)
-        vm.openMenu()
-        await vm.$nextTick()
-        wrapper.setProps({ clearOnSelect: false })
-        sleep(50)
-        vm.select(vm.forest.nodeMap.abbe)
       })
     })
   })
