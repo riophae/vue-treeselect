@@ -1991,6 +1991,9 @@ describe('Props', () => {
 
         vm.closeMenu()
         await vm.$nextTick()
+        sleep(50)
+        vm.openMenu()
+        await vm.$nextTick()
       })
     })
   })
