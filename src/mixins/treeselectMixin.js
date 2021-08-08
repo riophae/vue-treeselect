@@ -2032,9 +2032,6 @@ export default {
     expandParentNodes() {
       for (const id of this.forest.selectedNodeIds) {
         const node = this.getNode(id)
-        if (!node) {
-          continue
-        }
         for (const ancestor of node.ancestors) {
           ancestor.isExpanded = true
         }

@@ -1970,7 +1970,6 @@ describe('Props', () => {
             } ],
             value: 'abbb',
             scrollPositionOnCenter: true,
-            clearOnSelect: true,
           },
         })
         const { vm } = wrapper
@@ -1983,13 +1982,12 @@ describe('Props', () => {
           expect(menu.element.scrollTop).toBeGreaterThan(0)
         }
 
-        wrapper.setProps({ value: null })
+        wrapper.setProps({ value: null,
+          clearOnSelect: true })
         vm.localSearch.active = true
         sleep(50)
 
-        if (wrapper.contains('.vue-treeselect__option--selected') && menu.element.scrollHeight > menu.element.clientHeight) {
-          expect(menu.element.scrollTop).toBeGreaterThan(0)
-        }
+        vm.select(vm.forest.nodeMap.aa)
 
         vm.closeMenu()
         await vm.$nextTick()
