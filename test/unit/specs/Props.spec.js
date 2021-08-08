@@ -8,6 +8,7 @@ import {
   typeSearchText,
   findInputContainer,
   findInput,
+  findMenu,
   findMenuContainer,
   findOptionByNodeId,
   findLabelContainerByNodeId,
@@ -1932,6 +1933,42 @@ describe('Props', () => {
 
         expect(vm.forest.nodeMap.a.label).toBe('a')
         expect(vm.forest.nodeMap.a.isFallbackNode).toBe(true)
+      })
+
+      it('scrollPositionOnCenter check', async () => {
+        const wrapper = mount(Treeselect, {
+          propsData: {
+            options: [ {
+              id: 'a',
+              label: 'a',
+            },
+            {
+              id: 'b',
+              label: 'b',
+            },
+            {
+              id: 'c',
+              label: 'c',
+            },
+            {
+              id: 'd',
+              label: 'd',
+            } ],
+            value: 'd',
+            scrollPositionOnCenter: true,
+          },
+        })
+        const { vm } = wrapper
+
+        vm.openMenu()
+        await vm.$nextTick()
+        sleep(100)
+        const menu = findMenu(wrapper)
+        if (wrapper.contains('.vue-treeselect__option--selected') && menu.element.scrollHeight > menu.element.clientHeight) {
+          expect(menu.element.scrollTop).toBeGreaterThan(0)
+        }
+        vm.closeMenu()
+        await vm.$nextTick()
       })
     })
   })
