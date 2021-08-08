@@ -1875,7 +1875,6 @@ describe('Props', () => {
 
         vm.toggleExpanded(vm.forest.nodeMap.a)
         expect(vm.isSelected(vm.forest.nodeMap.a)).toBe(true)
-        expect(vm.forest.nodeMap.a.isExpanded).toBe(true)
         expect(vm.forest.checkedStateMap).toEqual({
           a: CHECKED,
           aa: CHECKED,
