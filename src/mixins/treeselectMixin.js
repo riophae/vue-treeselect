@@ -661,8 +661,8 @@ export default {
      */
     scrollPositionOnCenter: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
 
   data() {
@@ -1535,7 +1535,7 @@ export default {
       if (!this.options && !this.async) this.loadRootOptions()
       this.toggleClickOutsideEvent(true)
       if (this.scrollPositionOnCenter) {
-        this.$nextTick(this.scrollMenuOnCenter);
+        this.$nextTick(this.scrollMenuOnCenter)
       }
       this.$emit('open', this.getInstanceId())
     },
@@ -1855,7 +1855,7 @@ export default {
       this.buildForestState()
 
       if (nextState) {
-        this.expandParentNodes();
+        this.expandParentNodes()
         this.$emit('select', node.raw, this.getInstanceId())
       } else {
         this.$emit('deselect', node.raw, this.getInstanceId())
@@ -1863,7 +1863,7 @@ export default {
 
       if (this.localSearch.active && nextState && (this.single || this.clearOnSelect)) {
         if (this.scrollPositionOnCenter) {
-          this.$nextTick(this.scrollMenuOnCenter);
+          this.$nextTick(this.scrollMenuOnCenter)
         }
         this.resetSearchQuery()
       }
@@ -2006,36 +2006,36 @@ export default {
     },
 
     saveMenuScrollPosition() {
-      if (this.scrollPositionOnCenter) return;
+      if (this.scrollPositionOnCenter) return
       const $menu = this.getMenu()
       // istanbul ignore else
       if ($menu) this.menu.lastScrollPosition = $menu.scrollTop
     },
 
     restoreMenuScrollPosition() {
-      if (this.scrollPositionOnCenter) return;
+      if (this.scrollPositionOnCenter) return
       const $menu = this.getMenu()
       // istanbul ignore else
       if ($menu) $menu.scrollTop = this.menu.lastScrollPosition
     },
 
     scrollMenuOnCenter() {
-      const $option = document.querySelector(".vue-treeselect__option--selected");
-      const $menu = this.getMenu();
+      const $option = document.querySelector('.vue-treeselect__option--selected')
+      const $menu = this.getMenu()
 
       if ($option && $menu) {
-        const position = Math.max($option.offsetTop - (($menu.offsetHeight - $option.offsetHeight) / 2), 0);
-        $menu.scrollTop = position;
+        const position = Math.max($option.offsetTop - (($menu.offsetHeight - $option.offsetHeight) / 2), 0)
+        $menu.scrollTop = position
       }
     },
 
     expandParentNodes() {
       for (const id of this.forest.selectedNodeIds) {
         for (const ancestor of this.forest.nodeMap[id].ancestors) {
-          ancestor.isExpanded = true;
+          ancestor.isExpanded = true
         }
       }
-    }
+    },
   },
 
   created() {
