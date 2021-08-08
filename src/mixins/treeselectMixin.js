@@ -548,7 +548,7 @@ export default {
      */
     startSearchLength: {
       type: Number,
-      default: 1
+      default: 1,
     },
 
     /**
@@ -558,7 +558,7 @@ export default {
      */
     waitSearchFinishTime: {
       type: Number,
-      default: 0
+      default: 0,
     },
 
     /**
@@ -1248,7 +1248,7 @@ export default {
           // First time.
           setTimeout(() => {
             this.handleLocalSearch(true)
-          }, this.waitSearchFinishTime);
+          }, this.waitSearchFinishTime)
 
           this.lastSearchInput = now
           return
@@ -1258,7 +1258,7 @@ export default {
         if (diff < this.waitSearchFinishTime && !retry) {
           setTimeout(() => {
             this.handleLocalSearch(true)
-          }, this.waitSearchFinishTime);
+          }, this.waitSearchFinishTime)
 
           this.lastSearchInput = now
           return
