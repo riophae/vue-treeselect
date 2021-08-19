@@ -71,6 +71,20 @@ export default {
 
   props: {
     /**
+     * 开启虚拟滚动功能
+     */
+    virtual: {
+      type: Boolean,
+      default: false,
+    },
+    /**
+     * 虚拟滚动行高
+     */
+    virtualRowHeight: {
+      type: Number,
+      default: 25,
+    },
+    /**
      * Whether to allow resetting value even if there are disabled selected nodes.
      */
     allowClearingDisabled: {

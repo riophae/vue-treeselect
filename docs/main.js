@@ -25,6 +25,8 @@ function loadComponents() {
       const componentName = key.replace(/^\.\/|\.vue$/g, '')
       const component = context(key).default
 
+      if (componentName !== 'PerformanceTest') return
+
       Vue.component(componentName, component)
     })
   }

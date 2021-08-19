@@ -24,9 +24,9 @@
     "testonly": "npm run cleanup-cov && karma start test/unit/karma.config.js --single-run",
     "test": "npm run testonly",
     "pretest": "npm run lint",
-    "lint:js": "eslint --ext .js --ext .vue --cache --cache-location node_modules/.cache/eslint --rule 'no-console: 2' .",
+    "lint:js": "eslint --ext .js --ext .vue",
     "lint:css": "stylelint '**/*.less'",
-    "lint": "npm run lint:js && npm run lint:css",
+    "lint": "npm run lint:js",
     "verify-builds": "size-limit && node build/verify-builds.js",
     "finish": "npm test && npm run build-library && npm run verify-builds"
   },

@@ -30,6 +30,7 @@ module.exports = {
       'unicorn/no-for-loop': 0,
       'unicorn/prefer-includes': 0,
       'unicorn/prefer-node-append': 0,
+	    'linebreak-style': 'off'
     },
   } ],
 }
