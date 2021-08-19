@@ -2,6 +2,7 @@
   import { MENU_BUFFER } from '../constants'
   import { watchSize, setupResizeAndScrollEventListeners } from '../utils'
   import Option from './Option'
+  import Option3 from './Option3'
   import Tip from './Tip'
 
   const directionMap = {
@@ -150,13 +151,15 @@
       renderOptionList() {
         const { instance } = this
 
-        return (
-          <div class="vue-treeselect__list">
-            {instance.forest.normalizedOptions.map(rootNode => (
-              <Option node={rootNode} key={rootNode.id} />
-            ))}
-          </div>
-        )
+        return instance.virtual
+          ? <Option3 normalizedOptions={instance.forest.normalizedOptions}/>
+          : (
+            <div class="vue-treeselect__list">
+              {instance.forest.normalizedOptions.map(rootNode => (
+                <Option node={rootNode} key={rootNode.id} />
+              ))}
+            </div>
+          )
       },
 
       renderSearchPromptTip() {
