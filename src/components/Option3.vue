@@ -439,7 +439,7 @@
     },
 
     render() {
-      const { virtualList, totalHeight, marginTop } = this
+      const { virtualList, totalHeight, marginTop, instance } = this
 
       return (
         <div class="vue-treeselect__list" ref="dom">
@@ -451,6 +451,9 @@
                 class={{
                   'vue-treeselect__list-item': true,
                   [`vue-treeselect__indent-level-${node.level}`]: true,
+                }}
+                style={{
+                  lineHeight: instance.virtualRowHeight + 'px',
                 }}
               >
                 {this.renderOption(node)}
