@@ -38,6 +38,10 @@
         name: 'after-list',
         props: '-',
         description: `Slot showed after the menu list.`,
+      }, {
+        name: 'arrow-icon',
+        props: '-',
+        description: `Slot for a custom arrow icon.`,
       } ],
     }),
   }

@@ -69,6 +69,25 @@
         )
       },
 
+      getArrow() {
+        const { instance } = this
+        const arrowIconRenderer = instance.$scopedSlots['arrow-icon']
+
+        const arrowClass = {
+          'vue-treeselect__option-arrow': true,
+          'vue-treeselect__option-arrow--rotated': this.shouldExpand,
+          'vue-treeselect__option-arrow--custom': arrowIconRenderer,
+        }
+
+        if (arrowIconRenderer) {
+          return (
+            <div class={arrowClass}> { arrowIconRenderer() }</div>
+           )
+        }
+
+        return <ArrowIcon class={arrowClass} />
+      },
+
       renderArrow() {
         const { instance, node } = this
 
@@ -81,15 +100,11 @@
               appear: true,
             },
           }
-          const arrowClass = {
-            'vue-treeselect__option-arrow': true,
-            'vue-treeselect__option-arrow--rotated': this.shouldExpand,
-          }
 
           return (
             <div class="vue-treeselect__option-arrow-container" onMousedown={this.handleMouseDownOnArrow}>
               <transition {...transitionProps}>
-                <ArrowIcon class={arrowClass} />
+                { this.getArrow() }
               </transition>
             </div>
           )
