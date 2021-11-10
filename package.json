@@ -1,10 +1,10 @@
 {
   "name": "@unifai/vue-treeselect",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A multi-select component with nested options support for Vue.js forked from riophae/vue-treeselect",
   "author": "",
   "license": "MIT",
-  "repository": "unifai/vue-treeselect",
+  "repository": "@unifai/vue-treeselect",
   "main": "dist/vue-treeselect.cjs.js",
   "unpkg": "dist/vue-treeselect.umd.min.js",
   "css": "dist/vue-treeselect.min.css",
