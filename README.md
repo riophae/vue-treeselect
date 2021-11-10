@@ -1,11 +1,11 @@
 # vue-treeselect
-[![npm](https://badgen.now.sh/npm/v/@riophae/vue-treeselect)](https://www.npmjs.com/package/@riophae/vue-treeselect) [![Build](https://badgen.now.sh/circleci/github/riophae/vue-treeselect)](https://circleci.com/gh/riophae/vue-treeselect/tree/master) [![Coverage](https://badgen.net/codecov/c/github/riophae/vue-treeselect)](https://codecov.io/gh/riophae/vue-treeselect?branch=master)
-![npm monthly downloads](https://badgen.now.sh/npm/dm/@riophae/vue-treeselect)
-![jsDelivr monthly hits](https://badgen.net/jsdelivr/hits/npm/@riophae/vue-treeselect) [![Known vulnerabilities](https://snyk.io/test/npm/@riophae/vue-treeselect/badge.svg)](https://snyk.io/test/npm/@riophae/vue-treeselect) ![License](https://badgen.net/github/license/riophae/vue-treeselect)
-
 > A multi-select component with nested options support for Vue.js
 
-![Vue-Treeselect Screenshot](https://raw.githubusercontent.com/riophae/vue-treeselect/master/screenshot.png)
+#### Why fork ?
+Add some new requirements :
+- Improve search performance
+- Add `selectionable` option on nodes
+- Open treeselect in the right place
 
 ### Features
 
@@ -25,104 +25,15 @@
 It's recommended to install vue-treeselect via npm, and build your app using a bundler like [webpack](https://webpack.js.org/).
 
 ```bash
-npm install --save @riophae/vue-treeselect
+npm install --save @unifai/vue-treeselect
 ```
 
-This example shows how to integrate vue-treeselect with your [Vue SFCs](https://vuejs.org/v2/guide/single-file-components.html).
+### Publish new version of package
+1. Edit `package.json` and increase version name
+2. Build package `npm run finish`
+3. After login to npm, `npm publish --access=public`
 
-```vue
-<!-- Vue SFC -->
-<template>
-  <div id="app">
-    <treeselect v-model="value" :multiple="true" :options="options" />
-  </div>
-</template>
-
-<script>
-  // import the component
-  import Treeselect from '@riophae/vue-treeselect'
-  // import the styles
-  import '@riophae/vue-treeselect/dist/vue-treeselect.css'
-
-  export default {
-    // register the component
-    components: { Treeselect },
-    data() {
-      return {
-        // define the default value
-        value: null,
-        // define options
-        options: [ {
-          id: 'a',
-          label: 'a',
-          children: [ {
-            id: 'aa',
-            label: 'aa',
-          }, {
-            id: 'ab',
-            label: 'ab',
-          } ],
-        }, {
-          id: 'b',
-          label: 'b',
-        }, {
-          id: 'c',
-          label: 'c',
-        } ],
-      }
-    },
-  }
-</script>
-```
-
-If you just don't want to use webpack or any other bundlers, you can simply include the standalone UMD build in your page. In this way, make sure Vue as a dependency is included before vue-treeselect.
-
-```html
-<html>
-  <head>
-    <!-- include Vue 2.x -->
-    <script src="https://cdn.jsdelivr.net/npm/vue@^2"></script>
-    <!-- include vue-treeselect & its styles. you can change the version tag to better suit your needs. -->
-    <script src="https://cdn.jsdelivr.net/npm/@riophae/vue-treeselect@^0.4.0/dist/vue-treeselect.umd.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@riophae/vue-treeselect@^0.4.0/dist/vue-treeselect.min.css">
-  </head>
-  <body>
-    <div id="app">
-      <treeselect v-model="value" :multiple="true" :options="options" />
-    </div>
-  </body>
-  <script>
-    // register the component
-    Vue.component('treeselect', VueTreeselect.Treeselect)
-
-    new Vue({
-      el: '#app',
-      data: {
-        // define the default value
-        value: null,
-        // define options
-        options: [ {
-          id: 'a',
-          label: 'a',
-          children: [ {
-            id: 'aa',
-            label: 'aa',
-          }, {
-            id: 'ab',
-            label: 'ab',
-          } ],
-        }, {
-          id: 'b',
-          label: 'b',
-        }, {
-          id: 'c',
-          label: 'c',
-        } ],
-      },
-    })
-  </script>
-</html>
-```
+That's it !
 
 ### Documentation & Live Demo
 
@@ -142,20 +53,12 @@ It should function well on IE9, but the style can be slightly broken due to the 
 
 ### Bugs
 
-You can use this [pen](https://codepen.io/riophae/pen/MExgzP) to reproduce bugs and then [open an issue](https://github.com/riophae/vue-treeselect/issues/new).
-
-### Contributing
-
-1. Fork & clone the repo
-2. Install dependencies by `yarn` or `npm install`
-3. Check out a new branch
-4. `npm run dev` & hack
-5. Make sure `npm test` passes
-6. Push your changes & file a pull request
 
 ### Credits
 
-This project is inspired by [vue-multiselect](https://github.com/monterail/vue-multiselect), [react-select](https://github.com/JedWatson/react-select) and [Ant Design](https://github.com/ant-design/ant-design/). Special thanks go to their respective authors!
+This project is inspired by [vue-multiselect](https://github.com/monterail/vue-multiselect), [react-select](https://github.com/JedWatson/react-select) and [Ant Design](https://github.com/ant-design/ant-design/).
+This project is forked from [Vue-Treeselect](https://github.com/riophae/vue-treeselect)
+Special thanks go to their respective authors!
 
 Some icons used in this project:
 
@@ -166,7 +69,5 @@ Some icons used in this project:
   - "checkmark symbol" & "minus symbol" icons made by [Catalin Fertu](https://www.flaticon.com/authors/catalin-fertu) are licensed under [CC 3.0 BY](https://creativecommons.org/licenses/by/3.0/)
 
 ### License
-
-Copyright (c) 2017-present [Riophae Lee](https://github.com/riophae).
 
 Released under the [MIT License](https://github.com/riophae/vue-treeselect/blob/master/LICENSE).
