@@ -1,0 +1,69 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.0.1
+    hooks:
+      - id: trailing-whitespace
+        exclude: "__snapshots__"
+      - id: check-added-large-files
+        stages: [commit, push, manual]
+      - id: check-docstring-first
+        stages: [commit, push, manual]
+      - id: check-json
+        stages: [commit, push, manual]
+      - id: check-yaml
+        stages: [commit, push, manual]
+      - id: debug-statements
+        stages: [commit, push, manual]
+      - id: detect-private-key
+        stages: [commit, push, manual]
+      - id: end-of-file-fixer
+        stages: [commit]
+      - id: fix-encoding-pragma
+        stages: [commit]
+      - id: requirements-txt-fixer
+        stages: [commit]
+
+  - repo: https://github.com/ambv/black
+    rev: 21.9b0
+    hooks:
+      - id: black
+        language: python
+        stages: [commit]
+      - id: black
+        args: [--check]
+        language: python
+        stages: [manual, push]
+
+  - repo: https://gitlab.com/pycqa/flake8
+    rev: 3.9.2
+    hooks:
+      - id: flake8
+        language: python
+        stages: [commit, push, manual]
+
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: "v2.4.1"
+    hooks:
+      - id: prettier
+        exclude: "node_modules"
+        stages: [commit]
+      - id: prettier
+        entry: prettier --ignore-unknown
+        args: [--check]
+        exclude: "node_modules"
+        stages: [push, manual]
+
+  - repo: https://github.com/pre-commit/mirrors-eslint
+    rev: "v8.2.0"
+    hooks:
+      - id: eslint
+        exclude: "node_modules"
+        additional_dependencies:
+          - babel-eslint@10.1.0
+          - eslint@8.2.0
+          - eslint-config-prettier@8.3.0
+          - eslint-plugin-nuxt@3.0.0
+          - eslint-plugin-prettier@4.0.0
+          - eslint-plugin-vue@v7.7.0
+          - prettier@2.3.2
+        stages: [commit, push, manual]

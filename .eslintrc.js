@@ -1,35 +1,31 @@
 module.exports = {
   root: true,
-  extends: [ 'riophae/vue' ],
-  plugins: [ 'react' ],
-  globals: {
-    PKG_VERSION: true,
+  env: {
+    browser: true,
   },
-  settings: {
-    'import/resolver': {
-      node: null,
-      webpack: {
-        config: 'build/webpack-configs/base.js',
-      },
-    },
+  parserOptions: {
+    parser: "@babel/eslint-parser",
+    requireConfigFile: false,
+    ecmaVersion: 8,
+    sourceType: "module",
   },
+  plugins: ["prettier"],
+  extends: ["plugin:vue/recommended", "plugin:prettier/recommended"],
   rules: {
-    'import/no-named-as-default': 0,
-    'unicorn/consistent-function-scoping': 0,
-    'vue/attributes-order': 0,
-    'vue/no-v-html': 0,
-    'no-confusing-arrow': 0,
-    'no-console': 0,
-    'no-warning-comments': 0,
-    'no-undefined': 0,
-    'prefer-destructuring': 0,
+    "comma-dangle": "off",
+    "vue/no-reserved-keys": "off",
+    "class-methods-use-this": "off",
+    "import/no-unresolved": "off",
+    "import/extensions": "off",
+    "implicit-arrow-linebreak": "off",
+    "import/prefer-default-export": "off",
+    "vue/component-name-in-template-casing": [
+      "error",
+      "kebab-case",
+      {
+        ignores: [],
+      },
+    ],
+    "prettier/prettier": "error",
   },
-  overrides: [ {
-    files: [ 'src/**' ],
-    rules: {
-      'unicorn/no-for-loop': 0,
-      'unicorn/prefer-includes': 0,
-      'unicorn/prefer-node-append': 0,
-    },
-  } ],
-}
+};
