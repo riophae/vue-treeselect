@@ -3,6 +3,7 @@
     <treeselect
       :multiple="true"
       :options="options"
+      :default-expand-level="2"
       :value-consists-of="valueConsistsOf"
       v-model="value"
       />
@@ -20,7 +21,7 @@
 <script>
   export default {
     data: () => ({
-      value: [ 'team-i' ],
+      value: [],
       valueConsistsOf: 'BRANCH_PRIORITY',
       options: [ {
         id: 'company',
@@ -31,9 +32,6 @@
           children: [ {
             id: 'person-a',
             label: 'Person A 👱',
-          }, {
-            id: 'person-b',
-            label: 'Person B 🧔',
           } ],
         }, {
           id: 'team-ii',
@@ -48,6 +46,17 @@
         }, {
           id: 'person-e',
           label: 'Person E 👩',
+        } ],
+      }, {
+        id: 'costumer',
+        label: 'Costumer 🏢',
+        children: [ {
+          id: 'client-i',
+          label: 'Client I 👥',
+          children: [ {
+            id: 'userR-a',
+            label: 'user A 👱',
+          } ],
         } ],
       } ],
     }),

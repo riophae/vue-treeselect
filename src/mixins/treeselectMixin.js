@@ -709,8 +709,13 @@ export default {
       if (this.single || this.flat || this.disableBranchNodes || this.valueConsistsOf === ALL) {
         internalValue = this.forest.selectedNodeIds.slice()
       } else if (this.valueConsistsOf === BRANCH_PRIORITY) {
+        const hasOneChild = node => {
+          return node && node.children && node.children.length === 1
+        }
         internalValue = this.forest.selectedNodeIds.filter(id => {
           const node = this.getNode(id)
+          if (hasOneChild(node)) return node.hasBeenClicked
+          if (node.isLeaf && hasOneChild(node.parentNode)) return node.hasBeenClicked
           if (node.isRootNode) return true
           return !this.isSelected(node.parentNode)
         })
@@ -1806,6 +1811,7 @@ export default {
 
     // This is meant to be called only by `select()`.
     _selectNode(node) {
+      node.hasBeenClicked = node.id
       if (this.single || this.disableBranchNodes) {
         return this.addValue(node)
       }
@@ -1905,6 +1911,7 @@ export default {
     },
 
     removeValue(node) {
+      delete node.hasBeenClicked
       removeFromArray(this.forest.selectedNodeIds, node.id)
       delete this.forest.selectedNodeMap[node.id]
     },
