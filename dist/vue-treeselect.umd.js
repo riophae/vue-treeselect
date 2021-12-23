@@ -2260,7 +2260,7 @@ var instanceId = 0;
         this.forest.normalizedOptions = [];
       }
 
-      this.defaultSelectedNodeIds = [];
+      this.forest.defaultSelectedNodeIds = [];
     },
     getInstanceId: function getInstanceId() {
       return this.instanceId == null ? this.id : this.instanceId;

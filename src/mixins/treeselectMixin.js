@@ -952,7 +952,7 @@ export default {
       } else {
         this.forest.normalizedOptions = []
       }
-      this.defaultSelectedNodeIds = []
+      this.forest.defaultSelectedNodeIds = []
     },
 
     getInstanceId() {
