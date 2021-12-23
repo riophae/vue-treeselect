@@ -8,7 +8,7 @@
 node_modules/
 yarn.lock
 
-dist
+# dist
 gh-pages
 
 test/unit/coverage
