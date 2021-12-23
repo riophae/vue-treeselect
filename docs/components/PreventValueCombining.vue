@@ -21,7 +21,7 @@
 <script>
   export default {
     data: () => ({
-      value: [],
+      value: [ 'team-i' ],
       valueConsistsOf: 'BRANCH_PRIORITY',
       options: [ {
         id: 'company',

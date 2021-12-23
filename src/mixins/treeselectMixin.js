@@ -667,6 +667,8 @@ export default {
         checkedStateMap: createMap(),
         // Id list of all selected options.
         selectedNodeIds: this.extractCheckedNodeIdsFromValue(),
+        // Static list of selected option on initialiazation, will never change
+        defaultSelectedNodeIds: this.extractCheckedNodeIdsFromValue(),
         // <id, true> map for fast checking:
         //   if (forest.selectedNodeIds.indexOf(id) !== -1) forest.selectedNodeMap[id] === true
         selectedNodeMap: createMap(),
@@ -710,12 +712,18 @@ export default {
         internalValue = this.forest.selectedNodeIds.slice()
       } else if (this.valueConsistsOf === BRANCH_PRIORITY) {
         const hasOneChild = node => {
-          return node && node.children && node.children.length === 1
+          return node && !node.isDisabled &&
+            node.children && node.children.length === 1
         }
         internalValue = this.forest.selectedNodeIds.filter(id => {
           const node = this.getNode(id)
-          if (hasOneChild(node)) return node.hasBeenClicked
-          if (node.isLeaf && hasOneChild(node.parentNode)) return node.hasBeenClicked
+          // Add some logic to select unique child nodes
+          if (this.forest.defaultSelectedNodeIds.includes(id)) {
+            node.hasBeenSelected = id
+          }
+          if (hasOneChild(node)) return node.hasBeenSelected
+          if (node.isLeaf && hasOneChild(node.parentNode)) return node.hasBeenSelected
+          // Select the right branch node
           if (node.isRootNode) return true
           return !this.isSelected(node.parentNode)
         })
@@ -743,7 +751,6 @@ export default {
       } else if (this.sortValueBy === INDEX) {
         internalValue.sort((a, b) => sortValueByIndex(this.getNode(a), this.getNode(b)))
       }
-
       return internalValue
     },
     /**
@@ -945,6 +952,7 @@ export default {
       } else {
         this.forest.normalizedOptions = []
       }
+      this.defaultSelectedNodeIds = []
     },
 
     getInstanceId() {
@@ -1811,7 +1819,7 @@ export default {
 
     // This is meant to be called only by `select()`.
     _selectNode(node) {
-      node.hasBeenClicked = node.id
+      node.hasBeenSelected = node.id
       if (this.single || this.disableBranchNodes) {
         return this.addValue(node)
       }
@@ -1911,7 +1919,7 @@ export default {
     },
 
     removeValue(node) {
-      delete node.hasBeenClicked
+      delete node.hasBeenSelected
       removeFromArray(this.forest.selectedNodeIds, node.id)
       delete this.forest.selectedNodeMap[node.id]
     },
