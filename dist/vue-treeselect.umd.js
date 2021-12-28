@@ -2267,6 +2267,7 @@ var instanceId = 0;
     getUniqChildValues: function getUniqChildValues(ids) {
       var _this5 = this;
 
+      if (this.valueConsistsOf !== BRANCH_PRIORITY) return ids;
       var values = ids.map(function (id) {
         var node = _this5.getNode(id);
 

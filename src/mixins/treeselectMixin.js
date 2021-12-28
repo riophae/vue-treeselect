@@ -960,6 +960,7 @@ export default {
     },
 
     getUniqChildValues(ids) {
+      if (this.valueConsistsOf !== BRANCH_PRIORITY) return ids
       const values = ids.map(id => {
         const node = this.getNode(id)
         if (node.hasBeenSelected) return node.id
