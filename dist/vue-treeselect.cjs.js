@@ -871,7 +871,6 @@ var instanceId = 0;
         nodeMap: createMap(),
         checkedStateMap: createMap(),
         selectedNodeIds: this.extractCheckedNodeIdsFromValue(),
-        defaultSelectedNodeIds: this.extractCheckedNodeIdsFromValue(),
         selectedNodeMap: createMap()
       },
       rootOptionsStates: createAsyncOptionsStates(),
@@ -895,19 +894,9 @@ var instanceId = 0;
       if (this.single || this.flat || this.disableBranchNodes || this.valueConsistsOf === ALL) {
         internalValue = this.forest.selectedNodeIds.slice();
       } else if (this.valueConsistsOf === BRANCH_PRIORITY) {
-        var hasOneChild = function hasOneChild(node) {
-          return node && !node.isDisabled && node.children && node.children.length === 1;
-        };
-
         internalValue = this.forest.selectedNodeIds.filter(function (id) {
           var node = _this.getNode(id);
 
-          if (_this.forest.defaultSelectedNodeIds.includes(id)) {
-            node.hasBeenSelected = id;
-          }
-
-          if (hasOneChild(node)) return node.hasBeenSelected;
-          if (node.isLeaf && hasOneChild(node.parentNode)) return node.hasBeenSelected;
           if (node.isRootNode) return true;
           return !_this.isSelected(node.parentNode);
         });
@@ -1081,8 +1070,6 @@ var instanceId = 0;
       } else {
         this.forest.normalizedOptions = [];
       }
-
-      this.forest.defaultSelectedNodeIds = [];
     },
     getInstanceId: function getInstanceId() {
       return this.instanceId == null ? this.id : this.instanceId;
@@ -1091,13 +1078,42 @@ var instanceId = 0;
       var _this4 = this;
 
       if (this.valueFormat === 'id') {
-        return this.multiple ? this.internalValue.slice() : this.internalValue[0];
+        return this.multiple ? this.getUniqChildValues(this.internalValue.slice()) : this.internalValue[0];
       }
 
       var rawNodes = this.internalValue.map(function (id) {
         return _this4.getNode(id).raw;
       });
-      return this.multiple ? rawNodes : rawNodes[0];
+      return this.multiple ? this.getUniqChildValues(rawNodes) : rawNodes[0];
+    },
+    getUniqChildValues: function getUniqChildValues(ids) {
+      var _this5 = this;
+
+      var values = ids.map(function (id) {
+        var node = _this5.getNode(id);
+
+        if (node.hasBeenSelected) return node.id;
+
+        if (_this5.hasOneChild(node)) {
+          var children = [];
+
+          _this5.traverseDescendantsBFS(node, function (descendant) {
+            if (!descendant.isDisabled || _this5.allowSelectingDisabledDescendants) {
+              if (descendant.hasBeenSelected) {
+                children.push(descendant.id);
+              }
+            }
+          });
+
+          if (children && children.length) return children[0];
+        }
+
+        return id;
+      });
+      return values;
+    },
+    hasOneChild: function hasOneChild(node) {
+      return node && node.children && node.children.length === 1;
     },
     getNode: function getNode(nodeId) {
       warning_warning(function () {
@@ -1129,7 +1145,7 @@ var instanceId = 0;
       return this.$set(this.forest.nodeMap, id, fallbackNode);
     },
     extractCheckedNodeIdsFromValue: function extractCheckedNodeIdsFromValue() {
-      var _this5 = this;
+      var _this6 = this;
 
       if (this.value == null) return [];
 
@@ -1138,13 +1154,13 @@ var instanceId = 0;
       }
 
       return (this.multiple ? this.value : [this.value]).map(function (node) {
-        return _this5.enhancedNormalizer(node);
+        return _this6.enhancedNormalizer(node);
       }).map(function (node) {
         return node.id;
       });
     },
     extractNodeFromValue: function extractNodeFromValue(id) {
-      var _this6 = this;
+      var _this7 = this;
 
       var defaultNode = {
         id: id
@@ -1156,12 +1172,12 @@ var instanceId = 0;
 
       var valueArray = this.multiple ? Array.isArray(this.value) ? this.value : [] : this.value ? [this.value] : [];
       var matched = find(valueArray, function (node) {
-        return node && _this6.enhancedNormalizer(node).id === id;
+        return node && _this7.enhancedNormalizer(node).id === id;
       });
       return matched || defaultNode;
     },
     fixSelectedNodeIds: function fixSelectedNodeIds(nodeIdListOfPrevValue) {
-      var _this7 = this;
+      var _this8 = this;
 
       var nextSelectedNodeIds = [];
 
@@ -1171,9 +1187,9 @@ var instanceId = 0;
         nodeIdListOfPrevValue.forEach(function (nodeId) {
           nextSelectedNodeIds.push(nodeId);
 
-          var node = _this7.getNode(nodeId);
+          var node = _this8.getNode(nodeId);
 
-          if (node.isBranch) _this7.traverseDescendantsBFS(node, function (descendant) {
+          if (node.isBranch) _this8.traverseDescendantsBFS(node, function (descendant) {
             nextSelectedNodeIds.push(descendant.id);
           });
         });
@@ -1193,7 +1209,7 @@ var instanceId = 0;
         var _map = createMap();
 
         var _queue = nodeIdListOfPrevValue.filter(function (nodeId) {
-          var node = _this7.getNode(nodeId);
+          var node = _this8.getNode(nodeId);
 
           return node.isLeaf || node.children.length === 0;
         });
@@ -1215,7 +1231,7 @@ var instanceId = 0;
       this.buildForestState();
     },
     keepDataOfSelectedNodes: function keepDataOfSelectedNodes(prevNodeMap) {
-      var _this8 = this;
+      var _this9 = this;
 
       this.forest.selectedNodeIds.forEach(function (id) {
         if (!prevNodeMap[id]) return;
@@ -1224,7 +1240,7 @@ var instanceId = 0;
           isFallbackNode: true
         });
 
-        _this8.$set(_this8.forest.nodeMap, id, node);
+        _this9.$set(_this9.forest.nodeMap, id, node);
       });
     },
     isSelected: function isSelected(node) {
@@ -1242,20 +1258,20 @@ var instanceId = 0;
       }
     },
     traverseDescendantsDFS: function traverseDescendantsDFS(parentNode, callback) {
-      var _this9 = this;
+      var _this10 = this;
 
       if (!parentNode.isBranch) return;
       parentNode.children.forEach(function (child) {
-        _this9.traverseDescendantsDFS(child, callback);
+        _this10.traverseDescendantsDFS(child, callback);
 
         callback(child);
       });
     },
     traverseAllNodesDFS: function traverseAllNodesDFS(callback) {
-      var _this10 = this;
+      var _this11 = this;
 
       this.forest.normalizedOptions.forEach(function (rootNode) {
-        _this10.traverseDescendantsDFS(rootNode, callback);
+        _this11.traverseDescendantsDFS(rootNode, callback);
 
         callback(rootNode);
       });
@@ -1317,12 +1333,12 @@ var instanceId = 0;
       }
     },
     handleLocalSearch: function handleLocalSearch() {
-      var _this11 = this;
+      var _this12 = this;
 
       var searchQuery = this.trigger.searchQuery;
 
       var done = function done() {
-        return _this11.resetHighlightedOptionWhenNecessary(true);
+        return _this12.resetHighlightedOptionWhenNecessary(true);
       };
 
       if (!searchQuery) {
@@ -1334,41 +1350,41 @@ var instanceId = 0;
       this.localSearch.noResults = true;
       this.traverseAllNodesDFS(function (node) {
         if (node.isBranch) {
-          var _this11$$set;
+          var _this12$$set;
 
           node.isExpandedOnSearch = false;
           node.showAllChildrenOnSearch = false;
           node.isMatched = false;
           node.hasMatchedDescendants = false;
 
-          _this11.$set(_this11.localSearch.countMap, node.id, (_this11$$set = {}, defineProperty_default()(_this11$$set, ALL_CHILDREN, 0), defineProperty_default()(_this11$$set, ALL_DESCENDANTS, 0), defineProperty_default()(_this11$$set, LEAF_CHILDREN, 0), defineProperty_default()(_this11$$set, LEAF_DESCENDANTS, 0), _this11$$set));
+          _this12.$set(_this12.localSearch.countMap, node.id, (_this12$$set = {}, defineProperty_default()(_this12$$set, ALL_CHILDREN, 0), defineProperty_default()(_this12$$set, ALL_DESCENDANTS, 0), defineProperty_default()(_this12$$set, LEAF_CHILDREN, 0), defineProperty_default()(_this12$$set, LEAF_DESCENDANTS, 0), _this12$$set));
         }
       });
       var lowerCasedSearchQuery = searchQuery.trim().toLocaleLowerCase();
       var splitSearchQuery = lowerCasedSearchQuery.replace(/\s+/g, ' ').split(' ');
       this.traverseAllNodesDFS(function (node) {
-        if (_this11.searchNested && splitSearchQuery.length > 1) {
+        if (_this12.searchNested && splitSearchQuery.length > 1) {
           node.isMatched = splitSearchQuery.every(function (filterValue) {
             return match(false, filterValue, node.nestedSearchLabel);
           });
         } else {
-          node.isMatched = _this11.matchKeys.some(function (matchKey) {
-            return match(!_this11.disableFuzzyMatching, lowerCasedSearchQuery, node.lowerCased[matchKey]);
+          node.isMatched = _this12.matchKeys.some(function (matchKey) {
+            return match(!_this12.disableFuzzyMatching, lowerCasedSearchQuery, node.lowerCased[matchKey]);
           });
         }
 
         if (node.isMatched) {
-          _this11.localSearch.noResults = false;
+          _this12.localSearch.noResults = false;
           node.ancestors.forEach(function (ancestor) {
-            return _this11.localSearch.countMap[ancestor.id][ALL_DESCENDANTS]++;
+            return _this12.localSearch.countMap[ancestor.id][ALL_DESCENDANTS]++;
           });
           if (node.isLeaf) node.ancestors.forEach(function (ancestor) {
-            return _this11.localSearch.countMap[ancestor.id][LEAF_DESCENDANTS]++;
+            return _this12.localSearch.countMap[ancestor.id][LEAF_DESCENDANTS]++;
           });
 
           if (node.parentNode !== NO_PARENT_NODE) {
-            _this11.localSearch.countMap[node.parentNode.id][ALL_CHILDREN] += 1;
-            if (node.isLeaf) _this11.localSearch.countMap[node.parentNode.id][LEAF_CHILDREN] += 1;
+            _this12.localSearch.countMap[node.parentNode.id][ALL_CHILDREN] += 1;
+            if (node.isLeaf) _this12.localSearch.countMap[node.parentNode.id][LEAF_CHILDREN] += 1;
           }
         }
 
@@ -1380,15 +1396,15 @@ var instanceId = 0;
       done();
     },
     handleRemoteSearch: function handleRemoteSearch() {
-      var _this12 = this;
+      var _this13 = this;
 
       var searchQuery = this.trigger.searchQuery;
       var entry = this.getRemoteSearchEntry();
 
       var done = function done() {
-        _this12.initialize();
+        _this13.initialize();
 
-        _this12.resetHighlightedOptionWhenNecessary(true);
+        _this13.resetHighlightedOptionWhenNecessary(true);
       };
 
       if ((searchQuery === '' || this.cacheOptions) && entry.isLoaded) {
@@ -1411,7 +1427,7 @@ var instanceId = 0;
         succeed: function succeed(options) {
           entry.isLoaded = true;
           entry.options = options;
-          if (_this12.trigger.searchQuery === searchQuery) done();
+          if (_this13.trigger.searchQuery === searchQuery) done();
         },
         fail: function fail(err) {
           entry.loadingError = getErrorMessage(err);
@@ -1422,7 +1438,7 @@ var instanceId = 0;
       });
     },
     getRemoteSearchEntry: function getRemoteSearchEntry() {
-      var _this13 = this;
+      var _this14 = this;
 
       var searchQuery = this.trigger.searchQuery;
 
@@ -1433,7 +1449,7 @@ var instanceId = 0;
       this.$watch(function () {
         return entry.options;
       }, function () {
-        if (_this13.trigger.searchQuery === searchQuery) _this13.initialize();
+        if (_this14.trigger.searchQuery === searchQuery) _this14.initialize();
       }, {
         deep: true
       });
@@ -1480,7 +1496,7 @@ var instanceId = 0;
       return $menu && $menu.nodeName !== '#comment' ? $menu : null;
     },
     setCurrentHighlightedOption: function setCurrentHighlightedOption(node) {
-      var _this14 = this;
+      var _this15 = this;
 
       var scroll = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
       var prev = this.menu.current;
@@ -1494,7 +1510,7 @@ var instanceId = 0;
 
       if (this.menu.isOpen && scroll) {
         var scrollToOption = function scrollToOption() {
-          var $menu = _this14.getMenu();
+          var $menu = _this15.getMenu();
 
           var $option = $menu.querySelector(".vue-treeselect__option[data-id=\"".concat(node.id, "\"]"));
           if ($option) scrollIntoView($menu, $option);
@@ -1579,7 +1595,7 @@ var instanceId = 0;
       }
     },
     buildForestState: function buildForestState() {
-      var _this15 = this;
+      var _this16 = this;
 
       var selectedNodeMap = createMap();
       this.forest.selectedNodeIds.forEach(function (selectedNodeId) {
@@ -1595,9 +1611,9 @@ var instanceId = 0;
         this.selectedNodes.forEach(function (selectedNode) {
           checkedStateMap[selectedNode.id] = CHECKED;
 
-          if (!_this15.flat && !_this15.disableBranchNodes) {
+          if (!_this16.flat && !_this16.disableBranchNodes) {
             selectedNode.ancestors.forEach(function (ancestorNode) {
-              if (!_this15.isSelected(ancestorNode)) {
+              if (!_this16.isSelected(ancestorNode)) {
                 checkedStateMap[ancestorNode.id] = INDETERMINATE;
               }
             });
@@ -1611,18 +1627,18 @@ var instanceId = 0;
       return _objectSpread(_objectSpread({}, raw), this.normalizer(raw, this.getInstanceId()));
     },
     normalize: function normalize(parentNode, nodes, prevNodeMap) {
-      var _this16 = this;
+      var _this17 = this;
 
       var normalizedOptions = nodes.map(function (node) {
-        return [_this16.enhancedNormalizer(node), node];
+        return [_this17.enhancedNormalizer(node), node];
       }).map(function (_ref, index) {
         var _ref2 = slicedToArray_default()(_ref, 2),
             node = _ref2[0],
             raw = _ref2[1];
 
-        _this16.checkDuplication(node);
+        _this17.checkDuplication(node);
 
-        _this16.verifyNodeShape(node);
+        _this17.verifyNodeShape(node);
 
         var id = node.id,
             label = node.label,
@@ -1632,84 +1648,84 @@ var instanceId = 0;
         var level = isRootNode ? 0 : parentNode.level + 1;
         var isBranch = Array.isArray(children) || children === null;
         var isLeaf = !isBranch;
-        var isDisabled = !!node.isDisabled || !_this16.flat && !isRootNode && parentNode.isDisabled;
+        var isDisabled = !!node.isDisabled || !_this17.flat && !isRootNode && parentNode.isDisabled;
         var isNew = !!node.isNew;
 
-        var lowerCased = _this16.matchKeys.reduce(function (prev, key) {
+        var lowerCased = _this17.matchKeys.reduce(function (prev, key) {
           return _objectSpread(_objectSpread({}, prev), {}, defineProperty_default()({}, key, stringifyOptionPropValue(node[key]).toLocaleLowerCase()));
         }, {});
 
         var nestedSearchLabel = isRootNode ? lowerCased.label : parentNode.nestedSearchLabel + ' ' + lowerCased.label;
 
-        var normalized = _this16.$set(_this16.forest.nodeMap, id, createMap());
+        var normalized = _this17.$set(_this17.forest.nodeMap, id, createMap());
 
-        _this16.$set(normalized, 'id', id);
+        _this17.$set(normalized, 'id', id);
 
-        _this16.$set(normalized, 'label', label);
+        _this17.$set(normalized, 'label', label);
 
-        _this16.$set(normalized, 'level', level);
+        _this17.$set(normalized, 'level', level);
 
-        _this16.$set(normalized, 'ancestors', isRootNode ? [] : [parentNode].concat(parentNode.ancestors));
+        _this17.$set(normalized, 'ancestors', isRootNode ? [] : [parentNode].concat(parentNode.ancestors));
 
-        _this16.$set(normalized, 'index', (isRootNode ? [] : parentNode.index).concat(index));
+        _this17.$set(normalized, 'index', (isRootNode ? [] : parentNode.index).concat(index));
 
-        _this16.$set(normalized, 'parentNode', parentNode);
+        _this17.$set(normalized, 'parentNode', parentNode);
 
-        _this16.$set(normalized, 'lowerCased', lowerCased);
+        _this17.$set(normalized, 'lowerCased', lowerCased);
 
-        _this16.$set(normalized, 'nestedSearchLabel', nestedSearchLabel);
+        _this17.$set(normalized, 'nestedSearchLabel', nestedSearchLabel);
 
-        _this16.$set(normalized, 'isDisabled', isDisabled);
+        _this17.$set(normalized, 'isDisabled', isDisabled);
 
-        _this16.$set(normalized, 'isNew', isNew);
+        _this17.$set(normalized, 'isNew', isNew);
 
-        _this16.$set(normalized, 'isMatched', false);
+        _this17.$set(normalized, 'isMatched', false);
 
-        _this16.$set(normalized, 'isHighlighted', false);
+        _this17.$set(normalized, 'isHighlighted', false);
 
-        _this16.$set(normalized, 'isBranch', isBranch);
+        _this17.$set(normalized, 'isBranch', isBranch);
 
-        _this16.$set(normalized, 'isLeaf', isLeaf);
+        _this17.$set(normalized, 'isLeaf', isLeaf);
 
-        _this16.$set(normalized, 'isRootNode', isRootNode);
+        _this17.$set(normalized, 'isRootNode', isRootNode);
 
-        _this16.$set(normalized, 'raw', raw);
+        _this17.$set(normalized, 'raw', raw);
 
         if (isBranch) {
-          var _this16$$set;
+          var _this17$$set;
 
           var isLoaded = Array.isArray(children);
 
-          _this16.$set(normalized, 'childrenStates', _objectSpread(_objectSpread({}, createAsyncOptionsStates()), {}, {
+          _this17.$set(normalized, 'childrenStates', _objectSpread(_objectSpread({}, createAsyncOptionsStates()), {}, {
             isLoaded: isLoaded
           }));
 
-          _this16.$set(normalized, 'isExpanded', typeof isDefaultExpanded === 'boolean' ? isDefaultExpanded : level < _this16.defaultExpandLevel);
+          _this17.$set(normalized, 'isExpanded', typeof isDefaultExpanded === 'boolean' ? isDefaultExpanded : level < _this17.defaultExpandLevel);
 
-          _this16.$set(normalized, 'hasMatchedDescendants', false);
+          _this17.$set(normalized, 'hasMatchedDescendants', false);
 
-          _this16.$set(normalized, 'hasDisabledDescendants', false);
+          _this17.$set(normalized, 'hasDisabledDescendants', false);
 
-          _this16.$set(normalized, 'isExpandedOnSearch', false);
+          _this17.$set(normalized, 'isExpandedOnSearch', false);
 
-          _this16.$set(normalized, 'showAllChildrenOnSearch', false);
+          _this17.$set(normalized, 'showAllChildrenOnSearch', false);
 
-          _this16.$set(normalized, 'count', (_this16$$set = {}, defineProperty_default()(_this16$$set, ALL_CHILDREN, 0), defineProperty_default()(_this16$$set, ALL_DESCENDANTS, 0), defineProperty_default()(_this16$$set, LEAF_CHILDREN, 0), defineProperty_default()(_this16$$set, LEAF_DESCENDANTS, 0), _this16$$set));
+          _this17.$set(normalized, 'count', (_this17$$set = {}, defineProperty_default()(_this17$$set, ALL_CHILDREN, 0), defineProperty_default()(_this17$$set, ALL_DESCENDANTS, 0), defineProperty_default()(_this17$$set, LEAF_CHILDREN, 0), defineProperty_default()(_this17$$set, LEAF_DESCENDANTS, 0), _this17$$set));
 
-          _this16.$set(normalized, 'children', isLoaded ? _this16.normalize(normalized, children, prevNodeMap) : []);
+          _this17.$set(normalized, 'children', isLoaded ? _this17.normalize(normalized, children, prevNodeMap) : []);
 
           if (isDefaultExpanded === true) normalized.ancestors.forEach(function (ancestor) {
             ancestor.isExpanded = true;
           });
 
-          if (!isLoaded && typeof _this16.loadOptions !== 'function') {
+          if (!isLoaded && typeof _this17.loadOptions !== 'function') {
             warning_warning(function () {
               return false;
             }, function () {
               return 'Unloaded branch node detected. "loadOptions" prop is required to load its children.';
             });
           } else if (!isLoaded && normalized.isExpanded) {
-            _this16.loadChildrenOptions(normalized);
+            _this17.loadChildrenOptions(normalized);
           }
         }
 
@@ -1760,34 +1776,34 @@ var instanceId = 0;
       return normalizedOptions;
     },
     loadRootOptions: function loadRootOptions() {
-      var _this17 = this;
+      var _this18 = this;
 
       this.callLoadOptionsProp({
         action: LOAD_ROOT_OPTIONS,
         isPending: function isPending() {
-          return _this17.rootOptionsStates.isLoading;
+          return _this18.rootOptionsStates.isLoading;
         },
         start: function start() {
-          _this17.rootOptionsStates.isLoading = true;
-          _this17.rootOptionsStates.loadingError = '';
+          _this18.rootOptionsStates.isLoading = true;
+          _this18.rootOptionsStates.loadingError = '';
         },
         succeed: function succeed() {
-          _this17.rootOptionsStates.isLoaded = true;
+          _this18.rootOptionsStates.isLoaded = true;
 
-          _this17.$nextTick(function () {
-            _this17.resetHighlightedOptionWhenNecessary(true);
+          _this18.$nextTick(function () {
+            _this18.resetHighlightedOptionWhenNecessary(true);
           });
         },
         fail: function fail(err) {
-          _this17.rootOptionsStates.loadingError = getErrorMessage(err);
+          _this18.rootOptionsStates.loadingError = getErrorMessage(err);
         },
         end: function end() {
-          _this17.rootOptionsStates.isLoading = false;
+          _this18.rootOptionsStates.isLoading = false;
         }
       });
     },
     loadChildrenOptions: function loadChildrenOptions(parentNode) {
-      var _this18 = this;
+      var _this19 = this;
 
       var id = parentNode.id,
           raw = parentNode.raw;
@@ -1797,20 +1813,20 @@ var instanceId = 0;
           parentNode: raw
         },
         isPending: function isPending() {
-          return _this18.getNode(id).childrenStates.isLoading;
+          return _this19.getNode(id).childrenStates.isLoading;
         },
         start: function start() {
-          _this18.getNode(id).childrenStates.isLoading = true;
-          _this18.getNode(id).childrenStates.loadingError = '';
+          _this19.getNode(id).childrenStates.isLoading = true;
+          _this19.getNode(id).childrenStates.loadingError = '';
         },
         succeed: function succeed() {
-          _this18.getNode(id).childrenStates.isLoaded = true;
+          _this19.getNode(id).childrenStates.isLoaded = true;
         },
         fail: function fail(err) {
-          _this18.getNode(id).childrenStates.loadingError = getErrorMessage(err);
+          _this19.getNode(id).childrenStates.loadingError = getErrorMessage(err);
         },
         end: function end() {
-          _this18.getNode(id).childrenStates.isLoading = false;
+          _this19.getNode(id).childrenStates.isLoading = false;
         }
       });
     },
@@ -1856,12 +1872,12 @@ var instanceId = 0;
       }
     },
     checkDuplication: function checkDuplication(node) {
-      var _this19 = this;
+      var _this20 = this;
 
       warning_warning(function () {
-        return !(node.id in _this19.forest.nodeMap && !_this19.forest.nodeMap[node.id].isFallbackNode);
+        return !(node.id in _this20.forest.nodeMap && !_this20.forest.nodeMap[node.id].isFallbackNode);
       }, function () {
-        return "Detected duplicate presence of node id ".concat(JSON.stringify(node.id), ". ") + "Their labels are \"".concat(_this19.forest.nodeMap[node.id].label, "\" and \"").concat(node.label, "\" respectively.");
+        return "Detected duplicate presence of node id ".concat(JSON.stringify(node.id), ". ") + "Their labels are \"".concat(_this20.forest.nodeMap[node.id].label, "\" and \"").concat(node.label, "\" respectively.");
       });
     },
     verifyNodeShape: function verifyNodeShape(node) {
@@ -1909,14 +1925,14 @@ var instanceId = 0;
       }
     },
     clear: function clear() {
-      var _this20 = this;
+      var _this21 = this;
 
       if (this.hasValue) {
         if (this.single || this.allowClearingDisabled) {
           this.forest.selectedNodeIds = [];
         } else {
             this.forest.selectedNodeIds = this.forest.selectedNodeIds.filter(function (nodeId) {
-              return _this20.getNode(nodeId).isDisabled;
+              return _this21.getNode(nodeId).isDisabled;
             });
           }
 
@@ -1924,7 +1940,7 @@ var instanceId = 0;
       }
     },
     _selectNode: function _selectNode(node) {
-      var _this21 = this;
+      var _this22 = this;
 
       node.hasBeenSelected = node.id;
 
@@ -1937,11 +1953,11 @@ var instanceId = 0;
 
         if (this.autoSelectAncestors) {
           node.ancestors.forEach(function (ancestor) {
-            if (!_this21.isSelected(ancestor) && !ancestor.isDisabled) _this21.addValue(ancestor);
+            if (!_this22.isSelected(ancestor) && !ancestor.isDisabled) _this22.addValue(ancestor);
           });
         } else if (this.autoSelectDescendants) {
           this.traverseDescendantsBFS(node, function (descendant) {
-            if (!_this21.isSelected(descendant) && !descendant.isDisabled) _this21.addValue(descendant);
+            if (!_this22.isSelected(descendant) && !descendant.isDisabled) _this22.addValue(descendant);
           });
         }
 
@@ -1956,8 +1972,8 @@ var instanceId = 0;
 
       if (node.isBranch) {
         this.traverseDescendantsBFS(node, function (descendant) {
-          if (!descendant.isDisabled || _this21.allowSelectingDisabledDescendants) {
-            _this21.addValue(descendant);
+          if (!descendant.isDisabled || _this22.allowSelectingDisabledDescendants) {
+            _this22.addValue(descendant);
           }
         });
       }
@@ -1971,7 +1987,7 @@ var instanceId = 0;
       }
     },
     _deselectNode: function _deselectNode(node) {
-      var _this22 = this;
+      var _this23 = this;
 
       if (this.disableBranchNodes) {
         return this.removeValue(node);
@@ -1982,11 +1998,11 @@ var instanceId = 0;
 
         if (this.autoDeselectAncestors) {
           node.ancestors.forEach(function (ancestor) {
-            if (_this22.isSelected(ancestor) && !ancestor.isDisabled) _this22.removeValue(ancestor);
+            if (_this23.isSelected(ancestor) && !ancestor.isDisabled) _this23.removeValue(ancestor);
           });
         } else if (this.autoDeselectDescendants) {
           this.traverseDescendantsBFS(node, function (descendant) {
-            if (_this22.isSelected(descendant) && !descendant.isDisabled) _this22.removeValue(descendant);
+            if (_this23.isSelected(descendant) && !descendant.isDisabled) _this23.removeValue(descendant);
           });
         }
 
@@ -1997,8 +2013,8 @@ var instanceId = 0;
 
       if (node.isBranch) {
         this.traverseDescendantsDFS(node, function (descendant) {
-          if (!descendant.isDisabled || _this22.allowSelectingDisabledDescendants) {
-            _this22.removeValue(descendant);
+          if (!descendant.isDisabled || _this23.allowSelectingDisabledDescendants) {
+            _this23.removeValue(descendant);
 
             hasUncheckedSomeDescendants = true;
           }
