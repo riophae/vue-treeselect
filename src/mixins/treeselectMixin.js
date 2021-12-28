@@ -667,8 +667,6 @@ export default {
         checkedStateMap: createMap(),
         // Id list of all selected options.
         selectedNodeIds: this.extractCheckedNodeIdsFromValue(),
-        // Static list of selected option on initialiazation, will never change
-        defaultSelectedNodeIds: this.extractCheckedNodeIdsFromValue(),
         // <id, true> map for fast checking:
         //   if (forest.selectedNodeIds.indexOf(id) !== -1) forest.selectedNodeMap[id] === true
         selectedNodeMap: createMap(),
@@ -711,19 +709,8 @@ export default {
       if (this.single || this.flat || this.disableBranchNodes || this.valueConsistsOf === ALL) {
         internalValue = this.forest.selectedNodeIds.slice()
       } else if (this.valueConsistsOf === BRANCH_PRIORITY) {
-        const hasOneChild = node => {
-          return node && !node.isDisabled &&
-            node.children && node.children.length === 1
-        }
         internalValue = this.forest.selectedNodeIds.filter(id => {
           const node = this.getNode(id)
-          // Add some logic to select unique child nodes
-          if (this.forest.defaultSelectedNodeIds.includes(id)) {
-            node.hasBeenSelected = id
-          }
-          if (hasOneChild(node)) return node.hasBeenSelected
-          if (node.isLeaf && hasOneChild(node.parentNode)) return node.hasBeenSelected
-          // Select the right branch node
           if (node.isRootNode) return true
           return !this.isSelected(node.parentNode)
         })
@@ -751,6 +738,7 @@ export default {
       } else if (this.sortValueBy === INDEX) {
         internalValue.sort((a, b) => sortValueByIndex(this.getNode(a), this.getNode(b)))
       }
+
       return internalValue
     },
     /**
@@ -952,7 +940,6 @@ export default {
       } else {
         this.forest.normalizedOptions = []
       }
-      this.forest.defaultSelectedNodeIds = []
     },
 
     getInstanceId() {
@@ -962,14 +949,38 @@ export default {
     getValue() {
       if (this.valueFormat === 'id') {
         return this.multiple
-          ? this.internalValue.slice()
+          ? this.getUniqChildValues(this.internalValue.slice())
           : this.internalValue[0]
       }
 
       const rawNodes = this.internalValue.map(id => this.getNode(id).raw)
-      return this.multiple ? rawNodes : rawNodes[0]
+      return this.multiple
+        ? this.getUniqChildValues(rawNodes)
+        : rawNodes[0]
     },
 
+    getUniqChildValues(ids) {
+      const values = ids.map(id => {
+        const node = this.getNode(id)
+        if (node.hasBeenSelected) return node.id
+        if (this.hasOneChild(node)) {
+          const children = []
+          this.traverseDescendantsBFS(node, descendant => {
+            if (!descendant.isDisabled || this.allowSelectingDisabledDescendants) {
+              if (descendant.hasBeenSelected) {
+                children.push(descendant.id)
+              }
+            }
+          })
+          if (children && children.length) return children[0]
+        }
+        return id
+      })
+      return values
+    },
+    hasOneChild(node) {
+      return node && node.children && node.children.length === 1
+    },
     getNode(nodeId) {
       warning(
         () => nodeId != null,

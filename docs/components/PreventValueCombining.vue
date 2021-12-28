@@ -21,44 +21,51 @@
 <script>
   export default {
     data: () => ({
-      value: [ 'team-i' ],
+      value: [ 'person-a', 'team-ii' ],
       valueConsistsOf: 'BRANCH_PRIORITY',
-      options: [ {
-        id: 'company',
-        label: 'Company 🏢',
-        children: [ {
-          id: 'team-i',
-          label: 'Team I 👥',
-          children: [ {
-            id: 'person-a',
-            label: 'Person A 👱',
-          } ],
-        }, {
-          id: 'team-ii',
-          label: 'Team II 👥',
-          children: [ {
-            id: 'person-c',
-            label: 'Person C 👳',
-          }, {
-            id: 'person-d',
-            label: 'Person D 👧',
-          } ],
-        }, {
-          id: 'person-e',
-          label: 'Person E 👩',
-        } ],
-      }, {
-        id: 'costumer',
-        label: 'Costumer 🏢',
-        children: [ {
-          id: 'client-i',
-          label: 'Client I 👥',
-          children: [ {
-            id: 'userR-a',
-            label: 'user A 👱',
-          } ],
-        } ],
-      } ],
     }),
+    computed: {
+      options() {
+        const options = [ {
+          id: 'company',
+          label: 'Company 🏢',
+          children: [ {
+            id: 'team-i',
+            label: 'Team I 👥',
+            children: [ {
+              id: 'person-a',
+              label: 'Person A 👱',
+            } ],
+          }, {
+            id: 'team-ii',
+            label: 'Team II 👥',
+            children: [ {
+              id: 'person-c',
+              label: 'Person C 👳',
+            }, {
+              id: 'person-d',
+              label: 'Person D 👧',
+            } ],
+          }, {
+            id: 'person-e',
+            label: 'Person E 👩',
+          } ],
+        }, {
+          id: 'costumer',
+          label: 'Costumer 🏢',
+          children: [ {
+            id: 'client-i',
+            label: 'Client I 👥',
+            children: [ {
+              id: 'userR-a',
+              label: 'user A 👱',
+            } ],
+          } ],
+        } ]
+        return this.value.length
+          ? options.filter(x => x.children)
+          : options
+      },
+    },
   }
 </script>
