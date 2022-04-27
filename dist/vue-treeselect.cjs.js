@@ -1,5 +1,5 @@
 /*!
- * vue-treeselect v0.4.0 | (c) 2017-2021 Riophae Lee
+ * vue-treeselect v0.4.0 | (c) 2017-2022 Riophae Lee
  * Released under the MIT License.
  * https://vue-treeselect.js.org/
  */
@@ -570,9 +570,14 @@ function createAsyncOptionsStates() {
 }
 
 function stringifyOptionPropValue(value) {
-  if (typeof value === 'string') return value;
+  if (typeof value === 'string') return removeAccents(value);
   if (typeof value === 'number' && !isNaN_isNaN(value)) return value + '';
   return '';
+}
+
+function removeAccents(str) {
+  if (!str) return '';
+  return str.normalize('NFD').replace(/[\u0300-\u036F]/g, '');
 }
 
 function match(enableFuzzyMatch, needle, haystack) {
@@ -1361,7 +1366,7 @@ var instanceId = 0;
           _this12.$set(_this12.localSearch.countMap, node.id, (_this12$$set = {}, defineProperty_default()(_this12$$set, ALL_CHILDREN, 0), defineProperty_default()(_this12$$set, ALL_DESCENDANTS, 0), defineProperty_default()(_this12$$set, LEAF_CHILDREN, 0), defineProperty_default()(_this12$$set, LEAF_DESCENDANTS, 0), _this12$$set));
         }
       });
-      var lowerCasedSearchQuery = searchQuery.trim().toLocaleLowerCase();
+      var lowerCasedSearchQuery = removeAccents(searchQuery).trim().toLocaleLowerCase();
       var splitSearchQuery = lowerCasedSearchQuery.replace(/\s+/g, ' ').split(' ');
       this.traverseAllNodesDFS(function (node) {
         if (_this12.searchNested && splitSearchQuery.length > 1) {
