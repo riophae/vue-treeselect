@@ -42,10 +42,14 @@ function createAsyncOptionsStates() {
 }
 
 function stringifyOptionPropValue(value) {
-  if (typeof value === 'string') return value
+  if (typeof value === 'string') return removeAccents(value)
   if (typeof value === 'number' && !isNaN(value)) return value + ''
   // istanbul ignore next
   return ''
+}
+function removeAccents(str) {
+  if (!str) return ''
+  return str.normalize('NFD').replace(/[\u0300-\u036F]/g, '')
 }
 
 function match(enableFuzzyMatch, needle, haystack) {
@@ -1247,7 +1251,7 @@ export default {
         }
       })
 
-      const lowerCasedSearchQuery = searchQuery.trim().toLocaleLowerCase()
+      const lowerCasedSearchQuery = removeAccents(searchQuery).trim().toLocaleLowerCase()
       const splitSearchQuery = lowerCasedSearchQuery.replace(/\s+/g, ' ').split(' ')
       this.traverseAllNodesDFS(node => {
         if (this.searchNested && splitSearchQuery.length > 1) {

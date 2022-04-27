@@ -25,6 +25,9 @@
           id: 'grapes',
           label: 'Grapes 🍇',
         }, {
+          id: 'bete',
+          label: 'bêtes',
+        }, {
           id: 'pear',
           label: 'Pear 🍐',
         }, {
