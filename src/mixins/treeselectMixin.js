@@ -42,10 +42,14 @@ function createAsyncOptionsStates() {
 }
 
 function stringifyOptionPropValue(value) {
-  if (typeof value === 'string') return value
+  if (typeof value === 'string') return removeAccents(value)
   if (typeof value === 'number' && !isNaN(value)) return value + ''
   // istanbul ignore next
   return ''
+}
+function removeAccents(str) {
+  if (!str) return ''
+  return str.normalize('NFD').replace(/[\u0300-\u036F]/g, '')
 }
 
 function match(enableFuzzyMatch, needle, haystack) {
@@ -949,14 +953,39 @@ export default {
     getValue() {
       if (this.valueFormat === 'id') {
         return this.multiple
-          ? this.internalValue.slice()
+          ? this.getUniqChildValues(this.internalValue.slice())
           : this.internalValue[0]
       }
 
       const rawNodes = this.internalValue.map(id => this.getNode(id).raw)
-      return this.multiple ? rawNodes : rawNodes[0]
+      return this.multiple
+        ? this.getUniqChildValues(rawNodes)
+        : rawNodes[0]
     },
 
+    getUniqChildValues(ids) {
+      if (this.valueConsistsOf !== BRANCH_PRIORITY) return ids
+      const values = ids.map(id => {
+        const node = this.getNode(id)
+        if (node.hasBeenSelected) return node.id
+        if (this.hasOneChild(node)) {
+          const children = []
+          this.traverseDescendantsBFS(node, descendant => {
+            if (!descendant.isDisabled || this.allowSelectingDisabledDescendants) {
+              if (descendant.hasBeenSelected) {
+                children.push(descendant.id)
+              }
+            }
+          })
+          if (children && children.length) return children[0]
+        }
+        return id
+      })
+      return values
+    },
+    hasOneChild(node) {
+      return node && node.children && node.children.length === 1
+    },
     getNode(nodeId) {
       warning(
         () => nodeId != null,
@@ -1222,7 +1251,7 @@ export default {
         }
       })
 
-      const lowerCasedSearchQuery = searchQuery.trim().toLocaleLowerCase()
+      const lowerCasedSearchQuery = removeAccents(searchQuery).trim().toLocaleLowerCase()
       const splitSearchQuery = lowerCasedSearchQuery.replace(/\s+/g, ' ').split(' ')
       this.traverseAllNodesDFS(node => {
         if (this.searchNested && splitSearchQuery.length > 1) {
@@ -1806,6 +1835,7 @@ export default {
 
     // This is meant to be called only by `select()`.
     _selectNode(node) {
+      node.hasBeenSelected = node.id
       if (this.single || this.disableBranchNodes) {
         return this.addValue(node)
       }
@@ -1905,6 +1935,7 @@ export default {
     },
 
     removeValue(node) {
+      delete node.hasBeenSelected
       removeFromArray(this.forest.selectedNodeIds, node.id)
       delete this.forest.selectedNodeMap[node.id]
     },
