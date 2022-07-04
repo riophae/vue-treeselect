@@ -123,11 +123,13 @@ describe('Keyboard Support', () => {
 
       wrapper.setProps({ multiple: false })
 
+      await typeSearchText(wrapper, 'a')
       pressEnterKey(wrapper)
       expect(vm.internalValue).toEqual([ 'a' ])
       pressEnterKey(wrapper)
       expect(vm.internalValue).toEqual([ 'a' ])
 
+      await typeSearchText(wrapper, 'b')
       vm.setCurrentHighlightedOption(vm.forest.nodeMap.b)
       expect(vm.menu.current).toBe('b')
       pressEnterKey(wrapper)
@@ -139,15 +141,42 @@ describe('Keyboard Support', () => {
 
       wrapper.setProps({ multiple: true })
 
+      await typeSearchText(wrapper, 'a')
       pressEnterKey(wrapper)
       expect(vm.internalValue).toEqual([ 'a' ])
       pressEnterKey(wrapper)
       expect(vm.internalValue).toEqual([])
 
+      await typeSearchText(wrapper, 'b')
       vm.setCurrentHighlightedOption(vm.forest.nodeMap.b)
       expect(vm.menu.current).toBe('b')
       pressEnterKey(wrapper)
       expect(vm.internalValue).toEqual([ 'b' ])
+    })
+
+    // https://github.com/riophae/vue-treeselect/issues/442
+    it('pressing enter after invalid search should be a no-op (single-select)', async () => {
+      const { wrapper, vm } = await createInstance()
+
+      wrapper.setProps({ multiple: false })
+
+      await typeSearchText(wrapper, 'a')
+      await typeSearchText(wrapper, 'ab')
+      pressEnterKey(wrapper)
+      expect(vm.internalValue).toEqual([])
+      pressEnterKey(wrapper)
+      expect(vm.internalValue).toEqual([])
+    })
+
+    it('pressing enter after invalid search should be a no-op (multi-select)', async () => {
+      const { wrapper, vm } = await createInstance()
+
+      wrapper.setProps({ multiple: true })
+
+      await typeSearchText(wrapper, 'a')
+      await typeSearchText(wrapper, 'ab')
+      pressEnterKey(wrapper)
+      expect(vm.internalValue).toEqual([])
     })
 
     it('pressing enter key on a disabled option should be no-op', async () => {
