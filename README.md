@@ -7,6 +7,9 @@
 
 ![Vue-Treeselect Screenshot](https://raw.githubusercontent.com/riophae/vue-treeselect/master/screenshot.png)
 
+### Why fork?
+- Update dependencies (lodash) 
+
 ### Features
 
 - Single & multiple select with nested options support
@@ -25,7 +28,7 @@
 It's recommended to install vue-treeselect via npm, and build your app using a bundler like [webpack](https://webpack.js.org/).
 
 ```bash
-npm install --save @riophae/vue-treeselect
+npm install --save @hobbytowo/vue-treeselect
 ```
 
 This example shows how to integrate vue-treeselect with your [Vue SFCs](https://vuejs.org/v2/guide/single-file-components.html).
