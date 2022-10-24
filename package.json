@@ -95,7 +95,7 @@
     "pre-commit": "^1.2.2",
     "pug": "^2.0.0",
     "pug-loader": "^2.4.0",
-    "puppeteer": "^2.0.0",
+    "puppeteer": "^2.1.1",
     "raw-loader": "^3.0.0",
     "regenerator-runtime": "^0.13.1",
     "rimraf": "^3.0.0",
