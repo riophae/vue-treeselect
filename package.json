@@ -14,21 +14,21 @@
     "dist"
   ],
   "scripts": {
-    "dev": "node build/dev-server.js",
-    "build-library": "node build/build-library.js",
+    "dev": "NODE_OPTIONS=--openssl-legacy-provider node build/dev-server.js",
+    "build-library": "NODE_OPTIONS=--openssl-legacy-provider node build/build-library.js",
     "build-docs": "rimraf gh-pages && mkdir gh-pages && node build/build-docs.js",
     "preview-docs": "http-server gh-pages",
     "gh-pages": "npm run build-docs && gh-pages --dist gh-pages --branch gh-pages --dotfiles",
     "cleanup-cov": "rimraf test/unit/coverage",
     "unit": "npm run cleanup-cov && karma start test/unit/karma.conf.js --watch",
     "testonly": "npm run cleanup-cov && karma start test/unit/karma.config.js --single-run",
-    "test": "npm run testonly",
-    "pretest": "npm run lint",
+    "test": "NODE_OPTIONS=--openssl-legacy-providernpm run testonly",
+    "pretest": "NODE_OPTIONS=--openssl-legacy-provider npm run lint",
     "lint:js": "eslint --ext .js --ext .vue --cache --cache-location node_modules/.cache/eslint --rule 'no-console: 2' .",
     "lint:css": "stylelint '**/*.less'",
-    "lint": "npm run lint:js && npm run lint:css",
+    "lint": "NODE_OPTIONS=--openssl-legacy-provider npm run lint:js && npm run lint:css",
     "verify-builds": "size-limit && node build/verify-builds.js",
-    "finish": "npm test && npm run build-library && npm run verify-builds"
+    "finish": "NODE_OPTIONS=--openssl-legacy-provider npm test && npm run build-library && npm run verify-builds"
   },
   "pre-commit": "lint",
   "dependencies": {
