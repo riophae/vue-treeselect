@@ -1154,6 +1154,9 @@ export default {
     },
 
     getValueContainer() {
+      if (!this.$refs || !this.$refs.control || !this.$refs.control.$refs) {
+        return null
+      }
       return this.$refs.control.$refs['value-container']
     },
 
@@ -1173,7 +1176,7 @@ export default {
       evt.preventDefault()
       evt.stopPropagation()
 
-      if (this.disabled) return
+      if (this.disabled || !this.getValueContainer()) return
 
       const isClickedOnValueContainer = this.getValueContainer().$el.contains(evt.target)
       if (isClickedOnValueContainer && !this.menu.isOpen && (this.openOnClick || this.trigger.isFocused)) {

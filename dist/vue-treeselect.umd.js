@@ -104,17 +104,12 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ (function(module, exports, __webpack_require__) {
 
 var arrayWithHoles = __webpack_require__(1);
-
 var iterableToArrayLimit = __webpack_require__(2);
-
 var unsupportedIterableToArray = __webpack_require__(3);
-
 var nonIterableRest = __webpack_require__(5);
-
 function _slicedToArray(arr, i) {
   return arrayWithHoles(arr) || iterableToArrayLimit(arr, i) || unsupportedIterableToArray(arr, i) || nonIterableRest();
 }
-
 module.exports = _slicedToArray, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
@@ -124,7 +119,6 @@ module.exports = _slicedToArray, module.exports.__esModule = true, module.export
 function _arrayWithHoles(arr) {
   if (Array.isArray(arr)) return arr;
 }
-
 module.exports = _arrayWithHoles, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
@@ -133,18 +127,14 @@ module.exports = _arrayWithHoles, module.exports.__esModule = true, module.expor
 
 function _iterableToArrayLimit(arr, i) {
   var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];
-
   if (_i == null) return;
   var _arr = [];
   var _n = true;
   var _d = false;
-
   var _s, _e;
-
   try {
     for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) {
       _arr.push(_s.value);
-
       if (i && _arr.length === i) break;
     }
   } catch (err) {
@@ -157,10 +147,8 @@ function _iterableToArrayLimit(arr, i) {
       if (_d) throw _e;
     }
   }
-
   return _arr;
 }
-
 module.exports = _iterableToArrayLimit, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
@@ -168,7 +156,6 @@ module.exports = _iterableToArrayLimit, module.exports.__esModule = true, module
 /***/ (function(module, exports, __webpack_require__) {
 
 var arrayLikeToArray = __webpack_require__(4);
-
 function _unsupportedIterableToArray(o, minLen) {
   if (!o) return;
   if (typeof o === "string") return arrayLikeToArray(o, minLen);
@@ -177,7 +164,6 @@ function _unsupportedIterableToArray(o, minLen) {
   if (n === "Map" || n === "Set") return Array.from(o);
   if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return arrayLikeToArray(o, minLen);
 }
-
 module.exports = _unsupportedIterableToArray, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
@@ -186,14 +172,11 @@ module.exports = _unsupportedIterableToArray, module.exports.__esModule = true, 
 
 function _arrayLikeToArray(arr, len) {
   if (len == null || len > arr.length) len = arr.length;
-
   for (var i = 0, arr2 = new Array(len); i < len; i++) {
     arr2[i] = arr[i];
   }
-
   return arr2;
 }
-
 module.exports = _arrayLikeToArray, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
@@ -203,7 +186,6 @@ module.exports = _arrayLikeToArray, module.exports.__esModule = true, module.exp
 function _nonIterableRest() {
   throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
-
 module.exports = _nonIterableRest, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
@@ -211,17 +193,12 @@ module.exports = _nonIterableRest, module.exports.__esModule = true, module.expo
 /***/ (function(module, exports, __webpack_require__) {
 
 var arrayWithoutHoles = __webpack_require__(7);
-
 var iterableToArray = __webpack_require__(8);
-
 var unsupportedIterableToArray = __webpack_require__(3);
-
 var nonIterableSpread = __webpack_require__(9);
-
 function _toConsumableArray(arr) {
   return arrayWithoutHoles(arr) || iterableToArray(arr) || unsupportedIterableToArray(arr) || nonIterableSpread();
 }
-
 module.exports = _toConsumableArray, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
@@ -229,11 +206,9 @@ module.exports = _toConsumableArray, module.exports.__esModule = true, module.ex
 /***/ (function(module, exports, __webpack_require__) {
 
 var arrayLikeToArray = __webpack_require__(4);
-
 function _arrayWithoutHoles(arr) {
   if (Array.isArray(arr)) return arrayLikeToArray(arr);
 }
-
 module.exports = _arrayWithoutHoles, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
@@ -243,7 +218,6 @@ module.exports = _arrayWithoutHoles, module.exports.__esModule = true, module.ex
 function _iterableToArray(iter) {
   if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);
 }
-
 module.exports = _iterableToArray, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
@@ -253,7 +227,6 @@ module.exports = _iterableToArray, module.exports.__esModule = true, module.expo
 function _nonIterableSpread() {
   throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
-
 module.exports = _nonIterableSpread, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
@@ -271,10 +244,8 @@ function _defineProperty(obj, key, value) {
   } else {
     obj[key] = value;
   }
-
   return obj;
 }
-
 module.exports = _defineProperty, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
@@ -1213,7 +1184,6 @@ function _typeof(obj) {
     return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
   }, module.exports.__esModule = true, module.exports["default"] = module.exports), _typeof(obj);
 }
-
 module.exports = _typeof, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
@@ -1353,9 +1323,7 @@ var noop = __webpack_require__(12);
 var warning_warning =  false ? undefined : function warning(checker, complainer) {
   if (!checker()) {
     var _console;
-
     var message = ['[Vue-Treeselect Warning]'].concat(complainer());
-
     (_console = console).error.apply(_console, toConsumableArray_default()(message));
   }
 };
@@ -1366,17 +1334,16 @@ function onLeftClick(mouseDownHandler) {
       for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
         args[_key - 1] = arguments[_key];
       }
-
       mouseDownHandler.call.apply(mouseDownHandler, [this, evt].concat(args));
     }
   };
 }
 // CONCATENATED MODULE: ./src/utils/scrollIntoView.js
+
 function scrollIntoView($scrollingEl, $focusedEl) {
   var scrollingReact = $scrollingEl.getBoundingClientRect();
   var focusedRect = $focusedEl.getBoundingClientRect();
   var overScroll = $focusedEl.offsetHeight / 3;
-
   if (focusedRect.bottom + overScroll > scrollingReact.bottom) {
     $scrollingEl.scrollTop = Math.min($focusedEl.offsetTop + $focusedEl.clientHeight - $scrollingEl.offsetHeight + overScroll, $scrollingEl.scrollHeight);
   } else if (focusedRect.top - overScroll < scrollingReact.top) {
@@ -1459,26 +1426,22 @@ function removeFromArray(arr, elem) {
 var intervalId;
 var registered = [];
 var INTERVAL_DURATION = 100;
-
 function run() {
   intervalId = setInterval(function () {
     registered.forEach(test);
   }, INTERVAL_DURATION);
 }
-
 function stop() {
   clearInterval(intervalId);
   intervalId = null;
 }
-
 function test(item) {
   var $el = item.$el,
-      listener = item.listener,
-      lastWidth = item.lastWidth,
-      lastHeight = item.lastHeight;
+    listener = item.listener,
+    lastWidth = item.lastWidth,
+    lastHeight = item.lastHeight;
   var width = $el.offsetWidth;
   var height = $el.offsetHeight;
-
   if (lastWidth !== width || lastHeight !== height) {
     item.lastWidth = width;
     item.lastHeight = height;
@@ -1488,7 +1451,6 @@ function test(item) {
     });
   }
 }
-
 function watchSizeForIE9($el, listener) {
   var item = {
     $el: $el,
@@ -1496,54 +1458,45 @@ function watchSizeForIE9($el, listener) {
     lastWidth: null,
     lastHeight: null
   };
-
   var unwatch = function unwatch() {
     removeFromArray(registered, item);
     if (!registered.length) stop();
   };
-
   registered.push(item);
   test(item);
   run();
   return unwatch;
 }
-
 function watchSize($el, listener) {
   var isIE9 = document.documentMode === 9;
   var locked = true;
-
   var wrappedListener = function wrappedListener() {
     return locked || listener.apply(void 0, arguments);
   };
-
   var implementation = isIE9 ? watchSizeForIE9 : index_es;
   var removeSizeWatcher = implementation($el, wrappedListener);
   locked = false;
+
   return removeSizeWatcher;
 }
 // CONCATENATED MODULE: ./src/utils/setupResizeAndScrollEventListeners.js
 function findScrollParents($el) {
   var $scrollParents = [];
   var $parent = $el.parentNode;
-
   while ($parent && $parent.nodeName !== 'BODY' && $parent.nodeType === document.ELEMENT_NODE) {
     if (isScrollElment($parent)) $scrollParents.push($parent);
     $parent = $parent.parentNode;
   }
-
   $scrollParents.push(window);
   return $scrollParents;
 }
-
 function isScrollElment($el) {
   var _getComputedStyle = getComputedStyle($el),
-      overflow = _getComputedStyle.overflow,
-      overflowX = _getComputedStyle.overflowX,
-      overflowY = _getComputedStyle.overflowY;
-
+    overflow = _getComputedStyle.overflow,
+    overflowX = _getComputedStyle.overflowX,
+    overflowY = _getComputedStyle.overflowY;
   return /(auto|scroll|overlay)/.test(overflow + overflowY + overflowX);
 }
-
 function setupResizeAndScrollEventListeners($el, listener) {
   var $scrollParents = findScrollParents($el);
   window.addEventListener('resize', listener, {
@@ -1603,12 +1556,10 @@ var typeof_default = /*#__PURE__*/__webpack_require__.n(helpers_typeof);
 
 // CONCATENATED MODULE: ./src/utils/deepExtend.js
 
-
 function isPlainObject(value) {
   if (value == null || typeof_default()(value) !== 'object') return false;
   return Object.getPrototypeOf(value) === Object.prototype;
 }
-
 function copy(obj, key, value) {
   if (isPlainObject(value)) {
     obj[key] || (obj[key] = {});
@@ -1617,16 +1568,13 @@ function copy(obj, key, value) {
     obj[key] = value;
   }
 }
-
 function deepExtend(target, source) {
   if (isPlainObject(source)) {
     var keys = Object.keys(source);
-
     for (var i = 0, len = keys.length; i < len; i++) {
       copy(target, keys[i], source[keys[i]]);
     }
   }
-
   return target;
 }
 // EXTERNAL MODULE: ./node_modules/lodash/last.js
@@ -1644,17 +1592,14 @@ function find(arr, predicate, ctx) {
   for (var i = 0, len = arr.length; i < len; i++) {
     if (predicate.call(ctx, arr[i], i, arr)) return arr[i];
   }
-
   return undefined;
 }
 // CONCATENATED MODULE: ./src/utils/quickDiff.js
 function quickDiff(arrA, arrB) {
   if (arrA.length !== arrB.length) return true;
-
   for (var i = 0; i < arrA.length; i++) {
     if (arrA[i] !== arrB[i]) return true;
   }
-
   return false;
 }
 // CONCATENATED MODULE: ./src/utils/index.js
@@ -1677,25 +1622,37 @@ function quickDiff(arrA, arrB) {
 
 
 
+
+
+
+
+
 // CONCATENATED MODULE: ./src/constants.js
+
 var NO_PARENT_NODE = null;
+
 var UNCHECKED = 0;
 var INDETERMINATE = 1;
 var CHECKED = 2;
+
 var ALL_CHILDREN = 'ALL_CHILDREN';
 var ALL_DESCENDANTS = 'ALL_DESCENDANTS';
 var LEAF_CHILDREN = 'LEAF_CHILDREN';
 var LEAF_DESCENDANTS = 'LEAF_DESCENDANTS';
+
 var LOAD_ROOT_OPTIONS = 'LOAD_ROOT_OPTIONS';
 var LOAD_CHILDREN_OPTIONS = 'LOAD_CHILDREN_OPTIONS';
 var ASYNC_SEARCH = 'ASYNC_SEARCH';
+
 var ALL = 'ALL';
 var BRANCH_PRIORITY = 'BRANCH_PRIORITY';
 var LEAF_PRIORITY = 'LEAF_PRIORITY';
 var ALL_WITH_INDETERMINATE = 'ALL_WITH_INDETERMINATE';
+
 var ORDER_SELECTED = 'ORDER_SELECTED';
 var LEVEL = 'LEVEL';
 var INDEX = 'INDEX';
+
 var KEY_CODES = {
   BACKSPACE: 8,
   ENTER: 13,
@@ -1708,6 +1665,7 @@ var KEY_CODES = {
   ARROW_DOWN: 40,
   DELETE: 46
 };
+
 var INPUT_DEBOUNCE_DELAY =  false ? undefined : 200;
 var MIN_INPUT_WIDTH = 5;
 var MENU_BUFFER = 40;
@@ -1715,18 +1673,13 @@ var MENU_BUFFER = 40;
 
 
 
-
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
-
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { defineProperty_default()(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
-
-
 
 
 
 function sortValueByIndex(a, b) {
   var i = 0;
-
   do {
     if (a.level < i) return -1;
     if (b.level < i) return 1;
@@ -1734,11 +1687,9 @@ function sortValueByIndex(a, b) {
     i++;
   } while (true);
 }
-
 function sortValueByLevel(a, b) {
   return a.level === b.level ? sortValueByIndex(a, b) : a.level - b.level;
 }
-
 function createAsyncOptionsStates() {
   return {
     isLoaded: false,
@@ -1746,21 +1697,17 @@ function createAsyncOptionsStates() {
     loadingError: ''
   };
 }
-
 function stringifyOptionPropValue(value) {
   if (typeof value === 'string') return value;
   if (typeof value === 'number' && !isNaN_isNaN(value)) return value + '';
   return '';
 }
-
 function match(enableFuzzyMatch, needle, haystack) {
   return enableFuzzyMatch ? fuzzysearch_default()(needle, haystack) : includes(haystack, needle);
 }
-
 function getErrorMessage(err) {
   return err.message || String(err);
 }
-
 var instanceId = 0;
 /* harmony default export */ var treeselectMixin = ({
   provide: function provide() {
@@ -2070,29 +2017,25 @@ var instanceId = 0;
     },
     internalValue: function internalValue() {
       var _this = this;
-
       var internalValue;
-      var valueConsistsOf = this.showAsGroup ? LEAF_PRIORITY : this.valueConsistsOf;
 
+      var valueConsistsOf = this.showAsGroup ? LEAF_PRIORITY : this.valueConsistsOf;
       if (this.single || this.flat || this.disableBranchNodes || valueConsistsOf === ALL) {
         internalValue = this.forest.selectedNodeIds.slice();
       } else if (valueConsistsOf === BRANCH_PRIORITY) {
         internalValue = this.forest.selectedNodeIds.filter(function (id) {
           var node = _this.getNode(id);
-
           if (node.isRootNode) return true;
           return !_this.isSelected(node.parentNode);
         });
       } else if (valueConsistsOf === LEAF_PRIORITY) {
         internalValue = this.forest.selectedNodeIds.filter(function (id) {
           var node = _this.getNode(id);
-
           if (node.isLeaf) return true;
           return node.children.length === 0;
         });
       } else if (valueConsistsOf === ALL_WITH_INDETERMINATE) {
         var _internalValue;
-
         var indeterminateNodeIds = [];
         internalValue = this.forest.selectedNodeIds.slice();
         this.selectedNodes.forEach(function (selectedNode) {
@@ -2102,10 +2045,8 @@ var instanceId = 0;
             indeterminateNodeIds.push(ancestor.id);
           });
         });
-
         (_internalValue = internalValue).push.apply(_internalValue, indeterminateNodeIds);
       }
-
       if (this.sortValueBy === LEVEL) {
         internalValue.sort(function (a, b) {
           return sortValueByLevel(_this.getNode(a), _this.getNode(b));
@@ -2115,7 +2056,6 @@ var instanceId = 0;
           return sortValueByIndex(_this.getNode(a), _this.getNode(b));
         });
       }
-
       return internalValue;
     },
     hasValue: function hasValue() {
@@ -2126,13 +2066,11 @@ var instanceId = 0;
     },
     visibleOptionIds: function visibleOptionIds() {
       var _this2 = this;
-
       var visibleOptionIds = [];
       this.traverseAllNodesByIndex(function (node) {
         if (!_this2.localSearch.active || _this2.shouldOptionBeIncludedInSearchResult(node)) {
           visibleOptionIds.push(node.id);
         }
-
         if (node.isBranch && !_this2.shouldExpand(node)) {
           return false;
         }
@@ -2192,7 +2130,6 @@ var instanceId = 0;
       } else {
         this.handleLocalSearch();
       }
-
       this.$emit('search-change', this.trigger.searchQuery, this.getInstanceId());
     },
     value: function value() {
@@ -2204,13 +2141,11 @@ var instanceId = 0;
   methods: {
     verifyProps: function verifyProps() {
       var _this3 = this;
-
       warning_warning(function () {
         return _this3.async ? _this3.searchable : true;
       }, function () {
         return 'For async search mode, the value of "searchable" prop must be true.';
       });
-
       if (this.options == null && !this.loadOptions) {
         warning_warning(function () {
           return false;
@@ -2218,7 +2153,6 @@ var instanceId = 0;
           return 'Are you meant to dynamically load options? You need to use "loadOptions" prop.';
         });
       }
-
       if (this.flat) {
         warning_warning(function () {
           return _this3.multiple;
@@ -2226,7 +2160,6 @@ var instanceId = 0;
           return 'You are using flat mode. But you forgot to add "multiple=true"?';
         });
       }
-
       if (!this.flat) {
         var propNames = ['autoSelectAncestors', 'autoSelectDescendants', 'autoDeselectAncestors', 'autoDeselectDescendants'];
         propNames.forEach(function (propName) {
@@ -2243,7 +2176,6 @@ var instanceId = 0;
     },
     initialize: function initialize() {
       var options = this.async ? this.getRemoteSearchEntry().options : this.options;
-
       if (Array.isArray(options)) {
         var prevNodeMap = this.forest.nodeMap;
         this.forest.nodeMap = createMap();
@@ -2259,11 +2191,9 @@ var instanceId = 0;
     },
     getValue: function getValue() {
       var _this4 = this;
-
       if (this.valueFormat === 'id') {
         return this.multiple ? this.internalValue.slice() : this.internalValue[0];
       }
-
       var rawNodes = this.internalValue.map(function (id) {
         return _this4.getNode(id).raw;
       });
@@ -2279,6 +2209,7 @@ var instanceId = 0;
       return nodeId in this.forest.nodeMap ? this.forest.nodeMap[nodeId] : this.createFallbackNode(nodeId);
     },
     createFallbackNode: function createFallbackNode(id) {
+
       var raw = this.extractNodeFromValue(id);
       var label = this.enhancedNormalizer(raw).label || "".concat(id, " (unknown)");
       var fallbackNode = {
@@ -2300,13 +2231,10 @@ var instanceId = 0;
     },
     extractCheckedNodeIdsFromValue: function extractCheckedNodeIdsFromValue() {
       var _this5 = this;
-
       if (this.value == null) return [];
-
       if (this.valueFormat === 'id') {
         return this.multiple ? this.value.slice() : [this.value];
       }
-
       return (this.multiple ? this.value : [this.value]).map(function (node) {
         return _this5.enhancedNormalizer(node);
       }).map(function (node) {
@@ -2315,15 +2243,12 @@ var instanceId = 0;
     },
     extractNodeFromValue: function extractNodeFromValue(id) {
       var _this6 = this;
-
       var defaultNode = {
         id: id
       };
-
       if (this.valueFormat === 'id') {
         return defaultNode;
       }
-
       var valueArray = this.multiple ? Array.isArray(this.value) ? this.value : [] : this.value ? [this.value] : [];
       var matched = find(valueArray, function (node) {
         return node && _this6.enhancedNormalizer(node).id === id;
@@ -2332,7 +2257,6 @@ var instanceId = 0;
     },
     fixSelectedNodeIds: function fixSelectedNodeIds(nodeIdListOfPrevValue) {
       var _this7 = this;
-
       var nextSelectedNodeIds = [];
 
       if (this.single || this.flat || this.disableBranchNodes || this.valueConsistsOf === ALL) {
@@ -2340,9 +2264,7 @@ var instanceId = 0;
       } else if (this.valueConsistsOf === BRANCH_PRIORITY) {
         nodeIdListOfPrevValue.forEach(function (nodeId) {
           nextSelectedNodeIds.push(nodeId);
-
           var node = _this7.getNode(nodeId);
-
           if (node.isBranch) _this7.traverseDescendantsBFS(node, function (descendant) {
             nextSelectedNodeIds.push(descendant.id);
           });
@@ -2350,7 +2272,6 @@ var instanceId = 0;
       } else if (this.valueConsistsOf === LEAF_PRIORITY) {
         var map = createMap();
         var queue = nodeIdListOfPrevValue.slice();
-
         while (queue.length) {
           var nodeId = queue.shift();
           var node = this.getNode(nodeId);
@@ -2361,39 +2282,30 @@ var instanceId = 0;
         }
       } else if (this.valueConsistsOf === ALL_WITH_INDETERMINATE) {
         var _map = createMap();
-
         var _queue = nodeIdListOfPrevValue.filter(function (nodeId) {
           var node = _this7.getNode(nodeId);
-
           return node.isLeaf || node.children.length === 0;
         });
-
         while (_queue.length) {
           var _nodeId = _queue.shift();
-
           var _node = this.getNode(_nodeId);
-
           nextSelectedNodeIds.push(_nodeId);
           if (_node.isRootNode) continue;
           if (!(_node.parentNode.id in _map)) _map[_node.parentNode.id] = _node.parentNode.children.length;
           if (--_map[_node.parentNode.id] === 0) _queue.push(_node.parentNode.id);
         }
       }
-
       var hasChanged = quickDiff(this.forest.selectedNodeIds, nextSelectedNodeIds);
       if (hasChanged) this.forest.selectedNodeIds = nextSelectedNodeIds;
       this.buildForestState();
     },
     keepDataOfSelectedNodes: function keepDataOfSelectedNodes(prevNodeMap) {
       var _this8 = this;
-
       this.forest.selectedNodeIds.forEach(function (id) {
         if (!prevNodeMap[id]) return;
-
         var node = _objectSpread(_objectSpread({}, prevNodeMap[id]), {}, {
           isFallbackNode: true
         });
-
         _this8.$set(_this8.forest.nodeMap, id, node);
       });
     },
@@ -2403,7 +2315,6 @@ var instanceId = 0;
     traverseDescendantsBFS: function traverseDescendantsBFS(parentNode, callback) {
       if (!parentNode.isBranch) return;
       var queue = parentNode.children.slice();
-
       while (queue.length) {
         var currNode = queue[0];
         if (currNode.isBranch) queue.push.apply(queue, toConsumableArray_default()(currNode.children));
@@ -2413,20 +2324,16 @@ var instanceId = 0;
     },
     traverseDescendantsDFS: function traverseDescendantsDFS(parentNode, callback) {
       var _this9 = this;
-
       if (!parentNode.isBranch) return;
       parentNode.children.forEach(function (child) {
         _this9.traverseDescendantsDFS(child, callback);
-
         callback(child);
       });
     },
     traverseAllNodesDFS: function traverseAllNodesDFS(callback) {
       var _this10 = this;
-
       this.forest.normalizedOptions.forEach(function (rootNode) {
         _this10.traverseDescendantsDFS(rootNode, callback);
-
         callback(rootNode);
       });
     },
@@ -2451,6 +2358,9 @@ var instanceId = 0;
       }
     },
     getValueContainer: function getValueContainer() {
+      if (!this.$refs || !this.$refs.control || !this.$refs.control.$refs) {
+        return null;
+      }
       return this.$refs.control.$refs['value-container'];
     },
     getInput: function getInput() {
@@ -2465,19 +2375,16 @@ var instanceId = 0;
     handleMouseDown: onLeftClick(function handleMouseDown(evt) {
       evt.preventDefault();
       evt.stopPropagation();
-      if (this.disabled) return;
+      if (this.disabled || !this.getValueContainer()) return;
       var isClickedOnValueContainer = this.getValueContainer().$el.contains(evt.target);
-
       if (isClickedOnValueContainer && !this.menu.isOpen && (this.openOnClick || this.trigger.isFocused)) {
         this.openMenu();
       }
-
       if (this._blurOnSelect) {
         this.blurInput();
       } else {
         this.focusInput();
       }
-
       this.resetFlags();
     }),
     handleClickOutside: function handleClickOutside(evt) {
@@ -2488,29 +2395,25 @@ var instanceId = 0;
     },
     handleLocalSearch: function handleLocalSearch() {
       var _this11 = this;
-
       var searchQuery = this.trigger.searchQuery;
-
       var done = function done() {
         return _this11.resetHighlightedOptionWhenNecessary(true);
       };
-
       if (!searchQuery) {
         this.localSearch.active = false;
         return done();
       }
 
       this.localSearch.active = true;
+
       this.localSearch.noResults = true;
       this.traverseAllNodesDFS(function (node) {
         if (node.isBranch) {
           var _this11$$set;
-
           node.isExpandedOnSearch = false;
           node.showAllChildrenOnSearch = false;
           node.isMatched = false;
           node.hasMatchedDescendants = false;
-
           _this11.$set(_this11.localSearch.countMap, node.id, (_this11$$set = {}, defineProperty_default()(_this11$$set, ALL_CHILDREN, 0), defineProperty_default()(_this11$$set, ALL_DESCENDANTS, 0), defineProperty_default()(_this11$$set, LEAF_CHILDREN, 0), defineProperty_default()(_this11$$set, LEAF_DESCENDANTS, 0), _this11$$set));
         }
       });
@@ -2526,7 +2429,6 @@ var instanceId = 0;
             return match(!_this11.disableFuzzyMatching, lowerCasedSearchQuery, node.lowerCased[matchKey]);
           });
         }
-
         if (node.isMatched) {
           _this11.localSearch.noResults = false;
           node.ancestors.forEach(function (ancestor) {
@@ -2535,13 +2437,11 @@ var instanceId = 0;
           if (node.isLeaf) node.ancestors.forEach(function (ancestor) {
             return _this11.localSearch.countMap[ancestor.id][LEAF_DESCENDANTS]++;
           });
-
           if (node.parentNode !== NO_PARENT_NODE) {
             _this11.localSearch.countMap[node.parentNode.id][ALL_CHILDREN] += 1;
             if (node.isLeaf) _this11.localSearch.countMap[node.parentNode.id][LEAF_CHILDREN] += 1;
           }
         }
-
         if ((node.isMatched || node.isBranch && node.isExpandedOnSearch) && node.parentNode !== NO_PARENT_NODE) {
           node.parentNode.isExpandedOnSearch = true;
           node.parentNode.hasMatchedDescendants = true;
@@ -2551,20 +2451,15 @@ var instanceId = 0;
     },
     handleRemoteSearch: function handleRemoteSearch() {
       var _this12 = this;
-
       var searchQuery = this.trigger.searchQuery;
       var entry = this.getRemoteSearchEntry();
-
       var done = function done() {
         _this12.initialize();
-
         _this12.resetHighlightedOptionWhenNecessary(true);
       };
-
       if ((searchQuery === '' || this.cacheOptions) && entry.isLoaded) {
         return done();
       }
-
       this.callLoadOptionsProp({
         action: ASYNC_SEARCH,
         args: {
@@ -2593,9 +2488,7 @@ var instanceId = 0;
     },
     getRemoteSearchEntry: function getRemoteSearchEntry() {
       var _this13 = this;
-
       var searchQuery = this.trigger.searchQuery;
-
       var entry = this.remoteSearch[searchQuery] || _objectSpread(_objectSpread({}, createAsyncOptionsStates()), {}, {
         options: []
       });
@@ -2607,7 +2500,6 @@ var instanceId = 0;
       }, {
         deep: true
       });
-
       if (searchQuery === '') {
         if (Array.isArray(this.defaultOptions)) {
           entry.options = this.defaultOptions;
@@ -2618,11 +2510,9 @@ var instanceId = 0;
           return entry;
         }
       }
-
       if (!this.remoteSearch[searchQuery]) {
         this.$set(this.remoteSearch, searchQuery, entry);
       }
-
       return entry;
     },
     shouldExpand: function shouldExpand(node) {
@@ -2638,7 +2528,6 @@ var instanceId = 0;
       if (this.localSearch.active && !this.shouldOptionBeIncludedInSearchResult(node)) {
         return false;
       }
-
       return true;
     },
     getControl: function getControl() {
@@ -2651,23 +2540,17 @@ var instanceId = 0;
     },
     setCurrentHighlightedOption: function setCurrentHighlightedOption(node) {
       var _this14 = this;
-
       var scroll = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
       var prev = this.menu.current;
-
       if (prev != null && prev in this.forest.nodeMap) {
         this.forest.nodeMap[prev].isHighlighted = false;
       }
-
       this.menu.current = node.id;
       node.isHighlighted = true;
-
       if (this.menu.isOpen && scroll) {
         var scrollToOption = function scrollToOption() {
           var nodeId = node.id.toString().replace(/"/g, '\\"');
-
           var $menu = _this14.getMenu();
-
           var $option = $menu.querySelector(".vue-treeselect__option[data-id=\"".concat(nodeId, "\"]"));
           if ($option) scrollIntoView($menu, $option);
         };
@@ -2682,7 +2565,6 @@ var instanceId = 0;
     resetHighlightedOptionWhenNecessary: function resetHighlightedOptionWhenNecessary() {
       var forceReset = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
       var current = this.menu.current;
-
       if (forceReset || current == null || !(current in this.forest.nodeMap) || !this.shouldShowOptionInMenu(this.getNode(current))) {
         this.highlightFirstOption();
       }
@@ -2738,35 +2620,30 @@ var instanceId = 0;
     },
     toggleExpanded: function toggleExpanded(node) {
       var nextState;
-
       if (this.localSearch.active) {
         nextState = node.isExpandedOnSearch = !node.isExpandedOnSearch;
         if (nextState) node.showAllChildrenOnSearch = true;
       } else {
         nextState = node.isExpanded = !node.isExpanded;
       }
-
       if (nextState && !node.childrenStates.isLoaded) {
         this.loadChildrenOptions(node);
       }
     },
     buildForestState: function buildForestState() {
       var _this15 = this;
-
       var selectedNodeMap = createMap();
       this.forest.selectedNodeIds.forEach(function (selectedNodeId) {
         selectedNodeMap[selectedNodeId] = true;
       });
       this.forest.selectedNodeMap = selectedNodeMap;
       var checkedStateMap = createMap();
-
       if (this.multiple) {
         this.traverseAllNodesByIndex(function (node) {
           checkedStateMap[node.id] = UNCHECKED;
         });
         this.selectedNodes.forEach(function (selectedNode) {
           checkedStateMap[selectedNode.id] = CHECKED;
-
           if (!_this15.flat && !_this15.disableBranchNodes) {
             selectedNode.ancestors.forEach(function (ancestorNode) {
               if (!_this15.isSelected(ancestorNode)) {
@@ -2776,7 +2653,6 @@ var instanceId = 0;
           }
         });
       }
-
       this.forest.checkedStateMap = checkedStateMap;
     },
     enhancedNormalizer: function enhancedNormalizer(raw) {
@@ -2784,98 +2660,62 @@ var instanceId = 0;
     },
     normalize: function normalize(parentNode, nodes, prevNodeMap) {
       var _this16 = this;
-
       var normalizedOptions = nodes.map(function (node) {
         return [_this16.enhancedNormalizer(node), node];
       }).map(function (_ref, index) {
         var _ref2 = slicedToArray_default()(_ref, 2),
-            node = _ref2[0],
-            raw = _ref2[1];
-
+          node = _ref2[0],
+          raw = _ref2[1];
         _this16.checkDuplication(node);
-
         _this16.verifyNodeShape(node);
-
         var id = node.id !== undefined ? node.id : Math.round(Math.random() * 1000000);
         var label = node.label,
-            children = node.children,
-            isDefaultExpanded = node.isDefaultExpanded;
+          children = node.children,
+          isDefaultExpanded = node.isDefaultExpanded;
         var isRootNode = parentNode === NO_PARENT_NODE;
         var level = isRootNode || _this16.showAsGroup ? 0 : parentNode.level + 1;
         var isBranch = Array.isArray(children) || children === null;
         var isLeaf = !isBranch;
         var isDisabled = !!node.isDisabled || !_this16.flat && !isRootNode && parentNode.isDisabled;
         var isNew = !!node.isNew;
-
         var lowerCased = _this16.matchKeys.reduce(function (prev, key) {
           return _objectSpread(_objectSpread({}, prev), {}, defineProperty_default()({}, key, stringifyOptionPropValue(node[key]).toLocaleLowerCase()));
         }, {});
-
         var nestedSearchLabel = isRootNode ? lowerCased.label : parentNode.nestedSearchLabel + ' ' + lowerCased.label;
-
         var normalized = _this16.$set(_this16.forest.nodeMap, id, createMap());
-
         _this16.$set(normalized, 'id', id);
-
         _this16.$set(normalized, 'label', label);
-
         _this16.$set(normalized, 'level', level);
-
         _this16.$set(normalized, 'ancestors', isRootNode ? [] : [parentNode].concat(parentNode.ancestors));
-
         _this16.$set(normalized, 'index', (isRootNode ? [] : parentNode.index).concat(index));
-
         _this16.$set(normalized, 'parentNode', parentNode);
-
         _this16.$set(normalized, 'lowerCased', lowerCased);
-
         _this16.$set(normalized, 'nestedSearchLabel', nestedSearchLabel);
-
         _this16.$set(normalized, 'isDisabled', isDisabled);
-
         _this16.$set(normalized, 'isNew', isNew);
-
         _this16.$set(normalized, 'isMatched', false);
-
         _this16.$set(normalized, 'isHighlighted', false);
-
         _this16.$set(normalized, 'isBranch', isBranch);
-
         _this16.$set(normalized, 'isGroup', isBranch && _this16.showAsGroup);
-
         _this16.$set(normalized, 'isLeaf', isLeaf);
-
         _this16.$set(normalized, 'isRootNode', isRootNode);
-
         _this16.$set(normalized, 'raw', raw);
-
         if (isBranch) {
           var _this16$$set;
-
           var isLoaded = Array.isArray(children);
-
           _this16.$set(normalized, 'childrenStates', _objectSpread(_objectSpread({}, createAsyncOptionsStates()), {}, {
             isLoaded: isLoaded
           }));
-
           _this16.$set(normalized, 'isExpanded', _this16.showAsGroup ? _this16.showAsGroup : typeof isDefaultExpanded === 'boolean' ? isDefaultExpanded : level < _this16.defaultExpandLevel);
-
           _this16.$set(normalized, 'hasMatchedDescendants', false);
-
           _this16.$set(normalized, 'hasDisabledDescendants', false);
-
           _this16.$set(normalized, 'isExpandedOnSearch', false);
-
           _this16.$set(normalized, 'showAllChildrenOnSearch', false);
-
           _this16.$set(normalized, 'count', (_this16$$set = {}, defineProperty_default()(_this16$$set, ALL_CHILDREN, 0), defineProperty_default()(_this16$$set, ALL_DESCENDANTS, 0), defineProperty_default()(_this16$$set, LEAF_CHILDREN, 0), defineProperty_default()(_this16$$set, LEAF_DESCENDANTS, 0), _this16$$set));
-
           _this16.$set(normalized, 'children', isLoaded ? _this16.normalize(normalized, children, prevNodeMap) : []);
-
           if (isDefaultExpanded === true) normalized.ancestors.forEach(function (ancestor) {
             ancestor.isExpanded = true;
           });
-
           if (!isLoaded && typeof _this16.loadOptions !== 'function') {
             warning_warning(function () {
               return false;
@@ -2886,14 +2726,12 @@ var instanceId = 0;
             _this16.loadChildrenOptions(normalized);
           }
         }
-
         normalized.ancestors.forEach(function (ancestor) {
           return ancestor.count[ALL_DESCENDANTS]++;
         });
         if (isLeaf) normalized.ancestors.forEach(function (ancestor) {
           return ancestor.count[LEAF_DESCENDANTS]++;
         });
-
         if (!isRootNode) {
           parentNode.count[ALL_CHILDREN] += 1;
           if (isLeaf) parentNode.count[LEAF_CHILDREN] += 1;
@@ -2905,11 +2743,9 @@ var instanceId = 0;
           normalized.isMatched = prev.isMatched;
           normalized.showAllChildrenOnSearch = prev.showAllChildrenOnSearch;
           normalized.isHighlighted = prev.isHighlighted;
-
           if (prev.isBranch && normalized.isBranch) {
             normalized.isExpanded = prev.isExpanded;
             normalized.isExpandedOnSearch = prev.isExpandedOnSearch;
-
             if (prev.childrenStates.isLoaded && !normalized.childrenStates.isLoaded) {
               normalized.isExpanded = false;
             } else {
@@ -2917,10 +2753,8 @@ var instanceId = 0;
             }
           }
         }
-
         return normalized;
       });
-
       if (this.branchNodesFirst) {
         var branchNodes = normalizedOptions.filter(function (option) {
           return option.isBranch;
@@ -2930,12 +2764,10 @@ var instanceId = 0;
         });
         normalizedOptions = branchNodes.concat(leafNodes);
       }
-
       return normalizedOptions;
     },
     loadRootOptions: function loadRootOptions() {
       var _this17 = this;
-
       this.callLoadOptionsProp({
         action: LOAD_ROOT_OPTIONS,
         isPending: function isPending() {
@@ -2947,7 +2779,6 @@ var instanceId = 0;
         },
         succeed: function succeed() {
           _this17.rootOptionsStates.isLoaded = true;
-
           _this17.$nextTick(function () {
             _this17.resetHighlightedOptionWhenNecessary(true);
           });
@@ -2964,7 +2795,7 @@ var instanceId = 0;
       var _this18 = this;
 
       var id = parentNode.id,
-          raw = parentNode.raw;
+        raw = parentNode.raw;
       this.callLoadOptionsProp({
         action: LOAD_CHILDREN_OPTIONS,
         args: {
@@ -2990,17 +2821,15 @@ var instanceId = 0;
     },
     callLoadOptionsProp: function callLoadOptionsProp(_ref3) {
       var action = _ref3.action,
-          args = _ref3.args,
-          isPending = _ref3.isPending,
-          start = _ref3.start,
-          succeed = _ref3.succeed,
-          fail = _ref3.fail,
-          end = _ref3.end;
-
+        args = _ref3.args,
+        isPending = _ref3.isPending,
+        start = _ref3.start,
+        succeed = _ref3.succeed,
+        fail = _ref3.fail,
+        end = _ref3.end;
       if (!this.loadOptions || isPending()) {
         return;
       }
-
       start();
       var callback = once_default()(function (err, result) {
         if (err) {
@@ -3008,7 +2837,6 @@ var instanceId = 0;
         } else {
           succeed(result);
         }
-
         end();
       });
       var result = this.loadOptions(_objectSpread(_objectSpread({
@@ -3018,7 +2846,6 @@ var instanceId = 0;
       }, args), {}, {
         callback: callback
       }));
-
       if (is_promise_default()(result)) {
         result.then(function () {
           callback();
@@ -3031,7 +2858,6 @@ var instanceId = 0;
     },
     checkDuplication: function checkDuplication(node) {
       var _this19 = this;
-
       warning_warning(function () {
         return !(node.id in _this19.forest.nodeMap && !_this19.forest.nodeMap[node.id].isFallbackNode);
       }, function () {
@@ -3049,31 +2875,24 @@ var instanceId = 0;
       if (this.disabled || node.isDisabled) {
         return;
       }
-
       if (this.single) {
         this.clear();
       }
-
       var nextState = this.multiple && !this.flat ? this.forest.checkedStateMap[node.id] === UNCHECKED : !this.isSelected(node);
-
       if (nextState) {
         this._selectNode(node);
       } else {
         this._deselectNode(node);
       }
-
       this.buildForestState();
-
       if (nextState) {
         this.$emit('select', node.raw, this.getInstanceId());
       } else {
         this.$emit('deselect', node.raw, this.getInstanceId());
       }
-
       if (this.localSearch.active && nextState && (this.single || this.clearOnSelect)) {
         this.resetSearchQuery();
       }
-
       if (this.single && this.closeOnSelect) {
         this.closeMenu();
 
@@ -3084,7 +2903,6 @@ var instanceId = 0;
     },
     clear: function clear() {
       var _this20 = this;
-
       if (this.hasValue) {
         if (this.single || this.allowClearingDisabled) {
           this.forest.selectedNodeIds = [];
@@ -3093,20 +2911,16 @@ var instanceId = 0;
               return _this20.getNode(nodeId).isDisabled;
             });
           }
-
         this.buildForestState();
       }
     },
     _selectNode: function _selectNode(node) {
       var _this21 = this;
-
       if (this.single || this.disableBranchNodes) {
         return this.addValue(node);
       }
-
       if (this.flat) {
         this.addValue(node);
-
         if (this.autoSelectAncestors) {
           node.ancestors.forEach(function (ancestor) {
             if (!_this21.isSelected(ancestor) && !ancestor.isDisabled) _this21.addValue(ancestor);
@@ -3116,16 +2930,12 @@ var instanceId = 0;
             if (!_this21.isSelected(descendant) && !descendant.isDisabled) _this21.addValue(descendant);
           });
         }
-
         return;
       }
-
       var isFullyChecked = node.isLeaf || !node.hasDisabledDescendants || this.allowSelectingDisabledDescendants;
-
       if (isFullyChecked) {
         this.addValue(node);
       }
-
       if (node.isBranch) {
         this.traverseDescendantsBFS(node, function (descendant) {
           if (!descendant.isDisabled || _this21.allowSelectingDisabledDescendants) {
@@ -3133,10 +2943,8 @@ var instanceId = 0;
           }
         });
       }
-
       if (isFullyChecked) {
         var curr = node;
-
         while ((curr = curr.parentNode) !== NO_PARENT_NODE) {
           if (curr.children.every(this.isSelected)) this.addValue(curr);else break;
         }
@@ -3144,14 +2952,11 @@ var instanceId = 0;
     },
     _deselectNode: function _deselectNode(node) {
       var _this22 = this;
-
       if (this.disableBranchNodes) {
         return this.removeValue(node);
       }
-
       if (this.flat) {
         this.removeValue(node);
-
         if (this.autoDeselectAncestors) {
           node.ancestors.forEach(function (ancestor) {
             if (_this22.isSelected(ancestor) && !ancestor.isDisabled) _this22.removeValue(ancestor);
@@ -3161,26 +2966,20 @@ var instanceId = 0;
             if (_this22.isSelected(descendant) && !descendant.isDisabled) _this22.removeValue(descendant);
           });
         }
-
         return;
       }
-
       var hasUncheckedSomeDescendants = false;
-
       if (node.isBranch) {
         this.traverseDescendantsDFS(node, function (descendant) {
           if (!descendant.isDisabled || _this22.allowSelectingDisabledDescendants) {
             _this22.removeValue(descendant);
-
             hasUncheckedSomeDescendants = true;
           }
         });
       }
-
       if (node.isLeaf || hasUncheckedSomeDescendants || node.children.length === 0) {
         this.removeValue(node);
         var curr = node;
-
         while ((curr = curr.parentNode) !== NO_PARENT_NODE) {
           if (this.isSelected(curr)) this.removeValue(curr);else break;
         }
@@ -3226,13 +3025,11 @@ var instanceId = 0;
 });
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader/lib??vue-loader-options!./src/components/HiddenFields.vue?vue&type=script&lang=js&
 
-
 function stringifyValue(value) {
   if (typeof value === 'string') return value;
   if (value != null && !isNaN_isNaN(value)) return JSON.stringify(value);
   return '';
 }
-
 /* harmony default export */ var HiddenFieldsvue_type_script_lang_js_ = ({
   name: 'vue-treeselect--hidden-fields',
   inject: ['instance'],
@@ -3433,7 +3230,6 @@ var keysThatRequireMenuBeingOpen = [KEY_CODES.ENTER, KEY_CODES.END, KEY_CODES.HO
     },
     focus: function focus() {
       var instance = this.instance;
-
       if (!instance.disabled) {
         this.$refs.input && this.$refs.input.focus();
       }
@@ -3453,14 +3249,12 @@ var keysThatRequireMenuBeingOpen = [KEY_CODES.ENTER, KEY_CODES.END, KEY_CODES.HO
       if (menu && document.activeElement === menu) {
         return this.focus();
       }
-
       instance.trigger.isFocused = false;
       instance.closeMenu();
     },
     onInput: function onInput(evt) {
       var value = evt.target.value;
       this.value = value;
-
       if (value) {
         this.debouncedCallback();
       } else {
@@ -3472,22 +3266,18 @@ var keysThatRequireMenuBeingOpen = [KEY_CODES.ENTER, KEY_CODES.END, KEY_CODES.HO
       var instance = this.instance;
       var key = 'which' in evt ? evt.which : evt.keyCode;
       if (evt.ctrlKey || evt.shiftKey || evt.altKey || evt.metaKey) return;
-
       if (!instance.menu.isOpen && includes(keysThatRequireMenuBeingOpen, key)) {
         evt.preventDefault();
         return instance.openMenu();
       }
-
       switch (key) {
         case KEY_CODES.BACKSPACE:
           {
             if (instance.backspaceRemoves && !this.value.length) {
               instance.removeLastValue();
             }
-
             break;
           }
-
         case KEY_CODES.ENTER:
           {
             evt.preventDefault();
@@ -3497,7 +3287,6 @@ var keysThatRequireMenuBeingOpen = [KEY_CODES.ENTER, KEY_CODES.END, KEY_CODES.HO
             instance.select(current);
             break;
           }
-
         case KEY_CODES.ESCAPE:
           {
             if (this.value.length) {
@@ -3505,28 +3294,23 @@ var keysThatRequireMenuBeingOpen = [KEY_CODES.ENTER, KEY_CODES.END, KEY_CODES.HO
             } else if (instance.menu.isOpen) {
               instance.closeMenu();
             }
-
             break;
           }
-
         case KEY_CODES.END:
           {
             evt.preventDefault();
             instance.highlightLastOption();
             break;
           }
-
         case KEY_CODES.HOME:
           {
             evt.preventDefault();
             instance.highlightFirstOption();
             break;
           }
-
         case KEY_CODES.ARROW_LEFT:
           {
             var _current = instance.getNode(instance.menu.current);
-
             if (_current.isBranch && instance.shouldExpand(_current)) {
               evt.preventDefault();
               instance.toggleExpanded(_current);
@@ -3534,45 +3318,36 @@ var keysThatRequireMenuBeingOpen = [KEY_CODES.ENTER, KEY_CODES.END, KEY_CODES.HO
               evt.preventDefault();
               instance.setCurrentHighlightedOption(_current.parentNode);
             }
-
             break;
           }
-
         case KEY_CODES.ARROW_UP:
           {
             evt.preventDefault();
             instance.highlightPrevOption();
             break;
           }
-
         case KEY_CODES.ARROW_RIGHT:
           {
             var _current2 = instance.getNode(instance.menu.current);
-
             if (_current2.isBranch && !instance.shouldExpand(_current2)) {
               evt.preventDefault();
               instance.toggleExpanded(_current2);
             }
-
             break;
           }
-
         case KEY_CODES.ARROW_DOWN:
           {
             evt.preventDefault();
             instance.highlightNextOption();
             break;
           }
-
         case KEY_CODES.DELETE:
           {
             if (instance.deleteRemoves && !this.value.length) {
               instance.removeLastValue();
             }
-
             break;
           }
-
         default:
           {
             instance.openMenu();
@@ -3589,12 +3364,10 @@ var keysThatRequireMenuBeingOpen = [KEY_CODES.ENTER, KEY_CODES.END, KEY_CODES.HO
       var instance = this.instance;
       var props = {};
       var children = [];
-
       if (instance.searchable && !instance.disabled) {
         children.push(this.renderInput());
         if (this.needAutoSize) children.push(this.renderSizer());
       }
-
       if (!instance.searchable) {
         deepExtend(props, {
           on: {
@@ -3605,7 +3378,6 @@ var keysThatRequireMenuBeingOpen = [KEY_CODES.ENTER, KEY_CODES.END, KEY_CODES.HO
           ref: 'input'
         });
       }
-
       if (!instance.searchable && !instance.disabled) {
         deepExtend(props, {
           attrs: {
@@ -3613,7 +3385,6 @@ var keysThatRequireMenuBeingOpen = [KEY_CODES.ENTER, KEY_CODES.END, KEY_CODES.HO
           }
         });
       }
-
       return h("div", babel_helper_vue_jsx_merge_props_default()([{
         "class": "vue-treeselect__input-container"
       }, props]), [children]);
@@ -3748,7 +3519,7 @@ Placeholder_component.options.__file = "src/components/Placeholder.vue"
   render: function render() {
     var h = arguments[0];
     var instance = this.instance,
-        renderValueContainer = this.$parent.renderValueContainer;
+      renderValueContainer = this.$parent.renderValueContainer;
     var shouldShowValue = instance.hasValue && !instance.trigger.searchQuery;
     return renderValueContainer([shouldShowValue && h("div", {
       "class": "vue-treeselect__single-value"
@@ -3853,14 +3624,15 @@ Delete_component.options.__file = "src/components/icons/Delete.vue"
   methods: {
     handleMouseDown: onLeftClick(function handleMouseDown() {
       var instance = this.instance,
-          node = this.node;
+        node = this.node;
+
       instance.select(node);
     })
   },
   render: function render() {
     var h = arguments[0];
     var instance = this.instance,
-        node = this.node;
+      node = this.node;
     var itemClass = {
       'vue-treeselect__multi-value-item': true,
       'vue-treeselect__multi-value-item-disabled': node.isDisabled,
@@ -4106,15 +3878,14 @@ Arrow_component.options.__file = "src/components/icons/Arrow.vue"
       })]);
     },
     handleMouseDownOnX: onLeftClick(function handleMouseDownOnX(evt) {
+
       evt.stopPropagation();
       evt.preventDefault();
       var instance = this.instance;
       var result = instance.beforeClearAll();
-
       var handler = function handler(shouldClear) {
         if (shouldClear) instance.clear();
       };
-
       if (is_promise_default()(result)) {
         result.then(handler);
       } else {
@@ -4123,10 +3894,12 @@ Arrow_component.options.__file = "src/components/icons/Arrow.vue"
         }, 0);
       }
     }),
+
     handleMouseDownOnArrow: onLeftClick(function handleMouseDownOnArrow(evt) {
       evt.preventDefault();
       evt.stopPropagation();
       var instance = this.instance;
+
       instance.focusInput();
       instance.toggleMenu();
     }),
@@ -4193,7 +3966,7 @@ Control_component.options.__file = "src/components/Control.vue"
   render: function render(_, context) {
     var h = arguments[0];
     var props = context.props,
-        children = context.children;
+      children = context.children;
     return h("div", {
       "class": "vue-treeselect__tip vue-treeselect__".concat(props.type, "-tip")
     }, [h("div", {
@@ -4249,12 +4022,12 @@ var Option = {
   computed: {
     shouldExpand: function shouldExpand() {
       var instance = this.instance,
-          node = this.node;
+        node = this.node;
       return (node.isBranch || node.isGroup) && instance.shouldExpand(node);
     },
     shouldShow: function shouldShow() {
       var instance = this.instance,
-          node = this.node;
+        node = this.node;
       return instance.shouldShowOptionInMenu(node);
     }
   },
@@ -4262,7 +4035,7 @@ var Option = {
     renderOption: function renderOption() {
       var h = this.$createElement;
       var instance = this.instance,
-          node = this.node;
+        node = this.node;
       var optionClass = {
         'vue-treeselect__option': true,
         'vue-treeselect__option--group': node.isGroup,
@@ -4292,9 +4065,8 @@ var Option = {
     renderArrow: function renderArrow() {
       var h = this.$createElement;
       var instance = this.instance,
-          node = this.node;
+        node = this.node;
       if (instance.shouldFlattenOptions && this.shouldShow) return null;
-
       if (node.isBranch && !node.isGroup) {
         var transitionProps = {
           props: {
@@ -4322,7 +4094,6 @@ var Option = {
         }, ["\xA0"]);
         return arrowPlaceholder;
       }
-
       return null;
     },
     renderLabelContainer: function renderLabelContainer(children) {
@@ -4337,7 +4108,7 @@ var Option = {
     renderCheckboxContainer: function renderCheckboxContainer(children) {
       var h = this.$createElement;
       var instance = this.instance,
-          node = this.node;
+        node = this.node;
       if (instance.single) return null;
       if (instance.disableBranchNodes && node.isBranch) return null;
       return h("div", {
@@ -4347,7 +4118,7 @@ var Option = {
     renderCheckbox: function renderCheckbox() {
       var h = this.$createElement;
       var instance = this.instance,
-          node = this.node;
+        node = this.node;
       var checkedState = instance.forest.checkedStateMap[node.id];
       var checkboxClass = {
         'vue-treeselect__checkbox': true,
@@ -4370,7 +4141,7 @@ var Option = {
     renderLabel: function renderLabel() {
       var h = this.$createElement;
       var instance = this.instance,
-          node = this.node;
+        node = this.node;
       var shouldShowCount = node.isBranch && (instance.localSearch.active ? instance.showCountOnSearchComputed : instance.showCount);
       var count = shouldShowCount ? instance.localSearch.active ? instance.localSearch.countMap[node.id][instance.showCountOf] : node.count[instance.showCountOf] : NaN;
       var labelClassName = 'vue-treeselect__label';
@@ -4405,7 +4176,7 @@ var Option = {
     renderNoChildrenTip: function renderNoChildrenTip() {
       var h = this.$createElement;
       var instance = this.instance,
-          node = this.node;
+        node = this.node;
       if (!node.childrenStates.isLoaded || node.children.length) return null;
       return h(Tip, {
         attrs: {
@@ -4417,7 +4188,7 @@ var Option = {
     renderLoadingChildrenTip: function renderLoadingChildrenTip() {
       var h = this.$createElement;
       var instance = this.instance,
-          node = this.node;
+        node = this.node;
       if (!node.childrenStates.isLoading) return null;
       return h(Tip, {
         attrs: {
@@ -4429,7 +4200,7 @@ var Option = {
     renderLoadingChildrenErrorTip: function renderLoadingChildrenErrorTip() {
       var h = this.$createElement;
       var instance = this.instance,
-          node = this.node;
+        node = this.node;
       if (!node.childrenStates.loadingError) return null;
       return h(Tip, {
         attrs: {
@@ -4448,19 +4219,19 @@ var Option = {
     },
     handleMouseEnterOption: function handleMouseEnterOption(evt) {
       var instance = this.instance,
-          node = this.node;
+        node = this.node;
+
       if (evt.target !== evt.currentTarget) return;
       instance.setCurrentHighlightedOption(node, false);
     },
     handleMouseDownOnArrow: onLeftClick(function handleMouseDownOnOptionArrow() {
       var instance = this.instance,
-          node = this.node;
+        node = this.node;
       instance.toggleExpanded(node);
     }),
     handleMouseDownOnLabelContainer: onLeftClick(function handleMouseDownOnLabelContainer() {
       var instance = this.instance,
-          node = this.node;
-
+        node = this.node;
       if (node.isBranch && instance.disableBranchNodes) {
         instance.toggleExpanded(node);
       } else if (!node.isGroup) {
@@ -4469,7 +4240,7 @@ var Option = {
     }),
     handleMouseDownOnRetry: onLeftClick(function handleMouseDownOnRetry() {
       var instance = this.instance,
-          node = this.node;
+        node = this.node;
       instance.loadChildrenOptions(node);
     })
   },
@@ -4477,12 +4248,10 @@ var Option = {
     var h = arguments[0];
     var node = this.node;
     var indentLevel = this.instance.shouldFlattenOptions ? 0 : node.level;
-
     var listItemClass = defineProperty_default()({
       'vue-treeselect__list-item': true,
       'vue-treeselect__list-group': node.isGroup
     }, "vue-treeselect__indent-level-".concat(indentLevel), true);
-
     var transitionProps = {
       props: {
         name: 'vue-treeselect__list--transition'
@@ -4493,6 +4262,7 @@ var Option = {
     }, [this.renderOption(), node.isBranch && h("transition", transitionProps, [this.renderSubOptionsList()])]);
   }
 };
+
 /* harmony default export */ var Optionvue_type_script_lang_js_ = (Option);
 // CONCATENATED MODULE: ./src/components/Option.vue?vue&type=script&lang=js&
  /* harmony default export */ var components_Optionvue_type_script_lang_js_ = (Optionvue_type_script_lang_js_); 
@@ -4593,7 +4363,6 @@ var directionMap = {
     },
     renderNormalMenuInner: function renderNormalMenuInner() {
       var instance = this.instance;
-
       if (instance.rootOptionsStates.isLoading) {
         return this.renderLoadingOptionsTip();
       } else if (instance.rootOptionsStates.loadingError) {
@@ -4606,7 +4375,6 @@ var directionMap = {
     },
     renderLocalSearchMenuInner: function renderLocalSearchMenuInner() {
       var instance = this.instance;
-
       if (instance.rootOptionsStates.isLoading) {
         return this.renderLoadingOptionsTip();
       } else if (instance.rootOptionsStates.loadingError) {
@@ -4624,7 +4392,6 @@ var directionMap = {
       var entry = instance.getRemoteSearchEntry();
       var shouldShowSearchPromptTip = instance.trigger.searchQuery === '' && !instance.defaultOptions;
       var shouldShowNoResultsTip = shouldShowSearchPromptTip ? false : entry.isLoaded && entry.options.length === 0;
-
       if (shouldShowSearchPromptTip) {
         return this.renderSearchPromptTip();
       } else if (entry.isLoading) {
@@ -4693,6 +4460,7 @@ var directionMap = {
       var h = this.$createElement;
       var instance = this.instance;
       var entry = instance.getRemoteSearchEntry();
+
       return h(Tip, {
         attrs: {
           type: "error",
@@ -4751,7 +4519,6 @@ var directionMap = {
       var isControlInViewport = controlRect.top >= 0 && controlRect.top <= viewportHeight || controlRect.top < 0 && controlRect.bottom > 0;
       var hasEnoughSpaceBelow = spaceBelow > menuHeight + MENU_BUFFER;
       var hasEnoughSpaceAbove = spaceAbove > menuHeight + MENU_BUFFER;
-
       if (!isControlInViewport) {
         instance.closeMenu();
       } else if (instance.openDirection !== 'auto') {
@@ -4765,6 +4532,7 @@ var directionMap = {
     setupMenuSizeWatcher: function setupMenuSizeWatcher() {
       var instance = this.instance;
       var $menu = instance.getMenu();
+
       if (this.menuSizeWatcher) return;
       this.menuSizeWatcher = {
         remove: watchSize($menu, this.adjustMenuOpenDirection)
@@ -4773,6 +4541,7 @@ var directionMap = {
     setupMenuResizeAndScrollEventListeners: function setupMenuResizeAndScrollEventListeners() {
       var instance = this.instance;
       var $control = instance.getControl();
+
       if (this.menuResizeAndScrollEventListeners) return;
       this.menuResizeAndScrollEventListeners = {
         remove: setupResizeAndScrollEventListeners($control, this.adjustMenuOpenDirection)
@@ -4833,11 +4602,8 @@ var external_Vue_default = /*#__PURE__*/__webpack_require__.n(external_Vue_);
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader/lib??vue-loader-options!./src/components/MenuPortal.vue?vue&type=script&lang=js&
 
-
 function MenuPortalvue_type_script_lang_js_ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
-
 function MenuPortalvue_type_script_lang_js_objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? MenuPortalvue_type_script_lang_js_ownKeys(Object(source), !0).forEach(function (key) { defineProperty_default()(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : MenuPortalvue_type_script_lang_js_ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
-
 
 
 
@@ -4878,6 +4644,7 @@ var PortalTarget = {
     setupControlResizeAndScrollEventListeners: function setupControlResizeAndScrollEventListeners() {
       var instance = this.instance;
       var $control = instance.getControl();
+
       if (this.controlResizeAndScrollEventListeners) return;
       this.controlResizeAndScrollEventListeners = {
         remove: setupResizeAndScrollEventListeners($control, this.updateMenuContainerOffset)
@@ -4885,14 +4652,13 @@ var PortalTarget = {
     },
     setupControlSizeWatcher: function setupControlSizeWatcher() {
       var _this = this;
-
       var instance = this.instance;
       var $control = instance.getControl();
+
       if (this.controlSizeWatcher) return;
       this.controlSizeWatcher = {
         remove: watchSize($control, function () {
           _this.updateWidth();
-
           _this.updateMenuContainerOffset();
         })
       };
@@ -4928,6 +4694,7 @@ var PortalTarget = {
       var transform = find(transformVariations, function (t) {
         return t in document.body.style;
       });
+
       menuContainerStyle[transform] = "translate(".concat(left, ", ").concat(top, ")");
     }
   },
