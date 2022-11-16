@@ -15,6 +15,10 @@
         type: Object,
         required: true,
       },
+      ariaLabel: {
+        type: String,
+        default: '',
+      },
     },
 
     computed: {
