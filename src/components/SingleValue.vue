@@ -27,7 +27,7 @@
           </div>
         ),
         <Placeholder />,
-        <Input ref="input" />,
+        <Input ref="input"/>,
       ])
     },
   }

@@ -48,7 +48,7 @@
           {this.renderMultiValueItems()}
           {this.renderExceedLimitTip()}
           <Placeholder key="placeholder" />
-          <Input ref="input" key="input" />
+          <Input ref="input" key="input"/>
         </transition-group>,
       )
     },

@@ -58,6 +58,57 @@ function getErrorMessage(err) {
   return err.message || /* istanbul ignore next */String(err)
 }
 
+function readHighlightedAriaLabel(node) {
+  if (node.isBranch) {
+    srSpeak(node.ariaLabel + ', contains ' + node.children.length + ' subcategories, press right arrow to open')
+  } else if (node.isLeaf && !node.isRootNode) {
+    console.log(node)
+    srSpeak(node.ariaLabel + ', belongs to ' + (node.parentNode.ariaLabel))
+  } else if (node.isLeaf && node.isRootNode) {
+    console.log(node)
+    srSpeak(node.ariaLabel)
+  }
+}
+
+function readSelectedAriaLabel(node, isSelected) {
+  if (isSelected) {
+    srSpeak(node.ariaLabel + ' selected')
+  } else if (!isSelected) {
+    srSpeak(node.ariaLabel + ' not selected')
+  }
+}
+
+/*
+  This method is from the
+  Accessibility Guidelines:
+  https://a11y-guidelines.orange.com/en/web/components-examples/make-a-screen-reader-talk/
+
+  srSpeak(text, priority)
+    - Makes the screen reader to "force-read" any value you want
+    - Creates an hidden element that has has a value taken from the parameters
+    - Good for cases where the aria-label is not recognized properly by the screen reader
+    - parameters:
+      - text: the message to be vocalised (in this case, the aria-label)
+      - priority: "polite"
+*/
+
+function srSpeak(text) {
+  const el = document.createElement('div')
+  const id = 'speak-' + Date.now()
+  el.setAttribute('id', id)
+  el.setAttribute('aria-live', 'polite')
+  el.classList.add('visually-hidden')
+  document.body.appendChild(el)
+
+  window.setTimeout(() => {
+    document.getElementById(id).innerHTML = text
+  }, 100)
+
+  window.setTimeout(() => {
+    document.body.removeChild(document.getElementById(id))
+  }, 300)
+}
+
 let instanceId = 0
 
 export default {
@@ -92,7 +143,7 @@ export default {
      */
     alwaysOpen: {
       type: Boolean,
-      default: false,
+      default: true,
     },
 
     /**
@@ -191,7 +242,7 @@ export default {
      */
     branchNodesFirst: {
       type: Boolean,
-      default: false,
+      default: true,
     },
 
     /**
@@ -1416,30 +1467,38 @@ export default {
       if (!this.hasVisibleOptions) return
 
       const first = this.visibleOptionIds[0]
-      this.setCurrentHighlightedOption(this.getNode(first))
+      const firstNode = this.getNode(first)
+      this.setCurrentHighlightedOption(firstNode)
+      readHighlightedAriaLabel(firstNode)
     },
 
     highlightPrevOption() {
       if (!this.hasVisibleOptions) return
 
       const prev = this.visibleOptionIds.indexOf(this.menu.current) - 1
+      const previousNode = this.getNode(this.visibleOptionIds[prev])
       if (prev === -1) return this.highlightLastOption()
-      this.setCurrentHighlightedOption(this.getNode(this.visibleOptionIds[prev]))
+      this.setCurrentHighlightedOption(previousNode)
+      readHighlightedAriaLabel(previousNode)
     },
 
     highlightNextOption() {
       if (!this.hasVisibleOptions) return
 
       const next = this.visibleOptionIds.indexOf(this.menu.current) + 1
+      const nextNode = this.getNode(this.visibleOptionIds[next])
       if (next === this.visibleOptionIds.length) return this.highlightFirstOption()
-      this.setCurrentHighlightedOption(this.getNode(this.visibleOptionIds[next]))
+      this.setCurrentHighlightedOption(nextNode)
+      readHighlightedAriaLabel(nextNode)
     },
 
     highlightLastOption() {
       if (!this.hasVisibleOptions) return
 
       const last = getLast(this.visibleOptionIds)
-      this.setCurrentHighlightedOption(this.getNode(last))
+      const lastNode = this.getNode(last)
+      this.setCurrentHighlightedOption(lastNode)
+      readHighlightedAriaLabel(lastNode)
     },
 
     resetSearchQuery() {
@@ -1531,6 +1590,7 @@ export default {
           this.verifyNodeShape(node)
 
           const { id, label, children, isDefaultExpanded } = node
+          const ariaLabel = node.label
           const isRootNode = parentNode === NO_PARENT_NODE
           const level = isRootNode ? 0 : parentNode.level + 1
           const isBranch = Array.isArray(children) || children === null
@@ -1548,6 +1608,7 @@ export default {
           const normalized = this.$set(this.forest.nodeMap, id, createMap())
           this.$set(normalized, 'id', id)
           this.$set(normalized, 'label', label)
+          this.$set(normalized, 'ariaLabel', ariaLabel)
           this.$set(normalized, 'level', level)
           this.$set(normalized, 'ancestors', isRootNode ? [] : [ parentNode ].concat(parentNode.ancestors))
           this.$set(normalized, 'index', (isRootNode ? [] : parentNode.index).concat(index))
@@ -1773,8 +1834,10 @@ export default {
 
       if (nextState) {
         this._selectNode(node)
+        readSelectedAriaLabel(node, true)
       } else {
         this._deselectNode(node)
+        readSelectedAriaLabel(node, false)
       }
 
       this.buildForestState()

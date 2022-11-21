@@ -15,10 +15,6 @@
         type: Object,
         required: true,
       },
-      ariaLabel: {
-        type: String,
-        default: '',
-      },
     },
 
     computed: {
@@ -48,7 +44,7 @@
         }
 
         return (
-          <div class={optionClass} onMouseenter={this.handleMouseEnterOption} data-id={node.id}>
+          <div class={optionClass} role="option" aria-selected="false" onMouseenter={this.handleMouseEnterOption} data-id={node.id}>
             {this.renderArrow()}
             {this.renderLabelContainer([
               this.renderCheckboxContainer([

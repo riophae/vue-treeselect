@@ -1,5 +1,5 @@
 <template>
-  <treeselect :options="options" :multiple="true" />
+  <treeselect aria-label="select category" :options="options" :multiple="true" />
 </template>
 
 <script>
