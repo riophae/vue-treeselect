@@ -96,6 +96,7 @@ function srSpeak(text) {
   el.setAttribute('id', id)
   el.setAttribute('aria-live', 'polite')
   el.classList.add('visually-hidden')
+  el.style.visibility('hidden')
   document.body.appendChild(el)
 
   window.setTimeout(() => {
