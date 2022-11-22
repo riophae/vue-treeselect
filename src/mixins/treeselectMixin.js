@@ -60,12 +60,10 @@ function getErrorMessage(err) {
 
 function readHighlightedAriaLabel(node) {
   if (node.isBranch) {
-    srSpeak(node.ariaLabel + ', contains ' + node.children.length + ' subcategories, press right arrow to open')
+    srSpeak(node.ariaLabel + ', upper category')
   } else if (node.isLeaf && !node.isRootNode) {
-    console.log(node)
-    srSpeak(node.ariaLabel + ', belongs to ' + (node.parentNode.ariaLabel))
+    srSpeak(node.parentNode.ariaLabel + '. ' + node.ariaLabel)
   } else if (node.isLeaf && node.isRootNode) {
-    console.log(node)
     srSpeak(node.ariaLabel)
   }
 }
@@ -143,7 +141,7 @@ export default {
      */
     alwaysOpen: {
       type: Boolean,
-      default: true,
+      default: false,
     },
 
     /**
@@ -527,7 +525,7 @@ export default {
      */
     openOnFocus: {
       type: Boolean,
-      default: false,
+      default: true,
     },
 
     /**
@@ -1459,8 +1457,18 @@ export default {
         !(current in this.forest.nodeMap) ||
         !this.shouldShowOptionInMenu(this.getNode(current))
       ) {
-        this.highlightFirstOption()
+      // this.highlightFirstOption()
+        this.highlightBeginning()
       }
+    },
+
+    highlightBeginning() {
+      if (!this.hasVisibleOptions) return
+
+      const beforeFirst = this.visibleOptionIds[-1]
+      const zeroNode = this.getNode(beforeFirst)
+      this.setCurrentHighlightedOption(zeroNode)
+      readHighlightedAriaLabel(zeroNode)
     },
 
     highlightFirstOption() {
