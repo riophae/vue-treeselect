@@ -1,4 +1,4 @@
-# vue-treeselect
+# vue-treeselect (a fork of @riophae's Vue-Treeselect: https://github.com/riophae/vue-treeselect)
 [![npm](https://badgen.now.sh/npm/v/@riophae/vue-treeselect)](https://www.npmjs.com/package/@riophae/vue-treeselect) [![Build](https://badgen.now.sh/circleci/github/riophae/vue-treeselect)](https://circleci.com/gh/riophae/vue-treeselect/tree/master) [![Coverage](https://badgen.net/codecov/c/github/riophae/vue-treeselect)](https://codecov.io/gh/riophae/vue-treeselect?branch=master)
 ![npm monthly downloads](https://badgen.now.sh/npm/dm/@riophae/vue-treeselect)
 ![jsDelivr monthly hits](https://badgen.net/jsdelivr/hits/npm/@riophae/vue-treeselect) [![Known vulnerabilities](https://snyk.io/test/npm/@riophae/vue-treeselect/badge.svg)](https://snyk.io/test/npm/@riophae/vue-treeselect) ![License](https://badgen.net/github/license/riophae/vue-treeselect)
@@ -6,6 +6,15 @@
 > A multi-select component with nested options support for Vue.js
 
 ![Vue-Treeselect Screenshot](https://raw.githubusercontent.com/riophae/vue-treeselect/master/screenshot.png)
+
+
+
+### Additions to the original component:
+    - Support for aria-labels
+    - Functionality that
+        - makes the screen reader read the aria-labels of the options 
+        - recognizes when options are selected/deselected)
+        - informs the user if the branch is the option is branch/leaf node
 
 ### Features
 
