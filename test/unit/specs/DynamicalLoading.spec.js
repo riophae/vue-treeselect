@@ -1,8 +1,6 @@
 import Vue from 'vue'
 import { mount } from '@vue/test-utils'
 import sleep from 'yaku/lib/sleep'
-import Treeselect from '@src/components/Treeselect'
-import { CHECKED } from '@src/constants'
 import {
   leftClick,
   typeSearchText,
@@ -11,6 +9,8 @@ import {
   findOptionArrowContainerByNodeId,
   findChildrenOptionListByNodeId,
 } from './shared'
+import Treeselect from '@src/components/Treeselect'
+import { CHECKED } from '@src/constants'
 
 describe('Dynamical Loading', () => {
   describe('Verify props', () => {

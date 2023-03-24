@@ -13,7 +13,7 @@
         <tr>
           <td><strong>id</strong> (required)</td>
           <td class="type">Number | String</td>
-          <td>Used to identify the option within the tree. It's value must be unique across all options.</td>
+          <td>Used to identify the option within the tree. Its value must be unique across all options.</td>
         </tr>
         <tr>
           <td><strong>label</strong> (required)</td>

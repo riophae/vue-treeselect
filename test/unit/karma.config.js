@@ -1,16 +1,16 @@
-const webpackConfig = require('../../build/webpack.test.conf')
+process.env.CHROME_BIN = require('puppeteer').executablePath()
 
 module.exports = config => {
   config.set({
     files: [ './index.js' ],
-    browsers: [ 'CustomChrome' ],
+    browsers: [ 'ChromeHeadlessWithoutSandbox' ],
     customLaunchers: {
-      CustomChrome: {
-        // `ChromeHeadless` without any flags used to be fine,
-        // but it is not now for some unknown reason.
+      ChromeHeadlessWithoutSandbox: {
+        // `ChromeHeadless` without any flags used to be working
+        // well, but it is not now for some unknown reason.
         // Adding `--no-sandbox` flag solves the issue, which
-        // I know is insecure. But since we are only running
-        // tests, there would be no problem.
+        // I know is insecure. But since we are only using
+        // Chrome to run the tests, it should be just fine.
         base: 'ChromeHeadless',
         flags: [ '--no-sandbox' ],
       },
@@ -18,7 +18,7 @@ module.exports = config => {
     preprocessors: {
       './index.js': [ 'webpack', 'sourcemap' ],
     },
-    webpack: webpackConfig,
+    webpack: require('../../build/webpack-configs/test'),
     webpackMiddleware: {
       noInfo: true,
     },

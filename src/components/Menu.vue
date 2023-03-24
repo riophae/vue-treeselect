@@ -67,13 +67,33 @@
 
         return (
           <div ref="menu" class="vue-treeselect__menu" onMousedown={instance.handleMouseDown} style={this.menuStyle}>
+            {this.renderBeforeList()}
             {instance.async
               ? this.renderAsyncSearchMenuInner()
               : instance.localSearch.active
                 ? this.renderLocalSearchMenuInner()
                 : this.renderNormalMenuInner()}
+            {this.renderAfterList()}
           </div>
         )
+      },
+
+      renderBeforeList() {
+        const { instance } = this
+        const beforeListRenderer = instance.$scopedSlots['before-list']
+
+        return beforeListRenderer
+          ? beforeListRenderer()
+          : null
+      },
+
+      renderAfterList() {
+        const { instance } = this
+        const afterListRenderer = instance.$scopedSlots['after-list']
+
+        return afterListRenderer
+          ? afterListRenderer()
+          : null
       },
 
       renderNormalMenuInner() {

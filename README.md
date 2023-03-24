@@ -1,7 +1,7 @@
 # vue-treeselect
-[![npm](https://badgen.now.sh/npm/v/@riophae/vue-treeselect)](https://www.npmjs.com/package/@riophae/vue-treeselect) [![CircleCI](	https://badgen.now.sh/circleci/github/riophae/vue-treeselect)](https://circleci.com/gh/riophae/vue-treeselect/tree/master) [![Codecov](https://codecov.io/gh/riophae/vue-treeselect/branch/master/graph/badge.svg)](https://codecov.io/gh/riophae/vue-treeselect?branch=master)
+[![npm](https://badgen.now.sh/npm/v/@riophae/vue-treeselect)](https://www.npmjs.com/package/@riophae/vue-treeselect) [![Build](https://badgen.now.sh/circleci/github/riophae/vue-treeselect)](https://circleci.com/gh/riophae/vue-treeselect/tree/master) [![Coverage](https://badgen.net/codecov/c/github/riophae/vue-treeselect)](https://codecov.io/gh/riophae/vue-treeselect?branch=master)
 ![npm monthly downloads](https://badgen.now.sh/npm/dm/@riophae/vue-treeselect)
-![jsDelivr monthly hits](https://data.jsdelivr.com/v1/package/npm/@riophae/vue-treeselect/badge?style=rounded)
+![jsDelivr monthly hits](https://badgen.net/jsdelivr/hits/npm/@riophae/vue-treeselect) [![Known vulnerabilities](https://snyk.io/test/npm/@riophae/vue-treeselect/badge.svg)](https://snyk.io/test/npm/@riophae/vue-treeselect) ![License](https://badgen.net/github/license/riophae/vue-treeselect)
 
 > A multi-select component with nested options support for Vue.js
 
@@ -16,6 +16,7 @@
 - Keyboard support (navigate using <kbd>Arrow Up</kbd> & <kbd>Arrow Down</kbd> keys, select option using <kbd>Enter</kbd> key, etc.)
 - Rich options & highly customizable
 - Supports a wide range of browsers (see [below](#browser-compatibility))
+- RTL support
 
 *Requires Vue 2.2+*
 
@@ -48,7 +49,7 @@ This example shows how to integrate vue-treeselect with your [Vue SFCs](https://
     components: { Treeselect },
     data() {
       return {
-        // define default value
+        // define the default value
         value: null,
         // define options
         options: [ {
@@ -74,16 +75,16 @@ This example shows how to integrate vue-treeselect with your [Vue SFCs](https://
 </script>
 ```
 
-If you just don't want to use webpack or other bundlers, you can also simply include the standalone UMD build in your page. In this way, make sure Vue as a dependency is included before vue-treeselect.
+If you just don't want to use webpack or any other bundlers, you can simply include the standalone UMD build in your page. In this way, make sure Vue as a dependency is included before vue-treeselect.
 
 ```html
 <html>
   <head>
     <!-- include Vue 2.x -->
     <script src="https://cdn.jsdelivr.net/npm/vue@^2"></script>
-    <!-- include vue-treeselect & its styles. you can change the version tag to better suit your need. -->
-    <script src="https://cdn.jsdelivr.net/npm/@riophae/vue-treeselect@0.0.38/dist/vue-treeselect.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@riophae/vue-treeselect@0.0.38/dist/vue-treeselect.min.css">
+    <!-- include vue-treeselect & its styles. you can change the version tag to better suit your needs. -->
+    <script src="https://cdn.jsdelivr.net/npm/@riophae/vue-treeselect@^0.4.0/dist/vue-treeselect.umd.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@riophae/vue-treeselect@^0.4.0/dist/vue-treeselect.min.css">
   </head>
   <body>
     <div id="app">
@@ -97,7 +98,7 @@ If you just don't want to use webpack or other bundlers, you can also simply inc
     new Vue({
       el: '#app',
       data: {
-        // define default value
+        // define the default value
         value: null,
         // define options
         options: [ {

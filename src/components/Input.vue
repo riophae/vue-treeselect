@@ -87,10 +87,11 @@
 
       onBlur() {
         const { instance } = this
+        const menu = instance.getMenu()
 
         // #15
         // istanbul ignore next
-        if (document.activeElement === instance.$refs.menu) {
+        if (menu && document.activeElement === menu) {
           return this.focus()
         }
 
@@ -135,6 +136,7 @@
         }
         case KEY_CODES.ENTER: {
           evt.preventDefault()
+          if (instance.menu.current === null) return
           const current = instance.getNode(instance.menu.current)
           if (current.isBranch && instance.disableBranchNodes) return
           instance.select(current)
@@ -159,6 +161,7 @@
           break
         }
         case KEY_CODES.ARROW_LEFT: {
+          if (instance.menu.current === null) return
           const current = instance.getNode(instance.menu.current)
           if (current.isBranch && instance.shouldExpand(current)) {
             evt.preventDefault()
@@ -175,6 +178,7 @@
           break
         }
         case KEY_CODES.ARROW_RIGHT: {
+          if (instance.menu.current === null) return
           const current = instance.getNode(instance.menu.current)
           if (current.isBranch && !instance.shouldExpand(current)) {
             evt.preventDefault()

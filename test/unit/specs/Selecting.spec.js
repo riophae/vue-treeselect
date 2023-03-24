@@ -1,7 +1,7 @@
 import { mount } from '@vue/test-utils'
+import { leftClick, findLabelContainerByNodeId } from './shared'
 import Treeselect from '@src/components/Treeselect'
 import { UNCHECKED, INDETERMINATE, CHECKED } from '@src/constants'
-import { leftClick, findLabelContainerByNodeId } from './shared'
 
 describe('Single-select', () => {
   it('basic', () => {

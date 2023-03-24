@@ -6,7 +6,7 @@
       :value-consists-of="valueConsistsOf"
       v-model="value"
       />
-    <pre class="result">{{ value }}</pre>
+    <treeselect-value :value="value" />
     <p><strong>Value consists of:</strong></p>
     <p class="options">
       <label><input type="radio" value="ALL" v-model="valueConsistsOf">All</label><br>

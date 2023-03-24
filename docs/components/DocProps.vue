@@ -23,7 +23,7 @@
 
 <script>
   /* eslint-disable no-template-curly-in-string */
-  import entities from 'entities'
+  import { encodeHTML } from 'entities'
   import { code, strong, link, makeArgNameList, makePropList } from './utils'
 
   const NO_DEFAULT_VALUE = '–'
@@ -92,7 +92,7 @@
         description: 'Whether <kbd>Backspace</kbd> removes the last item if there is no text input.',
       }, {
         name: 'beforeClearAll',
-        type: entities.encodeHTML(`Fn${makeArgNameList([])} 🡒 (Boolean | Promise<Boolean>)`),
+        type: encodeHTML(`Fn${makeArgNameList([])} 🡒 (Boolean | Promise<Boolean>)`),
         defaultValue: code('() => true'),
         description: `Function that processes before clearing all input fields. Return ${code('false')} to stop values being cleared.`,
       }, {
@@ -195,11 +195,6 @@
         type: `Fn${makeArgNameList([ 'count' ])} 🡒 String`,
         defaultValue: code('count => `and ${count} more`'),
         description: 'Function that processes the message shown when selected elements pass the defined limit.',
-      }, {
-        name: 'loading',
-        type: 'Boolean',
-        defaultValue: code('false'),
-        description: `Whether is externally loading options or not. Set ${code('true')} to show a spinner.`,
       }, {
         name: 'loadingText',
         type: 'String',

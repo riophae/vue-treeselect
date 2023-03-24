@@ -1,23 +1,25 @@
 <template>
   <div>
-    <treeselect
-      name="demo"
-      :multiple="multiple"
-      :clearable="clearable"
-      :searchable="searchable"
-      :disabled="disabled"
-      :open-on-click="openOnClick"
-      :open-on-focus="openOnFocus"
-      :clear-on-select="clearOnSelect"
-      :close-on-select="closeOnSelect"
-      :always-open="alwaysOpen"
-      :append-to-body="appendToBody"
-      :options="options"
-      :limit="3"
-      :max-height="200"
-      v-model="value"
-      />
-    <pre class="result">{{ value }}</pre>
+    <div :dir="rtl ? 'rtl' : 'ltr'">
+      <treeselect
+        name="demo"
+        :multiple="multiple"
+        :clearable="clearable"
+        :searchable="searchable"
+        :disabled="disabled"
+        :open-on-click="openOnClick"
+        :open-on-focus="openOnFocus"
+        :clear-on-select="clearOnSelect"
+        :close-on-select="closeOnSelect"
+        :always-open="alwaysOpen"
+        :append-to-body="appendToBody"
+        :options="options"
+        :limit="3"
+        :max-height="200"
+        v-model="value"
+        />
+    </div>
+    <treeselect-value :value="value" />
     <p>
       <label><input type="checkbox" v-model="multiple">Multi-select</label>
       <label><input type="checkbox" v-model="clearable">Clearable</label>
@@ -35,6 +37,7 @@
     <p>
       <label><input type="checkbox" v-model="alwaysOpen">Always open</label>
       <label><input type="checkbox" v-model="appendToBody">Append to body</label>
+      <label><input type="checkbox" v-model="rtl">RTL mode</label>
     </p>
   </div>
 </template>
@@ -54,6 +57,7 @@
       closeOnSelect: false,
       alwaysOpen: false,
       appendToBody: false,
+      rtl: false,
       value: [ 'a' ],
       options: generateOptions(2, 3),
     }),

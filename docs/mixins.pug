@@ -13,7 +13,7 @@
 - }
 - function loadSFCSource(name, type) {
 -   const stripIndent = require('strip-indent')
--   const source = require(`!raw-loader!./components/${name}.vue`)
+-   const source = require(`!raw-loader!./components/${name}.vue`).default
 -   const startTag = `<${type}>`
 -   const endTag = `</${type}>`
 -   const start = source.indexOf(startTag) + startTag.length

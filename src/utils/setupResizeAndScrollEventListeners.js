@@ -26,9 +26,9 @@ export function setupResizeAndScrollEventListeners($el, listener) {
   })
 
   return function removeEventListeners() {
-    window.removeEventListener('resize', listener)
+    window.removeEventListener('resize', listener, { passive: true })
     $scrollParents.forEach($scrollParent => {
-      $scrollParent.removeEventListener('scroll', listener)
+      $scrollParent.removeEventListener('scroll', listener, { passive: true })
     })
   }
 }

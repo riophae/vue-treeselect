@@ -11,7 +11,7 @@
 
     ```js
     {
-      id: '<id>', // used to identify the option within the tree so it's value must be unique across all options
+      id: '<id>', // used to identify the option within the tree so its value must be unique across all options
       label: '<label>', // used to display the option
     }
     ```
@@ -50,7 +50,7 @@
       3. Whenever an unloaded branch node gets expanded, `loadOptions({ action, parentNode, callback, instanceId })` will be called, then you can perform the job requesting data from a remote server
   +demo('DelayedLoading')
   :markdown-it
-    It's also possible to have root level options to be delayed loaded. If no options have been initially registered (`options: null`), vue-treeselect will attempt to load root options by calling `loadOptions({ action, callback, instanceId })` after the component is mounted. In this example I have disabled the auto loading feature by setting `autoLoadRootOptions: false`, and root options will be loaded when the menu is opened.
+    It's also possible to have root level options to be delayed loaded. If no options have been initially registered (`options: null`), vue-treeselect will attempt to load root options by calling `loadOptions({ action, callback, instanceId })` after the component is mounted. In this example I have disabled the auto loading feature by setting `autoLoadRootOptions: false`, and the root options will be loaded when the menu is opened.
   +demo('DelayedRootOptions')
 
 +subsection('Async Searching')
@@ -65,7 +65,7 @@
       1. Whenever a branch node gets checked, all its children will be checked too
       2. Whenever a branch node has all children checked, the branch node itself will be checked too
 
-    Sometimes we don't need that mechanism, and want branch nodes and leaf nodes don't affect each other. In this case, flat mode should be used, as demonstrated in the following.
+    Sometimes we don't need that mechanism, and want branch nodes & leaf nodes don't affect each other. In this case, flat mode should be used, as demonstrated in the following.
 
     If you want to control the order in which selected options to be displayed, use the `sortValueBy` prop. This prop has three options:
 

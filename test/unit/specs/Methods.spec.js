@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils'
-import Treeselect from '@src/components/Treeselect'
 import { typeSearchText } from './shared'
+import Treeselect from '@src/components/Treeselect'
 
 describe('Methods', () => {
   describe('toggleExpanded()', () => {
@@ -213,7 +213,7 @@ describe('Methods', () => {
       wrapper.vm.getNode(null)
       expect(console.error).toHaveBeenCalledWith(
         '[Vue-Treeselect Warning]',
-        'Invalid node id: null'
+        'Invalid node id: null',
       )
     })
   })

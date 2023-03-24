@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils'
-import Treeselect from '@src/components/Treeselect'
 import { leftClick, findCheckboxByNodeId, findLabelContainerByNodeId } from './shared'
+import Treeselect from '@src/components/Treeselect'
 
 describe('Events', () => {
   describe('select & deselect', () => {

@@ -98,7 +98,7 @@ describe('Utils', () => {
         $el = document.createElement('div')
         $el.style.height = (height = 100) + 'px'
         $el.style.position = 'relative'
-        document.body.appendChild($el)
+        document.body.append($el)
         log = []
       }
       const cleanup = () => {
@@ -142,12 +142,14 @@ describe('Utils', () => {
 
       const init = () => {
         grandparent = document.createElement('div')
+        // eslint-disable-next-line unicorn/prefer-node-append
         parent = grandparent.appendChild(document.createElement('div'))
         parent.style.overflow = 'auto'
         parent.style.height = '100px'
+        // eslint-disable-next-line unicorn/prefer-node-append
         child = parent.appendChild(document.createElement('div'))
         child.style.height = '99999px'
-        document.body.appendChild(grandparent)
+        document.body.append(grandparent)
         called = 0
       }
       const cleanup = () => {

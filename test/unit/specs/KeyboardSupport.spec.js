@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import { mount } from '@vue/test-utils'
 import sleep from 'yaku/lib/sleep'
-import Treeselect from '@src/components/Treeselect'
 import {
   typeSearchText,
   pressBackspaceKey,
@@ -16,6 +15,7 @@ import {
   pressDeleteKey,
   pressAKey,
 } from './shared'
+import Treeselect from '@src/components/Treeselect'
 
 describe('Keyboard Support', () => {
   it('(enter + arrows + home + end) keys should trigger opening menu', () => {
@@ -87,10 +87,8 @@ describe('Keyboard Support', () => {
   })
 
   describe('enter key', () => {
-    let wrapper, vm
-
-    beforeEach(async () => {
-      wrapper = mount(Treeselect, {
+    async function createInstance() {
+      const wrapper = mount(Treeselect, {
         propsData: {
           alwaysOpen: true,
           options: [ {
@@ -110,15 +108,19 @@ describe('Keyboard Support', () => {
           } ],
         },
       })
-      vm = wrapper.vm
+      const { vm } = wrapper
 
       await vm.$nextTick()
 
       expect(vm.menu.isOpen).toBe(true)
       expect(vm.menu.current).toBe('a')
-    })
 
-    it('select or deselect option using enter key (single-select)', () => {
+      return { wrapper, vm }
+    }
+
+    it('select or deselect option using enter key (single-select)', async () => {
+      const { wrapper, vm } = await createInstance()
+
       wrapper.setProps({ multiple: false })
 
       pressEnterKey(wrapper)
@@ -132,7 +134,9 @@ describe('Keyboard Support', () => {
       expect(vm.internalValue).toEqual([ 'b' ])
     })
 
-    it('select or deselect option using enter key (multi-select)', () => {
+    it('select or deselect option using enter key (multi-select)', async () => {
+      const { wrapper, vm } = await createInstance()
+
       wrapper.setProps({ multiple: true })
 
       pressEnterKey(wrapper)
@@ -146,7 +150,9 @@ describe('Keyboard Support', () => {
       expect(vm.internalValue).toEqual([ 'b' ])
     })
 
-    it('pressing enter key on a disabled option should be no-op', () => {
+    it('pressing enter key on a disabled option should be no-op', async () => {
+      const { wrapper, vm } = await createInstance()
+
       vm.setCurrentHighlightedOption(vm.forest.nodeMap.c)
       expect(vm.menu.current).toBe('c')
       expect(vm.forest.nodeMap.c.isDisabled).toBe(true)
@@ -154,7 +160,9 @@ describe('Keyboard Support', () => {
       expect(vm.internalValue).toEqual([])
     })
 
-    it('pressing enter key on a branch node when disabledBranchNodes=true should be no-op', () => {
+    it('pressing enter key on a branch node when disabledBranchNodes=true should be no-op', async () => {
+      const { wrapper, vm } = await createInstance()
+
       wrapper.setProps({ disableBranchNodes: true })
 
       vm.setCurrentHighlightedOption(vm.forest.nodeMap.d)
@@ -162,6 +170,21 @@ describe('Keyboard Support', () => {
       expect(vm.forest.nodeMap.d.isBranch).toBe(true)
       pressEnterKey(wrapper)
       expect(vm.internalValue).toEqual([])
+    })
+
+    // #208
+    it('pressing enter key when there is no options should be no-op', async () => {
+      const wrapper = mount(Treeselect, {
+        propsData: {
+          alwaysOpen: true,
+          options: [],
+        },
+      })
+      const { vm } = wrapper
+
+      await vm.$nextTick()
+
+      pressEnterKey(wrapper)
     })
   })
 
