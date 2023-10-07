@@ -1,10 +1,12 @@
 <script>
   import { onLeftClick } from '../utils'
+  import treeselectMixin from '../mixins/treeselectMixin'
   import DeleteIcon from './icons/Delete'
 
   export default {
     name: 'vue-treeselect--multi-value-item',
     inject: [ 'instance' ],
+    mixins: [ treeselectMixin ],
 
     props: {
       node: {
@@ -31,11 +33,14 @@
       }
       const customValueLabelRenderer = instance.$scopedSlots['value-label']
       const labelRenderer = customValueLabelRenderer ? customValueLabelRenderer({ node }) : node.label
-
+      let value = labelRenderer
+      if (this.trimLength > 0) {
+        value = labelRenderer.length > this.trimLength ? labelRenderer.slice(0, this.trimLength) + '...' : labelRenderer
+      }
       return (
         <div class="vue-treeselect__multi-value-item-container">
           <div class={itemClass} onMousedown={this.handleMouseDown}>
-            <span class="vue-treeselect__multi-value-label">{ labelRenderer }</span>
+            <span class="vue-treeselect__multi-value-label" title={ this.showTitle ? labelRenderer : null }>{ value }</span>
             <span class="vue-treeselect__icon vue-treeselect__value-remove"><DeleteIcon /></span>
           </div>
         </div>

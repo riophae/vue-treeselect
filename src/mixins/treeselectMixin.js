@@ -636,6 +636,22 @@ export default {
       type: [ Number, String ],
       default: 999,
     },
+
+    /**
+     * to trim the label
+     */
+    trimLength: {
+      type: Number,
+      default: 0,
+    },
+
+    /**
+     *to show the title
+     */
+    showTitle: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   data() {
