@@ -15,7 +15,7 @@
   ],
   "scripts": {
     "dev": "NODE_OPTIONS=--openssl-legacy-provider node build/dev-server.js",
-    "build-library": "NODE_OPTIONS=--openssl-legacy-provider node build/build-library.js",
+    "build-library": "node build/build-library.js",
     "build-docs": "rimraf gh-pages && mkdir gh-pages && node build/build-docs.js",
     "preview-docs": "http-server gh-pages",
     "gh-pages": "npm run build-docs && gh-pages --dist gh-pages --branch gh-pages --dotfiles",
