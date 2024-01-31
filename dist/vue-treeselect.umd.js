@@ -1,5 +1,5 @@
 /*!
- * vue-treeselect v0.4.0 | (c) 2017-2023 Riophae Lee
+ * vue-treeselect v0.4.0 | (c) 2017-2024 Riophae Lee
  * Released under the MIT License.
  * https://vue-treeselect.js.org/
  */
@@ -257,11 +257,11 @@ module.exports = _defineProperty, module.exports.__esModule = true, module.expor
 
 var _typeof = __webpack_require__(12)["default"];
 var toPrimitive = __webpack_require__(13);
-function _toPropertyKey(arg) {
-  var key = toPrimitive(arg, "string");
-  return _typeof(key) === "symbol" ? key : String(key);
+function toPropertyKey(t) {
+  var i = toPrimitive(t, "string");
+  return "symbol" == _typeof(i) ? i : String(i);
 }
-module.exports = _toPropertyKey, module.exports.__esModule = true, module.exports["default"] = module.exports;
+module.exports = toPropertyKey, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
 /* 12 */
@@ -283,17 +283,17 @@ module.exports = _typeof, module.exports.__esModule = true, module.exports["defa
 /***/ (function(module, exports, __webpack_require__) {
 
 var _typeof = __webpack_require__(12)["default"];
-function _toPrimitive(input, hint) {
-  if (_typeof(input) !== "object" || input === null) return input;
-  var prim = input[Symbol.toPrimitive];
-  if (prim !== undefined) {
-    var res = prim.call(input, hint || "default");
-    if (_typeof(res) !== "object") return res;
+function toPrimitive(t, r) {
+  if ("object" != _typeof(t) || !t) return t;
+  var e = t[Symbol.toPrimitive];
+  if (void 0 !== e) {
+    var i = e.call(t, r || "default");
+    if ("object" != _typeof(i)) return i;
     throw new TypeError("@@toPrimitive must return a primitive value.");
   }
-  return (hint === "string" ? String : Number)(input);
+  return ("string" === r ? String : Number)(t);
 }
-module.exports = _toPrimitive, module.exports.__esModule = true, module.exports["default"] = module.exports;
+module.exports = toPrimitive, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
 /* 14 */
@@ -2936,7 +2936,7 @@ var instanceId = 0;
         }
         return;
       }
-      var isFullyChecked = node.isLeaf || !node.hasDisabledDescendants || this.allowSelectingDisabledDescendants;
+      var isFullyChecked = node.isLeaf || (!node.hasDisabledDescendants) || (this.allowSelectingDisabledDescendants);
       if (isFullyChecked) {
         this.addValue(node);
       }
@@ -3314,6 +3314,9 @@ var keysThatRequireMenuBeingOpen = [KEY_CODES.ENTER, KEY_CODES.END, KEY_CODES.HO
         case KEY_CODES.ARROW_LEFT:
           {
             var _current = instance.getNode(instance.menu.current);
+            if (!_current) {
+              break;
+            }
             if (_current.isBranch && instance.shouldExpand(_current)) {
               evt.preventDefault();
               instance.toggleExpanded(_current);
@@ -3332,6 +3335,9 @@ var keysThatRequireMenuBeingOpen = [KEY_CODES.ENTER, KEY_CODES.END, KEY_CODES.HO
         case KEY_CODES.ARROW_RIGHT:
           {
             var _current2 = instance.getNode(instance.menu.current);
+            if (!_current2) {
+              break;
+            }
             if (_current2.isBranch && !instance.shouldExpand(_current2)) {
               evt.preventDefault();
               instance.toggleExpanded(_current2);

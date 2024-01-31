@@ -1,5 +1,5 @@
 /*!
- * vue-treeselect v0.4.0 | (c) 2017-2023 Riophae Lee
+ * vue-treeselect v0.4.0 | (c) 2017-2024 Riophae Lee
  * Released under the MIT License.
  * https://vue-treeselect.js.org/
  */
@@ -1756,7 +1756,7 @@ var instanceId = 0;
         }
         return;
       }
-      var isFullyChecked = node.isLeaf || !node.hasDisabledDescendants || this.allowSelectingDisabledDescendants;
+      var isFullyChecked = node.isLeaf || (!node.hasDisabledDescendants) || (this.allowSelectingDisabledDescendants);
       if (isFullyChecked) {
         this.addValue(node);
       }
@@ -2134,6 +2134,9 @@ var keysThatRequireMenuBeingOpen = [KEY_CODES.ENTER, KEY_CODES.END, KEY_CODES.HO
         case KEY_CODES.ARROW_LEFT:
           {
             var _current = instance.getNode(instance.menu.current);
+            if (!_current) {
+              break;
+            }
             if (_current.isBranch && instance.shouldExpand(_current)) {
               evt.preventDefault();
               instance.toggleExpanded(_current);
@@ -2152,6 +2155,9 @@ var keysThatRequireMenuBeingOpen = [KEY_CODES.ENTER, KEY_CODES.END, KEY_CODES.HO
         case KEY_CODES.ARROW_RIGHT:
           {
             var _current2 = instance.getNode(instance.menu.current);
+            if (!_current2) {
+              break;
+            }
             if (_current2.isBranch && !instance.shouldExpand(_current2)) {
               evt.preventDefault();
               instance.toggleExpanded(_current2);
