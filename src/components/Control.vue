@@ -130,7 +130,7 @@
       // This is meant to be called by child `<Value />` component.
       renderValueContainer(children) {
         return (
-          <div class="vue-treeselect__value-container">
+          <div class="vue-treeselect__value-container test">
             {children}
           </div>
         )
