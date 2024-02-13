@@ -534,6 +534,11 @@ export default {
       default: 'Type to search...',
     },
 
+    showAsGroup: {
+      type: Boolean,
+      default: false,
+    },
+
     /**
      * Whether to show a children count next to the label of each branch node.
      */
@@ -706,21 +711,22 @@ export default {
       let internalValue
 
       // istanbul ignore else
-      if (this.single || this.flat || this.disableBranchNodes || this.valueConsistsOf === ALL) {
+      const valueConsistsOf = this.showAsGroup ? LEAF_PRIORITY : this.valueConsistsOf
+      if (this.single || this.flat || this.disableBranchNodes || valueConsistsOf === ALL) {
         internalValue = this.forest.selectedNodeIds.slice()
-      } else if (this.valueConsistsOf === BRANCH_PRIORITY) {
+      } else if (valueConsistsOf === BRANCH_PRIORITY) {
         internalValue = this.forest.selectedNodeIds.filter(id => {
           const node = this.getNode(id)
           if (node.isRootNode) return true
           return !this.isSelected(node.parentNode)
         })
-      } else if (this.valueConsistsOf === LEAF_PRIORITY) {
+      } else if (valueConsistsOf === LEAF_PRIORITY) {
         internalValue = this.forest.selectedNodeIds.filter(id => {
           const node = this.getNode(id)
           if (node.isLeaf) return true
           return node.children.length === 0
         })
-      } else if (this.valueConsistsOf === ALL_WITH_INDETERMINATE) {
+      } else if (valueConsistsOf === ALL_WITH_INDETERMINATE) {
         const indeterminateNodeIds = []
         internalValue = this.forest.selectedNodeIds.slice()
         this.selectedNodes.forEach(selectedNode => {
@@ -1148,6 +1154,9 @@ export default {
     },
 
     getValueContainer() {
+      if (!this.$refs || !this.$refs.control || !this.$refs.control.$refs) {
+        return null
+      }
       return this.$refs.control.$refs['value-container']
     },
 
@@ -1167,7 +1176,7 @@ export default {
       evt.preventDefault()
       evt.stopPropagation()
 
-      if (this.disabled) return
+      if (this.disabled || !this.getValueContainer()) return
 
       const isClickedOnValueContainer = this.getValueContainer().$el.contains(evt.target)
       if (isClickedOnValueContainer && !this.menu.isOpen && (this.openOnClick || this.trigger.isFocused)) {
@@ -1376,8 +1385,9 @@ export default {
 
       if (this.menu.isOpen && scroll) {
         const scrollToOption = () => {
+          const nodeId = node.id.toString().replace(/"/g, '\\"')
           const $menu = this.getMenu()
-          const $option = $menu.querySelector(`.vue-treeselect__option[data-id="${node.id}"]`)
+          const $option = $menu.querySelector(`.vue-treeselect__option[data-id="${nodeId}"]`)
           if ($option) scrollIntoView($menu, $option)
         }
 
@@ -1521,9 +1531,10 @@ export default {
           this.checkDuplication(node)
           this.verifyNodeShape(node)
 
-          const { id, label, children, isDefaultExpanded } = node
+          const id = node.id !== undefined ? node.id : Math.round(Math.random() * 1000000)
+          const { label, children, isDefaultExpanded } = node
           const isRootNode = parentNode === NO_PARENT_NODE
-          const level = isRootNode ? 0 : parentNode.level + 1
+          const level = isRootNode || this.showAsGroup ? 0 : parentNode.level + 1
           const isBranch = Array.isArray(children) || children === null
           const isLeaf = !isBranch
           const isDisabled = !!node.isDisabled || (!this.flat && !isRootNode && parentNode.isDisabled)
@@ -1550,6 +1561,7 @@ export default {
           this.$set(normalized, 'isMatched', false)
           this.$set(normalized, 'isHighlighted', false)
           this.$set(normalized, 'isBranch', isBranch)
+          this.$set(normalized, 'isGroup', isBranch && this.showAsGroup)
           this.$set(normalized, 'isLeaf', isLeaf)
           this.$set(normalized, 'isRootNode', isRootNode)
           this.$set(normalized, 'raw', raw)
@@ -1561,7 +1573,7 @@ export default {
               ...createAsyncOptionsStates(),
               isLoaded,
             })
-            this.$set(normalized, 'isExpanded', typeof isDefaultExpanded === 'boolean'
+            this.$set(normalized, 'isExpanded', this.showAsGroup ? this.showAsGroup : typeof isDefaultExpanded === 'boolean'
               ? isDefaultExpanded
               : level < this.defaultExpandLevel)
             this.$set(normalized, 'hasMatchedDescendants', false)

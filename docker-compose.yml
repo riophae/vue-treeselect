@@ -1,0 +1,8 @@
+version: '3'
+services:
+  app:
+    image: library/node:14-alpine
+    volumes:
+      - .:/app
+    user: '${UID:-1000}:${GID:-1000}'
+    command: tail -f /dev/null
